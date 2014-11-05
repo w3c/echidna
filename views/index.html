@@ -1,0 +1,170 @@
+<!DOCTYPE html>
+
+<html lang="en-GB">
+
+  <head>
+    <meta charset="utf-8">
+    <meta name="application-name" content="Echidna">
+    <meta name="description" content="W3C's orchestrator for the new publication workflow">
+    <meta name="keywords" content="w3c,publication,workflow">
+    <meta name="author" content="W3C">
+    <title>Echidna</title>
+
+    <style type="text/css">
+
+      * {
+        box-sizing: border-box;
+      }
+
+      body {
+        margin: 0;
+        border: 0;
+        padding: 0;
+        font-family: "Lucida Sans Unicode", "Lucida Grande", "Trebuchet MS", Helvetica, Verdana, Geneva, Calibri, sans-serif;
+      }
+
+      header, section, footer {
+        margin: 1em 4em;
+        padding: 1em 4em;
+      }
+
+      section {
+        background-color: #f0f0f0;
+      }
+
+      h1, h2, h3, p {
+        margin: 0;
+        /* padding: 0.25em 0; */
+      }
+
+      input:not([type="submit"]):not([type="checkbox"]) {
+        min-width: 40em;
+        font-family: monospace;
+      }
+
+      .output {
+        margin: 0;
+        padding: 0;
+        background-color: #fffff0;
+        padding: 0.5em 1em;
+        border: solid 1px #c0c0c0;
+        font-family: monospace;
+        white-space: pre;
+      }
+
+      .info {
+        font-size: smaller;
+        float: right;
+      }
+
+      #infoText {
+        display: none;
+      }
+
+    </style>
+
+  </head>
+
+  <body>
+
+    <header>
+      <h1>Echidna</h1>
+    </header>
+
+    <section>
+      <p class="info">This invokes the method <a href="/api/version"><code>/api/version</code></a>.</p>
+      <h2>Basic info</h2>
+      <input id="infoButton" type="submit" value="Retrieve" />
+      <p id="infoText" class="output" />
+    </section>
+
+    <section>
+      <p class="info">This invokes the method <code>/api/request</code> (<code>POST</code>) with params <code>{url</code>, <code>decision</code>}.</p>
+      <h2>Submit new request</h2>
+      <form id="submitForm" method="POST" action="/api/request">
+        <label for="url">URL</label>
+        <br />
+        <input id="url" name="url" value="https://example.com/foo/spec.html" />
+        <br />
+        <label for="decision">Decision to publish</label>
+        <br />
+        <input id="decision" name="decision" value="https://example.com/foo/messages/29372" />
+        <br />
+        <input id="submitButton" type="submit" value="Submit" />
+      </form>
+    </section>
+
+    <section>
+      <p class="info">This invokes the method <a href="/api/status"><code>/api/status</code></a> and splits results in two groups.</p>
+      <h2>Queue</h2>
+      <input id="auto" type="checkbox" checked="checked" />
+      <label for="auto">Refresh automatically every 2 s</label>
+      <br />
+      <p id="lastUpdate">Last updated: <span /></p>
+      <input id="queueButton" type="submit" value="Refresh now" disabled="true" />
+      <h3>Requests processed</h3>
+      <p id="queueProcessedText" class="output" />
+      <h3>Requests pending</h3>
+      <p id="queuePendingText" class="output" />
+    </section>
+
+    <footer>
+      <p>W3C</p>
+    </footer>
+
+    <script type="text/javascript" src="https://code.jquery.com/jquery-2.1.1.min.js"></script>
+
+    <script type="text/javascript">
+
+      $(document).ready(function() {
+
+        function getStatus() {
+          $.get('/api/status', function(data) {
+            console.dir(data);
+            $('#queueProcessedText').text(JSON.stringify(data.processed, null, 2));
+            $('#queuePendingText').text(JSON.stringify(data.pending, null, 2));
+             $('#lastUpdate > span').text(new Date().toLocaleTimeString());
+            if ($('#auto').prop('checked')) {
+              window.setTimeout(getStatus, 2000);
+            }
+          });
+        }
+
+        $('#infoButton').click(function() {
+          $.get('/api/version', function(data) {
+            $('#infoButton').hide();
+            $('#infoText').text(data).show();
+          });
+        });
+
+        $('#submitButton').click(function(event) {
+          event.preventDefault();
+          $.post(
+            $('#submitForm').prop('action'),
+            {url: $('#url').prop('value'), decision: $('#decision').prop('value')},
+            function(data) {
+              window.alert(data);
+            }
+          );
+        });
+
+        $('#auto').click(function() {
+          $('#queueButton').prop('disabled', $(this).prop('checked'));
+          if ($(this).prop('checked')) {
+            getStatus();
+          }
+        });
+
+        $('#queueButton').click(getStatus);
+        getStatus();
+
+      });
+
+    </script>
+
+  </body>
+
+</html>
+
+<!-- EOF -->
+
