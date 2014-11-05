@@ -1,3 +1,5 @@
-## Introduction
+## echidna
 
-Description of your project here.
+W3C tool to handle the automatic publication of specifications under http://www.w3.org/TR/.
+
+Stay tuned...
