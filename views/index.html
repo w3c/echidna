@@ -10,46 +10,24 @@
     <meta name="author" content="W3C">
     <title>Echidna</title>
 
+    <link rel="stylesheet" href="/styles/bootstrap.min.css">
     <style type="text/css">
 
-      * {
-        box-sizing: border-box;
+      .navbar-brand {
+        padding-top: 5px;
       }
 
-      body {
-        margin: 0;
-        border: 0;
-        padding: 0;
-        font-family: "Lucida Sans Unicode", "Lucida Grande", "Trebuchet MS", Helvetica, Verdana, Geneva, Calibri, sans-serif;
+      .navbar img {
+        height: 40px;
       }
 
-      header, section, footer {
-        margin: 1em 4em;
-        padding: 1em 4em;
-      }
-
-      section {
-        background-color: #f0f0f0;
-      }
-
-      h1, h2, h3, p {
-        margin: 0;
-        /* padding: 0.25em 0; */
+      sup {
+        color: red;
+        font-weight: bold;
       }
 
       input:not([type="submit"]):not([type="checkbox"]) {
-        min-width: 40em;
         font-family: monospace;
-      }
-
-      .output {
-        margin: 0;
-        padding: 0;
-        background-color: #fffff0;
-        padding: 0.5em 1em;
-        border: solid 1px #c0c0c0;
-        font-family: monospace;
-        white-space: pre;
       }
 
       .info {
@@ -66,51 +44,80 @@
   </head>
 
   <body>
+    <nav class="navbar navbar-default" role="navigation">
+        <div class="container">
+            <div class="navbar-header">
+                <a class="navbar-brand" href="http://www.w3.org/">
+                    <img src="/images/w3c_home_nb-v.svg" alt="W3C">
+                </a>
+            </div>
 
-    <header>
-      <h1>Echidna</h1>
-    </header>
+            <p class="navbar-text">Echidna<sup>early</sup> &ndash; The automated publication system at W3C</p>
+        </div>
+    </nav>
 
-    <section>
-      <p class="info">This invokes the method <a href="/api/version"><code>/api/version</code></a>.</p>
-      <h2>Basic info</h2>
-      <input id="infoButton" type="submit" value="Retrieve" />
-      <p id="infoText" class="output" />
-    </section>
+    <div class="container">
 
-    <section>
-      <p class="info">This invokes the method <code>/api/request</code> (<code>POST</code>) with params <code>{url</code>, <code>decision</code>}.</p>
-      <h2>Submit new request</h2>
-      <form id="submitForm" method="POST" action="/api/request">
-        <label for="url">URL</label>
+      <section>
+        <p class="info">This invokes the method <a href="/api/version"><code>/api/version</code></a>.</p>
+
+        <h2>Basic info</h2>
+
+        <button id="infoButton" type="submit" class="btn btn-default">Retrieve</button>
+
+        <pre id="infoText"></pre>
+      </section>
+
+      <hr>
+
+      <section>
+        <p class="info">This invokes the method <code>/api/request</code> (<code>POST</code>) with params <code>{ url, decision }</code>.</p>
+
+        <h2>
+            New publication request
+        </h2>
+
+        <form role="form" id="submitForm" method="POST" action="/api/request">
+        <fieldset>
+
+          <div class="form-group">
+            <label for="url">Document URL</label>
+            <input type="url" class="form-control" id="url" value="https://example.com/foo/spec.html">
+          </div>
+
+          <div class="form-group">
+            <label for="decision">WG Decision URL</label>
+            <input type="url" class="form-control" id="decision" value="https://example.com/foo/messages/29372">
+          </div>
+
+          <button id="submitButton" type="submit" class="btn btn-primary">Request publication</button>
+        </fieldset>
+        </form>
+      </section>
+
+      <hr>
+
+      <section>
+        <p class="info">This invokes the method <a href="/api/status"><code>/api/status</code></a> and splits results in two groups.</p>
+
+        <h2>Publication requests</h2>
+
+        <input id="auto" type="checkbox" checked="checked" />
+
+        <label for="auto">Refresh automatically every 2 s</label>
         <br />
-        <input id="url" name="url" value="https://example.com/foo/spec.html" />
-        <br />
-        <label for="decision">Decision to publish</label>
-        <br />
-        <input id="decision" name="decision" value="https://example.com/foo/messages/29372" />
-        <br />
-        <input id="submitButton" type="submit" value="Submit" />
-      </form>
-    </section>
+        <p id="lastUpdate">Last updated: <span></span></p>
 
-    <section>
-      <p class="info">This invokes the method <a href="/api/status"><code>/api/status</code></a> and splits results in two groups.</p>
-      <h2>Queue</h2>
-      <input id="auto" type="checkbox" checked="checked" />
-      <label for="auto">Refresh automatically every 2 s</label>
-      <br />
-      <p id="lastUpdate">Last updated: <span /></p>
-      <input id="queueButton" type="submit" value="Refresh now" disabled="true" />
-      <h3>Requests processed</h3>
-      <p id="queueProcessedText" class="output" />
-      <h3>Requests pending</h3>
-      <p id="queuePendingText" class="output" />
-    </section>
+        <button id="queueButton" type="submit" class="btn btn-default" disabled>Refresh now</button>
 
-    <footer>
-      <p>W3C</p>
-    </footer>
+        <h3>Requests processed</h3>
+        <pre id="queueProcessedText"></pre>
+
+        <h3>Requests pending</h3>
+        <pre id="queuePendingText"></pre>
+      </section>
+
+    </div>
 
     <script type="text/javascript" src="https://code.jquery.com/jquery-2.1.1.min.js"></script>
 
