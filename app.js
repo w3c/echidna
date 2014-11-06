@@ -22,8 +22,7 @@ var meta = require('./package.json')
 ,   spawn = require('child_process').spawn
 ,   app = express()
 ,   port = 3000
-,   pending = {}
-,   processed = {}
+,   requests = {}
 ;
 
 app.use(express.compress());
@@ -61,23 +60,17 @@ app.get('/api/status', function(req, res) {
   ,   entry
   ;
   if (url) {
-    if (processed[url]) {
-      res.json(processed[url]);
-    }
-    else if (pending[url]) {
-      res.json(pending[url]);
+    if (requests[url]) {
+      res.json(requests[url]);
     }
     else {
       res.send(500, {error: 'Request of URL ' + url + ' does not exist.'});
     }
   }
   else {
-    result = {'processed': {}, 'pending': {}};
-    for (entry in processed) {
-      result.processed[entry] = processed[entry];
-    }
-    for (entry in pending) {
-      result.pending[entry] = pending[entry];
+    result = {'requests': {}};
+    for (entry in requests) {
+      result.requests[entry] = requests[entry];
     }
     res.json(result);
   }
@@ -91,14 +84,11 @@ app.post('/api/request', function(req, res) {
     res.send(500, {error: 'Missing parameters {url, decision}.'});
   }
   else {
-    if (pending[url]) {
-      res.send('Spec at ' + url + ' is yet pending validation.');
-    }
-    else if (processed[url]) {
-      res.send('Spec at ' + url + ' has been already submitted. Check “/api/status”.');
+    if (requests[url]) {
+      res.send('Spec at ' + url + ' is yet pending validation OR has been already submitted. Check “/api/status”.');
     }
     else {
-      pending[url] = {'decision': decision, 'stage': -1, 'status': 'queued', 'errors': []};
+      requests[url] = {'decision': decision, 'stage': -1, 'jobs': {}, 'errors': []};
       processJob(url);
       res.send(200, 'Spec at ' + url + ' (decision: ' + decision + ') added to the queue.');
     }
@@ -112,14 +102,19 @@ function dumpLine(data) {
 function processJob(url, code, signal) {
   var spec
   ,   job;
-  if (pending[url]) {
-    spec = pending[url];
+  if (requests[url]) {
+    spec = requests[url];
     if (code && 0 !== code) {
+      spec.jobs[STEPS[spec.stage]].status = 'failure';
       spec.errors.push(STEPS[spec.stage] + ' failed with code ' + code + '.');
     }
-    if (spec.stage >= -1 && spec.stage < STEPS.length - 1) {
+    else if (spec.stage >= -1 && spec.stage < STEPS.length - 1) {
+      if (spec.stage !== -1) {
+        spec.jobs[STEPS[spec.stage]].status = 'ok';
+      }
       spec.stage ++;
-      spec.status = STEPS[spec.stage];
+      spec.jobs[STEPS[spec.stage]] = {};
+      spec.jobs[STEPS[spec.stage]].status = 'pending';
       job = spawn(PREFIX + STEPS[spec.stage] + SUFFIX, [url]);
       /* job.stdout.on('data', dumpLine);
       job.stderr.on('data', dumpLine); */
@@ -128,13 +123,10 @@ function processJob(url, code, signal) {
       });
     }
     else if (STEPS.length - 1 === spec.stage) {
+      spec.jobs[STEPS[spec.stage]].status = 'ok';
       console.log('Spec at ' + url + ' (decision: ' + spec.decision + ') has finished.');
-      processed[url] = {'decision': spec.decision, 'time': new Date().toLocaleTimeString('en-GB'), 'errors': spec.errors};
-      delete(pending[url]);
+      requests[url].time = new Date().toLocaleTimeString('en-GB');
     }
-  }
-  else if (processed[url]) {
-    console.error('Spec at "' + url + '" has finished processing already.');
   }
   else {
     console.error('Cannot find spec at "' + url + '".');

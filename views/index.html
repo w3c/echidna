@@ -110,11 +110,8 @@
 
         <button id="queueButton" type="submit" class="btn btn-default" disabled>Refresh now</button>
 
-        <h3>Requests processed</h3>
-        <pre id="queueProcessedText"></pre>
-
-        <h3>Requests pending</h3>
-        <pre id="queuePendingText"></pre>
+        <h3>Requests</h3>
+        <pre id="queueText"></pre>
       </section>
 
     </div>
@@ -128,8 +125,7 @@
         function getStatus() {
           $.get('/api/status', function(data) {
             console.dir(data);
-            $('#queueProcessedText').text(JSON.stringify(data.processed, null, 2));
-            $('#queuePendingText').text(JSON.stringify(data.pending, null, 2));
+            $('#queueText').text(JSON.stringify(data.requests, null, 2));
              $('#lastUpdate > span').text(new Date().toLocaleTimeString());
             if ($('#auto').prop('checked')) {
               window.setTimeout(getStatus, 2000);
