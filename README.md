@@ -54,8 +54,8 @@ Coming soon.
 
 ## Related sub-projects
 
-* [`Specberus`](https://github.com/w3c/specberus)
-* [`linkchecker`](https://github.com/halindrome/linkchecker)
+* [Specberus](https://github.com/w3c/specberus)
+* [LinkChecker](https://github.com/halindrome/linkchecker)
 * [`third-party-resources-checker`](https://github.com/dontcallmedom/third-party-resources-checker)
 * [`w3c-validate`](https://github.com/busbud/w3c-validate)
 * [`w3cjs`](https://github.com/thomasdavis/w3cjs)
