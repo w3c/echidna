@@ -16,6 +16,8 @@ var PREFIX = 'stubs/'
     ]
 ;
 
+var Promise = require('promise');
+
 var meta = require('./package.json')
 ,   express = require('express')
 ,   ejs = require('ejs')
@@ -89,7 +91,7 @@ app.post('/api/request', function(req, res) {
     }
     else {
       requests[url] = {'decision': decision, 'stage': -1, 'jobs': {}, 'errors': []};
-      processJob(url);
+      orchestrate(url);
       res.send(200, 'Spec at ' + url + ' (decision: ' + decision + ') added to the queue.');
     }
   }
@@ -98,6 +100,69 @@ app.post('/api/request', function(req, res) {
 function dumpLine(data) {
   console.log(data);
 }
+
+
+function retrieve(url) {
+  return new Promise(function (resolve, reject) {
+    var job = spawn('stubs/retrieve-resources.sh', [url]);
+
+    job.on('exit', function (innerCode, innerSignal) {
+      if (innerCode === 0) {
+        resolve(url);
+      }
+      else {
+        reject("retrieve step failed.");
+      }
+    });
+  });
+
+}
+
+function specberus(url) {
+  return new Promise(function (resolve, reject) {
+    var job = spawn('stubs/specberus.sh', [url]);
+
+    job.on('exit', function (innerCode, innerSignal) {
+      if (innerCode === 0) {
+        resolve(url);
+      }
+      else {
+        reject("specberus step failed.");
+      }
+    });
+  });
+}
+
+function orchestrate(url) {
+  var spec = requests[url];
+
+  spec.jobs['retrieve-resources'] = {};
+  spec.jobs['retrieve-resources'].status = 'pending';
+
+  retrieve(url).then(
+    function (url) {
+      spec.jobs['retrieve-resources'].status = 'ok';
+
+      spec.jobs['specberus'] = {};
+      spec.jobs['specberus'].status = 'pending';
+      return specberus(url);
+    },
+    function (err) {
+      spec.jobs['retrieve-resources'].status = 'failure';
+      spec.errors.push(err);
+    }
+  ).then(
+    function (url) {
+      spec.jobs['specberus'].status = 'ok';
+    },
+    function (err) {
+      spec.jobs['specberus'].status = 'failure';
+      spec.errors.push(err);
+    }
+  );
+
+}
+
 
 function processJob(url, code, signal) {
   var spec
