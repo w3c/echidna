@@ -111,11 +111,10 @@ function retrieve(url) {
         resolve(url);
       }
       else {
-        reject("retrieve step failed.");
+        reject(new Error("retrieve-resources step failed with code " + innerCode));
       }
     });
   });
-
 }
 
 function specberus(url) {
@@ -127,7 +126,7 @@ function specberus(url) {
         resolve(url);
       }
       else {
-        reject("specberus step failed.");
+        reject(new Error("specberus step failed with code " + innerCode));
       }
     });
   });
@@ -149,7 +148,7 @@ function orchestrate(url) {
     },
     function (err) {
       spec.jobs['retrieve-resources'].status = 'failure';
-      spec.errors.push(err);
+      spec.errors.push(err.toString());
     }
   ).then(
     function (url) {
@@ -157,7 +156,7 @@ function orchestrate(url) {
     },
     function (err) {
       spec.jobs['specberus'].status = 'failure';
-      spec.errors.push(err);
+      spec.errors.push(err.toString());
     }
   );
 
