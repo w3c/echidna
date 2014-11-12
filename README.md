@@ -52,7 +52,7 @@ Then simply open [`http://localhost:3000`](http://localhost:3000) on your web br
 
 Coming soon.
 
-## Related sub-projects
+## Sub-projects, and related tools
 
 * [Specberus](https://github.com/w3c/specberus)
 * [LinkChecker](https://github.com/halindrome/linkchecker)
