@@ -90,8 +90,12 @@ app.post('/api/request', function(req, res) {
       res.send('Spec at ' + url + ' is yet pending validation OR has been already submitted. Check “/api/status”.');
     }
     else {
-      requests[url] = {'decision': decision, 'stage': -1, 'jobs': {}, 'errors': []};
-      orchestrate(url);
+      requests[url] = {'url': url, 'decision': decision, 'jobs': {}};
+      orchestrate(requests[url]).then(function () {
+        console.log('Spec at ' + url + ' (decision: ' + decision + ') has FINISHED.');
+      }, function (err) {
+        console.log('Spec at ' + url + ' (decision: ' + decision + ') has FAILED.');
+      });
       res.send(200, 'Spec at ' + url + ' (decision: ' + decision + ') added to the queue.');
     }
   }
@@ -132,34 +136,76 @@ function specberus(url) {
   });
 }
 
-function orchestrate(url) {
-  var spec = requests[url];
+function publish(url) {
+  return new Promise(function (resolve, reject) {
+    var job = spawn('stubs/publish.sh', [url]);
 
-  spec.jobs['retrieve-resources'] = {};
+    job.on('exit', function (innerCode, innerSignal) {
+      if (innerCode === 0) {
+        resolve(url);
+      }
+      else {
+        reject(new Error("publish step failed with code " + innerCode));
+      }
+    });
+  });
+}
+
+function Job () {
+  if (typeof this !== 'object') throw new TypeError('Jobs must be constructed via new');
+
+  this.status = '';
+  this.errors = [];
+  this.time = '';
+}
+
+function orchestrate(spec) {
+  spec.jobs['retrieve-resources'] = new Job();
+  spec.jobs['specberus'] = new Job();
+  spec.jobs['publish'] = new Job();
+
   spec.jobs['retrieve-resources'].status = 'pending';
 
-  retrieve(url).then(
+  return retrieve(spec.url).then(
     function (url) {
       spec.jobs['retrieve-resources'].status = 'ok';
+      spec.jobs['retrieve-resources'].time = new Date().toLocaleTimeString('en-GB');
 
-      spec.jobs['specberus'] = {};
       spec.jobs['specberus'].status = 'pending';
-      return specberus(url);
+      return specberus(url).then(
+        function (url) {
+          spec.jobs['specberus'].status = 'ok';
+          spec.jobs['specberus'].time = new Date().toLocaleTimeString('en-GB');
+
+          spec.jobs['publish'].status = 'pending';
+          return publish(url).then(
+            function (url) {
+              spec.jobs['publish'].status = 'ok';
+              spec.jobs['publish'].time = new Date().toLocaleTimeString('en-GB');
+              return Promise.resolve("finished");
+            },
+            function (err) {
+              spec.jobs['publish'].status = 'failure';
+              spec.jobs['publish'].errors.push(err.toString());
+              return Promise.reject(err);
+            }
+          );
+        },
+        function (err) {
+          spec.jobs['specberus'].status = 'failure';
+          spec.jobs['specberus'].errors.push(err.toString());
+          return Promise.reject(err);
+        }
+      );
     },
     function (err) {
       spec.jobs['retrieve-resources'].status = 'failure';
-      spec.errors.push(err.toString());
+      spec.jobs['retrieve-resources'].errors.push(err.toString());
+      return Promise.reject(err);
     }
-  ).then(
-    function (url) {
-      spec.jobs['specberus'].status = 'ok';
-    },
-    function (err) {
-      spec.jobs['specberus'].status = 'failure';
-      spec.errors.push(err.toString());
-    }
-  );
-
+  ).catch(function (err) {
+    return Promise.reject(new Error('Orchestrator has failed.'));
+  });
 }
 
 
