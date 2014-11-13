@@ -58,23 +58,19 @@ app.get('/api/version', function(req, res) {
 
 app.get('/api/status', function(req, res) {
   var result
-  ,   url = req.body ? req.body.url : null
+  ,   url = req.query ? req.query.url : null
   ,   entry
   ;
   if (url) {
     if (requests[url]) {
-      res.json(requests[url]);
+      res.json({ 'request': requests[url] });
     }
     else {
-      res.send(500, {error: 'Request of URL ' + url + ' does not exist.'});
+      res.send(500, { error: 'Request of URL ' + url + ' does not exist.' });
     }
   }
   else {
-    result = {'requests': {}};
-    for (entry in requests) {
-      result.requests[entry] = requests[entry];
-    }
-    res.json(result);
+    res.json({ 'requests': requests });
   }
 });
 
