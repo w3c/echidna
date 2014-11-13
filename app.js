@@ -3,19 +3,6 @@
 
 console.log('Launching…');
 
-// Pseudo-constants:
-var PREFIX = 'stubs/'
-,   SUFFIX = '.sh'
-,   STEPS = [
-      'retrieve-resources'
-    , 'third-party-checker'
-    , 'specberus'
-    , 'link-checker'
-    , 'parse-metadata'
-    , 'publish'
-    ]
-;
-
 var Promise = require('promise');
 
 var meta = require('./package.json')
@@ -96,11 +83,6 @@ app.post('/api/request', function(req, res) {
     }
   }
 });
-
-function dumpLine(data) {
-  console.log(data);
-}
-
 
 function retrieve(from, to) {
   return new Promise(function (resolve, reject) {
@@ -237,41 +219,6 @@ function orchestrate(spec) {
   });
 }
 
-
-function processJob(url, code, signal) {
-  var spec
-  ,   job;
-  if (requests[url]) {
-    spec = requests[url];
-    if (code && 0 !== code) {
-      spec.jobs[STEPS[spec.stage]].status = 'failure';
-      spec.errors.push(STEPS[spec.stage] + ' failed with code ' + code + '.');
-    }
-    else if (spec.stage >= -1 && spec.stage < STEPS.length - 1) {
-      if (spec.stage !== -1) {
-        spec.jobs[STEPS[spec.stage]].status = 'ok';
-      }
-      spec.stage ++;
-      spec.jobs[STEPS[spec.stage]] = {};
-      spec.jobs[STEPS[spec.stage]].status = 'pending';
-      job = spawn(PREFIX + STEPS[spec.stage] + SUFFIX, [url]);
-      /* job.stdout.on('data', dumpLine);
-      job.stderr.on('data', dumpLine); */
-      job.on('exit', function(innerCode, innerSignal) {
-        processJob(url, innerCode, innerSignal);
-      });
-    }
-    else if (STEPS.length - 1 === spec.stage) {
-      spec.jobs[STEPS[spec.stage]].status = 'ok';
-      console.log('Spec at ' + url + ' (decision: ' + spec.decision + ') has finished.');
-      requests[url].time = new Date().toLocaleTimeString('en-GB');
-    }
-  }
-  else {
-    console.error('Cannot find spec at "' + url + '".');
-  }
-}
-
 app.listen(process.env.PORT || port);
 
 console.log(meta.name +
@@ -279,6 +226,3 @@ console.log(meta.name +
   ' running on ' + process.platform +
   ' and listening on port ' + port +
   '. The server time is ' + new Date().toLocaleTimeString() + '.');
-
-// EOF
-
