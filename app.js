@@ -4,6 +4,7 @@
 console.log('Launching…');
 
 var Promise = require('promise');
+var Immutable = require('immutable');
 
 var meta = require('./package.json')
 ,   express = require('express')
@@ -73,7 +74,12 @@ app.post('/api/request', function(req, res) {
       res.send('Spec at ' + url + ' is yet pending validation OR has been already submitted. Check “/api/status”.');
     }
     else {
-      requests[url] = {'url': url, 'decision': decision, 'jobs': {}};
+      requests[url] = {
+        'url': url,
+        'decision': decision,
+        'jobs': {},
+        'history': new History()
+      };
       orchestrate(requests[url]).then(function () {
         console.log('Spec at ' + url + ' (decision: ' + decision + ') has FINISHED.');
       }, function (err) {
@@ -145,13 +151,31 @@ function publish(url) {
   });
 }
 
-function Job () {
+function Job() {
   if (typeof this !== 'object') throw new TypeError('Jobs must be constructed via new');
 
   this.status = '';
   this.errors = [];
   this.time = '';
 }
+
+var History = function History (facts) {
+  if (typeof this !== 'object') throw new TypeError('Jobs must be constructed via new');
+
+  this.facts = typeof(facts) === 'undefined' ? Immutable.Stack() : facts;
+};
+
+History.prototype.add = function (fact) {
+  return new History(this.facts.unshift({
+    time: new Date(),
+    fact: fact
+  }));
+};
+
+// Override
+History.prototype.toJSON = function () {
+  return this.facts.reverse().toJSON();
+};
 
 function orchestrate(spec) {
   spec.jobs['retrieve-resources'] = new Job();
@@ -167,25 +191,24 @@ function orchestrate(spec) {
   return retrieve(spec.url, tempLocation).then(
     function () {
       spec.jobs['retrieve-resources'].status = 'ok';
-      spec.jobs['retrieve-resources'].time = new Date().toLocaleTimeString('en-GB');
+      spec.history = spec.history.add('The file has been retrieved.');
 
       spec.jobs['specberus'].status = 'pending';
       return specberus(tempLocation).then(
         function () {
           spec.jobs['specberus'].status = 'ok';
-          spec.jobs['specberus'].time = new Date().toLocaleTimeString('en-GB');
+          spec.history = spec.history.add('The document passed specberus.');
 
           spec.jobs['parse-metadata'].status = 'pending';
           return parseMetadata(tempLocation).then(
             function (metadata) {
               spec.jobs['parse-metadata'].status = 'ok';
-              spec.jobs['parse-metadata'].time = new Date().toLocaleTimeString('en-GB');
 
               spec.jobs['publish'].status = 'pending';
               return publish(tempLocation, finalLocation).then(
                 function () {
                   spec.jobs['publish'].status = 'ok';
-                  spec.jobs['publish'].time = new Date().toLocaleTimeString('en-GB');
+                  spec.history = spec.history.add('The document has been published at <a href="' + finalLocation + '">' + finalLocation + '</a>.');
                   return Promise.resolve("finished");
                 },
                 function (err) {
@@ -203,6 +226,7 @@ function orchestrate(spec) {
           );
         },
         function (err) {
+          spec.history = spec.history.add('The document failed specberus.');
           spec.jobs['specberus'].status = 'failure';
           spec.jobs['specberus'].errors.push(err.toString());
           return Promise.reject(err);
@@ -210,6 +234,7 @@ function orchestrate(spec) {
       );
     },
     function (err) {
+      spec.history = spec.history.add('The document could not be retrieved.');
       spec.jobs['retrieve-resources'].status = 'failure';
       spec.jobs['retrieve-resources'].errors.push(err.toString());
       return Promise.reject(err);
