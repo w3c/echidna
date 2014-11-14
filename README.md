@@ -1,4 +1,3 @@
-
 # Echidna
 
 Echidna is the central piece of software taking care of the new publication workflow at [W3C](http://www.w3.org/). The plan is for Echidna and related sub-projects (see below) to automatise the publication of new specs under [`http://www.w3.org/TR/`](http://www.w3.org/TR/).
@@ -14,6 +13,7 @@ Echidna is the central piece of software taking care of the new publication work
 
 These will be resolved automatically by simply running `npm install` on the directory of the project.
 
+* [Immutable.js](https://github.com/facebook/immutable-js/)
 * [express](https://github.com/strongloop/express)
 * [ejs](https://github.com/tj/ejs)
 * `grunt`
@@ -65,4 +65,3 @@ Coming soon.
 * **File** bugs and suggestions [here on GitHub](https://github.com/w3c/echidna/issues).
 * **Talk to us** on IRC: server `irc.w3.org`; channels `#pub` or `#pubrules` (here are [detailed instructions to connect](http://www.w3.org/wiki/IRC)).
 * **Discuss** the publication workflow and related tools [on the mailing list](http://lists.w3.org/Archives/Public/spec-prod/).
-
