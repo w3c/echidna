@@ -60,6 +60,9 @@ Coming soon.
 * [`w3c-validate`](https://github.com/busbud/w3c-validate)
 * [`w3cjs`](https://github.com/thomasdavis/w3cjs)
 * [Tenon](http://www.tenon.io/documentation/)
+* Generators (see [`spec-generator`](https://github.com/w3c/spec-generator)):
+ * Respec
+ * [CSS Spec Preprocessor](https://api.csswg.org/bikeshed/) for Bikeshed
 
 ## Feedback and contributions
 
