@@ -59,6 +59,7 @@ Coming soon.
 * [`third-party-resources-checker`](https://github.com/dontcallmedom/third-party-resources-checker)
 * [`w3c-validate`](https://github.com/busbud/w3c-validate)
 * [`w3cjs`](https://github.com/thomasdavis/w3cjs)
+* [Tenon](http://www.tenon.io/documentation/)
 
 ## Feedback and contributions
 
