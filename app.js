@@ -105,7 +105,7 @@ function retrieve(from, to) {
   });
 }
 
-function specberus(url) {
+function specberus(url, profile) {
   return new Promise(function (resolve, reject) {
     var job = spawn('stubs/specberus.sh', [url]);
 
@@ -193,7 +193,7 @@ function orchestrate(spec) {
       spec.history = spec.history.add('The file has been retrieved.');
 
       spec.jobs['specberus'].status = 'pending';
-      return specberus(tempLocation).then(
+      return specberus(tempLocation, 'WD').then(
         function () {
           spec.jobs['specberus'].status = 'ok';
           spec.history = spec.history.add('The document passed specberus.');
