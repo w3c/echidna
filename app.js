@@ -156,7 +156,6 @@ function Job() {
 
   this.status = '';
   this.errors = [];
-  this.time = '';
 }
 
 var History = function History (facts) {
