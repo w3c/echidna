@@ -120,6 +120,21 @@ function specberus(url, profile) {
   });
 }
 
+function thirdPartyChecker(url) {
+  return new Promise(function (resolve, reject) {
+    var job = spawn('stubs/third-party-checker.sh', [url]);
+
+    job.on('exit', function (innerCode, innerSignal) {
+      if (innerCode === 0) {
+        resolve();
+      }
+      else {
+        reject(new Error("third-party-checker step failed with code " + innerCode));
+      }
+    });
+  });
+}
+
 function parseMetadata(url) {
   return new Promise(function (resolve, reject) {
     var job = spawn('stubs/parse-metadata.sh', [url]);
@@ -179,6 +194,7 @@ History.prototype.toJSON = function () {
 function orchestrate(spec) {
   spec.jobs['retrieve-resources'] = new Job();
   spec.jobs['specberus'] = new Job();
+  spec.jobs['third-party-checker'] = new Job();
   spec.jobs['parse-metadata'] = new Job();
   spec.jobs['publish'] = new Job();
 
@@ -198,28 +214,41 @@ function orchestrate(spec) {
           spec.jobs['specberus'].status = 'ok';
           spec.history = spec.history.add('The document passed specberus.');
 
-          spec.jobs['parse-metadata'].status = 'pending';
-          return parseMetadata(tempLocation).then(
-            function (metadata) {
-              spec.jobs['parse-metadata'].status = 'ok';
+          spec.jobs['third-party-checker'].status = 'pending';
+          return thirdPartyChecker(tempLocation).then(
+            function () {
+              spec.jobs['third-party-checker'].status = 'ok';
+              spec.history = spec.history.add('The document passed the third party checker.');
 
-              spec.jobs['publish'].status = 'pending';
-              return publish(tempLocation, finalLocation).then(
-                function () {
-                  spec.jobs['publish'].status = 'ok';
-                  spec.history = spec.history.add('The document has been published at <a href="' + finalLocation + '">' + finalLocation + '</a>.');
-                  return Promise.resolve("finished");
+              spec.jobs['parse-metadata'].status = 'pending';
+              return parseMetadata(tempLocation).then(
+                function (metadata) {
+                  spec.jobs['parse-metadata'].status = 'ok';
+
+                  spec.jobs['publish'].status = 'pending';
+                  return publish(tempLocation, finalLocation).then(
+                    function () {
+                      spec.jobs['publish'].status = 'ok';
+                      spec.history = spec.history.add('The document has been published at <a href="' + finalLocation + '">' + finalLocation + '</a>.');
+                      return Promise.resolve("finished");
+                    },
+                    function (err) {
+                      spec.jobs['publish'].status = 'failure';
+                      spec.jobs['publish'].errors.push(err.toString());
+                      return Promise.reject(err);
+                    }
+                  );
                 },
                 function (err) {
-                  spec.jobs['publish'].status = 'failure';
-                  spec.jobs['publish'].errors.push(err.toString());
+                  spec.jobs['parse-metadata'].status = 'failure';
+                  spec.jobs['parse-metadata'].errors.push(err.toString());
                   return Promise.reject(err);
                 }
               );
-            },
-            function (err) {
-              spec.jobs['parse-metadata'].status = 'failure';
-              spec.jobs['parse-metadata'].errors.push(err.toString());
+            }, function (err) {
+              spec.history = spec.history.add('The document failed the third-party-checker.');
+              spec.jobs['third-party-checker'].status = 'failure';
+              spec.jobs['third-party-checker'].errors.push(err.toString());
               return Promise.reject(err);
             }
           );
