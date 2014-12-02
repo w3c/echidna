@@ -1,6 +1,9 @@
 var Http = require('http')
 ,   Promise = require('promise')
+,   Fs = require('fs')
 ;
+
+var DOWNLOAD_DIR = '/tmp/';
 
 exports.downloadFile = function downloadFile(file_url) {
   return new Promise(function (resolve) {
@@ -12,3 +15,7 @@ exports.downloadFile = function downloadFile(file_url) {
     });
   });
 };
+
+exports.temporaryInstall = function temporaryInstall(filename, content) {
+  return Promise.denodeify(Fs.writeFile)(DOWNLOAD_DIR + filename, content);
+}
