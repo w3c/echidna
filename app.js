@@ -13,6 +13,7 @@ var meta = require('./package.json')
 ,   app = express()
 ,   port = 3000
 ,   requests = {}
+,   DocumentDownloader = require("./functions.js").DocumentDownloader
 ;
 
 app.use(express.compress());
@@ -200,10 +201,10 @@ function orchestrate(spec) {
 
   spec.jobs['retrieve-resources'].status = 'pending';
 
-  var tempLocation = 'foo';
+  var tempLocation = '/tmp/' + new Date() + '/';
   var finalLocation = 'bar';
 
-  return retrieve(spec.url, tempLocation).then(
+  return new DocumentDownloader().fetchAndInstall(spec.url, tempLocation).then(
     function () {
       spec.jobs['retrieve-resources'].status = 'ok';
       spec.history = spec.history.add('The file has been retrieved.');

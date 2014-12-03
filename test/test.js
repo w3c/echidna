@@ -3,14 +3,16 @@ var expect = require("chai").use(require("chai-as-promised")).expect
 ,   Fs = require("fs")
 ;
 
-var downloadFile = require("../functions.js").downloadFile;
+var DocumentDownloader = require("../functions.js").DocumentDownloader
+,   downloader = new DocumentDownloader()
+;
 
-describe('downloadFile', function () {
+describe('DocumentDownloader.fetch', function () {
   it('should be a function', function () {
-    expect(downloadFile).to.be.a('function');
+    expect(downloader.fetch).to.be.a('function');
   });
 
-  var content = downloadFile('http://www.example.com/');
+  var content = downloader.fetch('http://www.example.com/');
 
   it('should return a promise', function () {
     return expect(content).to.be.an.instanceOf(Promise);
@@ -25,13 +27,11 @@ describe('downloadFile', function () {
   });
 });
 
-var temporaryInstall = require("../functions.js").temporaryInstall;
-
-describe('temporaryInstall', function () {
+describe('DocumentDownloader.install', function () {
   var promise;
 
   before(function() {
-    promise = temporaryInstall('foo', 'bar');
+    promise = downloader.install('/tmp/foo', 'bar');
   });
 
   after(function(){
@@ -39,7 +39,7 @@ describe('temporaryInstall', function () {
   });
 
   it('should be a function', function () {
-    expect(temporaryInstall).to.be.a('function');
+    expect(downloader.install).to.be.a('function');
   });
 
 
@@ -50,6 +50,41 @@ describe('temporaryInstall', function () {
   it('should create the file with proper content', function () {
     return promise.then(function() {
       expect(Fs.readFileSync('/tmp/foo', { 'encoding': 'utf8' })).to.equal('bar');
+    });
+  });
+});
+
+describe('DocumentDownloader.fetchAndInstall', function () {
+  var promise;
+
+  before(function() {
+    promise = downloader.fetchAndInstall('http://www.example.com/', '/tmp/testechidna');
+  });
+
+  after(function(){
+    Fs.unlinkSync('/tmp/testechidna/Overview.html');
+    Fs.rmdirSync('/tmp/testechidna');
+  });
+
+  it('should be a function', function () {
+    expect(downloader.fetchAndInstall).to.be.a('function');
+  });
+
+  it('should return a promise', function () {
+    return expect(promise).to.be.an.instanceOf(Promise);
+  });
+
+  it('should create the folder if it does not exist', function () {
+    return promise.then(function() {
+      expect(Fs.existsSync('/tmp/testechidna')).to.be.true;
+    }, function (err) {
+      console.log('error: ' + err);
+    });
+  });
+
+  it('should create the file with proper content', function () {
+    return promise.then(function() {
+      expect(Fs.readFileSync('/tmp/testechidna/Overview.html', { 'encoding': 'utf8' })).to.contain("Example Domain");
     });
   });
 });

@@ -3,9 +3,9 @@ var Http = require('http')
 ,   Fs = require('fs')
 ;
 
-var DOWNLOAD_DIR = '/tmp/';
+var DocumentDownloader = function() {};
 
-exports.downloadFile = function downloadFile(file_url) {
+DocumentDownloader.prototype.fetch = function (file_url) {
   return new Promise(function (resolve) {
     Http.get(file_url, function(res) {
       var content = '';
@@ -16,6 +16,27 @@ exports.downloadFile = function downloadFile(file_url) {
   });
 };
 
-exports.temporaryInstall = function temporaryInstall(filename, content) {
-  return Promise.denodeify(Fs.writeFile)(DOWNLOAD_DIR + filename, content);
+DocumentDownloader.prototype.install = function (dest, content) {
+  return Promise.denodeify(Fs.writeFile)(dest, content);
 }
+
+DocumentDownloader.prototype.fetchAndInstall = function (url, dest) {
+  var self = this;
+  var mkdir = Promise.denodeify(Fs.mkdir);
+
+  return new Promise(function (resolve) {
+    Fs.exists(dest, function (exists) {
+      resolve(exists);
+    });
+  }).then(function (pathExists) {
+    if (!pathExists) {
+      return mkdir(dest);
+    }
+  }).then(function () {
+    return self.fetch(url).then(function (content) {
+      return self.install(dest + '/Overview.html', content);
+    });
+  });
+};
+
+exports.DocumentDownloader = DocumentDownloader;
