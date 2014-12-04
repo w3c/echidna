@@ -1,6 +1,7 @@
 var expect = require("chai").use(require("chai-as-promised")).expect
 ,   Promise = require("promise")
 ,   Fs = require("fs")
+,   List = require("immutable").List
 ;
 
 var DocumentDownloader = require("../functions.js").DocumentDownloader
@@ -86,5 +87,43 @@ describe('DocumentDownloader.fetchAndInstall', function () {
     return promise.then(function() {
       expect(Fs.readFileSync('/tmp/testechidna/Overview.html', { 'encoding': 'utf8' })).to.contain("Example Domain");
     });
+  });
+});
+
+describe('DocumentDownloader.getFilenames', function () {
+  it('should be a function', function () {
+    expect(downloader.getFilenames).to.be.a('function');
+  });
+
+  it('should return an immutable list', function () {
+    expect(downloader.getFilenames('')).to.be.an.instanceOf(List);
+  });
+
+  it('should return a list of string', function () {
+    expect(downloader.getFilenames("test").first()).to.be.a('string');
+  });
+
+  it('should read a well-formed manifest', function () {
+    var manifest = [
+      'index.html # This file will be used as `Overview.html`',
+      '',
+      '# Stylesheets',
+      'css/screen.css',
+      'css/print.css',
+      '',
+      '# Images',
+      'img/image1.jpg',
+      'img/image2.jpg'
+    ].join('\n');
+
+    var filenames = [
+      'index.html',
+      'css/screen.css',
+      'css/print.css',
+      'img/image1.jpg',
+      'img/image2.jpg'
+    ];
+
+    expect(downloader.getFilenames(manifest).toArray()).to.eql(filenames);
   });
 });

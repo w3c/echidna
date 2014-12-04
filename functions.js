@@ -1,3 +1,5 @@
+var List = require('immutable').List;
+
 var Http = require('http')
 ,   Promise = require('promise')
 ,   Fs = require('fs')
@@ -38,5 +40,18 @@ DocumentDownloader.prototype.fetchAndInstall = function (url, dest) {
     });
   });
 };
+
+DocumentDownloader.prototype.getFilenames = function getFilenames(manifest) {
+  return manifest.split('\n').reduce(function (acc, line) {
+    var filename = line.split('#')[0].trim();
+
+    if (filename !== '') {
+      return acc.push(filename);
+    }
+    else {
+      return acc;
+    }
+  }, List());
+}
 
 exports.DocumentDownloader = DocumentDownloader;
