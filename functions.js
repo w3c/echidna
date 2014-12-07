@@ -25,6 +25,13 @@ DocumentDownloader.prototype.install = function (dest, content) {
   return Promise.denodeify(Fs.writeFile)(dest, content);
 }
 
+DocumentDownloader.prototype.installAll = function(destsContents) {
+  var self = this;
+  return Promise.all(destsContents.map(function (e) { // e == [dest, content]
+    return self.install(e[0], e[1]);
+  }));
+};
+
 DocumentDownloader.prototype.fetchAndInstall = function (url, dest) {
   var self = this;
   var mkdir = Promise.denodeify(Fs.mkdir);

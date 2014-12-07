@@ -81,6 +81,33 @@ describe('DocumentDownloader.install', function () {
   });
 });
 
+describe('DocumentDownloader.installAll', function () {
+  var promise;
+
+  before(function() {
+    promise = downloader.installAll([
+      ['/tmp/multiple_foo1', 'multiple_bar1'],
+      ['/tmp/multiple_foo2', 'multiple_bar2']
+    ]);
+  });
+
+  it('should be a function', function () {
+    expect(downloader.installAll).to.be.a('function');
+  });
+
+
+  it('should return a promise', function () {
+    return expect(promise).to.be.an.instanceOf(Promise);
+  });
+
+  it('should create multiple files with proper contents', function () {
+    return promise.then(function() {
+      expect(Fs.readFileSync('/tmp/multiple_foo1', { 'encoding': 'utf8' })).to.equal('multiple_bar1');
+      expect(Fs.readFileSync('/tmp/multiple_foo2', { 'encoding': 'utf8' })).to.equal('multiple_bar2');
+    });
+  });
+});
+
 describe('DocumentDownloader.fetchAndInstall', function () {
   var promise;
 
