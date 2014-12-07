@@ -1,21 +1,24 @@
-var List = require('immutable').List;
-
 var Http = require('http')
 ,   Promise = require('promise')
 ,   Fs = require('fs')
+,   List = require('immutable').List
 ;
 
 var DocumentDownloader = function() {};
 
-DocumentDownloader.prototype.fetch = function (file_url) {
+DocumentDownloader.prototype.fetch = function (url) {
   return new Promise(function (resolve) {
-    Http.get(file_url, function(res) {
+    Http.get(url, function(res) {
       var content = '';
 
       res.on('data', function(data) { content = content + data; });
       res.on('end', function() { resolve(content); });
     });
   });
+};
+
+DocumentDownloader.prototype.fetchAll = function (urls) {
+  return Promise.all(urls.map(this.fetch));
 };
 
 DocumentDownloader.prototype.install = function (dest, content) {

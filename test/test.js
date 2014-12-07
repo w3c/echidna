@@ -16,7 +16,7 @@ describe('DocumentDownloader.fetch', function () {
   var content = downloader.fetch('http://www.example.com/');
 
   it('should return a promise', function () {
-    return expect(content).to.be.an.instanceOf(Promise);
+    expect(content).to.be.an.instanceOf(Promise);
   });
 
   it('should promise a string', function () {
@@ -25,6 +25,32 @@ describe('DocumentDownloader.fetch', function () {
 
   it('should download a file', function () {
     return expect(content).to.eventually.contain("Example Domain");
+  });
+});
+
+describe('DocumentDownloader.fetchAll', function () {
+  var content = downloader.fetchAll([
+    'http://www.example.com/',
+    'http://www.w3.org/'
+  ]);
+
+  it('should be a function', function () {
+    expect(downloader.fetchAll).to.be.a('function');
+  });
+
+  it('should return a promise', function () {
+    expect(content).to.be.an.instanceOf(Promise);
+  });
+
+  it('should promise an array', function () {
+    return expect(content).to.eventually.be.a('array').of.length(2);
+  });
+
+  it('should fetch multiple URLs', function () {
+    return content.then(function (content) {
+      expect(content[0]).to.contain("Example Domain");
+      expect(content[1]).to.contain("World Wide Web Consortium");
+    });
   });
 });
 
