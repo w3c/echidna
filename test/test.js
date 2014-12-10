@@ -111,7 +111,7 @@ describe('DocumentDownloader.fetchAndInstall', function () {
   var promise;
 
   before(function() {
-    promise = downloader.fetchAndInstall('http://www.example.com/', '/tmp/testechidna');
+    promise = downloader.fetchAndInstall('http://www.example.com/', '/tmp/testechidna', false);
   });
 
   after(function(){
@@ -139,6 +139,20 @@ describe('DocumentDownloader.fetchAndInstall', function () {
     return promise.then(function() {
       expect(Fs.readFileSync('/tmp/testechidna/Overview.html', { 'encoding': 'utf8' })).to.contain("Example Domain");
     });
+  });
+
+  it('should read a manifest and install its content', function () {
+    return downloader.fetchAndInstall('http://jay.w3.org/~plehegar/navigation-timing/W3CTRMANIFEST', '/tmp/testechidnaManifest', true)
+      .then(function() {
+        expect(Fs.readFileSync('/tmp/testechidnaManifest/Overview.html', { 'encoding': 'utf8' })).to.contain("Navigation Timing 2");
+        expect(Fs.existsSync('/tmp/testechidnaManifest/spec.css')).to.be.true;
+        expect(Fs.existsSync('/tmp/testechidnaManifest/timing-overview.png')).to.be.true;
+
+        Fs.unlinkSync('/tmp/testechidnaManifest/Overview.html');
+        Fs.unlinkSync('/tmp/testechidnaManifest/spec.css');
+        Fs.unlinkSync('/tmp/testechidnaManifest/timing-overview.png');
+        Fs.rmdirSync('/tmp/testechidnaManifest');
+      });
   });
 });
 

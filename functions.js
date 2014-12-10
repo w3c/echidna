@@ -2,6 +2,7 @@ var Http = require('http')
 ,   Promise = require('promise')
 ,   Fs = require('fs')
 ,   List = require('immutable').List
+,   Url = require('url')
 ;
 
 // Zip the list with a given array
@@ -41,7 +42,7 @@ DocumentDownloader.prototype.installAll = function(destsContents) {
   }));
 };
 
-DocumentDownloader.prototype.fetchAndInstall = function (url, dest) {
+DocumentDownloader.prototype.fetchAndInstall = function (url, dest, isManifest) {
   var self = this;
   var mkdir = Promise.denodeify(Fs.mkdir);
 
@@ -55,7 +56,21 @@ DocumentDownloader.prototype.fetchAndInstall = function (url, dest) {
     }
   }).then(function () {
     return self.fetch(url).then(function (content) {
-      return self.install(dest + '/Overview.html', content);
+      if (isManifest) {
+        var filenames = self.getFilenames(content);
+        var dests = filenames.set(0, 'Overview.html').map(function (filename) {
+          return dest + '/' + filename;
+        });
+        var urls = filenames.map(function (filename) {
+          return Url.resolve(url, filename);
+        });
+        return self.fetchAll(urls).then(function (contents) {
+          return self.installAll(dests.zip(contents));
+        });
+      }
+      else {
+        return self.install(dest + '/Overview.html', content);
+      }
     });
   });
 };

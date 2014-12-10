@@ -204,7 +204,7 @@ function orchestrate(spec) {
   var tempLocation = '/tmp/' + new Date() + '/';
   var finalLocation = 'bar';
 
-  return new DocumentDownloader().fetchAndInstall(spec.url, tempLocation).then(
+  return new DocumentDownloader().fetchAndInstall(spec.url, tempLocation, false).then(
     function () {
       spec.jobs['retrieve-resources'].status = 'ok';
       spec.history = spec.history.add('The file has been retrieved.');
