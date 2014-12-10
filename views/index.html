@@ -82,7 +82,13 @@
 
           <div class="form-group">
             <label for="url">Document URL</label>
-            <input type="url" class="form-control" id="url" value="http://example.com/">
+            <input type="url" class="form-control" id="url" value="http://example.com/ OR http://jay.w3.org/~plehegar/navigation-timing/W3CTRMANIFEST">
+
+            <div class="checkbox">
+              <label>
+                <input type="checkbox" id="isManifest"> This is a manifest
+              </label>
+            </div>
           </div>
 
           <div class="form-group">
@@ -144,7 +150,7 @@
           event.preventDefault();
           $.post(
             $('#submitForm').prop('action'),
-            {url: $('#url').prop('value'), decision: $('#decision').prop('value')},
+            {url: $('#url').prop('value'), decision: $('#decision').prop('value'), isManifest: $('#isManifest').prop('value')},
             function(data) {
               window.alert(data);
             }

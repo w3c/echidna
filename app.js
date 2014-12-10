@@ -66,6 +66,7 @@ app.get('/api/status', function(req, res) {
 app.post('/api/request', function(req, res) {
   var url = req.body ? req.body.url : null
   ,   decision = req.body ? req.body.decision : null
+  ,   isManifest = req.body ? req.body.isManifest : false
   ;
   if (!url || !decision) {
     res.send(500, {error: 'Missing parameters {url, decision}.'});
@@ -78,10 +79,11 @@ app.post('/api/request', function(req, res) {
       requests[url] = {
         'url': url,
         'decision': decision,
+        'isManifest': isManifest,
         'jobs': {},
         'history': new History()
       };
-      orchestrate(requests[url]).then(function () {
+      orchestrate(requests[url], isManifest).then(function () {
         console.log('Spec at ' + url + ' (decision: ' + decision + ') has FINISHED.');
       }, function (err) {
         console.log('Spec at ' + url + ' (decision: ' + decision + ') has FAILED.');
@@ -90,21 +92,6 @@ app.post('/api/request', function(req, res) {
     }
   }
 });
-
-function retrieve(from, to) {
-  return new Promise(function (resolve, reject) {
-    var job = spawn('stubs/retrieve-resources.sh', [from]);
-
-    job.on('exit', function (innerCode, innerSignal) {
-      if (innerCode === 0) {
-        resolve();
-      }
-      else {
-        reject(new Error("retrieve-resources step failed with code " + innerCode));
-      }
-    });
-  });
-}
 
 function specberus(url, profile) {
   return new Promise(function (resolve, reject) {
@@ -192,7 +179,7 @@ History.prototype.toJSON = function () {
   return this.facts.reverse().toJSON();
 };
 
-function orchestrate(spec) {
+function orchestrate(spec, isManifest) {
   spec.jobs['retrieve-resources'] = new Job();
   spec.jobs['specberus'] = new Job();
   spec.jobs['third-party-checker'] = new Job();
@@ -204,7 +191,7 @@ function orchestrate(spec) {
   var tempLocation = '/tmp/' + new Date() + '/';
   var finalLocation = 'bar';
 
-  return new DocumentDownloader().fetchAndInstall(spec.url, tempLocation, false).then(
+  return new DocumentDownloader().fetchAndInstall(spec.url, tempLocation, isManifest).then(
     function () {
       spec.jobs['retrieve-resources'].status = 'ok';
       spec.history = spec.history.add('The file has been retrieved.');
