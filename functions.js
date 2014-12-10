@@ -18,7 +18,7 @@ DocumentDownloader.prototype.fetch = function (url) {
 };
 
 DocumentDownloader.prototype.fetchAll = function (urls) {
-  return Promise.all(urls.map(this.fetch));
+  return Promise.all(urls.toArray().map(this.fetch));
 };
 
 DocumentDownloader.prototype.install = function (dest, content) {
@@ -27,8 +27,8 @@ DocumentDownloader.prototype.install = function (dest, content) {
 
 DocumentDownloader.prototype.installAll = function(destsContents) {
   var self = this;
-  return Promise.all(destsContents.map(function (e) { // e == [dest, content]
-    return self.install(e[0], e[1]);
+  return Promise.all(destsContents.toArray().map(function (e) { // e == [dest, content]
+    return self.install(e.get(0), e.get(1));
   }));
 };
 

@@ -29,10 +29,10 @@ describe('DocumentDownloader.fetch', function () {
 });
 
 describe('DocumentDownloader.fetchAll', function () {
-  var content = downloader.fetchAll([
+  var content = downloader.fetchAll(List.of(
     'http://www.example.com/',
     'http://www.w3.org/'
-  ]);
+  ));
 
   it('should be a function', function () {
     expect(downloader.fetchAll).to.be.a('function');
@@ -69,7 +69,6 @@ describe('DocumentDownloader.install', function () {
     expect(downloader.install).to.be.a('function');
   });
 
-
   it('should return a promise', function () {
     return expect(promise).to.be.an.instanceOf(Promise);
   });
@@ -85,10 +84,10 @@ describe('DocumentDownloader.installAll', function () {
   var promise;
 
   before(function() {
-    promise = downloader.installAll([
-      ['/tmp/multiple_foo1', 'multiple_bar1'],
-      ['/tmp/multiple_foo2', 'multiple_bar2']
-    ]);
+    promise = downloader.installAll(List.of(
+      List.of('/tmp/multiple_foo1', 'multiple_bar1'),
+      List.of('/tmp/multiple_foo2', 'multiple_bar2')
+    ));
   });
 
   it('should be a function', function () {
@@ -153,7 +152,7 @@ describe('DocumentDownloader.getFilenames', function () {
   });
 
   it('should return a list of string', function () {
-    expect(downloader.getFilenames("test").first()).to.be.a('string');
+    expect(downloader.getFilenames('test').first()).to.be.a('string');
   });
 
   it('should read a well-formed manifest', function () {
