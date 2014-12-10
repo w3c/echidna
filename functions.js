@@ -4,6 +4,15 @@ var Http = require('http')
 ,   List = require('immutable').List
 ;
 
+// Zip the list with a given array
+// This is temporary until progress on
+// https://github.com/facebook/immutable-js/issues/51
+List.prototype.zip = function(array) {
+  return this.map(function (item, index) {
+    return List.of(item, array[index]);
+  });
+};
+
 var DocumentDownloader = function() {};
 
 DocumentDownloader.prototype.fetch = function (url) {

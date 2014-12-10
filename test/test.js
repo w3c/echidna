@@ -179,3 +179,17 @@ describe('DocumentDownloader.getFilenames', function () {
     expect(downloader.getFilenames(manifest).toArray()).to.eql(filenames);
   });
 });
+
+describe('List.zip', function () {
+  var l = List.of('a', 'b');
+  var a = [1, 2];
+  var z = l.zip(a);
+
+  it('should return a List', function () {
+    expect(z).to.be.an.instanceOf(List);
+  });
+
+  it('should zip an array', function () {
+    expect(z).to.eql(List.of(List.of('a', 1), List.of('b', 2)));
+  });
+});
