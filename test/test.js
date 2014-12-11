@@ -42,14 +42,14 @@ describe('DocumentDownloader.fetchAll', function () {
     expect(content).to.be.an.instanceOf(Promise);
   });
 
-  it('should promise an array', function () {
-    return expect(content).to.eventually.be.a('array').of.length(2);
+  it('should promise a List of size 2', function () {
+    return expect(content).to.eventually.be.an.instanceOf(List).of.property('size', 2);
   });
 
   it('should fetch multiple URLs', function () {
     return content.then(function (content) {
-      expect(content[0]).to.contain("Example Domain");
-      expect(content[1]).to.contain("World Wide Web Consortium");
+      expect(content.get(0)).to.contain("Example Domain");
+      expect(content.get(1)).to.contain("World Wide Web Consortium");
     });
   });
 });
@@ -196,7 +196,7 @@ describe('DocumentDownloader.getFilenames', function () {
 
 describe('List.zip', function () {
   var l = List.of('a', 'b');
-  var a = [1, 2];
+  var a = List.of(1, 2);
   var z = l.zip(a);
 
   it('should return a List', function () {

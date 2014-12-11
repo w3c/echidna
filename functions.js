@@ -5,12 +5,13 @@ var Http = require('http')
 ,   Url = require('url')
 ;
 
-// Zip the list with a given array
+// Zip a list with another list
+// Example: (a, b) zip (c, d) == ((a, c), (b, d))
 // This is temporary until progress on
 // https://github.com/facebook/immutable-js/issues/51
-List.prototype.zip = function(array) {
+List.prototype.zip = function(list) {
   return this.map(function (item, index) {
-    return List.of(item, array[index]);
+    return List.of(item, list.get(index));
   });
 };
 
@@ -28,7 +29,7 @@ DocumentDownloader.prototype.fetch = function (url) {
 };
 
 DocumentDownloader.prototype.fetchAll = function (urls) {
-  return Promise.all(urls.toArray().map(this.fetch));
+  return Promise.all(urls.toArray().map(this.fetch)).then(List);
 };
 
 DocumentDownloader.prototype.install = function (dest, content) {
