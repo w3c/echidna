@@ -34,7 +34,7 @@ DocumentDownloader.prototype.fetchAll = function (urls) {
 
 DocumentDownloader.prototype.install = function (dest, content) {
   return Promise.denodeify(Fs.writeFile)(dest, content);
-}
+};
 
 DocumentDownloader.prototype.installAll = function(destsContents) {
   var self = this;
@@ -87,6 +87,6 @@ DocumentDownloader.prototype.getFilenames = function getFilenames(manifest) {
       return acc;
     }
   }, List());
-}
+};
 
 exports.DocumentDownloader = DocumentDownloader;
