@@ -188,7 +188,8 @@ function orchestrate(spec, isManifest) {
 
   spec.jobs['retrieve-resources'].status = 'pending';
 
-  var tempLocation = '/tmp/' + new Date() + '/';
+  var date = new Date().getTime();
+  var tempLocation = '/var/www/html/trstaging/' + date + '/';
   var finalLocation = 'bar';
 
   return new DocumentDownloader().fetchAndInstall(spec.url, tempLocation, isManifest).then(
