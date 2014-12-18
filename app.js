@@ -66,7 +66,7 @@ app.get('/api/status', function(req, res) {
 app.post('/api/request', function(req, res) {
   var url = req.body ? req.body.url : null
   ,   decision = req.body ? req.body.decision : null
-  ,   isManifest = req.body ? req.body.isManifest : false
+  ,   isManifest = req.body ? req.body.isManifest === 'true' : false
   ;
   if (!url || !decision) {
     res.send(500, {error: 'Missing parameters {url, decision}.'});

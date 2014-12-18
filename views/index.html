@@ -150,7 +150,7 @@
           event.preventDefault();
           $.post(
             $('#submitForm').prop('action'),
-            {url: $('#url').prop('value'), decision: $('#decision').prop('value'), isManifest: $('#isManifest').prop('value')},
+            {url: $('#url').prop('value'), decision: $('#decision').prop('value'), isManifest: $('#isManifest').is(':checked')},
             function(data) {
               window.alert(data);
             }
