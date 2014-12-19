@@ -14,6 +14,7 @@ var meta = require('./package.json')
 ,   port = 3000
 ,   requests = {}
 ,   DocumentDownloader = require("./functions.js").DocumentDownloader
+,   Specberus = require("../specberus/lib/validator").Specberus
 ;
 
 app.use(express.compress());
@@ -93,17 +94,42 @@ app.post('/api/request', function(req, res) {
   }
 });
 
-function specberus(url, profile) {
+function specberus(url) {
   return new Promise(function (resolve, reject) {
-    var job = spawn('stubs/specberus.sh', [url]);
+    function Sink () {}
+    require("util").inherits(Sink, require("events").EventEmitter);
 
-    job.on('exit', function (innerCode, innerSignal) {
-      if (innerCode === 0) {
-        resolve();
-      }
-      else {
-        reject(new Error("specberus step failed with code " + innerCode));
-      }
+    var sink = new Sink();
+
+    sink.on("start-all", function (profilename) {
+      console.log("start-all", profilename);
+    });
+
+    sink.on("end-all", function (profilename) {
+      resolve();
+    });
+
+    sink.on("err", function (type, data) {
+      data.type = type;
+      console.log("[ERROR]", data);
+      reject(new Error("Specberus has failed"));
+    });
+
+    sink.on("exception", function (message) {
+      reject(new Error(message.message));
+    });
+
+    new Specberus().validate({
+      url: url,
+      profile: require("../specberus/lib/profiles/WD"),
+      events: sink,
+      // validation: "recursive",
+      // validation: "simple-validation",
+      validation: "no-validation",
+      noRecTrack: false,
+      informativeOnly: false,
+      // patentPolicy: patentPolicy,
+      processDocument: "2005"
     });
   });
 }
@@ -190,6 +216,7 @@ function orchestrate(spec, isManifest) {
 
   var date = new Date().getTime();
   var tempLocation = '/var/www/html/trstaging/' + date + '/';
+  var specberusLocation = 'http://localhost/trstaging/' + date + '/Overview.html';
   var finalLocation = 'bar';
 
   return new DocumentDownloader().fetchAndInstall(spec.url, tempLocation, isManifest).then(
@@ -198,7 +225,7 @@ function orchestrate(spec, isManifest) {
       spec.history = spec.history.add('The file has been retrieved.');
 
       spec.jobs['specberus'].status = 'pending';
-      return specberus(tempLocation, 'WD').then(
+      return specberus(specberusLocation).then(
         function () {
           spec.jobs['specberus'].status = 'ok';
           spec.history = spec.history.add('The document passed specberus.');
