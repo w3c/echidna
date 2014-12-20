@@ -3,6 +3,7 @@ var Http = require('http')
 ,   Fs = require('fs')
 ,   List = require('immutable').List
 ,   Url = require('url')
+,   Specberus = require("../specberus/lib/validator").Specberus;
 ;
 
 // Zip a list with another list
@@ -90,3 +91,47 @@ DocumentDownloader.prototype.getFilenames = function getFilenames(manifest) {
 };
 
 exports.DocumentDownloader = DocumentDownloader;
+
+var SpecberusWrapper = function () {};
+
+SpecberusWrapper.prototype.validate = function(url) {
+  return new Promise(function (resolve, reject) {
+    function Sink () {}
+    require("util").inherits(Sink, require("events").EventEmitter);
+
+    var sink = new Sink();
+    var errors = List();
+
+    sink.on("start-all", function (profilename) {
+      console.log("start-all", profilename);
+    });
+
+    sink.on("end-all", function (profilename) {
+      resolve(errors);
+    });
+
+    sink.on("err", function (type, data) {
+      data.type = type;
+      errors = errors.push(data);
+    });
+
+    sink.on("exception", function (exception) {
+      reject(new Error(exception.message));
+    });
+
+    new Specberus().validate({
+      url: url,
+      profile: require("../specberus/lib/profiles/WD"),
+      events: sink,
+      // validation: "recursive",
+      // validation: "simple-validation",
+      validation: "no-validation",
+      noRecTrack: false,
+      informativeOnly: false,
+      // patentPolicy: patentPolicy,
+      processDocument: "2005"
+    });
+  });
+}
+
+exports.SpecberusWrapper = SpecberusWrapper;

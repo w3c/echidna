@@ -14,7 +14,7 @@ var meta = require('./package.json')
 ,   port = 3000
 ,   requests = {}
 ,   DocumentDownloader = require("./functions.js").DocumentDownloader
-,   Specberus = require("../specberus/lib/validator").Specberus
+,   SpecberusWrapper = require("./functions.js").SpecberusWrapper
 ;
 
 app.use(express.compress());
@@ -93,46 +93,6 @@ app.post('/api/request', function(req, res) {
     }
   }
 });
-
-function specberus(url) {
-  return new Promise(function (resolve, reject) {
-    function Sink () {}
-    require("util").inherits(Sink, require("events").EventEmitter);
-
-    var sink = new Sink();
-
-    sink.on("start-all", function (profilename) {
-      console.log("start-all", profilename);
-    });
-
-    sink.on("end-all", function (profilename) {
-      resolve();
-    });
-
-    sink.on("err", function (type, data) {
-      data.type = type;
-      console.log("[ERROR]", data);
-      reject(new Error("Specberus has failed"));
-    });
-
-    sink.on("exception", function (message) {
-      reject(new Error(message.message));
-    });
-
-    new Specberus().validate({
-      url: url,
-      profile: require("../specberus/lib/profiles/WD"),
-      events: sink,
-      // validation: "recursive",
-      // validation: "simple-validation",
-      validation: "no-validation",
-      noRecTrack: false,
-      informativeOnly: false,
-      // patentPolicy: patentPolicy,
-      processDocument: "2005"
-    });
-  });
-}
 
 function thirdPartyChecker(url) {
   return new Promise(function (resolve, reject) {
@@ -225,49 +185,59 @@ function orchestrate(spec, isManifest) {
       spec.history = spec.history.add('The file has been retrieved.');
 
       spec.jobs['specberus'].status = 'pending';
-      return specberus(specberusLocation).then(
-        function () {
-          spec.jobs['specberus'].status = 'ok';
-          spec.history = spec.history.add('The document passed specberus.');
+      return new SpecberusWrapper().validate(specberusLocation).then(
+        function (errors) {
+          if(errors.size === 0) {
+            spec.jobs['specberus'].status = 'ok';
+            spec.history = spec.history.add('The document passed specberus.');
 
-          spec.jobs['third-party-checker'].status = 'pending';
-          return thirdPartyChecker(tempLocation).then(
-            function () {
-              spec.jobs['third-party-checker'].status = 'ok';
-              spec.history = spec.history.add('The document passed the third party checker.');
+            spec.jobs['third-party-checker'].status = 'pending';
 
-              spec.jobs['parse-metadata'].status = 'pending';
-              return parseMetadata(tempLocation).then(
-                function (metadata) {
-                  spec.jobs['parse-metadata'].status = 'ok';
+            return thirdPartyChecker(tempLocation).then(
+              function () {
+                spec.jobs['third-party-checker'].status = 'ok';
+                spec.history = spec.history.add('The document passed the third party checker.');
 
-                  spec.jobs['publish'].status = 'pending';
-                  return publish(tempLocation, finalLocation).then(
-                    function () {
-                      spec.jobs['publish'].status = 'ok';
-                      spec.history = spec.history.add('The document has been published at <a href="' + finalLocation + '">' + finalLocation + '</a>.');
-                      return Promise.resolve("finished");
-                    },
-                    function (err) {
-                      spec.jobs['publish'].status = 'failure';
-                      spec.jobs['publish'].errors.push(err.toString());
-                      return Promise.reject(err);
-                    }
-                  );
-                },
-                function (err) {
-                  spec.jobs['parse-metadata'].status = 'failure';
-                  spec.jobs['parse-metadata'].errors.push(err.toString());
-                  return Promise.reject(err);
-                }
-              );
-            }, function (err) {
-              spec.history = spec.history.add('The document failed the third-party-checker.');
-              spec.jobs['third-party-checker'].status = 'failure';
-              spec.jobs['third-party-checker'].errors.push(err.toString());
-              return Promise.reject(err);
-            }
-          );
+                spec.jobs['parse-metadata'].status = 'pending';
+                return parseMetadata(tempLocation).then(
+                  function (metadata) {
+                    spec.jobs['parse-metadata'].status = 'ok';
+
+                    spec.jobs['publish'].status = 'pending';
+                    return publish(tempLocation, finalLocation).then(
+                      function () {
+                        spec.jobs['publish'].status = 'ok';
+                        spec.history = spec.history.add('The document has been published at <a href="' + finalLocation + '">' + finalLocation + '</a>.');
+                        return Promise.resolve("finished");
+                      },
+                      function (err) {
+                        spec.jobs['publish'].status = 'failure';
+                        spec.jobs['publish'].errors.push(err.toString());
+                        return Promise.reject(err);
+                      }
+                    );
+                  },
+                  function (err) {
+                    spec.jobs['parse-metadata'].status = 'failure';
+                    spec.jobs['parse-metadata'].errors.push(err.toString());
+                    return Promise.reject(err);
+                  }
+                );
+              }, function (err) {
+                spec.history = spec.history.add('The document failed the third-party-checker.');
+                spec.jobs['third-party-checker'].status = 'failure';
+                spec.jobs['third-party-checker'].errors.push(err.toString());
+                return Promise.reject(err);
+              }
+            );
+          }
+          else {
+            spec.jobs['specberus'].status = 'failure';
+            spec.jobs['specberus'].errors = errors;
+            spec.history = spec.history.add('The document failed specberus.');
+
+            return Promise.reject(new Error("Failed Specberus"));
+          }
         },
         function (err) {
           spec.history = spec.history.add('The document failed specberus.');
