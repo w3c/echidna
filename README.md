@@ -56,9 +56,12 @@ $ nodejs app.js [STAGING_PATH [SPECBERUS_BASE_URI [PORT]]]
 
 Meaning of positional parameters:
 
-1. `STAGING_PATH`: path in the local filesystem where documents will be downloaded; *staged*. Default: `/var/www/html/trstaging/`.
-1. `SPECBERUS_BASE_URI`: [Specberus](https://github.com/w3c/specberus) HTTP endpoint. Default: `http://localhost/trstaging/`.
-1. `PORT`: where Echidna will be listening for publication requests. Default: `3000`.
+1. `STAGING_PATH`: path in the local filesystem where documents will be downloaded; *staged*.  
+(Default `/var/www/html/trstaging/`.)
+2. `SPECBERUS_BASE_URI`: [Specberus](https://github.com/w3c/specberus) HTTP endpoint.  
+(Default `http://localhost/trstaging/`.)
+3. `PORT`: where Echidna will be listening for publication requests.  
+(Default `3000`.)
 
 Examples:
 
