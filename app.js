@@ -21,7 +21,7 @@ var meta = require('./package.json')
 ,   app = express()
 ,   requests = {}
 ,   argTempLocation = process.argv[2]
-,   argSpecberusLocation  = process.argv[3]
+,   argHttpLocation  = process.argv[3]
 ,   port = process.argv[4] || DEFAULT_PORT;
 ;
 
@@ -167,7 +167,7 @@ function orchestrate(spec, isManifest) {
 
   var date = new Date().getTime();
   var tempLocation = (argTempLocation || DEFAULT_TEMP_LOCATION) + path.sep + date + path.sep;
-  var specberusLocation = (argSpecberusLocation || DEFAULT_SPECBERUS_LOCATION) + '/' + date + '/Overview.html';
+  var httpLocation = (argHttpLocation || DEFAULT_SPECBERUS_LOCATION) + '/' + date + '/Overview.html';
   var finalLocation = 'bar';
 
   return new DocumentDownloader().fetchAndInstall(spec.url, tempLocation, isManifest).then(
@@ -176,15 +176,14 @@ function orchestrate(spec, isManifest) {
       spec.history = spec.history.add('The file has been retrieved.');
 
       spec.jobs['specberus'].status = 'pending';
-      return new SpecberusWrapper().validate(specberusLocation).then(
+      return new SpecberusWrapper().validate(httpLocation).then(
         function (report) {
           if(report.errors.size === 0) {
             spec.jobs['specberus'].status = 'ok';
             spec.history = spec.history.add('The document passed specberus.');
 
             spec.jobs['third-party-checker'].status = 'pending';
-
-            return thirdPartyChecker(tempLocation).then(
+            return thirdPartyChecker(httpLocation).then(
               function () {
                 spec.jobs['third-party-checker'].status = 'ok';
                 spec.history = spec.history.add('The document passed the third party checker.');
