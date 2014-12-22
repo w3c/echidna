@@ -194,8 +194,8 @@ function orchestrate(spec, isManifest) {
 
       spec.jobs['specberus'].status = 'pending';
       return new SpecberusWrapper().validate(specberusLocation).then(
-        function (errors) {
-          if(errors.size === 0) {
+        function (report) {
+          if(report.errors.size === 0) {
             spec.jobs['specberus'].status = 'ok';
             spec.history = spec.history.add('The document passed specberus.');
 
@@ -241,7 +241,7 @@ function orchestrate(spec, isManifest) {
           }
           else {
             spec.jobs['specberus'].status = 'failure';
-            spec.jobs['specberus'].errors = errors;
+            spec.jobs['specberus'].errors = report.errors;
             spec.history = spec.history.add('The document failed specberus.');
 
             return Promise.reject(new Error("Failed Specberus"));

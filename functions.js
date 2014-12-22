@@ -101,13 +101,17 @@ SpecberusWrapper.prototype.validate = function(url) {
 
     var sink = new Sink();
     var errors = List();
+    var specberus = new Specberus();
 
     sink.on("start-all", function (profilename) {
       console.log("start-all", profilename);
     });
 
     sink.on("end-all", function (profilename) {
-      resolve(errors);
+      resolve({
+        errors: errors,
+        metadata: specberus.data
+      });
     });
 
     sink.on("err", function (type, data) {
@@ -119,7 +123,7 @@ SpecberusWrapper.prototype.validate = function(url) {
       reject(new Error(exception.message));
     });
 
-    new Specberus().validate({
+    specberus.validate({
       url: url,
       profile: require("../specberus/lib/profiles/WD"),
       events: sink,
