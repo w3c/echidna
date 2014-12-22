@@ -18,7 +18,7 @@ List.prototype.zip = function(list) {
 
 var DocumentDownloader = function() {};
 
-DocumentDownloader.prototype.fetch = function (url) {
+DocumentDownloader.fetch = function (url) {
   return new Promise(function (resolve) {
     Http.get(url, function(res) {
       var content = '';
@@ -29,23 +29,21 @@ DocumentDownloader.prototype.fetch = function (url) {
   });
 };
 
-DocumentDownloader.prototype.fetchAll = function (urls) {
+DocumentDownloader.fetchAll = function (urls) {
   return Promise.all(urls.toArray().map(this.fetch)).then(List);
 };
 
-DocumentDownloader.prototype.install = function (dest, content) {
+DocumentDownloader.install = function (dest, content) {
   return Promise.denodeify(Fs.writeFile)(dest, content);
 };
 
-DocumentDownloader.prototype.installAll = function(destsContents) {
-  var self = this;
+DocumentDownloader.installAll = function(destsContents) {
   return Promise.all(destsContents.toArray().map(function (e) { // e == [dest, content]
-    return self.install(e.get(0), e.get(1));
+    return DocumentDownloader.install(e.get(0), e.get(1));
   }));
 };
 
-DocumentDownloader.prototype.fetchAndInstall = function (url, dest, isManifest) {
-  var self = this;
+DocumentDownloader.fetchAndInstall = function (url, dest, isManifest) {
   var mkdir = Promise.denodeify(Fs.mkdir);
 
   return new Promise(function (resolve) {
@@ -57,27 +55,27 @@ DocumentDownloader.prototype.fetchAndInstall = function (url, dest, isManifest) 
       return mkdir(dest);
     }
   }).then(function () {
-    return self.fetch(url).then(function (content) {
+    return DocumentDownloader.fetch(url).then(function (content) {
       if (isManifest) {
-        var filenames = self.getFilenames(content);
+        var filenames = DocumentDownloader.getFilenames(content);
         var dests = filenames.set(0, 'Overview.html').map(function (filename) {
           return dest + '/' + filename;
         });
         var urls = filenames.map(function (filename) {
           return Url.resolve(url, filename);
         });
-        return self.fetchAll(urls).then(function (contents) {
-          return self.installAll(dests.zip(contents));
+        return DocumentDownloader.fetchAll(urls).then(function (contents) {
+          return DocumentDownloader.installAll(dests.zip(contents));
         });
       }
       else {
-        return self.install(dest + '/Overview.html', content);
+        return DocumentDownloader.install(dest + '/Overview.html', content);
       }
     });
   });
 };
 
-DocumentDownloader.prototype.getFilenames = function getFilenames(manifest) {
+DocumentDownloader.getFilenames = function getFilenames(manifest) {
   return manifest.split('\n').reduce(function (acc, line) {
     var filename = line.split('#')[0].trim();
 

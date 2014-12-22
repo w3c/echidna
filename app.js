@@ -170,7 +170,7 @@ function orchestrate(spec, isManifest) {
   var httpLocation = (argHttpLocation || DEFAULT_SPECBERUS_LOCATION) + '/' + date + '/Overview.html';
   var finalLocation = 'bar';
 
-  return new DocumentDownloader().fetchAndInstall(spec.url, tempLocation, isManifest).then(
+  return DocumentDownloader.fetchAndInstall(spec.url, tempLocation, isManifest).then(
     function () {
       spec.jobs['retrieve-resources'].status = 'ok';
       spec.history = spec.history.add('The file has been retrieved.');

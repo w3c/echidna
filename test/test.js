@@ -4,18 +4,16 @@ var expect = require("chai").use(require("chai-as-promised")).expect
 ,   List = require("immutable").List
 ;
 
-var DocumentDownloader = require("../functions.js").DocumentDownloader
-,   downloader = new DocumentDownloader()
-;
+var DocumentDownloader = require("../functions.js").DocumentDownloader;
 
 describe('DocumentDownloader', function () {
 
   describe('fetch(url)', function () {
     it('should be a function', function () {
-      expect(downloader.fetch).to.be.a('function');
+      expect(DocumentDownloader.fetch).to.be.a('function');
     });
 
-    var content = downloader.fetch('http://www.example.com/');
+    var content = DocumentDownloader.fetch('http://www.example.com/');
 
     it('should return a promise', function () {
       expect(content).to.be.an.instanceOf(Promise);
@@ -31,13 +29,13 @@ describe('DocumentDownloader', function () {
   });
 
   describe('fetchAll(urls)', function () {
-    var content = downloader.fetchAll(List.of(
+    var content = DocumentDownloader.fetchAll(List.of(
       'http://www.example.com/',
       'http://www.w3.org/'
     ));
 
     it('should be a function', function () {
-      expect(downloader.fetchAll).to.be.a('function');
+      expect(DocumentDownloader.fetchAll).to.be.a('function');
     });
 
     it('should return a promise', function () {
@@ -60,7 +58,7 @@ describe('DocumentDownloader', function () {
     var promise;
 
     before(function() {
-      promise = downloader.install('/tmp/foo', 'bar');
+      promise = DocumentDownloader.install('/tmp/foo', 'bar');
     });
 
     after(function(){
@@ -68,7 +66,7 @@ describe('DocumentDownloader', function () {
     });
 
     it('should be a function', function () {
-      expect(downloader.install).to.be.a('function');
+      expect(DocumentDownloader.install).to.be.a('function');
     });
 
     it('should return a promise', function () {
@@ -86,14 +84,14 @@ describe('DocumentDownloader', function () {
     var promise;
 
     before(function() {
-      promise = downloader.installAll(List.of(
+      promise = DocumentDownloader.installAll(List.of(
         List.of('/tmp/multiple_foo1', 'multiple_bar1'),
         List.of('/tmp/multiple_foo2', 'multiple_bar2')
       ));
     });
 
     it('should be a function', function () {
-      expect(downloader.installAll).to.be.a('function');
+      expect(DocumentDownloader.installAll).to.be.a('function');
     });
 
 
@@ -113,7 +111,7 @@ describe('DocumentDownloader', function () {
     var promise;
 
     before(function() {
-      promise = downloader.fetchAndInstall('http://www.example.com/', '/tmp/testechidna', false);
+      promise = DocumentDownloader.fetchAndInstall('http://www.example.com/', '/tmp/testechidna', false);
     });
 
     after(function(){
@@ -122,7 +120,7 @@ describe('DocumentDownloader', function () {
     });
 
     it('should be a function', function () {
-      expect(downloader.fetchAndInstall).to.be.a('function');
+      expect(DocumentDownloader.fetchAndInstall).to.be.a('function');
     });
 
     it('should return a promise', function () {
@@ -144,7 +142,7 @@ describe('DocumentDownloader', function () {
     });
 
     it('should read a manifest and install its content', function () {
-      return downloader.fetchAndInstall('http://jay.w3.org/~plehegar/navigation-timing/W3CTRMANIFEST', '/tmp/testechidnaManifest', true)
+      return DocumentDownloader.fetchAndInstall('http://jay.w3.org/~plehegar/navigation-timing/W3CTRMANIFEST', '/tmp/testechidnaManifest', true)
         .then(function() {
           expect(Fs.readFileSync('/tmp/testechidnaManifest/Overview.html', { 'encoding': 'utf8' })).to.contain("Navigation Timing 2");
           expect(Fs.existsSync('/tmp/testechidnaManifest/spec.css')).to.be.true;
@@ -160,15 +158,15 @@ describe('DocumentDownloader', function () {
 
   describe('getFilenames(manifestContent)', function () {
     it('should be a function', function () {
-      expect(downloader.getFilenames).to.be.a('function');
+      expect(DocumentDownloader.getFilenames).to.be.a('function');
     });
 
     it('should return an immutable list', function () {
-      expect(downloader.getFilenames('')).to.be.an.instanceOf(List);
+      expect(DocumentDownloader.getFilenames('')).to.be.an.instanceOf(List);
     });
 
     it('should return a list of string', function () {
-      expect(downloader.getFilenames('test').first()).to.be.a('string');
+      expect(DocumentDownloader.getFilenames('test').first()).to.be.a('string');
     });
 
     it('should read a well-formed manifest', function () {
@@ -192,7 +190,7 @@ describe('DocumentDownloader', function () {
         'img/image2.jpg'
       ];
 
-      expect(downloader.getFilenames(manifest).toArray()).to.eql(filenames);
+      expect(DocumentDownloader.getFilenames(manifest).toArray()).to.eql(filenames);
     });
   });
 });
