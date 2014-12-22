@@ -117,22 +117,6 @@ function thirdPartyChecker(url) {
   });
 }
 
-function parseMetadata(url) {
-  return new Promise(function (resolve, reject) {
-    var job = spawn('stubs/parse-metadata.sh', [url]);
-
-    job.on('exit', function (innerCode, innerSignal) {
-      if (innerCode === 0) {
-        var metadata = {};
-        resolve();
-      }
-      else {
-        reject(new Error("parse-metadata step failed with code " + innerCode));
-      }
-    });
-  });
-}
-
 function publish(url) {
   return new Promise(function (resolve, reject) {
     var job = spawn('stubs/publish.sh', [url]);
@@ -177,7 +161,6 @@ function orchestrate(spec, isManifest) {
   spec.jobs['retrieve-resources'] = new Job();
   spec.jobs['specberus'] = new Job();
   spec.jobs['third-party-checker'] = new Job();
-  spec.jobs['parse-metadata'] = new Job();
   spec.jobs['publish'] = new Job();
 
   spec.jobs['retrieve-resources'].status = 'pending';
@@ -206,28 +189,16 @@ function orchestrate(spec, isManifest) {
                 spec.jobs['third-party-checker'].status = 'ok';
                 spec.history = spec.history.add('The document passed the third party checker.');
 
-                spec.jobs['parse-metadata'].status = 'pending';
-                return parseMetadata(tempLocation).then(
-                  function (metadata) {
-                    spec.jobs['parse-metadata'].status = 'ok';
-
-                    spec.jobs['publish'].status = 'pending';
-                    return publish(tempLocation, finalLocation).then(
-                      function () {
-                        spec.jobs['publish'].status = 'ok';
-                        spec.history = spec.history.add('The document has been published at <a href="' + finalLocation + '">' + finalLocation + '</a>.');
-                        return Promise.resolve("finished");
-                      },
-                      function (err) {
-                        spec.jobs['publish'].status = 'failure';
-                        spec.jobs['publish'].errors.push(err.toString());
-                        return Promise.reject(err);
-                      }
-                    );
+                spec.jobs['publish'].status = 'pending';
+                return publish(tempLocation, finalLocation).then(
+                  function () {
+                    spec.jobs['publish'].status = 'ok';
+                    spec.history = spec.history.add('The document has been published at <a href="' + finalLocation + '">' + finalLocation + '</a>.');
+                    return Promise.resolve("finished");
                   },
                   function (err) {
-                    spec.jobs['parse-metadata'].status = 'failure';
-                    spec.jobs['parse-metadata'].errors.push(err.toString());
+                    spec.jobs['publish'].status = 'failure';
+                    spec.jobs['publish'].errors.push(err.toString());
                     return Promise.reject(err);
                   }
                 );
