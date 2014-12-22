@@ -3,6 +3,11 @@
 
 console.log('Launching…');
 
+// Pseudo-constants:
+var DEFAULT_TEMP_LOCATION = '/var/www/html/trstaging/'
+,   DEFAULT_SPECBERUS_LOCATION = 'http://localhost/trstaging/'
+,   DEFAULT_PORT = 3000;
+
 var Promise = require('promise');
 var Immutable = require('immutable');
 
@@ -10,11 +15,14 @@ var meta = require('./package.json')
 ,   express = require('express')
 ,   ejs = require('ejs')
 ,   spawn = require('child_process').spawn
-,   app = express()
-,   port = 3000
-,   requests = {}
 ,   DocumentDownloader = require("./functions.js").DocumentDownloader
 ,   SpecberusWrapper = require("./functions.js").SpecberusWrapper
+,   path = require('path')
+,   app = express()
+,   requests = {}
+,   argTempLocation = process.argv[2]
+,   argSpecberusLocation  = process.argv[3]
+,   port = process.argv[4] || DEFAULT_PORT;
 ;
 
 app.use(express.compress());
@@ -175,8 +183,8 @@ function orchestrate(spec, isManifest) {
   spec.jobs['retrieve-resources'].status = 'pending';
 
   var date = new Date().getTime();
-  var tempLocation = '/var/www/html/trstaging/' + date + '/';
-  var specberusLocation = 'http://localhost/trstaging/' + date + '/Overview.html';
+  var tempLocation = (argTempLocation || DEFAULT_TEMP_LOCATION) + path.sep + date + path.sep;
+  var specberusLocation = (argSpecberusLocation || DEFAULT_SPECBERUS_LOCATION) + '/' + date + '/Overview.html';
   var finalLocation = 'bar';
 
   return new DocumentDownloader().fetchAndInstall(spec.url, tempLocation, isManifest).then(
