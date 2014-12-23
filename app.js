@@ -176,7 +176,7 @@ function orchestrate(spec, isManifest) {
       spec.history = spec.history.add('The file has been retrieved.');
 
       spec.jobs['specberus'].status = 'pending';
-      return new SpecberusWrapper().validate(httpLocation).then(
+      return SpecberusWrapper.validate(httpLocation).then(
         function (report) {
           if(report.errors.size === 0) {
             spec.jobs['specberus'].status = 'ok';
@@ -219,7 +219,7 @@ function orchestrate(spec, isManifest) {
         },
         function (err) {
           spec.history = spec.history.add('The document failed specberus.');
-          spec.jobs['specberus'].status = 'failure';
+          spec.jobs['specberus'].status = 'error';
           spec.jobs['specberus'].errors.push(err.toString());
           return Promise.reject(err);
         }

@@ -92,7 +92,7 @@ exports.DocumentDownloader = DocumentDownloader;
 
 var SpecberusWrapper = function () {};
 
-SpecberusWrapper.prototype.validate = function(url) {
+SpecberusWrapper.validate = function (url) {
   return new Promise(function (resolve, reject) {
     function Sink () {}
     require("util").inherits(Sink, require("events").EventEmitter);
