@@ -101,10 +101,6 @@ SpecberusWrapper.validate = function (url) {
     var errors = List();
     var specberus = new Specberus();
 
-    sink.on("start-all", function (profilename) {
-      console.log("start-all", profilename);
-    });
-
     sink.on("end-all", function (profilename) {
       resolve({
         errors: errors,
@@ -126,12 +122,10 @@ SpecberusWrapper.validate = function (url) {
       profile: require("../specberus/lib/profiles/WD"),
       events: sink,
       // validation: "recursive",
-      // validation: "simple-validation",
-      validation: "no-validation",
+      validation: "simple-validation",
       noRecTrack: false,
       informativeOnly: false,
-      // patentPolicy: patentPolicy,
-      processDocument: "2005"
+      processDocument: "2014"
     });
   });
 }
