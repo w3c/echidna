@@ -3,7 +3,8 @@ var Http = require('http')
 ,   Fs = require('fs')
 ,   List = require('immutable').List
 ,   Url = require('url')
-,   Specberus = require("../specberus/lib/validator").Specberus;
+,   Specberus = require("../specberus/lib/validator").Specberus
+,   C = require('./const.js')
 ;
 
 // Zip a list with another list
@@ -137,3 +138,28 @@ SpecberusWrapper.validate = function (url) {
 }
 
 exports.SpecberusWrapper = SpecberusWrapper;
+
+var ThirdPartyChecker = function () {};
+
+ThirdPartyChecker.check = function (url) {
+  var args  = ['../third-party-resources-checker/detect-phantom.js', url, global.RESOURCE_WHITELIST],
+      spawn = require('child_process').spawn;
+  return new Promise(function (resolve, reject) {
+    var phantom = spawn(global.PHANTOM, args)
+    ,   buffer = "";
+    phantom.stdout.on('data', function(data) {
+      buffer += data;
+    });
+    phantom.on('close', function() {
+      var consoleout = buffer.replace(global.DEFAULT_SPECBERUS_LOCATION, '', 'g').split("\n");
+      consoleout.pop();
+      if (consoleout.length > 0) {
+        reject(consoleout);
+      } else {
+        resolve();
+      }
+    });
+  });
+}
+
+exports.ThirdPartyChecker = ThirdPartyChecker;
