@@ -4,9 +4,7 @@
 console.log('Launching…');
 
 // Pseudo-constants:
-var DEFAULT_TEMP_LOCATION = '/var/www/html/trstaging/'
-,   DEFAULT_HTTP_LOCATION = 'http://localhost/trstaging/'
-,   DEFAULT_PORT = 3000;
+require('./const.js');
 
 var Promise = require('promise');
 var Immutable = require('immutable');
@@ -19,6 +17,7 @@ var meta = require('./package.json')
 ,   exec = require('child_process').exec
 ,   DocumentDownloader = require("./functions.js").DocumentDownloader
 ,   SpecberusWrapper = require("./functions.js").SpecberusWrapper
+,   ThirdPartyChecker = require("./functions.js").ThirdPartyChecker
 ,   path = require('path')
 ,   app = express()
 ,   requests = {}
@@ -104,21 +103,6 @@ app.post('/api/request', function(req, res) {
     }
   }
 });
-
-function thirdPartyChecker(url) {
-  return new Promise(function (resolve, reject) {
-    var job = spawn('stubs/third-party-checker.sh', [url]);
-
-    job.on('exit', function (innerCode, innerSignal) {
-      if (innerCode === 0) {
-        resolve();
-      }
-      else {
-        reject(new Error("third-party-checker step failed with code " + innerCode));
-      }
-    });
-  });
-}
 
 function trInstaller(source, dest) {
   return new Promise(function (resolve, reject) {
@@ -210,8 +194,8 @@ function orchestrate(spec, isManifest) {
   spec.jobs['retrieve-resources'].status = 'pending';
 
   var date = new Date().getTime();
-  var tempLocation = argTempLocation + path.sep + date + path.sep;
-  var httpLocation = argHttpLocation + '/' + date + '/Overview.html';
+  var tempLocation = (argTempLocation || global.DEFAULT_TEMP_LOCATION) + path.sep + date + path.sep;
+  var httpLocation = (argHttpLocation || global.DEFAULT_SPECBERUS_LOCATION) + '/' + date + '/Overview.html';
   var finalLocation = 'bar';
 
   return DocumentDownloader.fetchAndInstall(spec.url, tempLocation, isManifest).then(
@@ -227,7 +211,7 @@ function orchestrate(spec, isManifest) {
             spec.history = spec.history.add('The document passed specberus.');
 
             spec.jobs['third-party-checker'].status = 'pending';
-            return thirdPartyChecker(httpLocation).then(
+            return ThirdPartyChecker.check(httpLocation).then(
               function () {
                 spec.jobs['third-party-checker'].status = 'ok';
                 spec.history = spec.history.add('The document passed the third party checker.');
