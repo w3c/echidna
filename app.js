@@ -21,8 +21,8 @@ var meta = require('./package.json')
 ,   path = require('path')
 ,   app = express()
 ,   requests = {}
-,   argTempLocation = process.argv[2]
-,   argHttpLocation  = process.argv[3]
+,   argTempLocation = process.argv[2] || DEFAULT_TEMP_LOCATION
+,   argHttpLocation  = process.argv[3] || DEFAULT_HTTP_LOCATION
 ,   port = process.argv[4] || DEFAULT_PORT;
 ;
 
@@ -197,8 +197,8 @@ function orchestrate(spec, isManifest) {
   spec.jobs['retrieve-resources'].status = 'pending';
 
   var date = new Date().getTime();
-  var tempLocation = (argTempLocation || DEFAULT_TEMP_LOCATION) + path.sep + date + path.sep;
-  var httpLocation = (argHttpLocation || DEFAULT_SPECBERUS_LOCATION) + '/' + date + '/Overview.html';
+  var tempLocation = argTempLocation + path.sep + date + path.sep;
+  var httpLocation = argHttpLocation + '/' + date + '/Overview.html';
   var finalLocation = 'bar';
 
   return DocumentDownloader.fetchAndInstall(spec.url, tempLocation, isManifest).then(
