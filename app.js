@@ -10,6 +10,7 @@ var DEFAULT_TEMP_LOCATION = '/var/www/html/trstaging/'
 
 var Promise = require('promise');
 var Immutable = require('immutable');
+var Request = require('request');
 
 var meta = require('./package.json')
 ,   express = require('express')
@@ -117,17 +118,47 @@ function thirdPartyChecker(url) {
   });
 }
 
-function publish(url) {
-  return new Promise(function (resolve, reject) {
-    var job = spawn('stubs/publish.sh', [url]);
+var publishToTrUrl = '';
 
-    job.on('exit', function (innerCode, innerSignal) {
-      if (innerCode === 0) {
-        resolve();
+function publish(metadata) {
+  return new Promise(function (resolve, reject) {
+    Request.post({
+      url: publishToTrUrl,
+      form: {
+        specversionslisttype: {
+          specversions: [
+            {
+              trmaturity: [2], // WD
+              uri: metadata.uri,
+              latestVersionUri: metadata.latestVersionUri,
+              old: [{
+                uri: metadata.previousVersionUri,
+                wgid: metadata.wgId
+              }],
+              date: metadata.date,
+              title: metadata.title,
+              wgid: metadata.wgId,
+              reportEditors: metadata.editorIds.map(getUsername).toArray(),
+              informative: false, // FIXME Not always true
+              editorDraft: metadata.editorsDraft,
+              processRules: metadata.processRules,
+              ppMaturity: 0, // 'None', FIXME Not always true
+              ppStatus: 0, // FIXME 0 == http://www.w3.org/Consortium/Patent-Policy-20040205/, not always true, can be informative
+              specid: {
+                description: '', // @@@
+                specgroup: [
+                  '' // @@@
+                ]
+              }
+            }
+          ]
+        }
       }
-      else {
-        reject(new Error("publish step failed with code " + innerCode));
-      }
+    }, function(/*err, httpResponse, body*/){
+      // console.log(err);
+      // console.log(httpResponse);
+      // console.log(body);
+      resolve();
     });
   });
 }
@@ -189,7 +220,7 @@ function orchestrate(spec, isManifest) {
                 spec.history = spec.history.add('The document passed the third party checker.');
 
                 spec.jobs['publish'].status = 'pending';
-                return publish(tempLocation, finalLocation).then(
+                return publish(report.metadata).then(
                   function () {
                     spec.jobs['publish'].status = 'ok';
                     spec.history = spec.history.add('The document has been published at <a href="' + finalLocation + '">' + finalLocation + '</a>.');
