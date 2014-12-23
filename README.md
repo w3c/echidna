@@ -8,6 +8,7 @@ Echidna is the central piece of software taking care of the new publication work
 
 * [Node.js](http://nodejs.org/)
 * [npm](https://www.npmjs.org/)
+* [PhantomJS](http://phantomjs.org/)
 
 ### npm dependencies
 
