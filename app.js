@@ -5,7 +5,7 @@ console.log('Launching…');
 
 // Pseudo-constants:
 var DEFAULT_TEMP_LOCATION = '/var/www/html/trstaging/'
-,   DEFAULT_SPECBERUS_LOCATION = 'http://localhost/trstaging/'
+,   DEFAULT_HTTP_LOCATION = 'http://localhost/trstaging/'
 ,   DEFAULT_PORT = 3000;
 
 var Promise = require('promise');
