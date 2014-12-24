@@ -18,6 +18,7 @@ var meta = require('./package.json')
 ,   DocumentDownloader = require("./functions.js").DocumentDownloader
 ,   SpecberusWrapper = require("./functions.js").SpecberusWrapper
 ,   ThirdPartyChecker = require("./functions.js").ThirdPartyChecker
+,   TokenChecker = require("./functions.js").TokenChecker
 ,   path = require('path')
 ,   app = express()
 ,   requests = {}
@@ -186,6 +187,7 @@ History.prototype.toJSON = function () {
 
 function orchestrate(spec, isManifest) {
   spec.jobs['retrieve-resources'] = new Job();
+  spec.jobs['token-checker'] = new Job();
   spec.jobs['specberus'] = new Job();
   spec.jobs['third-party-checker'] = new Job();
   spec.jobs['tr-install'] = new Job();
@@ -197,77 +199,94 @@ function orchestrate(spec, isManifest) {
   var tempLocation = (argTempLocation || global.DEFAULT_TEMP_LOCATION) + path.sep + date + path.sep;
   var httpLocation = (argHttpLocation || global.DEFAULT_SPECBERUS_LOCATION) + '/' + date + '/Overview.html';
   var finalLocation = 'bar';
+  var token; //@todo retrieve token
 
   return DocumentDownloader.fetchAndInstall(spec.url, tempLocation, isManifest).then(
     function () {
       spec.jobs['retrieve-resources'].status = 'ok';
       spec.history = spec.history.add('The file has been retrieved.');
 
-      spec.jobs['specberus'].status = 'pending';
-      return SpecberusWrapper.validate(httpLocation).then(
-        function (report) {
-          if(report.errors.size === 0) {
-            spec.jobs['specberus'].status = 'ok';
-            spec.history = spec.history.add('The document passed specberus.');
+      spec.jobs['token-checker'].status = 'pending';
+      var shortlink; //@todo retrieve shortlink
+      return TokenChecker.check(shortlink, token).then(
+          function(authReport) {
+            if(authReport.authorized) {
+              spec.jobs['token-checker'].status = 'ok';
+              spec.history = spec.history.add('You are authorized to publish');
 
-            spec.jobs['third-party-checker'].status = 'pending';
-            return ThirdPartyChecker.check(httpLocation).then(
-              function (extResources) {
-                if (extResources.length === 0) {
-                  spec.jobs['third-party-checker'].status = 'ok';
-                  spec.history = spec.history.add('The document passed the third party checker.');
-                  spec.jobs['tr-install'].status = 'pending';
-                  return trInstall(tempLocation, finalLocation).then(
-                    function () {
-                      spec.jobs['tr-install'].status = 'ok';
+              spec.jobs['specberus'].status = 'pending';
+              return SpecberusWrapper.validate(httpLocation).then(
+                function (report) {
+                  if(report.errors.size === 0) {
+                    spec.jobs['specberus'].status = 'ok';
+                    spec.history = spec.history.add('The document passed specberus.');
 
-                      spec.jobs['publish'].status = 'pending';
-                      return publish(report.metadata).then(
-                        function () {
-                          spec.jobs['publish'].status = 'ok';
-                          spec.history = spec.history.add('The document has been published at <a href="' + finalLocation + '">' + finalLocation + '</a>.');
-                          return Promise.resolve("finished");
-                        },
-                        function (err) {
-                          spec.jobs['publish'].status = 'failure';
-                          spec.jobs['publish'].errors.push(err.toString());
-                          return Promise.reject(err);
+                    spec.jobs['third-party-checker'].status = 'pending';
+                    return ThirdPartyChecker.check(httpLocation).then(
+                      function (extResources) {
+                        if (extResources.length === 0) {
+                          spec.jobs['third-party-checker'].status = 'ok';
+                          spec.history = spec.history.add('The document passed the third party checker.');
+                          spec.jobs['tr-install'].status = 'pending';
+                          return trInstall(tempLocation, finalLocation).then(
+                            function () {
+                              spec.jobs['tr-install'].status = 'ok';
+
+                              spec.jobs['publish'].status = 'pending';
+                              return publish(report.metadata).then(
+                                function () {
+                                  spec.jobs['publish'].status = 'ok';
+                                  spec.history = spec.history.add('The document has been published at <a href="' + finalLocation + '">' + finalLocation + '</a>.');
+                                  return Promise.resolve("finished");
+                                },
+                                function (err) {
+                                  spec.jobs['publish'].status = 'failure';
+                                  spec.jobs['publish'].errors.push(err.toString());
+                                  return Promise.reject(err);
+                                }
+                              );
+                            },
+                            function (err) {
+                              spec.jobs['tr-install'].status = 'failure';
+                              spec.jobs['tr-install'].errors.push(err.toString());
+                            }
+                          );
+                        } else {
+                          spec.history = spec.history.add('The document contains non-authorized resources');
+                          spec.jobs['third-party-checker'].status = 'failure';
+                          spec.jobs['third-party-checker'].errors = extResources;
+                          return Promise.reject(new Error("Failed Third-Party checker"));
                         }
-                      );
-                    },
-                    function (err) {
-                      spec.jobs['tr-install'].status = 'failure';
-                      spec.jobs['tr-install'].errors.push(err.toString());
-                    }
-                  );
-                } else {
-                  spec.history = spec.history.add('The document contains non-authorized resources');
-                  spec.jobs['third-party-checker'].status = 'failure';
-                  spec.jobs['third-party-checker'].errors = extResources;
-                  return Promise.reject(new Error("Failed Third-Party checker"));
-                }
-              }, function (err) {
-                spec.history = spec.history.add('The document failed the third-party-checker.');
-                spec.jobs['third-party-checker'].status = 'failure';
-                spec.jobs['third-party-checker'].errors.push(err.toString());
-                return Promise.reject(err);
-              }
-            );
-          }
-          else {
-            spec.jobs['specberus'].status = 'failure';
-            spec.jobs['specberus'].errors = report.errors;
-            spec.history = spec.history.add('The document failed specberus.');
+                      }, function (err) {
+                        spec.history = spec.history.add('The document failed the third-party-checker.');
+                        spec.jobs['third-party-checker'].status = 'failure';
+                        spec.jobs['third-party-checker'].errors.push(err.toString());
+                        return Promise.reject(err);
+                      }
+                    );
+                  }
+                  else {
+                    spec.jobs['specberus'].status = 'failure';
+                    spec.jobs['specberus'].errors = report.errors;
+                    spec.history = spec.history.add('The document failed specberus.');
 
-            return Promise.reject(new Error("Failed Specberus"));
+                    return Promise.reject(new Error("Failed Specberus"));
+                  }
+                },
+                function (err) {
+                  spec.history = spec.history.add('The document failed specberus.');
+                  spec.jobs['specberus'].status = 'error';
+                  spec.jobs['specberus'].errors.push(err.toString());
+                  return Promise.reject(err);
+                }
+              );
+            } else {
+              spec.jobs['token-checker'].status = 'failure';
+              spec.jobs['token-checker'].errors = 'Not authorized';
+              spec.history = spec.history.add('You are not authorized to publish');
+              return Promise.reject(new Error("Failed Token checker"));
+            }
           }
-        },
-        function (err) {
-          spec.history = spec.history.add('The document failed specberus.');
-          spec.jobs['specberus'].status = 'error';
-          spec.jobs['specberus'].errors.push(err.toString());
-          return Promise.reject(err);
-        }
       );
     },
     function (err) {
