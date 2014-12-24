@@ -169,7 +169,8 @@ TokenChecker.check = function (url, token) {
         'token': token
       }
     }, function (err, res, body) {
-      resolve(JSON.parse(body));
+      if (err) reject(new Error("There was an error while checking the token: ", err));
+      else resolve(JSON.parse(body));
     });
   });
 }

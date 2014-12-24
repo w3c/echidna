@@ -282,10 +282,15 @@ function orchestrate(spec, isManifest) {
               );
             } else {
               spec.jobs['token-checker'].status = 'failure';
-              spec.jobs['token-checker'].errors = 'Not authorized';
+              spec.jobs['token-checker'].errors.push('Not authorized');
               spec.history = spec.history.add('You are not authorized to publish');
               return Promise.reject(new Error("Failed Token checker"));
             }
+          },
+          function (err) {
+            spec.jobs['token-checker'].status = 'error';
+            spec.jobs['token-checker'].errors.push(err.toString());
+            return Promise.reject(err);
           }
       );
     },
@@ -296,6 +301,7 @@ function orchestrate(spec, isManifest) {
       return Promise.reject(err);
     }
   ).catch(function (err) {
+    spec.history = spec.history.add('A system error occurred during the process.');
     return Promise.reject(new Error('Orchestrator has failed.'));
   });
 }
