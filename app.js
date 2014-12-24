@@ -21,9 +21,9 @@ var meta = require('./package.json')
 ,   path = require('path')
 ,   app = express()
 ,   requests = {}
-,   argTempLocation = process.argv[2] || DEFAULT_TEMP_LOCATION
-,   argHttpLocation  = process.argv[3] || DEFAULT_HTTP_LOCATION
-,   port = process.argv[4] || DEFAULT_PORT
+,   argTempLocation = process.argv[2] || global.DEFAULT_TEMP_LOCATION
+,   argHttpLocation  = process.argv[3] || global.DEFAULT_HTTP_LOCATION
+,   port = process.argv[4] || global.DEFAULT_PORT
 ,   trInstallCmd = 'cp'
 ;
 
