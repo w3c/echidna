@@ -4,7 +4,7 @@
 console.log('Launching…');
 
 // Pseudo-constants:
-var C = require('./const.js');
+require('./const.js');
 
 var Promise = require('promise');
 var Immutable = require('immutable');
@@ -199,23 +199,30 @@ function orchestrate(spec, isManifest) {
 
             spec.jobs['third-party-checker'].status = 'pending';
             return ThirdPartyChecker.check(httpLocation).then(
-              function () {
-                spec.jobs['third-party-checker'].status = 'ok';
-                spec.history = spec.history.add('The document passed the third party checker.');
+              function (extResources) {
+                if (extResources.length === 0) {
+                  spec.jobs['third-party-checker'].status = 'ok';
+                  spec.history = spec.history.add('The document passed the third party checker.');
 
-                spec.jobs['publish'].status = 'pending';
-                return publish(report.metadata).then(
-                  function () {
-                    spec.jobs['publish'].status = 'ok';
-                    spec.history = spec.history.add('The document has been published at <a href="' + finalLocation + '">' + finalLocation + '</a>.');
-                    return Promise.resolve("finished");
-                  },
-                  function (err) {
-                    spec.jobs['publish'].status = 'failure';
-                    spec.jobs['publish'].errors.push(err.toString());
-                    return Promise.reject(err);
-                  }
-                );
+                  spec.jobs['publish'].status = 'pending';
+                  return publish(report.metadata).then(
+                    function () {
+                      spec.jobs['publish'].status = 'ok';
+                      spec.history = spec.history.add('The document has been published at <a href="' + finalLocation + '">' + finalLocation + '</a>.');
+                      return Promise.resolve("finished");
+                    },
+                    function (err) {
+                      spec.jobs['publish'].status = 'failure';
+                      spec.jobs['publish'].errors.push(err.toString());
+                      return Promise.reject(err);
+                    }
+                  );
+                } else {
+                  spec.history = spec.history.add('The document contains non-authorized resources');
+                  spec.jobs['third-party-checker'].status = 'failure';
+                  spec.jobs['third-party-checker'].errors = extResources;
+                  return Promise.reject(new Error("Failed Third-Party checker"));
+                }
               }, function (err) {
                 spec.history = spec.history.add('The document failed the third-party-checker.');
                 spec.jobs['third-party-checker'].status = 'failure';
