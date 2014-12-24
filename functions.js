@@ -144,7 +144,7 @@ ThirdPartyChecker.check = function (url) {
       buffer += data;
     });
     phantom.on('close', function() {
-      var consoleout = buffer.replace(global.DEFAULT_SPECBERUS_LOCATION, '', 'g').split("\n");
+      var consoleout = buffer.replace(global.DEFAULT_HTTP_LOCATION, '', 'g').split("\n");
       consoleout.pop();
       resolve(consoleout);
     });
