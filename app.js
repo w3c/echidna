@@ -16,6 +16,7 @@ var meta = require('./package.json')
 ,   express = require('express')
 ,   ejs = require('ejs')
 ,   spawn = require('child_process').spawn
+,   exec = require('child_process').exec
 ,   DocumentDownloader = require("./functions.js").DocumentDownloader
 ,   SpecberusWrapper = require("./functions.js").SpecberusWrapper
 ,   path = require('path')
@@ -23,7 +24,8 @@ var meta = require('./package.json')
 ,   requests = {}
 ,   argTempLocation = process.argv[2] || DEFAULT_TEMP_LOCATION
 ,   argHttpLocation  = process.argv[3] || DEFAULT_HTTP_LOCATION
-,   port = process.argv[4] || DEFAULT_PORT;
+,   port = process.argv[4] || DEFAULT_PORT
+,   trInstallCmd = 'cp'
 ;
 
 app.use(express.compress());
@@ -118,6 +120,16 @@ function thirdPartyChecker(url) {
   });
 }
 
+function trInstaller(source, dest) {
+  return new Promise(function (resolve, reject) {
+    var cmd = trInstallCmd + ' ' + source + ' ' + dest;
+    exec(cmd, function (err, stdout, stderr) {
+      if (err) reject(err);
+      else resolve();
+    });
+  });
+}
+
 var publishToTrUrl = '';
 
 function publish(metadata) {
@@ -192,6 +204,7 @@ function orchestrate(spec, isManifest) {
   spec.jobs['retrieve-resources'] = new Job();
   spec.jobs['specberus'] = new Job();
   spec.jobs['third-party-checker'] = new Job();
+  spec.jobs['tr-install'] = new Job();
   spec.jobs['publish'] = new Job();
 
   spec.jobs['retrieve-resources'].status = 'pending';
@@ -219,17 +232,28 @@ function orchestrate(spec, isManifest) {
                 spec.jobs['third-party-checker'].status = 'ok';
                 spec.history = spec.history.add('The document passed the third party checker.');
 
-                spec.jobs['publish'].status = 'pending';
-                return publish(report.metadata).then(
+                spec.jobs['tr-install'].status = 'pending';
+                return trInstall(tempLocation, finalLocation).then(
                   function () {
-                    spec.jobs['publish'].status = 'ok';
-                    spec.history = spec.history.add('The document has been published at <a href="' + finalLocation + '">' + finalLocation + '</a>.');
-                    return Promise.resolve("finished");
+                    spec.jobs['tr-install'].status = 'ok';
+
+                    spec.jobs['publish'].status = 'pending';
+                    return publish(report.metadata).then(
+                      function () {
+                        spec.jobs['publish'].status = 'ok';
+                        spec.history = spec.history.add('The document has been published at <a href="' + finalLocation + '">' + finalLocation + '</a>.');
+                        return Promise.resolve("finished");
+                      },
+                      function (err) {
+                        spec.jobs['publish'].status = 'failure';
+                        spec.jobs['publish'].errors.push(err.toString());
+                        return Promise.reject(err);
+                      }
+                    );
                   },
                   function (err) {
-                    spec.jobs['publish'].status = 'failure';
-                    spec.jobs['publish'].errors.push(err.toString());
-                    return Promise.reject(err);
+                    spec.jobs['tr-install'].status = 'failure';
+                    spec.jobs['tr-install'].errors.push(err.toString());
                   }
                 );
               }, function (err) {
