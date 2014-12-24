@@ -3,7 +3,8 @@ var Http = require('http')
 ,   Fs = require('fs')
 ,   List = require('immutable').List
 ,   Url = require('url')
-,   Specberus = require("../specberus/lib/validator").Specberus;
+,   Specberus = require("../specberus/lib/validator").Specberus
+,   Request = require('request');
 require('./const.js');
 
 // Zip a list with another list
@@ -152,3 +153,25 @@ ThirdPartyChecker.check = function (url) {
 }
 
 exports.ThirdPartyChecker = ThirdPartyChecker;
+
+var TokenChecker = function () {};
+
+TokenChecker.check = function (url, token) {
+  return new Promise(function (resolve) {
+    Request.get({
+      'uri': global.TOKEN_ENDPOINT,
+      'auth': {
+        'user': global.USERNAME,
+        'pass': global.PASSWORD
+      },
+      'qs': {
+        'spec': url,
+        'token': token
+      }
+    }, function (err, res, body) {
+      resolve(JSON.parse(body));
+    });
+  });
+}
+
+exports.TokenChecker = TokenChecker;
