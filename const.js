@@ -8,3 +8,4 @@ global.USERNAME = process.env.USERNAME;
 global.PASSWORD = process.env.PASSWORD;
 global.W3C_PUBSYSTEM_URL = '';
 global.TR_INSTALL_CMD = '/bin/cp';
+global.UPDATE_TR_SHORTLINK_CMD = '';
