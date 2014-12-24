@@ -3,9 +3,8 @@ var Http = require('http')
 ,   Fs = require('fs')
 ,   List = require('immutable').List
 ,   Url = require('url')
-,   Specberus = require("../specberus/lib/validator").Specberus
-,   C = require('./const.js')
-;
+,   Specberus = require("../specberus/lib/validator").Specberus;
+require('./const.js');
 
 // Zip a list with another list
 // Example: (a, b) zip (c, d) == ((a, c), (b, d))
@@ -136,9 +135,9 @@ exports.SpecberusWrapper = SpecberusWrapper;
 var ThirdPartyChecker = function () {};
 
 ThirdPartyChecker.check = function (url) {
-  var args  = ['../third-party-resources-checker/detect-phantom.js', url, global.RESOURCE_WHITELIST],
+  var args  = ['../third-party-resources-checker/detect-phantom.js', url, global.RESOURCES_WHITELIST],
       spawn = require('child_process').spawn;
-  return new Promise(function (resolve, reject) {
+  return new Promise(function (resolve) {
     var phantom = spawn(global.PHANTOM, args)
     ,   buffer = "";
     phantom.stdout.on('data', function(data) {
@@ -147,11 +146,7 @@ ThirdPartyChecker.check = function (url) {
     phantom.on('close', function() {
       var consoleout = buffer.replace(global.DEFAULT_SPECBERUS_LOCATION, '', 'g').split("\n");
       consoleout.pop();
-      if (consoleout.length > 0) {
-        reject(consoleout);
-      } else {
-        resolve();
-      }
+      resolve(consoleout);
     });
   });
 }
