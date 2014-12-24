@@ -4,9 +4,7 @@
 console.log('Launching…');
 
 // Pseudo-constants:
-var DEFAULT_TEMP_LOCATION = '/var/www/html/trstaging/'
-,   DEFAULT_HTTP_LOCATION = 'http://localhost/trstaging/'
-,   DEFAULT_PORT = 3000;
+require('./const.js');
 
 var Promise = require('promise');
 var Immutable = require('immutable');
@@ -19,12 +17,13 @@ var meta = require('./package.json')
 ,   exec = require('child_process').exec
 ,   DocumentDownloader = require("./functions.js").DocumentDownloader
 ,   SpecberusWrapper = require("./functions.js").SpecberusWrapper
+,   ThirdPartyChecker = require("./functions.js").ThirdPartyChecker
 ,   path = require('path')
 ,   app = express()
 ,   requests = {}
-,   argTempLocation = process.argv[2] || DEFAULT_TEMP_LOCATION
-,   argHttpLocation  = process.argv[3] || DEFAULT_HTTP_LOCATION
-,   port = process.argv[4] || DEFAULT_PORT
+,   argTempLocation = process.argv[2] || global.DEFAULT_TEMP_LOCATION
+,   argHttpLocation  = process.argv[3] || global.DEFAULT_HTTP_LOCATION
+,   port = process.argv[4] || global.DEFAULT_PORT
 ,   trInstallCmd = 'cp'
 ;
 
@@ -104,21 +103,6 @@ app.post('/api/request', function(req, res) {
     }
   }
 });
-
-function thirdPartyChecker(url) {
-  return new Promise(function (resolve, reject) {
-    var job = spawn('stubs/third-party-checker.sh', [url]);
-
-    job.on('exit', function (innerCode, innerSignal) {
-      if (innerCode === 0) {
-        resolve();
-      }
-      else {
-        reject(new Error("third-party-checker step failed with code " + innerCode));
-      }
-    });
-  });
-}
 
 function trInstaller(source, dest) {
   return new Promise(function (resolve, reject) {
@@ -210,8 +194,8 @@ function orchestrate(spec, isManifest) {
   spec.jobs['retrieve-resources'].status = 'pending';
 
   var date = new Date().getTime();
-  var tempLocation = argTempLocation + path.sep + date + path.sep;
-  var httpLocation = argHttpLocation + '/' + date + '/Overview.html';
+  var tempLocation = (argTempLocation || global.DEFAULT_TEMP_LOCATION) + path.sep + date + path.sep;
+  var httpLocation = (argHttpLocation || global.DEFAULT_SPECBERUS_LOCATION) + '/' + date + '/Overview.html';
   var finalLocation = 'bar';
 
   return DocumentDownloader.fetchAndInstall(spec.url, tempLocation, isManifest).then(
@@ -227,35 +211,41 @@ function orchestrate(spec, isManifest) {
             spec.history = spec.history.add('The document passed specberus.');
 
             spec.jobs['third-party-checker'].status = 'pending';
-            return thirdPartyChecker(httpLocation).then(
-              function () {
-                spec.jobs['third-party-checker'].status = 'ok';
-                spec.history = spec.history.add('The document passed the third party checker.');
+            return ThirdPartyChecker.check(httpLocation).then(
+              function (extResources) {
+                if (extResources.length === 0) {
+                  spec.jobs['third-party-checker'].status = 'ok';
+                  spec.history = spec.history.add('The document passed the third party checker.');
+                  spec.jobs['tr-install'].status = 'pending';
+                  return trInstall(tempLocation, finalLocation).then(
+                    function () {
+                      spec.jobs['tr-install'].status = 'ok';
 
-                spec.jobs['tr-install'].status = 'pending';
-                return trInstall(tempLocation, finalLocation).then(
-                  function () {
-                    spec.jobs['tr-install'].status = 'ok';
-
-                    spec.jobs['publish'].status = 'pending';
-                    return publish(report.metadata).then(
-                      function () {
-                        spec.jobs['publish'].status = 'ok';
-                        spec.history = spec.history.add('The document has been published at <a href="' + finalLocation + '">' + finalLocation + '</a>.');
-                        return Promise.resolve("finished");
-                      },
-                      function (err) {
-                        spec.jobs['publish'].status = 'failure';
-                        spec.jobs['publish'].errors.push(err.toString());
-                        return Promise.reject(err);
-                      }
-                    );
-                  },
-                  function (err) {
-                    spec.jobs['tr-install'].status = 'failure';
-                    spec.jobs['tr-install'].errors.push(err.toString());
-                  }
-                );
+                      spec.jobs['publish'].status = 'pending';
+                      return publish(report.metadata).then(
+                        function () {
+                          spec.jobs['publish'].status = 'ok';
+                          spec.history = spec.history.add('The document has been published at <a href="' + finalLocation + '">' + finalLocation + '</a>.');
+                          return Promise.resolve("finished");
+                        },
+                        function (err) {
+                          spec.jobs['publish'].status = 'failure';
+                          spec.jobs['publish'].errors.push(err.toString());
+                          return Promise.reject(err);
+                        }
+                      );
+                    },
+                    function (err) {
+                      spec.jobs['tr-install'].status = 'failure';
+                      spec.jobs['tr-install'].errors.push(err.toString());
+                    }
+                  );
+                } else {
+                  spec.history = spec.history.add('The document contains non-authorized resources');
+                  spec.jobs['third-party-checker'].status = 'failure';
+                  spec.jobs['third-party-checker'].errors = extResources;
+                  return Promise.reject(new Error("Failed Third-Party checker"));
+                }
               }, function (err) {
                 spec.history = spec.history.add('The document failed the third-party-checker.');
                 spec.jobs['third-party-checker'].status = 'failure';
