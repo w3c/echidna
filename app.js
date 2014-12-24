@@ -115,12 +115,10 @@ function trInstaller(source, dest) {
   });
 }
 
-var publishToTrUrl = '';
-
 function publish(metadata) {
   return new Promise(function (resolve, reject) {
     Request.post({
-      url: publishToTrUrl,
+      url: global.W3C_PUBSYSTEM_URL,
       form: {
         specversionslisttype: {
           specversions: [
