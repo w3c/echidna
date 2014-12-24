@@ -7,3 +7,4 @@ global.TOKEN_ENDPOINT = 'https://www.w3.org/Web/publications/authorize';
 global.USERNAME = process.env.USERNAME;
 global.PASSWORD = process.env.PASSWORD;
 global.W3C_PUBSYSTEM_URL = '';
+global.TR_INSTALL_CMD = '/bin/cp';

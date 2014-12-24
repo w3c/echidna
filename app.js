@@ -25,7 +25,6 @@ var meta = require('./package.json')
 ,   argTempLocation = process.argv[2] || global.DEFAULT_TEMP_LOCATION
 ,   argHttpLocation  = process.argv[3] || global.DEFAULT_HTTP_LOCATION
 ,   port = process.argv[4] || global.DEFAULT_PORT
-,   trInstallCmd = 'cp'
 ;
 
 app.use(express.compress());
@@ -107,7 +106,7 @@ app.post('/api/request', function(req, res) {
 
 function trInstaller(source, dest) {
   return new Promise(function (resolve, reject) {
-    var cmd = trInstallCmd + ' ' + source + ' ' + dest;
+    var cmd = global.TR_INSTALL_CMD + ' ' + source + ' ' + dest;
     exec(cmd, function (err, stdout, stderr) {
       if (err) reject(err);
       else resolve();
