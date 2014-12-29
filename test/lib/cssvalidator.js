@@ -1,7 +1,8 @@
 // Simulates the CSS Validator
 
 var express = require('express');
-var validator = module.exports = express();
+var validator = express();
+module.exports = validator;
 
 validator.get('/css-validator/validator', function (req, res) {
   var uri = req.param("uri") || "";
@@ -51,5 +52,5 @@ validator.get('/css-validator/validator', function (req, res) {
     json.cssvalidation.warnings = warnings;
     json.cssvalidation.result.warningcount = warnings.length;
   }
-  return res.jsonp(json);
+  return res.json(json);
 });

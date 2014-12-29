@@ -34,6 +34,8 @@ function htmlTemplate(serverPath, fileSystemPath) {
     [ "DD+1", tomorrow.getDate() ],
     [ "DD", today.getDate() ] ];
 
+  // will apply all the templates in the parameter content
+  // return the string after replacement
   function applyTemplate(s) {
     var str = s.toString();
 
@@ -46,7 +48,7 @@ function htmlTemplate(serverPath, fileSystemPath) {
       if (start === -1 || end === -1 || (end <= (start+1))) {
         return str.substring(oldstart);
       }
-      var name = str.substring(start+2, end);
+      var name = str.substring(start+2, end).trim();
       var replacement = "";
       for (var i = templates.length - 1; i >= 0; i--) {
         var template = templates[i];

@@ -1,7 +1,8 @@
 // Simulates the HTML validator
 
 var express = require('express');
-var validator = module.exports = express();
+var validator = express();
+module.exports = validator;
 
 validator.get('/check', function (req, res) {
   var url = req.param("uri") || "";
@@ -13,5 +14,5 @@ validator.get('/check', function (req, res) {
       "type": "text/html"
     }
   };
-  return res.jsonp(result);
+  return res.json(result);
 });
