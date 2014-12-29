@@ -5,7 +5,8 @@ var expect = require("chai").use(require("chai-as-promised")).expect
 ,   Promise = require("promise")
 ,   Fs = require("fs")
 ,   List = require("immutable").List
-,   server = require("./lib/testserver");
+,   server = require("./lib/testserver")
+;
 
 server.start();
 
@@ -152,8 +153,10 @@ describe('DocumentDownloader', function () {
     });
 
     it('should read a manifest and install its content', function () {
-      return DocumentDownloader.fetchAndInstall(server.location() +
-            '/drafts/navigation-timing/W3CTRMANIFEST', '/tmp/testechidnaManifest', true)
+      return DocumentDownloader.fetchAndInstall(
+        server.location() + '/drafts/navigation-timing/W3CTRMANIFEST',
+        '/tmp/testechidnaManifest',
+        true)
         .then(function() {
           expect(Fs.readFileSync('/tmp/testechidnaManifest/Overview.html', { 'encoding': 'utf8' })).to.contain("Navigation Timing 2");
           expect(Fs.existsSync('/tmp/testechidnaManifest/spec.css')).to.be.true;
