@@ -5,6 +5,7 @@ var server;
 var cssvalidator = require("./cssvalidator");
 var htmlvalidator = require("./htmlvalidator");
 var htmlTemplate = require("./htmltemplate");
+var morgan = require('morgan');
 
 var port = (process.env.PORT || 3000) + 1;
 
@@ -12,8 +13,8 @@ var TestServer   = function () {};
 
 var drafts = __dirname + "/../drafts";
 
-app.use(express.logger({stream: fs.createWriteStream("/tmp/echidna-testserver.log", {flags: 'w'}),
-            format:"dev"}));
+app.use(morgan('dev',
+    {stream: fs.createWriteStream("/tmp/echidna-testserver.log", {flags: 'w'})}));
 
 app.use(cssvalidator);
 app.use(htmlvalidator);
