@@ -243,10 +243,6 @@ describe('SpecberusWrapper', function () {
           .that.has.property("size").that.equals(0);
     });
 
-    it('should promise an object with a metadata property', function () {
-      return expect(content).to.eventually.have.property("metadata");
-    });
-
   });
 
   describe('validate(url-with-css-errors)', function () {
