@@ -25,7 +25,7 @@
   },
   "private": true,
   "dependencies": {
-    "express": "~4.10.17",
+    "express": "~4.10.7",
     "ejs": "1.0.x",
     "promise": "~6.0.1",
     "immutable": "~3.1.0",
