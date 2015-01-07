@@ -133,19 +133,19 @@ function publish(metadata) {
           specversions: [
             {
               trmaturity: [2], // WD
-              uri: metadata.uri,
-              latestVersionUri: metadata.latestVersionUri,
+              uri: metadata.get('thisVersion'),
+              latestVersionUri: metadata.get('latestVersion'),
               old: [{
-                uri: metadata.previousVersionUri,
-                wgid: metadata.wgId
+                uri: metadata.get('previousVersion'),
+                wgid: 0, // FIXME metadata.wgId
               }],
-              date: metadata.date,
-              title: metadata.title,
-              wgid: metadata.wgId,
-              reportEditors: metadata.editorIds.map(getUsername).toArray(),
+              date: metadata.get('docDate'),
+              title: metadata.get('title'),
+              wgid: 0, // FIXME metadata.wgId
+              reportEditors: metadata.get('editorIds'),
               informative: false, // FIXME Not always true
-              editorDraft: metadata.editorsDraft,
-              processRules: metadata.processRules,
+              editorDraft: metadata.get('editorsDraft'),
+              processRules: metadata.get('processRules'),
               ppMaturity: 0, // 'None', FIXME Not always true
               ppStatus: 0, // FIXME 0 == http://www.w3.org/Consortium/Patent-Policy-20040205/, not always true, can be informative
               specid: {
@@ -236,13 +236,13 @@ function orchestrate(spec, isManifest) {
                   spec.jobs['tr-install'].status = 'ok';
 
                   spec.jobs['update-tr-shortlink'].status = 'pending';
-                  return updateTrShortlink(report.metadata.uri).then(function () {
+                  return updateTrShortlink(report.metadata.get('thisVersion')).then(function () {
                     spec.jobs['update-tr-shortlink'].status = 'ok';
 
                     spec.jobs['publish'].status = 'pending';
                     return publish(report.metadata).then(function () {
                       spec.jobs['publish'].status = 'ok';
-                      spec.history = spec.history.add('The document has been published at <a href="' + finalLocation + '">' + finalLocation + '</a>.');
+                      spec.history = spec.history.add('The document has been published at <a href="' + report.metadata.get('thisVersion') + '">' + report.metadata.get('thisVersion') + '</a>.');
                       return Promise.resolve("finished");
                     }, function (err) {
                       spec.jobs['publish'].status = 'error';
