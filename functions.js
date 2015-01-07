@@ -2,6 +2,7 @@ var Http = require('http')
 ,   Promise = require('promise')
 ,   Fs = require('fs')
 ,   List = require('immutable').List
+,   Map = require('immutable').Map
 ,   Url = require('url')
 ,   Specberus = require("../specberus/lib/validator").Specberus
 ,   Request = require('request');
@@ -100,7 +101,7 @@ SpecberusWrapper.validate = function (url) {
 
     var sink = new Sink();
     var errors = List();
-    var metadata = List();
+    var metadata = Map();
 
     sink.on("end-all", function (profilename) {
       resolve({
@@ -109,8 +110,8 @@ SpecberusWrapper.validate = function (url) {
       });
     });
 
-    sink.on("metadata", function (item) {
-      metadata = metadata.push(item);
+    sink.on("metadata", function (key, value) {
+      metadata = metadata.set(key, value);
     });
 
     sink.on("err", function (type, data) {
