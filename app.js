@@ -129,33 +129,20 @@ function publish(metadata) {
     Request.post({
       url: global.W3C_PUBSYSTEM_URL,
       form: {
-        specversionslisttype: {
-          specversions: [
-            {
-              trmaturity: [2], // WD
-              uri: metadata.get('thisVersion'),
-              latestVersionUri: metadata.get('latestVersion'),
-              old: [{
-                uri: metadata.get('previousVersion'),
-                wgid: 0, // FIXME metadata.wgId
-              }],
-              date: metadata.get('docDate'),
-              title: metadata.get('title'),
-              wgid: 0, // FIXME metadata.wgId
-              reportEditors: metadata.get('editorIds'),
-              informative: false, // FIXME Not always true
-              editorDraft: metadata.get('editorsDraft'),
-              processRules: metadata.get('processRules'),
-              ppMaturity: 0, // 'None', FIXME Not always true
-              ppStatus: 0, // FIXME 0 == http://www.w3.org/Consortium/Patent-Policy-20040205/, not always true, can be informative
-              specid: {
-                description: '', // @@@
-                specgroup: [
-                  '' // @@@
-                ]
-              }
-            }
-          ]
+        specversion: {
+          uri: metadata.get('thisVersion'),
+          latestVersionUri: metadata.get('latestVersion'),
+          // old: [{
+          //   uri: metadata.get('previousVersion'),
+          //   wgid: 0, // FIXME metadata.wgId
+          // }],
+          date: metadata.get('docDate'),
+          title: metadata.get('title'),
+          // wgid: 0, // FIXME metadata.wgId
+          reportEditors: metadata.get('editorIds'),
+          informative: false, // FIXME Not always true
+          editorDraft: metadata.get('editorsDraft'),
+          processRules: metadata.get('processRules')
         }
       }
     }, function(/*err, httpResponse, body*/){
