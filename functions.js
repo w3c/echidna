@@ -44,6 +44,14 @@ DocumentDownloader.installAll = function(destsContents) {
   }));
 };
 
+DocumentDownloader.sanitize = function(list) {
+  return list.filter(function (filename) {
+    if (filename.indexOf('.htaccess') !== -1) return false;
+    else if (filename.indexOf('.php') !== -1) return false;
+    else return true;
+  });
+}
+
 DocumentDownloader.fetchAndInstall = function (url, dest, isManifest) {
   var mkdir = Promise.denodeify(Fs.mkdir);
 
@@ -59,9 +67,11 @@ DocumentDownloader.fetchAndInstall = function (url, dest, isManifest) {
     return DocumentDownloader.fetch(url).then(function (content) {
       if (isManifest) {
         var filenames = DocumentDownloader.getFilenames(content);
-        var dests = filenames.set(0, 'Overview.html').map(function (filename) {
-          return dest + '/' + filename;
-        });
+        var dests = DocumentDownloader.sanitize(filenames)
+          .set(0, 'Overview.html')
+          .map(function (filename) {
+            return dest + '/' + filename;
+          });
         var urls = filenames.map(function (filename) {
           return Url.resolve(url, filename);
         });
