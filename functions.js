@@ -8,16 +8,6 @@ var Http = require('http')
 ,   Request = require('request');
 require('./const.js');
 
-// Zip a list with another list
-// Example: (a, b) zip (c, d) == ((a, c), (b, d))
-// This is temporary until progress on
-// https://github.com/facebook/immutable-js/issues/51
-List.prototype.zip = function(list) {
-  return this.map(function (item, index) {
-    return List.of(item, list.get(index));
-  });
-};
-
 var DocumentDownloader = function() {};
 
 DocumentDownloader.fetch = function (url) {
@@ -41,7 +31,7 @@ DocumentDownloader.install = function (dest, content) {
 
 DocumentDownloader.installAll = function(destsContents) {
   return Promise.all(destsContents.toArray().map(function (e) { // e == [dest, content]
-    return DocumentDownloader.install(e.get(0), e.get(1));
+    return DocumentDownloader.install(e[0], e[1]);
   }));
 };
 

@@ -85,8 +85,8 @@ describe('DocumentDownloader', function () {
 
     before(function() {
       promise = DocumentDownloader.installAll(List.of(
-        List.of('/tmp/multiple_foo1', 'multiple_bar1'),
-        List.of('/tmp/multiple_foo2', 'multiple_bar2')
+        ['/tmp/multiple_foo1', 'multiple_bar1'],
+        ['/tmp/multiple_foo2', 'multiple_bar2']
       ));
     });
 
@@ -191,22 +191,6 @@ describe('DocumentDownloader', function () {
       ];
 
       expect(DocumentDownloader.getFilenames(manifest).toArray()).to.eql(filenames);
-    });
-  });
-});
-
-describe('List', function () {
-  describe('zip(list)', function () {
-    var l = List.of('a', 'b');
-    var a = List.of(1, 2);
-    var z = l.zip(a);
-
-    it('should return a List', function () {
-      expect(z).to.be.an.instanceOf(List);
-    });
-
-    it('should zip an array', function () {
-      expect(z).to.eql(List.of(List.of('a', 1), List.of('b', 2)));
     });
   });
 });
