@@ -110,10 +110,11 @@ SpecberusWrapper.validate = function (url) {
     });
 
     sink.on("exception", function (exception) {
+      console.log("specberus exception is " + exception.message);
       reject(new Error(exception.message));
     });
 
-    new Specberus().validate({
+    var options = {
       url: url,
       profile: require("../specberus/lib/profiles/WD"),
       events: sink,
@@ -122,9 +123,17 @@ SpecberusWrapper.validate = function (url) {
       noRecTrack: false,
       informativeOnly: false,
       processDocument: "2014"
-    });
+    };
+
+    if (process.env.NODE_ENV == "dev") {
+      var port = (process.env.PORT || 3000)+1;
+      options.cssValidator = "http://localhost:"+port+"/css-validator/validator";
+      options.htmlValidator = "http://localhost:"+port+"/check";
+    }
+
+    new Specberus().validate(options);
   });
-}
+};
 
 exports.SpecberusWrapper = SpecberusWrapper;
 
