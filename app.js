@@ -12,6 +12,8 @@ var Request = require('request');
 
 var meta = require('./package.json')
 ,   express = require('express')
+,   compression = require('compression')
+,   bodyParser = require('body-parser')
 ,   ejs = require('ejs')
 ,   spawn = require('child_process').spawn
 ,   exec = require('child_process').exec
@@ -27,8 +29,8 @@ var meta = require('./package.json')
 ,   port = process.argv[4] || global.DEFAULT_PORT
 ;
 
-app.use(express.compress());
-app.use(express.bodyParser({}));
+app.use(compression());
+app.use(bodyParser.urlencoded({ extended: false }));
 
 app.set('view engine', 'ejs');
 app.engine('.html', ejs.renderFile);
