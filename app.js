@@ -68,7 +68,7 @@ app.get('/api/status', function(req, res) {
       res.json({ 'request': requests[url] });
     }
     else {
-      res.send(500, { error: 'Request of URL ' + url + ' does not exist.' });
+      res.status(500).send({ error: 'Request of URL ' + url + ' does not exist.' });
     }
   }
   else {
@@ -82,7 +82,7 @@ app.post('/api/request', function(req, res) {
   ,   isManifest = req.body ? req.body.isManifest === 'true' : false
   ;
   if (!url || !decision) {
-    res.send(500, {error: 'Missing parameters {url, decision}.'});
+    res.status(500).send({error: 'Missing parameters {url, decision}.'});
   }
   else {
     if (requests[url]) {
@@ -101,7 +101,7 @@ app.post('/api/request', function(req, res) {
       }, function (err) {
         console.log('Spec at ' + url + ' (decision: ' + decision + ') has FAILED.');
       });
-      res.send(200, 'Spec at ' + url + ' (decision: ' + decision + ') added to the queue.');
+      res.send('Spec at ' + url + ' (decision: ' + decision + ') added to the queue.');
     }
   }
 });
