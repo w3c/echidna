@@ -131,7 +131,7 @@ SpecberusWrapper.validate = function (url) {
       options.htmlValidator = "http://localhost:"+port+"/check";
     }
 
-    specberus.validate(options);
+    new Specberus().validate(options);
   });
 };
 
