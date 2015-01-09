@@ -1,8 +1,13 @@
+// switch the environment into testing mode
+process.env.NODE_ENV = 'dev';
+
 var expect = require("chai").use(require("chai-as-promised")).expect
 ,   Promise = require("promise")
 ,   Fs = require("fs")
 ,   List = require("immutable").List
-;
+,   server = require("./lib/testserver");
+
+server.start();
 
 var DocumentDownloader = require("../functions.js").DocumentDownloader;
 
@@ -13,7 +18,7 @@ describe('DocumentDownloader', function () {
       expect(DocumentDownloader.fetch).to.be.a('function');
     });
 
-    var content = DocumentDownloader.fetch('http://www.example.com/');
+    var content = DocumentDownloader.fetch(server.location());
 
     it('should return a promise', function () {
       expect(content).to.be.an.instanceOf(Promise);
@@ -24,14 +29,14 @@ describe('DocumentDownloader', function () {
     });
 
     it('should download a file', function () {
-      return expect(content).to.eventually.contain("Example Domain");
+      return expect(content).to.eventually.contain("you got me");
     });
   });
 
   describe('fetchAll(urls)', function () {
     var content = DocumentDownloader.fetchAll(List.of(
-      'http://www.example.com/',
-      'http://www.w3.org/'
+      server.location() + "/robots",
+      server.location() + "/elvis"
     ));
 
     it('should be a function', function () {
@@ -48,8 +53,8 @@ describe('DocumentDownloader', function () {
 
     it('should fetch multiple URLs', function () {
       return content.then(function (content) {
-        expect(content.get(0)).to.contain("Example Domain");
-        expect(content.get(1)).to.contain("World Wide Web Consortium");
+        expect(content.get(0)).to.contain("looking for");
+        expect(content.get(1)).to.contain("alive");
       });
     });
   });
@@ -90,6 +95,11 @@ describe('DocumentDownloader', function () {
       ));
     });
 
+    after(function(){
+      Fs.unlinkSync('/tmp/multiple_foo1');
+      Fs.unlinkSync('/tmp/multiple_foo2');
+    });
+
     it('should be a function', function () {
       expect(DocumentDownloader.installAll).to.be.a('function');
     });
@@ -111,7 +121,7 @@ describe('DocumentDownloader', function () {
     var promise;
 
     before(function() {
-      promise = DocumentDownloader.fetchAndInstall('http://www.example.com/', '/tmp/testechidna', false);
+      promise = DocumentDownloader.fetchAndInstall(server.location(), '/tmp/testechidna', false);
     });
 
     after(function(){
@@ -137,12 +147,13 @@ describe('DocumentDownloader', function () {
 
     it('should create the file with proper content', function () {
       return promise.then(function() {
-        expect(Fs.readFileSync('/tmp/testechidna/Overview.html', { 'encoding': 'utf8' })).to.contain("Example Domain");
+        expect(Fs.readFileSync('/tmp/testechidna/Overview.html', { 'encoding': 'utf8' })).to.contain("you got me");
       });
     });
 
     it('should read a manifest and install its content', function () {
-      return DocumentDownloader.fetchAndInstall('http://jay.w3.org/~plehegar/navigation-timing/W3CTRMANIFEST', '/tmp/testechidnaManifest', true)
+      return DocumentDownloader.fetchAndInstall(server.location() +
+            '/drafts/navigation-timing/W3CTRMANIFEST', '/tmp/testechidnaManifest', true)
         .then(function() {
           expect(Fs.readFileSync('/tmp/testechidnaManifest/Overview.html', { 'encoding': 'utf8' })).to.contain("Navigation Timing 2");
           expect(Fs.existsSync('/tmp/testechidnaManifest/spec.css')).to.be.true;
@@ -192,5 +203,70 @@ describe('DocumentDownloader', function () {
 
       expect(DocumentDownloader.getFilenames(manifest).toArray()).to.eql(filenames);
     });
+  });
+});
+
+var SpecberusWrapper = require("../functions.js").SpecberusWrapper;
+
+describe('SpecberusWrapper', function () {
+
+  describe('validate(url)', function () {
+
+    it('should be a function', function () {
+      expect(SpecberusWrapper.validate).to.be.a('function');
+    });
+
+    var content = SpecberusWrapper.validate(server.location() + '/drafts/navigation-timing/');
+
+    it('should return a promise', function () {
+      expect(content).to.be.an.instanceOf(Promise);
+    });
+
+    it('should promise an object', function () {
+      return expect(content).to.eventually.be.an.instanceOf(Object);
+    });
+
+    it('should promise an object with an error property', function () {
+      return expect(content).to.eventually.have.property("errors");
+    });
+
+    it('should return an error property that is a list', function () {
+      return expect(content).that.eventually.has.property("errors")
+          .that.is.an.instanceOf(List);
+    });
+
+    it('should return an error property that is an empty list', function () {
+      return expect(content).that.eventually.has.property("errors")
+          .that.has.property("size").that.equals(0);
+    });
+
+    it('should promise an object with a metadata property', function () {
+      return expect(content).to.eventually.have.property("metadata");
+    });
+
+  });
+
+  describe('validate(url-with-css-errors)', function () {
+
+    var content = SpecberusWrapper.validate(server.location() +
+            '/drafts/nav-csserror/');
+
+    it('should return an error property that has 2 errors', function () {
+      return expect(content).that.eventually.has.property("errors")
+          .that.has.property("size").that.equals(2);
+    });
+
+  });
+
+  describe('validate(url-with-css-warnings)', function () {
+
+    var content = SpecberusWrapper.validate(server.location() +
+            '/drafts/nav-csswarning/');
+
+    it('should return an error property that has no errors', function () {
+      return expect(content).that.eventually.has.property("errors")
+          .that.has.property("size").that.equals(0);
+    });
+
   });
 });
