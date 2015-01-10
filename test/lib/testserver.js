@@ -1,11 +1,11 @@
 var fs = require('fs');
 var express = require('express');
 var app = express();
-var server;
+var morgan = require('morgan');
 var cssvalidator = require("./cssvalidator");
 var htmlvalidator = require("./htmlvalidator");
 var htmlTemplate = require("./htmltemplate");
-var morgan = require('morgan');
+var getMetadata = require('./utils').getMetadata;
 
 var port = (process.env.PORT || 3000) + 1;
 
@@ -34,6 +34,8 @@ app.get('/elvis', function(req, res) {
   res.send('<!doctype html><p>Elvis is alive.');
 });
 
+var server;
+
 TestServer.start = function (trace) {
   if (app === undefined) {
     init();
@@ -46,6 +48,15 @@ TestServer.start = function (trace) {
 
 TestServer.location = function () {
   return "http://localhost:" + server.address().port;
+};
+
+// this will return metadata associate with a draft
+TestServer.getMetadata = function (name) {
+  var data = getMetadata(drafts, name);
+  if (data.location === undefined) {
+    data.location = this.location() + "/drafts/" + name + "/";
+  }
+  return data;
 };
 
 module.exports = TestServer;

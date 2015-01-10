@@ -1,42 +1,15 @@
 var fs = require('fs');
 var url = require('url');
-
-// v8 doesn't support String.endsWith
-function endsWith(subjectString, searchString) {
-  var s = subjectString.toString();
-  position = s.length - searchString.length;
-  var lastIndex = s.indexOf(searchString, position);
-  return lastIndex !== -1 && lastIndex === position;
-}
-
-// returns date as "YYYYMMDD"
-function fullDate(dateObj) {
-  function pn(n) {
-    return (n<10)?"0"+n:""+n;
-  }
-  return dateObj.getFullYear() + "" +
-    pn(dateObj.getMonth()+1) + "" + pn(dateObj.getDate());
-}
-
-var months = ['January','February','March','April','May','June','July',
-      'August','September','October','November','December'];
+var subtitutions = require('./utils').subtitutions;
+var getMetadata = require('./utils').getMetadata;
+var endsWith = require('./utils').endsWith;
 
 function htmlTemplate(serverPath, fileSystemPath) {
-  var today = new Date();
-  var tomorrow = new Date(today.getTime() + 24 * 60 * 60 * 1000);
 
-  var templates = [ [ "DATE", fullDate(today) ],
-    [ "DATE+1", fullDate(tomorrow) ],
-    [ "YYYY", today.getFullYear() ],
-    [ "YYYY+1", today.getFullYear()+1 ],
-    [ "mm", today.getMonth() + 1 ],
-    [ "MM", months[today.getMonth()] ],
-    [ "DD+1", tomorrow.getDate() ],
-    [ "DD", today.getDate() ] ];
-
-  // will apply all the templates in the parameter content
+  // will apply all the substitutions in the parameter s
+  // including the substitutions contained in metadata
   // return the string after replacement
-  function applyTemplate(s) {
+  function applyTemplate(s, metadata) {
     var str = s.toString();
 
     function replace(oldstart) {
@@ -50,11 +23,12 @@ function htmlTemplate(serverPath, fileSystemPath) {
       }
       var name = str.substring(start+2, end).trim();
       var replacement = "";
-      for (var i = templates.length - 1; i >= 0; i--) {
-        var template = templates[i];
-        if (name === template[0]) {
-          replacement += template[1];
-        }
+      if (subtitutions[name] !== undefined) {
+        replacement += subtitutions[name];
+      } else if (metadata[name] !== undefined) {
+        replacement += metadata[name];
+      } else {
+        console.log("htmltemplate.js: %s not a valid substitution", name);
       }
       return str.substring(oldstart, start)
        + replacement
@@ -77,12 +51,18 @@ function htmlTemplate(serverPath, fileSystemPath) {
     }
     var filepath = fileSystemPath + path.substring(serverPath.length);
     var content = null;
+    var metadata = null;
     try {
+      // load the file
       content = fs.readFileSync(filepath, {options: "utf-8"});
+      // load the metadata associated with the file (if any)
+      var dirpath = filepath.substring(0, filepath.lastIndexOf('/'));
+      var name = dirpath.substring(dirpath.lastIndexOf('/')+1);
+      metadata = getMetadata(fileSystemPath, name);
     } catch (e) {
       return next();
     }
-    res.send(applyTemplate(content));
+    res.send(applyTemplate(content, metadata));
   };
 }
 
