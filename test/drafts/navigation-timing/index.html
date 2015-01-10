@@ -2,33 +2,34 @@
 <html lang="en">
 <head>
   <meta charset="utf-8">
-  <title>Navigation Timing 2</title>
+  <title>{{title}}</title>
   <link href="spec.css" rel="stylesheet" type="text/css">
-  <link href="https://www.w3.org/StyleSheets/TR/W3C-WD.css" rel="stylesheet" type="text/css">
+  <link href="https://www.w3.org/StyleSheets/TR/W3C-{{status}}.css" rel="stylesheet" type="text/css">
 </head>
 
 <body class="cr">
 
 <div class="head">
 <a href="http://www.w3.org/"><img height="48" width="72" alt="W3C" src="http://www.w3.org/Icons/w3c_home"/></a>
-<h1>Navigation Timing 2</h1>
+<h1>{{title}}</h1>
 <h2 class="no-num no-toc" id="working-draft">W3C Working Draft {{DD}} {{MM}} {{YYYY}}</h2>
 <dl>
   <dt>This version:</dt>
- <dd><a href="http://www.w3.org/TR/{{YYYY}}/WD-navigation-timing-2-{{DATE}}/">http://www.w3.org/TR/{{YYYY}}/WD-navigation-timing-2-{{DATE}}/</a></dd>
+  <dd><a href="{{thisVersion}}">{{thisVersion}}</a></dd>
   <dt>Latest version:</dt>
-    <dd><a
-      href="http://www.w3.org/TR/navigation-timing-2/">http://www.w3.org/TR/navigation-timing-2/</a></dd>
+  <dd><a href="{{latestVersion}}">{{latestVersion}}</a></dd>
   <dt>Previous version:</dt>
- <dd><a href="http://www.w3.org/TR/2014/WD-navigation-timing-2-20140325/">http://www.w3.org/TR/2014/WD-navigation-timing-2-20140325/</a></dd>
+  <dd><a href="{{previousVersion}}">{{previousVersion}}</a></dd>
+  <dt>Latest Editor's Draft</dt>
+  <dd><a href="{{editorsDraft}}">{{editorsDraft}}</a></dd>
   <dt>Editors:</dt>
-    <dd class="vcard"><span class="fn">Jatinder Mann</span>, <span
+    <dd class="vcard" data-editor-id='44357'><span class="fn">Jatinder Mann</span>, <span
       class="org">Microsoft Corp.</span>, &lt;<a
       class="email" href="mailto:jmann@microsoft.com">jmann@microsoft.com</a>&gt; </dd>
-      <dd class="vcard"><span class="fn">Tobin Titus</span>, <span
+      <dd class="vcard" data-editor-id='69474'><span class="fn">Tobin Titus</span>, <span
       class="org">Microsoft Corp.</span>, &lt;<a
       class="email" href="mailto:tobint@microsoft.com">tobint@microsoft.com</a>&gt; </dd>
-    <dd class="vcard"><span class="fn">Arvind Jain</span>, <span
+    <dd class="vcard" data-editor-id='45188'><span class="fn">Arvind Jain</span>, <span
       class="org">Google Inc.</span>, &lt;<a
       class="email" href="mailto:arvind@google.com">arvind@google.com</a>&gt; </dd>
 </dl>
@@ -52,23 +53,22 @@ document</h2>
    can be found in the <a href="http://www.w3.org/TR/">W3C technical reports
    index</a> at http://www.w3.org/TR/.</em></p>
 
-<p>This is document is the <strong>Working Draft</strong> of the Navigation Timing 2 specification.</p>
+<p>This is document is the <strong>Working Draft</strong> of the {{title}} specification.</p>
 
 <p>Please send comments
-   to <a href="mailto:public-web-perf@w3.org?subject=%5BNavigationTiming2%5D%20">public-web-perf@w3.org</a>
-   (<a href="http://lists.w3.org/Archives/Public/public-web-perf/">archived</a>)
-   with <samp>[NavigationTiming2]</samp> at the start of the subject line.</p>
+   to <a href="mailto:{{list}}@w3.org">{{list}}@w3.org</a>
+   (<a href="http://lists.w3.org/Archives/Public/{{list}}/">archived</a>).</p>
 
 <p>This document is produced by
-   the <a href="http://www.w3.org/2010/webperf/">Web Performance Working Group</a>
-   . The Web Performance Working Group is part of
+   the <a href="{{groupHomepage}}">{{groupName}}</a>
+   . The {{groupName}} is part of
    the <a href="http://www.w3.org/2006/rwc/Activity">Rich Web Clients
    Activity</a> in the
    W3C <a href="http://www.w3.org/Interaction/">Interaction
    Domain</a>.
 
 <p>
- Navigation Timing 2 supplements the first version of <a href='#NavigationTiming'>Navigation Timing</a> and includes:
+ {{title}} supplements the first version of <a href='#NavigationTiming'>Navigation Timing</a> and includes:
 </p>
 <ul>
 <li>support for <a href="#PerformanceTimeline">Performance Timeline</a>;</li>
@@ -85,7 +85,7 @@ cite this document as other than work in progress. </p>
 <p>This document was produced by a group operating under
    the <a href="http://www.w3.org/Consortium/Patent-Policy-20040205/">5
    February 2004 W3C Patent Policy</a>. W3C maintains
-   a <a href="http://www.w3.org/2004/01/pp-impl/45211/status"
+   a <a href="http://www.w3.org/2004/01/pp-impl/{{groupID}}/status"
    rel="disclosure">public list of any patent disclosures</a> made in
    connection with the deliverables of the group; that page also
    includes instructions for disclosing a patent. An individual who
@@ -94,7 +94,7 @@ cite this document as other than work in progress. </p>
    Claim(s)</a> must disclose the information in accordance
    with <a href="http://www.w3.org/Consortium/Patent-Policy-20040205/#sec-Disclosure">section
    6 of the W3C Patent Policy</a>.</p>
-<p>This document is governed by the <a id="w3c_process_revision" href="http://www.w3.org/2014/Process-20140801/">1 August 2014 <abbr title="World Wide Web Consortium">W3C</abbr> Process Document</a>.
+<p>This document is governed by the <a id="w3c_process_revision" href="{{processURI}}">{{process}} <abbr title="World Wide Web Consortium">W3C</abbr> Process Document</a>.
           </p>
 <h2 class="no-num no-toc" id="table-of-contents">Table of Contents</h2>
 <!--begin-toc-->
