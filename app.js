@@ -144,7 +144,7 @@ function publish(metadata) {
           reportEditors: metadata.get('editorIds'),
           informative: false, // FIXME Not always true
           editorDraft: metadata.get('editorsDraft'),
-          processRules: metadata.get('processRules')
+          processRules: metadata.get('process')
         }
       }
     }, function(/*err, httpResponse, body*/){
