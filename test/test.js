@@ -5,6 +5,7 @@ var expect = require("chai").use(require("chai-as-promised")).expect
 ,   Promise = require("promise")
 ,   Fs = require("fs")
 ,   List = require("immutable").List
+,   Map = require("immutable").Map
 ,   server = require("./lib/testserver")
 ;
 
@@ -154,7 +155,7 @@ describe('DocumentDownloader', function () {
 
     it('should read a manifest and install its content', function () {
       return DocumentDownloader.fetchAndInstall(
-        server.location() + '/drafts/navigation-timing/W3CTRMANIFEST',
+        server.getMetadata('navigation-timing').location + 'W3CTRMANIFEST',
         '/tmp/testechidnaManifest',
         true)
         .then(function() {
@@ -219,7 +220,8 @@ describe('SpecberusWrapper', function () {
       expect(SpecberusWrapper.validate).to.be.a('function');
     });
 
-    var content = SpecberusWrapper.validate(server.location() + '/drafts/navigation-timing/');
+    var myDraft = server.getMetadata('navigation-timing');
+    var content = SpecberusWrapper.validate(myDraft.location);
 
     it('should return a promise', function () {
       expect(content).to.be.an.instanceOf(Promise);
@@ -243,12 +245,85 @@ describe('SpecberusWrapper', function () {
           .that.has.property("size").that.equals(0);
     });
 
+    it('should promise an object with a metadata property', function () {
+      return expect(content).to.eventually.have.property("metadata");
+    });
+
+    it('should return a metadata property that is a Map', function () {
+      return expect(content).to.eventually.have.property("metadata")
+          .that.is.an.instanceOf(Map);
+    });
+
+    it('should promise an object with the proper metadata.title', function () {
+      return content.then(function (result) {
+        expect(result.metadata.get("title")).to.equal(myDraft.title);
+      }, function (err) {
+        console.log('error: ' + err);
+      });
+    });
+
+    it('should promise an object with the proper metadata.thisVersion', function () {
+      return content.then(function (result) {
+        expect(result.metadata.get("thisVersion")).to.equal(myDraft.thisVersion);
+      }, function (err) {
+        console.log('error: ' + err);
+      });
+    });
+
+    it('should promise an object with the proper metadata.latestVersion', function () {
+      return content.then(function (result) {
+        expect(result.metadata.get("latestVersion")).to.equal(myDraft.latestVersion);
+      }, function (err) {
+        console.log('error: ' + err);
+      });
+    });
+
+    it('should promise an object with the proper metadata.docDate', function () {
+      return content.then(function (result) {
+        expect(result.metadata.get("docDate")).to.be.a('Date');
+        expect(result.metadata.get("docDate").toISOString()).to.equal(myDraft.docDate.toISOString());
+      }, function (err) {
+        console.log('error: ' + err);
+      });
+    });
+
+    it('should promise an object with the proper metadata.process', function () {
+      return content.then(function (result) {
+        expect(result.metadata.get("process")).to.equal(myDraft.process);
+      }, function (err) {
+        console.log('error: ' + err);
+      });
+    });
+
+    it('should promise an object with the proper metadata.editorsDraft', function () {
+      return content.then(function (result) {
+        expect(result.metadata.get("editorsDraft")).to.equal(myDraft.editorsDraft);
+      }, function (err) {
+        console.log('error: ' + err);
+      });
+    });
+
+    it('should promise an object with the proper metadata.editorIDs', function () {
+      return content.then(function (result) {
+        expect(result.metadata.get("editorIDs")).to.deep.equal(myDraft.editorIDs);
+      }, function (err) {
+        console.log('error: ' + err);
+      });
+    });
+
+    it('should promise an object with the proper metadata.deliverers', function () {
+      return content.then(function (result) {
+        expect(result.metadata.get("deliverers")).to.deep.equal(myDraft.deliverers);
+      }, function (err) {
+        console.log('error: ' + err);
+      });
+    });
+
   });
 
   describe('validate(url-with-css-errors)', function () {
 
-    var content = SpecberusWrapper.validate(server.location() +
-            '/drafts/nav-csserror/');
+    var content = SpecberusWrapper.validate(server.getMetadata('nav-csserror').location);
 
     it('should return an error property that has 2 errors', function () {
       return expect(content).that.eventually.has.property("errors")
@@ -259,8 +334,7 @@ describe('SpecberusWrapper', function () {
 
   describe('validate(url-with-css-warnings)', function () {
 
-    var content = SpecberusWrapper.validate(server.location() +
-            '/drafts/nav-csswarning/');
+    var content = SpecberusWrapper.validate(server.getMetadata('nav-csswarning').location);
 
     it('should return an error property that has no errors', function () {
       return expect(content).that.eventually.has.property("errors")
