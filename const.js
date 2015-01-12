@@ -7,5 +7,5 @@ global.TOKEN_ENDPOINT = 'https://www.w3.org/Web/publications/authorize';
 global.USERNAME = process.env.USERNAME;
 global.PASSWORD = process.env.PASSWORD;
 global.W3C_PUBSYSTEM_URL = '';
-global.TR_INSTALL_CMD = '/bin/cp';
-global.UPDATE_TR_SHORTLINK_CMD = '';
+global.TR_INSTALL_CMD = '/afs/w3.org/pub/WWW/Systems/Mirroring/bin/cvs/cvs-publisher';
+global.UPDATE_TR_SHORTLINK_CMD = '/afs/w3.org/pub/WWW/2002/01/tr-automation/shortlink.sh';
