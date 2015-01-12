@@ -231,6 +231,10 @@ function orchestrate(spec, isManifest) {
                     spec.jobs['publish'].status = 'pending';
                     return publish(report.metadata).then(function () {
                       spec.jobs['publish'].status = 'ok';
+                      var cmd = global.SENDMAIL + ' ' + global.MAILING_LIST + ' ' + report.metadata.get('thisVersion');
+                      exec(cmd, function (err, stdout, stderr) {
+                        if (err) console.error(stderr);
+                      });
                       spec.history = spec.history.add('The document has been published at <a href="' + report.metadata.get('thisVersion') + '">' + report.metadata.get('thisVersion') + '</a>.');
                       return Promise.resolve("finished");
                     }, function (err) {
