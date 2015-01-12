@@ -9,3 +9,5 @@ global.PASSWORD = process.env.PASSWORD;
 global.W3C_PUBSYSTEM_URL = '';
 global.TR_INSTALL_CMD = '/bin/cp';
 global.UPDATE_TR_SHORTLINK_CMD = '';
+global.SENDMAIL = 'stubs/sendmail.sh';
+global.MAILING_LIST = 'foobar@w3.org';
