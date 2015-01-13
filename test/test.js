@@ -4,9 +4,10 @@ process.env.NODE_ENV = 'dev';
 var expect = require("chai").use(require("chai-as-promised")).expect
 ,   Promise = require("promise")
 ,   Fs = require("fs")
-,   List = require("immutable").List
 ,   Map = require("immutable").Map
 ,   server = require("./lib/testserver")
+,   Immutable = require('immutable')
+,   List = Immutable.List
 ;
 
 server.start();
@@ -206,6 +207,30 @@ describe('DocumentDownloader', function () {
       ];
 
       expect(DocumentDownloader.getFilenames(manifest).toArray()).to.eql(filenames);
+    });
+  });
+
+  describe('sanitize(list)', function () {
+    it('should be a function', function () {
+      expect(DocumentDownloader.sanitize).to.be.a('function');
+    });
+
+    it('should return an immutable list', function () {
+      expect(DocumentDownloader.sanitize(List())).to.be.an.instanceOf(List);
+    });
+
+    it('should return a list of string', function () {
+      expect(DocumentDownloader.sanitize(List('test')).first()).to.be.a('string');
+    });
+
+    console.log(Immutable.is(DocumentDownloader.sanitize(List.of('allowed_file', '.htaccess')), List.of('allowed_file')));
+
+    it('should filter out .htaccess files', function () {
+      expect(Immutable.is(DocumentDownloader.sanitize(List.of('allowed_file', '.htaccess')), List.of('allowed_file'))).to.be.true;
+    });
+
+    it('should filter out PHP files', function () {
+      expect(Immutable.is(DocumentDownloader.sanitize(List.of('allowed_file', 'not_allowed.php')), List.of('allowed_file'))).to.be.true;
     });
   });
 });
