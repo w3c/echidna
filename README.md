@@ -44,7 +44,7 @@ These will be resolved automatically by simply running `npm install` on the dire
 $ git clone git@github.com:w3c/echidna.git
 $ cd echidna
 $ npm install
-$ nodejs app.js
+$ npm start
 ```
 
 Then simply open [`http://localhost:3000`](http://localhost:3000) on your web browser and start throwing publication requests at it.
@@ -52,7 +52,7 @@ Then simply open [`http://localhost:3000`](http://localhost:3000) on your web br
 ## Syntax and command-line parameters
 
 ```
-$ nodejs app.js [STAGING_PATH [SPECBERUS_BASE_URI [PORT]]]
+$ npm start [STAGING_PATH [SPECBERUS_BASE_URI [PORT]]]
 ```
 
 Meaning of positional parameters:
@@ -67,16 +67,21 @@ Meaning of positional parameters:
 Examples:
 
 ```bash
-$ nodejs app.js /home/nick/public_html/staging/ http://localhost/~nick/staging/ 80
+$ npm start /home/nick/public_html/staging/ http://localhost/~nick/staging/ 80
 ```
 
 ```bash
-$ nodejs app.js ../tmp/echidna-files/
+$ npm start ../tmp/echidna-files/
 ```
 
 ## Automated tests and builds
 
-Coming soon.
+Use
+```bash
+$ npm test
+```
+This will launch mocha and its associated tests.
+
 
 ## Sub-projects, and related tools
 
