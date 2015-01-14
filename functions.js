@@ -37,8 +37,8 @@ DocumentDownloader.installAll = function(destsContents) {
 
 DocumentDownloader.sanitize = function(list) {
   return list.filter(function (filename) {
-    if (filename.indexOf('.htaccess') !== -1) return false;
-    else if (filename.indexOf('.php') !== -1) return false;
+    if (filename.toLowerCase().indexOf('.htaccess') !== -1) return false;
+    else if (filename.toLowerCase().indexOf('.php') !== -1) return false;
     else return true;
   });
 }
