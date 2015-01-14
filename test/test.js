@@ -314,7 +314,7 @@ describe('SpecberusWrapper', function () {
 
     it('should promise an object with the proper metadata.process', function () {
       return content.then(function (result) {
-        expect(result.metadata.get("process")).to.equal(myDraft.process);
+        expect(result.metadata.get("process")).to.equal(myDraft.processURI);
       }, function (err) {
         console.log('error: ' + err);
       });
