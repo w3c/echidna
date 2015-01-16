@@ -6,7 +6,7 @@ var Promise = require('promise');
 var List = require('immutable').List;
 var Map = require('immutable').Map;
 var Specberus = require("../specberus/lib/validator").Specberus;
-require('./const.js');
+require('./config.js');
 
 var DocumentDownloader = function() {};
 

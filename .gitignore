@@ -28,5 +28,5 @@ node_modules
 .lock-wscript
 
 # Configuration
-const.js
+config.js
 

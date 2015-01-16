@@ -20,7 +20,7 @@ var ThirdPartyChecker = require("./functions.js").ThirdPartyChecker;
 var TokenChecker = require("./functions.js").TokenChecker;
 
 // Configuration file
-require('./const.js');
+require('./config.js');
 
 var app = express();
 var requests = {};
