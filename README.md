@@ -100,5 +100,5 @@ This will launch mocha and its associated tests.
 ## Feedback and contributions
 
 * **File** bugs and suggestions [here on GitHub](https://github.com/w3c/echidna/issues).
-* **Talk to us** on IRC: server `irc.w3.org`; channels `#pub` or `#pubrules` (here are [detailed instructions to connect](http://www.w3.org/wiki/IRC)).
+* **Talk to us** on IRC: server `irc.w3.org`, channel `#pub` (here are [detailed instructions to connect](http://www.w3.org/wiki/IRC)).
 * **Discuss** the publication workflow and related tools [on the mailing list](http://lists.w3.org/Archives/Public/spec-prod/).
