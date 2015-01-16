@@ -77,6 +77,10 @@
     "time-grunt": "~0.1.1",
     "morgan": "~1.5.1"
   },
+  "scripts": {
+    "start": "node app.js",
+    "test": "mocha"
+  },
   "engines": {
     "node": ">=0.8.0",
     "npm": "1.2.x"
