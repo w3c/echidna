@@ -1,18 +1,18 @@
 // switch the environment into testing mode
 process.env.NODE_ENV = 'dev';
 
-var expect = require("chai").use(require("chai-as-promised")).expect
-,   Promise = require("promise")
-,   Fs = require("fs")
-,   Map = require("immutable").Map
-,   server = require("./lib/testserver")
-,   Immutable = require('immutable')
-,   List = Immutable.List
-;
+var expect = require("chai").use(require("chai-as-promised")).expect;
+var Promise = require("promise");
+var Fs = require("fs");
+var Immutable = require('immutable');
+var List = Immutable.List;
+var Map = Immutable.Map;
+
+var server = require("./lib/testserver");
+var DocumentDownloader = require("../functions.js").DocumentDownloader;
+var SpecberusWrapper = require("../functions.js").SpecberusWrapper;
 
 server.start();
-
-var DocumentDownloader = require("../functions.js").DocumentDownloader;
 
 describe('DocumentDownloader', function () {
 
@@ -137,14 +137,12 @@ describe('DocumentDownloader', function () {
     });
 
     it('should return a promise', function () {
-      return expect(promise).to.be.an.instanceOf(Promise);
+      expect(promise).to.be.an.instanceOf(Promise);
     });
 
     it('should create the folder if it does not exist', function () {
       return promise.then(function() {
         expect(Fs.existsSync('/tmp/testechidna')).to.be.true;
-      }, function (err) {
-        console.log('error: ' + err);
       });
     });
 
@@ -158,17 +156,17 @@ describe('DocumentDownloader', function () {
       return DocumentDownloader.fetchAndInstall(
         server.getMetadata('navigation-timing').location + 'W3CTRMANIFEST',
         '/tmp/testechidnaManifest',
-        true)
-        .then(function() {
-          expect(Fs.readFileSync('/tmp/testechidnaManifest/Overview.html', { 'encoding': 'utf8' })).to.contain("Navigation Timing 2");
-          expect(Fs.existsSync('/tmp/testechidnaManifest/spec.css')).to.be.true;
-          expect(Fs.existsSync('/tmp/testechidnaManifest/timing-overview.png')).to.be.true;
+        true
+      ).then(function() {
+        expect(Fs.readFileSync('/tmp/testechidnaManifest/Overview.html', { 'encoding': 'utf8' })).to.contain("Navigation Timing 2");
+        expect(Fs.existsSync('/tmp/testechidnaManifest/spec.css')).to.be.true;
+        expect(Fs.existsSync('/tmp/testechidnaManifest/timing-overview.png')).to.be.true;
 
-          Fs.unlinkSync('/tmp/testechidnaManifest/Overview.html');
-          Fs.unlinkSync('/tmp/testechidnaManifest/spec.css');
-          Fs.unlinkSync('/tmp/testechidnaManifest/timing-overview.png');
-          Fs.rmdirSync('/tmp/testechidnaManifest');
-        });
+        Fs.unlinkSync('/tmp/testechidnaManifest/Overview.html');
+        Fs.unlinkSync('/tmp/testechidnaManifest/spec.css');
+        Fs.unlinkSync('/tmp/testechidnaManifest/timing-overview.png');
+        Fs.rmdirSync('/tmp/testechidnaManifest');
+      });
     });
   });
 
@@ -235,12 +233,9 @@ describe('DocumentDownloader', function () {
   });
 });
 
-var SpecberusWrapper = require("../functions.js").SpecberusWrapper;
-
 describe('SpecberusWrapper', function () {
 
   describe('validate(url)', function () {
-
     it('should be a function', function () {
       expect(SpecberusWrapper.validate).to.be.a('function');
     });
@@ -262,12 +257,12 @@ describe('SpecberusWrapper', function () {
 
     it('should return an error property that is a list', function () {
       return expect(content).that.eventually.has.property("errors")
-          .that.is.an.instanceOf(List);
+        .that.is.an.instanceOf(List);
     });
 
     it('should return an error property that is an empty list', function () {
       return expect(content).that.eventually.has.property("errors")
-          .that.has.property("size").that.equals(0);
+        .that.has.property('size', 0);
     });
 
     it('should promise an object with a metadata property', function () {
@@ -347,24 +342,20 @@ describe('SpecberusWrapper', function () {
   });
 
   describe('validate(url-with-css-errors)', function () {
-
     var content = SpecberusWrapper.validate(server.getMetadata('nav-csserror').location);
 
     it('should return an error property that has 2 errors', function () {
       return expect(content).that.eventually.has.property("errors")
-          .that.has.property("size").that.equals(2);
+        .that.has.property('size', 2);
     });
-
   });
 
   describe('validate(url-with-css-warnings)', function () {
-
     var content = SpecberusWrapper.validate(server.getMetadata('nav-csswarning').location);
 
     it('should return an error property that has no errors', function () {
       return expect(content).that.eventually.has.property("errors")
-          .that.has.property("size").that.equals(0);
+        .that.has.property('size', 0);
     });
-
   });
 });

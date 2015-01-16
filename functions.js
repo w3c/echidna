@@ -1,11 +1,11 @@
-var Http = require('http')
-,   Promise = require('promise')
-,   Fs = require('fs')
-,   List = require('immutable').List
-,   Map = require('immutable').Map
-,   Url = require('url')
-,   Specberus = require("../specberus/lib/validator").Specberus
-,   Request = require('request');
+var Http = require('http');
+var Fs = require('fs');
+var Url = require('url');
+var Request = require('request');
+var Promise = require('promise');
+var List = require('immutable').List;
+var Map = require('immutable').Map;
+var Specberus = require("../specberus/lib/validator").Specberus;
 require('./const.js');
 
 var DocumentDownloader = function() {};
@@ -81,12 +81,8 @@ DocumentDownloader.getFilenames = function getFilenames(manifest) {
   return manifest.split('\n').reduce(function (acc, line) {
     var filename = line.split('#')[0].trim();
 
-    if (filename !== '') {
-      return acc.push(filename);
-    }
-    else {
-      return acc;
-    }
+    if (filename !== '') return acc.push(filename);
+    else return acc;
   }, List());
 };
 
@@ -136,9 +132,9 @@ SpecberusWrapper.validate = function (url) {
     };
 
     if (process.env.NODE_ENV == "dev") {
-      var port = (process.env.PORT || 3000)+1;
-      options.cssValidator = "http://localhost:"+port+"/css-validator/validator";
-      options.htmlValidator = "http://localhost:"+port+"/check";
+      var port = (process.env.PORT || 3000) + 1;
+      options.cssValidator = "http://localhost:" + port + "/css-validator/validator";
+      options.htmlValidator = "http://localhost:" + port + "/check";
     }
 
     new Specberus().validate(options);
@@ -150,14 +146,17 @@ exports.SpecberusWrapper = SpecberusWrapper;
 var ThirdPartyChecker = function () {};
 
 ThirdPartyChecker.check = function (url) {
-  var args  = ['../third-party-resources-checker/detect-phantom.js', url, global.RESOURCES_WHITELIST],
-      spawn = require('child_process').spawn;
+  var args  = ['../third-party-resources-checker/detect-phantom.js', url, global.RESOURCES_WHITELIST];
+  var spawn = require('child_process').spawn;
+
   return new Promise(function (resolve) {
-    var phantom = spawn(global.PHANTOM, args)
-    ,   buffer = "";
+    var phantom = spawn(global.PHANTOM, args);
+    var buffer = "";
+
     phantom.stdout.on('data', function(data) {
       buffer += data;
     });
+
     phantom.on('close', function() {
       var consoleout = buffer.replace(global.DEFAULT_HTTP_LOCATION, '', 'g').split("\n");
       consoleout.pop();
@@ -173,14 +172,14 @@ var TokenChecker = function () {};
 TokenChecker.check = function (url, token) {
   return new Promise(function (resolve) {
     Request.get({
-      'uri': global.TOKEN_ENDPOINT,
-      'auth': {
-        'user': global.USERNAME,
-        'pass': global.PASSWORD
+      uri: global.TOKEN_ENDPOINT,
+      auth: {
+        user: global.USERNAME,
+        pass: global.PASSWORD
       },
-      'qs': {
-        'spec': url,
-        'token': token
+      qs: {
+        spec: url,
+        token: token
       }
     }, function (err, res, body) {
       if (err) reject(new Error("There was an error while checking the token: ", err));

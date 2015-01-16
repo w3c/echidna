@@ -1,33 +1,32 @@
-
 'use strict';
 
 console.log('Launching…');
 
-// Pseudo-constants:
+var meta = require('./package.json');
+var express = require('express');
+var compression = require('compression');
+var bodyParser = require('body-parser');
+var ejs = require('ejs');
+var spawn = require('child_process').spawn;
+var exec = require('child_process').exec;
+var path = require('path');
+var Request = require('request');
+var Promise = require('promise');
+var Stack = require('immutable').Stack;
+
+var DocumentDownloader = require("./functions.js").DocumentDownloader;
+var SpecberusWrapper = require("./functions.js").SpecberusWrapper;
+var ThirdPartyChecker = require("./functions.js").ThirdPartyChecker;
+var TokenChecker = require("./functions.js").TokenChecker;
+
+// Configuration file
 require('./const.js');
 
-var Promise = require('promise');
-var Immutable = require('immutable');
-var Request = require('request');
-
-var meta = require('./package.json')
-,   express = require('express')
-,   compression = require('compression')
-,   bodyParser = require('body-parser')
-,   ejs = require('ejs')
-,   spawn = require('child_process').spawn
-,   exec = require('child_process').exec
-,   DocumentDownloader = require("./functions.js").DocumentDownloader
-,   SpecberusWrapper = require("./functions.js").SpecberusWrapper
-,   ThirdPartyChecker = require("./functions.js").ThirdPartyChecker
-,   TokenChecker = require("./functions.js").TokenChecker
-,   path = require('path')
-,   app = express()
-,   requests = {}
-,   argTempLocation = process.argv[2] || global.DEFAULT_TEMP_LOCATION
-,   argHttpLocation  = process.argv[3] || global.DEFAULT_HTTP_LOCATION
-,   port = process.argv[4] || global.DEFAULT_PORT
-;
+var app = express();
+var requests = {};
+var argTempLocation = process.argv[2] || global.DEFAULT_TEMP_LOCATION;
+var argHttpLocation  = process.argv[3] || global.DEFAULT_HTTP_LOCATION;
+var port = process.argv[4] || global.DEFAULT_PORT;
 
 app.use(compression());
 app.use(bodyParser.urlencoded({ extended: false }));
@@ -51,36 +50,34 @@ app.get('/', function(request, response, next) {
 // API methods
 
 app.get('/api/version', function(req, res) {
-  res.send(meta.name +
+  res.send(
+    meta.name +
     ' version ' + meta.version +
     ' running on ' + process.platform +
     ' and listening on port ' + port +
-    '. The server time is ' + new Date().toLocaleTimeString() + '.');
+    '. The server time is ' + new Date().toLocaleTimeString() + '.'
+  );
 });
 
 app.get('/api/status', function(req, res) {
-  var result
-  ,   url = req.query ? req.query.url : null
-  ,   entry
-  ;
+  var result;
+  var url = req.query ? req.query.url : null;
+  var entry;
+
   if (url) {
-    if (requests[url]) {
-      res.json({ 'request': requests[url] });
-    }
+    if (requests[url]) res.json({ 'request': requests[url] });
     else {
       res.status(500).send({ error: 'Request of URL ' + url + ' does not exist.' });
     }
   }
-  else {
-    res.json({ 'requests': requests });
-  }
+  else res.json({ 'requests': requests });
 });
 
 app.post('/api/request', function(req, res) {
-  var url = req.body ? req.body.url : null
-  ,   decision = req.body ? req.body.decision : null
-  ,   isManifest = req.body ? req.body.isManifest === 'true' : false
-  ;
+  var url = req.body ? req.body.url : null;
+  var decision = req.body ? req.body.decision : null;
+  var isManifest = req.body ? req.body.isManifest === 'true' : false;
+
   if (!url || !decision) {
     res.status(500).send({error: 'Missing parameters {url, decision}.'});
   }
@@ -166,7 +163,7 @@ function Job() {
 var History = function History (facts) {
   if (typeof this !== 'object') throw new TypeError('Jobs must be constructed via new');
 
-  this.facts = typeof(facts) === 'undefined' ? Immutable.Stack() : facts;
+  this.facts = typeof(facts) === 'undefined' ? Stack() : facts;
 };
 
 History.prototype.add = function (fact) {
