@@ -16,9 +16,10 @@ Echidna is the central piece of software taking care of the new publication work
 
 These will be resolved automatically by simply running `npm install` on the directory of the project.
 
-* [Immutable.js](https://github.com/facebook/immutable-js/)
 * [express](https://github.com/strongloop/express)
 * [ejs](https://github.com/tj/ejs)
+* [Immutable.js](https://github.com/facebook/immutable-js/)
+* [Promise](https://github.com/then/promise)
 
 ## How to get it up and running
 
