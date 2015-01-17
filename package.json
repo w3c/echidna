@@ -42,7 +42,6 @@
   "bugs": {
     "url": "https://github.com/w3c/echidna/issues"
   },
-  "private": true,
   "dependencies": {
     "express": "~4.10.7",
     "ejs": "1.0.x",
