@@ -45,6 +45,7 @@ These will be resolved automatically by simply running `npm install` on the dire
 ```bash
 $ git clone git@github.com:w3c/echidna.git
 $ cd echidna
+$ cp config.js.example config.js
 $ npm install
 $ npm start
 ```
