@@ -16,29 +16,10 @@ Echidna is the central piece of software taking care of the new publication work
 
 These will be resolved automatically by simply running `npm install` on the directory of the project.
 
-* [Immutable.js](https://github.com/facebook/immutable-js/)
 * [express](https://github.com/strongloop/express)
 * [ejs](https://github.com/tj/ejs)
-* `grunt`
-* `grunt-contrib-copy`
-* `grunt-contrib-concat`
-* `grunt-contrib-uglify`
-* `grunt-contrib-jshint`
-* `grunt-contrib-sass`
-* `grunt-contrib-cssmin`
-* `grunt-contrib-connect`
-* `grunt-contrib-clean`
-* `grunt-contrib-htmlmin`
-* `grunt-contrib-imagemin`
-* `grunt-contrib-watch`
-* `grunt-open`
-* `grunt-express-server`
-* `grunt-rev`
-* `grunt-usemin`
-* `grunt-svgmin`
-* `grunt-concurrent`
-* `load-grunt-tasks`
-* `time-grunt`
+* [Immutable.js](https://github.com/facebook/immutable-js/)
+* [Promise](https://github.com/then/promise)
 
 ## How to get it up and running
 
