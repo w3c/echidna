@@ -37,7 +37,7 @@ Then simply open [`http://localhost:3000`](http://localhost:3000) on your web br
 ## Syntax and command-line parameters
 
 ```
-$ npm start [STAGING_PATH [SPECBERUS_BASE_URI [PORT]]]
+$ npm start [STAGING_PATH [HTTP_BASE_URI [PORT]]]
 ```
 
 Meaning of positional parameters:
