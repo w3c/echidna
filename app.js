@@ -204,7 +204,8 @@ function orchestrate(spec, isManifest, token) {
                 spec.jobs['token-checker'].status = 'pending';
                 var shortlink = report.metadata.get('latestVersion');
                 return TokenChecker.check(shortlink, token).then(function(authReport) {
-                    if(authReport.authorized) {
+                    var matchSource = spec.url.substring(0, authReport.source.length) === spec.url;
+                    if(authReport.authorized && matchSource) {
                         spec.jobs['token-checker'].status = 'ok';
                         spec.history = spec.history.add('You are authorized to publish');
 
