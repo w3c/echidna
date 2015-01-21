@@ -5,4 +5,5 @@ node_js:
 before_script:
   - cp config.js.example config.js
 notifications:
+  email: false
   irc: "irc.w3.org#pub"
