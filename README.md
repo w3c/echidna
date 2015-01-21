@@ -20,6 +20,7 @@ These will be resolved automatically by simply running `npm install` on the dire
 * [ejs](https://github.com/tj/ejs)
 * [Immutable.js](https://github.com/facebook/immutable-js/)
 * [Promise](https://github.com/then/promise)
+* [Specberus](https://github.com/w3c/specberus)
 
 ## How to get it up and running
 

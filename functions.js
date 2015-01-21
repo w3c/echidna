@@ -5,7 +5,7 @@ var Request = require('request');
 var Promise = require('promise');
 var List = require('immutable').List;
 var Map = require('immutable').Map;
-var Specberus = require("../specberus/lib/validator").Specberus;
+var Specberus = require("specberus/lib/validator").Specberus;
 require('./config.js');
 
 var DocumentDownloader = function() {};
@@ -122,7 +122,7 @@ SpecberusWrapper.validate = function (url) {
 
     var options = {
       url: url,
-      profile: require("../specberus/lib/profiles/WD"),
+      profile: require("specberus/lib/profiles/WD"),
       events: sink,
       // validation: "recursive",
       validation: "simple-validation",
