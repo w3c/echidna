@@ -183,9 +183,9 @@ function orchestrate(spec, isManifest) {
   spec.jobs['token-checker'] = new Job();
   spec.jobs['specberus'] = new Job();
   spec.jobs['third-party-checker'] = new Job();
+  spec.jobs['publish'] = new Job();
   spec.jobs['tr-install'] = new Job();
   spec.jobs['update-tr-shortlink'] = new Job();
-  spec.jobs['publish'] = new Job();
 
   var date = new Date().getTime();
   var tempLocation = (argTempLocation || global.DEFAULT_TEMP_LOCATION) + path.sep + date + path.sep;
