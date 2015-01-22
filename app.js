@@ -217,17 +217,18 @@ function orchestrate(spec, isManifest) {
                 spec.jobs['third-party-checker'].status = 'ok';
                 spec.history = spec.history.add('The document passed the third party checker.');
 
-                spec.jobs['tr-install'].status = 'pending';
-                return trInstall(tempLocation, finalLocation).then(function () {
-                  spec.jobs['tr-install'].status = 'ok';
+                spec.jobs['publish'].status = 'pending';
+                return publish(report.metadata).then(function () {
+                  spec.jobs['publish'].status = 'ok';
 
-                  spec.jobs['update-tr-shortlink'].status = 'pending';
-                  return updateTrShortlink(report.metadata.get('thisVersion')).then(function () {
-                    spec.jobs['update-tr-shortlink'].status = 'ok';
+                  spec.jobs['tr-install'].status = 'pending';
+                  return trInstall(tempLocation, finalLocation).then(function () {
+                    spec.jobs['tr-install'].status = 'ok';
 
-                    spec.jobs['publish'].status = 'pending';
-                    return publish(report.metadata).then(function () {
-                      spec.jobs['publish'].status = 'ok';
+                    spec.jobs['update-tr-shortlink'].status = 'pending';
+                    return updateTrShortlink(report.metadata.get('thisVersion')).then(function () {
+                      spec.jobs['update-tr-shortlink'].status = 'ok';
+
                       var cmd = global.SENDMAIL + ' ' + global.MAILING_LIST + ' ' + report.metadata.get('thisVersion');
                       exec(cmd, function (err, stdout, stderr) {
                         if (err) console.error(stderr);
@@ -235,18 +236,18 @@ function orchestrate(spec, isManifest) {
                       spec.history = spec.history.add('The document has been published at <a href="' + report.metadata.get('thisVersion') + '">' + report.metadata.get('thisVersion') + '</a>.');
                       return Promise.resolve("finished");
                     }, function (err) {
-                      spec.jobs['publish'].status = 'error';
-                      spec.jobs['publish'].errors.push(err.toString());
+                      spec.jobs['update-tr-shortlink'].status = 'error';
+                      spec.jobs['update-tr-shortlink'].errors.push(err.toString());
                       return Promise.reject(err);
                     });
                   }, function (err) {
-                    spec.jobs['update-tr-shortlink'].status = 'error';
-                    spec.jobs['update-tr-shortlink'].errors.push(err.toString());
+                    spec.jobs['tr-install'].status = 'error';
+                    spec.jobs['tr-install'].errors.push(err.toString());
                     return Promise.reject(err);
                   });
                 }, function (err) {
-                  spec.jobs['tr-install'].status = 'error';
-                  spec.jobs['tr-install'].errors.push(err.toString());
+                  spec.jobs['publish'].status = 'error';
+                  spec.jobs['publish'].errors.push(err.toString());
                   return Promise.reject(err);
                 });
               }
