@@ -170,7 +170,7 @@ exports.ThirdPartyChecker = ThirdPartyChecker;
 var TokenChecker = function () {};
 
 TokenChecker.check = function (url, token) {
-  return new Promise(function (resolve) {
+  return new Promise(function (resolve, reject) {
     Request.get({
       uri: global.TOKEN_ENDPOINT,
       auth: {
