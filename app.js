@@ -7,7 +7,6 @@ var express = require('express');
 var compression = require('compression');
 var bodyParser = require('body-parser');
 var ejs = require('ejs');
-var spawn = require('child_process').spawn;
 var exec = require('child_process').exec;
 var path = require('path');
 var Request = require('request');
