@@ -7,10 +7,18 @@ var Fs = require("fs");
 var Immutable = require('immutable');
 var List = Immutable.List;
 var Map = Immutable.Map;
+require('../config.js');
 
 var server = require("./lib/testserver");
+
+// used by the TokenChecker
+global.TOKEN_ENDPOINT = server.location() + '/authorize';
+global.USERNAME = "toto";
+global.PASSWORD = "secret";
+
 var DocumentDownloader = require("../functions.js").DocumentDownloader;
 var SpecberusWrapper = require("../functions.js").SpecberusWrapper;
+var TokenChecker = require("../functions.js").TokenChecker;
 
 describe('DocumentDownloader', function () {
 
@@ -152,7 +160,7 @@ describe('DocumentDownloader', function () {
 
     it('should read a manifest and install its content', function () {
       return DocumentDownloader.fetchAndInstall(
-        server.getMetadata('navigation-timing').location + 'W3CTRMANIFEST',
+        server.getMetadata('navigation-timing-2').location + 'W3CTRMANIFEST',
         '/tmp/testechidnaManifest',
         true
       ).then(function() {
@@ -219,8 +227,6 @@ describe('DocumentDownloader', function () {
       expect(DocumentDownloader.sanitize(List('test')).first()).to.be.a('string');
     });
 
-    console.log(Immutable.is(DocumentDownloader.sanitize(List.of('allowed_file', '.htaccess')), List.of('allowed_file')));
-
     it('should filter out .htaccess files', function () {
       expect(Immutable.is(DocumentDownloader.sanitize(List.of('allowed_file', '.htaccess')), List.of('allowed_file'))).to.be.true;
     });
@@ -238,7 +244,7 @@ describe('SpecberusWrapper', function () {
       expect(SpecberusWrapper.validate).to.be.a('function');
     });
 
-    var myDraft = server.getMetadata('navigation-timing');
+    var myDraft = server.getMetadata('navigation-timing-2');
     var content = SpecberusWrapper.validate(myDraft.location);
 
     it('should return a promise', function () {
@@ -355,5 +361,41 @@ describe('SpecberusWrapper', function () {
       return expect(content).that.eventually.has.property("errors")
         .that.has.property('size', 0);
     });
+  });
+});
+
+describe('TokenChecker', function () {
+
+  describe('check(url, token)', function () {
+    it('should be a function', function () {
+      expect(TokenChecker.check).to.be.a('function');
+    });
+
+    var myDraft = server.getMetadata('navigation-timing-2');
+    var token = "98345098A98F345F";
+    var check = TokenChecker.check(myDraft.latestVersion, token);
+
+    it('should return a promise', function () {
+      expect(check).to.be.an.instanceOf(Promise);
+    });
+
+    it('should promise an object', function () {
+      return expect(check).to.eventually.be.an.instanceOf(Object);
+    });
+
+    it('should promise an object with a token property', function () {
+      return expect(check).to.eventually.have.property("token")
+        .that.is.equals(token);
+    });
+
+    it('should promise an object with a source property', function () {
+      return expect(check).to.eventually.have.property("source");
+    });
+
+    it('should promise an object with an authorized property', function () {
+      return expect(check).to.eventually.have.property("authorized")
+        .that.is.equals(true);
+    });
+
   });
 });
