@@ -131,14 +131,11 @@ function publish(metadata) {
         specversion: {
           uri: metadata.get('thisVersion'),
           latestVersionUri: metadata.get('latestVersion'),
-          // old: [{
-          //   uri: metadata.get('previousVersion'),
-          //   wgid: 0, // FIXME metadata.wgId
-          // }],
+          previousVersionUri: metadata.get('previousVersion'),
           date: metadata.get('docDate'),
           title: metadata.get('title'),
-          // wgid: 0, // FIXME metadata.wgId
-          reportEditors: metadata.get('editorIds'),
+          deliverers: metadata.get('delivererIDs'),
+          editors: metadata.get('editorIds'),
           informative: false, // FIXME Not always true
           editorDraft: metadata.get('editorsDraft'),
           processRules: metadata.get('process')
