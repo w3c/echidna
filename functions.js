@@ -116,7 +116,6 @@ SpecberusWrapper.validate = function (url) {
     });
 
     sink.on("exception", function (exception) {
-      console.log("specberus exception is " + exception.message);
       reject(new Error(exception.message));
     });
 
