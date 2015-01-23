@@ -36,14 +36,11 @@ app.get('/elvis', function(req, res) {
 
 var server;
 
-TestServer.start = function (trace) {
+TestServer.start = function () {
   if (app === undefined) {
     init();
   }
   server = app.listen(port);
-  if (trace) {
-    console.log("Test server started at %s/.", this.location());
-  }
 };
 
 TestServer.location = function () {
@@ -58,5 +55,7 @@ TestServer.getMetadata = function (name) {
   }
   return data;
 };
+
+TestServer.start();
 
 module.exports = TestServer;

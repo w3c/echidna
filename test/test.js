@@ -12,8 +12,6 @@ var server = require("./lib/testserver");
 var DocumentDownloader = require("../functions.js").DocumentDownloader;
 var SpecberusWrapper = require("../functions.js").SpecberusWrapper;
 
-server.start();
-
 describe('DocumentDownloader', function () {
 
   describe('fetch(url)', function () {
