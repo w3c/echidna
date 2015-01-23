@@ -6,4 +6,7 @@ before_script:
   - cp config.js.example config.js
 notifications:
   email: false
-  irc: "irc.w3.org#pub"
+  irc:
+    channels:
+      - "irc.w3.org#pub"
+    skip_join: true
