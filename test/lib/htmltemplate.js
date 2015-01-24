@@ -58,7 +58,7 @@ function htmlTemplate(serverPath, fileSystemPath) {
       // load the metadata associated with the file (if any)
       var dirpath = filepath.substring(0, filepath.lastIndexOf('/'));
       var name = dirpath.substring(dirpath.lastIndexOf('/')+1);
-      metadata = getMetadata(fileSystemPath, name);
+      metadata = getMetadata(name);
     } catch (e) {
       return next();
     }

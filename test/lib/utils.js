@@ -2,6 +2,8 @@ var fs = require('fs');
 
 var utils = function () {};
 
+var draftsSystemPath = __dirname + "/../drafts";
+
 // v8 doesn't support String.endsWith
 function endsWith(subjectString, searchString) {
   var s = subjectString.toString();
@@ -68,10 +70,10 @@ function augmentMetadata(name) {
 // look for /meta.json based on filepath
 // and store if any using name found in filepath (subdirectory name)
 // return the loaded metadata
-function getMetadata(dirpath, name) {
+function getMetadata(name) {
   if (metadata[name] === undefined) {
     try {
-      metadata[name] = JSON.parse(fs.readFileSync(dirpath + "/" + name + "/meta.json",
+      metadata[name] = JSON.parse(fs.readFileSync(draftsSystemPath + "/" + name + "/meta.json",
                                              {options: "utf-8"}));
       augmentMetadata(name);
     } catch (e) {
@@ -81,6 +83,7 @@ function getMetadata(dirpath, name) {
   return metadata[name];
 }
 
+module.exports.draftsSystemPath = draftsSystemPath;
 module.exports.endsWith = endsWith;
 module.exports.subtitutions = subtitutions;
 module.exports.getMetadata = getMetadata;
