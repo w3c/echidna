@@ -76,9 +76,10 @@ app.post('/api/request', function(req, res) {
   var url = req.body ? req.body.url : null;
   var decision = req.body ? req.body.decision : null;
   var isManifest = req.body ? req.body.isManifest === 'true' : false;
+  var token = req.body ? req.body.token : null;
 
-  if (!url || !decision) {
-    res.status(500).send({error: 'Missing parameters {url, decision}.'});
+  if (!url || !decision || !token) {
+    res.status(500).send({error: 'Missing parameters {url, decision, token}.'});
   }
   else {
     if (requests[url]) {
@@ -89,10 +90,11 @@ app.post('/api/request', function(req, res) {
         'url': url,
         'decision': decision,
         'isManifest': isManifest,
+        'token': token,
         'jobs': {},
         'history': new History()
       };
-      orchestrate(requests[url], isManifest).then(function () {
+      orchestrate(requests[url], isManifest, token).then(function () {
         console.log('Spec at ' + url + ' (decision: ' + decision + ') has FINISHED.');
       }, function (err) {
         console.log('Spec at ' + url + ' (decision: ' + decision + ') has FAILED.');
@@ -175,7 +177,7 @@ History.prototype.toJSON = function () {
   return this.facts.reverse().toJSON();
 };
 
-function orchestrate(spec, isManifest) {
+function orchestrate(spec, isManifest, token) {
   spec.jobs['retrieve-resources'] = new Job();
   spec.jobs['token-checker'] = new Job();
   spec.jobs['specberus'] = new Job();
@@ -188,7 +190,6 @@ function orchestrate(spec, isManifest) {
   var tempLocation = (argTempLocation || global.DEFAULT_TEMP_LOCATION) + path.sep + date + path.sep;
   var httpLocation = (argHttpLocation || global.DEFAULT_SPECBERUS_LOCATION) + '/' + date + '/Overview.html';
   var finalLocation = 'bar';
-  var token; //@todo retrieve token
 
   spec.jobs['retrieve-resources'].status = 'pending';
   return DocumentDownloader.fetchAndInstall(spec.url, tempLocation, isManifest).then(function () {
