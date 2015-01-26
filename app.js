@@ -228,9 +228,9 @@ function orchestrate(spec, isManifest, token) {
                                                 spec.jobs['update-tr-shortlink'].status = 'ok';
 
                                                 var cmd = global.SENDMAIL + ' ' + global.MAILING_LIST + ' ' + report.metadata.get('thisVersion');
-                                                // exec(cmd, function (err, stdout, stderr) {
-                                                //   if (err) console.error(stderr);
-                                                // });
+                                                exec(cmd, function (err, stdout, stderr) {
+                                                  if (err) console.error(stderr);
+                                                });
                                                 spec.history = spec.history.add('The document has been published at <a href="' + report.metadata.get('thisVersion') + '">' + report.metadata.get('thisVersion') + '</a>.');
                                                 return Promise.resolve("finished");
                                             }, function (err) {
