@@ -173,7 +173,8 @@ function orchestrate(spec, isManifest, token) {
     var date = new Date().getTime();
     var tempLocation = (argTempLocation || global.DEFAULT_TEMP_LOCATION) + path.sep + date + path.sep;
     var httpLocation = (argHttpLocation || global.DEFAULT_SPECBERUS_LOCATION) + '/' + date + '/Overview.html';
-    var finalLocation = 'bar';
+    var baseTRpath = global.DEFAULT_BASE_TR_PATH;
+    var finalTRpath;
 
     spec.jobs['retrieve-resources'].status = 'pending';
     return DocumentDownloader.fetchAndInstall(spec.url, tempLocation, isManifest).then(function () {
@@ -205,7 +206,8 @@ function orchestrate(spec, isManifest, token) {
                                         spec.jobs['publish'].status = 'ok';
 
                                         spec.jobs['tr-install'].status = 'pending';
-                                        return trInstall(tempLocation, finalLocation).then(function () {
+					finalTRpath = buildFinalTRpath(baseTRpath, report.metadata.get('thisVersion'));
+                                        return trInstaller(tempLocation, finalTRpath).then(function () {
                                             spec.jobs['tr-install'].status = 'ok';
 
                                             spec.jobs['update-tr-shortlink'].status = 'pending';
