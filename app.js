@@ -202,13 +202,13 @@ function orchestrate(spec, isManifest, token) {
                 spec.jobs['specberus'].status = 'ok';
                 spec.history = spec.history.add('The document passed specberus.');
                 spec.jobs['token-checker'].status = 'pending';
-                var shortlink; //@todo retrieve shortlink
+                var shortlink = report.metadata.get('latestVersion');
                 return TokenChecker.check(shortlink, token).then(function(authReport) {
                     if(authReport.authorized) {
                         spec.jobs['token-checker'].status = 'ok';
                         spec.history = spec.history.add('You are authorized to publish');
 
-                        spec.jobs['third-party-checker'].status = 'pending';//{{{
+                        spec.jobs['third-party-checker'].status = 'pending';
                         return ThirdPartyChecker.check(httpLocation).then(function (extResources) {
                             if (extResources.length === 0) {
                                 spec.jobs['third-party-checker'].status = 'ok';
