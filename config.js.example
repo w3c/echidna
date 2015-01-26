@@ -2,6 +2,7 @@ global.DEFAULT_TEMP_LOCATION = '/var/www/tr';
 global.DEFAULT_HTTP_LOCATION = 'http://localhost/tr';
 global.DEFAULT_LOG_LOCATION = '.';
 global.DEFAULT_PORT = 3000;
+global.DEFAULT_BASE_TR_PATH = '/usr/cvs-local-copy/';
 global.PHANTOM = '/usr/bin/phantom';
 global.RESOURCES_WHITELIST = '/tmp/whitelist.txt';
 global.TOKEN_ENDPOINT = 'https://www.w3.org/Web/publications/authorize';
