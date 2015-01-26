@@ -71,11 +71,9 @@
       <hr>
 
       <section>
-        <p class="info">This invokes the method <code>/api/request</code> (<code>POST</code>) with params <code>{ url, decision }</code>.</p>
+        <p class="info">This invokes the method <code>/api/request</code> (<code>POST</code>) with params <code>{url, decision, token}</code>.</p>
 
-        <h2>
-            New publication request
-        </h2>
+        <h2>New publication request</h2>
 
         <form role="form" id="submitForm" method="POST" action="/api/request">
         <fieldset>
@@ -94,6 +92,11 @@
           <div class="form-group">
             <label for="decision">WG Decision URL</label>
             <input type="url" class="form-control" id="decision" placeholder="https://example.com/foo/messages/29372">
+          </div>
+
+          <div class="form-group">
+            <label for="token">Token</label>
+            <input type="password" class="form-control" id="token" placeholder="12345678">
           </div>
 
           <button id="submitButton" type="submit" class="btn btn-primary">Request publication</button>
@@ -150,7 +153,10 @@
           event.preventDefault();
           $.post(
             $('#submitForm').prop('action'),
-            {url: $('#url').prop('value'), decision: $('#decision').prop('value'), isManifest: $('#isManifest').is(':checked')},
+            {url: $('#url').prop('value'),
+             decision: $('#decision').prop('value'),
+             token: $('#token').prop('value'),
+             decision: $('#decision').prop('value')},
             function(data) {
               window.alert(data);
             }
