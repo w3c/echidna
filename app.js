@@ -107,6 +107,7 @@ app.post('/api/request', function(req, res) {
 
 function trInstaller(source, dest) {
     return new Promise(function (resolve, reject) {
+        // Append '/*' to test with 'cp -R':    source + '/* ' + dest;
         var cmd = global.TR_INSTALL_CMD + ' ' + source + ' ' + dest;
         exec(cmd, function (err, stdout, stderr) {
             if (err) reject(err);
@@ -206,7 +207,7 @@ function orchestrate(spec, isManifest, token) {
                                         spec.jobs['publish'].status = 'ok';
 
                                         spec.jobs['tr-install'].status = 'pending';
-					finalTRpath = buildFinalTRpath(baseTRpath, report.metadata.get('thisVersion'));
+                                        finalTRpath = buildFinalTRpath(baseTRpath, report.metadata.get('thisVersion'));
                                         return trInstaller(tempLocation, finalTRpath).then(function () {
                                             spec.jobs['tr-install'].status = 'ok';
 
