@@ -179,8 +179,8 @@ History.prototype.toJSON = function () {
 
 function orchestrate(spec, isManifest, token) {
     spec.jobs['retrieve-resources'] = new Job();
-    spec.jobs['token-checker'] = new Job();
     spec.jobs['specberus'] = new Job();
+    spec.jobs['token-checker'] = new Job();
     spec.jobs['third-party-checker'] = new Job();
     spec.jobs['publish'] = new Job();
     spec.jobs['tr-install'] = new Job();
