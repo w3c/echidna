@@ -147,7 +147,8 @@ function publish(metadata) {
             if (error) reject(error);
             else if (response.statusCode === 501) reject(new Error(body.message));
             else if (response.statusCode === 400) resolve(body.errors);
-            else resolve([]);
+            else if (response.statusCode === 201) resolve([]);
+            else reject(new Error("There was an error when publishing: code " + response.statusCode));
         });
     });
 }
