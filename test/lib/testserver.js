@@ -38,10 +38,17 @@ app.get('/elvis', function(req, res) {
 var server;
 
 TestServer.start = function () {
+  var limit_port = port + 30;
   if (app === undefined) {
     init();
   }
-  server = app.listen(port);
+  do {
+    server = app.listen(port);
+    port += 1;
+  } while ((server.address() === null) && (port < limit_port));
+  if (server.address() === null) {
+    throw new Error("Can't find a free port for the test server " + port);
+  }
 };
 
 TestServer.location = function () {
