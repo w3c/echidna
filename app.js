@@ -174,7 +174,6 @@ function orchestrate(spec, isManifest, token) {
     var date = new Date().getTime();
     var tempLocation = (argTempLocation || global.DEFAULT_TEMP_LOCATION) + path.sep + date + path.sep;
     var httpLocation = (argHttpLocation || global.DEFAULT_SPECBERUS_LOCATION) + '/' + date + '/Overview.html';
-    var baseTRpath = global.DEFAULT_BASE_TR_PATH;
     var finalTRpath;
 
     spec.jobs['retrieve-resources'].status = 'pending';
@@ -207,7 +206,7 @@ function orchestrate(spec, isManifest, token) {
                                         spec.jobs['publish'].status = 'ok';
 
                                         spec.jobs['tr-install'].status = 'pending';
-                                        finalTRpath = buildFinalTRpath(baseTRpath, report.metadata.get('thisVersion'));
+                                        finalTRpath = buildFinalTRpath(report.metadata.get('thisVersion'));
                                         return trInstaller(tempLocation, finalTRpath).then(function () {
                                             spec.jobs['tr-install'].status = 'ok';
 
