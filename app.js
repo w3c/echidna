@@ -11,12 +11,12 @@ var exec = require('child_process').exec;
 var path = require('path');
 var Request = require('request');
 var Promise = require('promise');
-var Stack = require('immutable').Stack;
 
 var DocumentDownloader = require("./functions.js").DocumentDownloader;
 var SpecberusWrapper = require("./functions.js").SpecberusWrapper;
 var ThirdPartyChecker = require("./functions.js").ThirdPartyChecker;
 var TokenChecker = require("./functions.js").TokenChecker;
+var History = require("./history.js").History;
 
 // Configuration file
 require('./config.js');
@@ -158,24 +158,6 @@ function Job() {
     this.status = '';
     this.errors = [];
 }
-
-var History = function History (facts) {
-    if (typeof this !== 'object') throw new TypeError('Jobs must be constructed via new');
-
-    this.facts = typeof(facts) === 'undefined' ? Stack() : facts;
-};
-
-History.prototype.add = function (fact) {
-    return new History(this.facts.unshift({
-        time: new Date(),
-        fact: fact
-    }));
-};
-
-// Override
-History.prototype.toJSON = function () {
-    return this.facts.reverse().toJSON();
-};
 
 function orchestrate(spec, isManifest, token) {
     spec.jobs['retrieve-resources'] = new Job();
