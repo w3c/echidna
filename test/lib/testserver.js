@@ -26,7 +26,14 @@ app.use('/drafts', express.static(draftsSystemPath));
 
 // three resources to test if the test is alive and kicking
 app.get('/', function(req, res) {
-  res.send("<!doctype html><p>Baby don't worry you know that you got me");
+  var index = "<!doctype html><h1>Sample Drafts</h1><ul>"
+  var item = "<li><a href='"+TestServer.location()+"/drafts/";
+  var listing = fs.readdirSync(draftsSystemPath);
+  for (var i = listing.length - 1; i >= 0; i--) {
+    index += item + listing[i] + "/'>" + listing[i] + "</a></li>"
+  };
+  index += "</ul>";
+  res.send(index);
 });
 app.get('/robots', function(req, res) {
   res.send("<!doctype html><p>Those are not the robots you're looking for.");

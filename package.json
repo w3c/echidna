@@ -60,7 +60,8 @@
   },
   "scripts": {
     "start": "node app.js",
-    "test": "mocha"
+    "test": "mocha",
+    "testserver": "node test/lib/testserver"
   },
   "engines": {
     "node": ">=0.10.0",
