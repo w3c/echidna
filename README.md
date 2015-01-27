@@ -67,6 +67,15 @@ $ npm test
 ```
 This will launch mocha and its associated tests.
 
+### test server
+
+For testing purposes, we're using an internal test server at http://localhost:3001/ . It will get started and stopped automatically when launching mocha. One can launch this test server separately by using:
+
+```bash
+$ node test/lib/testserver
+```
+
+The test server simulates some of the W3C services, such as the CSS and HTML Validators or the token authorization checker. It also serves sample drafts.
 
 ## Sub-projects, and related tools
 
