@@ -16,7 +16,7 @@ global.TOKEN_ENDPOINT = server.location() + '/authorize';
 global.USERNAME = "toto";
 global.PASSWORD = "secret";
 
-var DocumentDownloader = require("../functions.js").DocumentDownloader;
+var DocumentDownloader = require('../lib/document-downloader');
 var SpecberusWrapper = require("../functions.js").SpecberusWrapper;
 var TokenChecker = require("../functions.js").TokenChecker;
 

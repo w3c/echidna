@@ -13,7 +13,7 @@ var Moment = require('moment');
 var Request = require('request');
 var Promise = require('promise');
 
-var DocumentDownloader = require("./functions.js").DocumentDownloader;
+var DocumentDownloader = require("./lib/document-downloader");
 var SpecberusWrapper = require("./functions.js").SpecberusWrapper;
 var ThirdPartyChecker = require("./functions.js").ThirdPartyChecker;
 var TokenChecker = require("./functions.js").TokenChecker;
