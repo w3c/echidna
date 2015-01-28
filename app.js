@@ -17,7 +17,7 @@ var DocumentDownloader = require("./lib/document-downloader");
 var SpecberusWrapper = require("./functions.js").SpecberusWrapper;
 var ThirdPartyChecker = require("./functions.js").ThirdPartyChecker;
 var TokenChecker = require("./functions.js").TokenChecker;
-var History = require("./history.js").History;
+var History = require("./lib/history");
 
 // Configuration file
 require('./config.js');
