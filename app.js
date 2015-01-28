@@ -9,6 +9,7 @@ var bodyParser = require('body-parser');
 var ejs = require('ejs');
 var exec = require('child_process').exec;
 var path = require('path');
+var Moment = require('moment');
 var Request = require('request');
 var Promise = require('promise');
 
@@ -134,7 +135,7 @@ function publish(metadata) {
                     uri: metadata.get('thisVersion'),
                     latestVersionUri: metadata.get('latestVersion'),
                     previousVersionUri: metadata.get('previousVersion'),
-                    date: metadata.get('docDate'),
+                    date: Moment(metadata.get('docDate')).format('YYYY-MM-DD'),
                     title: metadata.get('title'),
                     deliverers: metadata.get('delivererIDs'),
                     editors: metadata.get('editorIds'),
