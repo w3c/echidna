@@ -171,6 +171,8 @@ function orchestrate(spec, isManifest, token) {
     spec.jobs['tr-install'] = new Job();
     spec.jobs['update-tr-shortlink'] = new Job();
 
+    var W3C_PREFIX = /^https?:\/\/(www\.)?w3c?\.org/i;
+
     var date = new Date().getTime();
     var tempLocation = (argTempLocation || global.DEFAULT_TEMP_LOCATION) + path.sep + date + path.sep;
     var httpLocation = (argHttpLocation || global.DEFAULT_SPECBERUS_LOCATION) + '/' + date + '/Overview.html';
@@ -206,7 +208,7 @@ function orchestrate(spec, isManifest, token) {
                                         spec.jobs['publish'].status = 'ok';
 
                                         spec.jobs['tr-install'].status = 'pending';
-                                        finalTRpath = buildFinalTRpath(report.metadata.get('thisVersion'));
+                                        finalTRpath = report.metadata.get('thisVersion').replace(W3C_PREFIX, '');
                                         return trInstaller(tempLocation, finalTRpath).then(function () {
                                             spec.jobs['tr-install'].status = 'ok';
 
