@@ -170,7 +170,7 @@ function orchestrate(spec, isManifest, token) {
     spec.jobs['tr-install'] = new Job();
     spec.jobs['update-tr-shortlink'] = new Job();
 
-    var W3C_PREFIX = /^https?:\/\/(www\.)?w3c?\.org/i;
+    var W3C_PREFIX = 'http://www.w3.org';
 
     var date = new Date().getTime();
     var tempLocation = (argTempLocation || global.DEFAULT_TEMP_LOCATION) + path.sep + date + path.sep;
@@ -207,30 +207,41 @@ function orchestrate(spec, isManifest, token) {
                                         spec.jobs['publish'].status = 'ok';
 
                                         spec.jobs['tr-install'].status = 'pending';
-                                        finalTRpath = report.metadata.get('thisVersion').replace(W3C_PREFIX, '');
-                                        return trInstaller(tempLocation, finalTRpath).then(function () {
-                                            spec.jobs['tr-install'].status = 'ok';
+                                        if (0 === report.metadata.get('thisVersion').indexOf(W3C_PREFIX)) {
+                                            finalTRpath = report.metadata.get('thisVersion').replace(W3C_PREFIX, '');
+                                            return trInstaller(tempLocation, finalTRpath).then(function () {
+                                                spec.jobs['tr-install'].status = 'ok';
 
-                                            spec.jobs['update-tr-shortlink'].status = 'pending';
-                                            return updateTrShortlink(report.metadata.get('thisVersion')).then(function () {
-                                                spec.jobs['update-tr-shortlink'].status = 'ok';
+                                                spec.jobs['update-tr-shortlink'].status = 'pending';
+                                                return updateTrShortlink(report.metadata.get('thisVersion')).then(function () {
+                                                    spec.jobs['update-tr-shortlink'].status = 'ok';
 
-                                                var cmd = global.SENDMAIL + ' ' + global.MAILING_LIST + ' ' + report.metadata.get('thisVersion');
-                                                exec(cmd, function (err, stdout, stderr) {
-                                                  if (err) console.error(stderr);
+                                                    var cmd = global.SENDMAIL + ' ' + global.MAILING_LIST + ' ' + report.metadata.get('thisVersion');
+                                                    exec(cmd, function (err, stdout, stderr) {
+                                                      if (err) console.error(stderr);
+                                                    });
+                                                    spec.history = spec.history.add('The document has been published at <a href="' +
+                                                        report.metadata.get('thisVersion') + '">' + report.metadata.get('thisVersion') + '</a>.');
+                                                    return Promise.resolve("finished");
+                                                }, function (err) {
+                                                    spec.jobs['update-tr-shortlink'].status = 'error';
+                                                    spec.jobs['update-tr-shortlink'].errors.push(err.toString());
+                                                    return Promise.reject(err);
                                                 });
-                                                spec.history = spec.history.add('The document has been published at <a href="' + report.metadata.get('thisVersion') + '">' + report.metadata.get('thisVersion') + '</a>.');
-                                                return Promise.resolve("finished");
                                             }, function (err) {
-                                                spec.jobs['update-tr-shortlink'].status = 'error';
-                                                spec.jobs['update-tr-shortlink'].errors.push(err.toString());
+                                                spec.jobs['tr-install'].status = 'error';
+                                                spec.jobs['tr-install'].errors.push(err.toString());
                                                 return Promise.reject(err);
                                             });
-                                        }, function (err) {
-                                            spec.jobs['tr-install'].status = 'error';
-                                            spec.jobs['tr-install'].errors.push(err.toString());
-                                            return Promise.reject(err);
-                                        });
+                                        }
+                                        else {
+                                            spec.jobs['publish'].status = 'failure';
+                                            spec.jobs['publish'].errors.push(errors);
+                                            spec.history = spec.history.add('The document could not be published: ' + errors.map(function (error) {
+                                                return error.message;
+                                            }));
+                                            return Promise.reject(new Error("Failed the publication system"));
+                                        }
                                     }
                                     else {
                                         spec.jobs['publish'].status = 'failure';
