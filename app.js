@@ -132,6 +132,7 @@ function publish(metadata) {
             json: true,
             form: {
                 specversion: {
+                    status: metadata.get('status'),
                     uri: metadata.get('thisVersion'),
                     latestVersionUri: metadata.get('latestVersion'),
                     previousVersionUri: metadata.get('previousVersion'),
