@@ -130,6 +130,10 @@ function publish(metadata) {
         Request.post({
             url: global.W3C_PUBSYSTEM_URL,
             json: true,
+            auth: {
+                user: global.USERNAME,
+                pass: global.PASSWORD
+            },
             form: {
                 specversion: {
                     status: metadata.get('status'),
