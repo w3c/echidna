@@ -43,19 +43,19 @@
     "url": "https://github.com/w3c/echidna/issues"
   },
   "dependencies": {
-    "express": "4.x.x",
-    "promise": "6.x.x",
-    "immutable": "3.x.x",
-    "request": "2.x.x",
-    "compression": "1.x.x",
     "body-parser": "1.x.x",
-    "specberus": "w3c/specberus",
-    "moment": "2.x.x"
+    "compression": "1.x.x",
+    "express": "4.x.x",
+    "immutable": "3.x.x",
+    "moment": "2.x.x",
+    "promise": "6.x.x",
+    "request": "2.x.x",
+    "specberus": "w3c/specberus"
   },
   "devDependencies": {
-    "mocha": "2.x.x",
     "chai": "1.x.x",
     "chai-as-promised": "4.x.x",
+    "mocha": "2.x.x",
     "morgan": "1.x.x"
   },
   "scripts": {
