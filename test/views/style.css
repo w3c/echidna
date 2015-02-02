@@ -1,33 +1,167 @@
 
 /**
  * Style for the Echidna testbed.
+ *
  * @author Antonio <antonio@w3.org>
  */
 
-body {
-    margin :          0 0 128px 0;
-    padding:          1em 4ex;
+/* General styles */
+
+* {
+    box-sizing:       border-box;
+    margin:           0;
+    border:           0;
+    padding:          0;
 }
 
-ol#specList {
+body {
+    margin :          1rem 25rem 13rem 1rem;
+    font-family:      "Lucida Sans Unicode", "Lucida Grande", "Trebuchet MS", Helvetica, Verdana, Geneva, Calibri, sans-serif;
+    background-color: #f8f0ff;
+    color:            #404040;
+}
+
+h1, h2, h3 {
+    margin:           0.5em 0;
+    clear:            both;
+    color:            #000000;
+}
+
+/* Main sections */
+
+div#content {
     display:          none;
 }
+
+/* Forms for settings */
+
+form {
+    margin:           0 0 0.5em 0;
+    display:          inline-flex;
+}
+
+form.left {
+    float:            left;
+}
+
+form.right {
+    float:            right;
+}
+
+form.left > * {
+    padding:          0 1rem 0 0;
+    display:          inline;
+}
+
+form.right > * {
+    padding:          0 0 0 1rem;
+    display:          inline;
+}
+
+form.left input {
+    padding:          0 1rem 0 0;
+}
+
+form.right input {
+    padding:          0 0 0 1rem;
+}
+
+form input {
+    margin:           0;
+    padding:          0.1em;
+    border:           1px #808080 solid;
+    font-family:      monospace;
+}
+
+/* Table of specs */
+
+table#specList {
+    text-align:       left;
+}
+
+table#specList th, table#specList td {
+    padding:          0;
+}
+
+table#specList th:not(:first-child), table#specList td:not(:first-child) {
+    padding-left:     1ex;
+}
+
+table#specList th:not(:last-child), table#specList td:not(:last-child) {
+    padding-right:    1ex;
+}
+
+table#specList td.deliverers {
+    font-size:        smaller;
+}
+
+/* Panels */
 
 pre#console {
     position:         fixed;
     bottom:           0;
     left:             0;
     right:            0;
-    height:           128px;
+    height:           12rem;
     margin:           0;
     border-style:     solid;
-    border-color:     #c0c0c0;
-    border-width:     0.25em 0 0 0;
+    border-color:     #000000;
+    border-width:     1px 0 0 0;
     padding:          0.5em 2ex;
     word-wrap:        break-word;
     overflow-y:       scroll;
     font-family:      monospace;
-    background-color: #f0f0f0;
+    background-color: #fff8f0;
+}
+
+pre#inspector {
+    position:         fixed;
+    bottom:           12rem;
+    top:              0;
+    right:            0;
+    width:            24rem;
+    margin:           0;
+    border-style:     solid;
+    border-color:     #000000;
+    border-width:     0 0 0 1px;
+    padding:          0.5em 2ex;
+    word-wrap:        break-word;
+    overflow-y:       scroll;
+    font-family:      monospace;
+    font-size:        smaller;
+    background-color: #f0fff8;
+}
+
+/* Actions and progress bars */
+
+table#specList td.progressBar {
+    padding:          0;
+    width:            128px;
+    border-width:     1px;
+    border-style:     solid;
+}
+
+table#specList td.progressBar:hover, table#specList td.progressBar:active {
+    background-color: #ffff00;
+}
+
+table#specList td.progressBar span {
+    display:          inline-block;
+    background-color: #c8c0cf;
+}
+
+table#specList td.progressBar:hover span, table#specList td.progressBar:active span {
+    background-color: #8f8fcf;
+}
+
+a.action, td.action {
+    color:            #c04040;
+    text-decoration:  none;
+    cursor:           pointer;
+}
+
+a.action:hover, a.action:active, td.action:hover, td.action:active {
+    background-color: #ffff00;
 }
 
 /* EOF */
