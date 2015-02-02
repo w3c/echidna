@@ -5,7 +5,7 @@ var validator = express();
 module.exports = validator;
 
 validator.get('/check', function (req, res) {
-  var url = req.param("uri") || "";
+  var url = req.query.uri || "";
   var result = {
     "url": url,
     "messages": [],

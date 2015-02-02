@@ -10,8 +10,8 @@ function getShortName(latestVersion) {
 }
 
 tokenChecker.get('/authorize', function (req, res) {
-  var uri = req.param("spec");
-  var token = req.param("token");
+  var uri = req.query.spec;
+  var token = req.query.token;
   var json = {
     "token" : token,
     "spec"  : uri,
