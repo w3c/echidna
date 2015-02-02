@@ -1,3 +1,4 @@
+
 'use strict';
 
 console.log('Launching…');
@@ -30,6 +31,7 @@ var port = process.argv[4] || global.DEFAULT_PORT;
 
 app.use(compression());
 app.use(bodyParser.urlencoded({ extended: false }));
+app.use(corsHandler);
 
 app.set('view engine', 'ejs');
 app.engine('.html', ejs.renderFile);
@@ -104,6 +106,27 @@ app.post('/api/request', function(req, res) {
         }
     }
 });
+
+/**
+ * Add CORS headers to responses if the client is explicitly allowed.
+ *
+ * First, this ensures that the testbed page on the test server, listening on a different port, can GET and POST to Echidna.
+ * Most importantly, this is necessary to attend publication requests from third parties, eg GitHub.
+ */
+
+function corsHandler (req, res, next) {
+
+    if (req && req.headers && req.headers.origin) {
+        if (global.ALLOWED_CLIENTS.some(function(regex) {
+            return regex.test(req.headers.origin);
+        })) {
+            res.header('Access-Control-Allow-Origin', req.headers.origin);
+            res.header('Access-Control-Allow-Methods', 'GET,POST');
+            res.header('Access-Control-Allow-Headers', 'Content-Type');
+        }
+    }
+    next();
+}
 
 function trInstaller(source, dest) {
     return new Promise(function (resolve, reject) {
@@ -298,7 +321,13 @@ function orchestrate(spec, isManifest, token) {
     });
 }
 
-app.listen(process.env.PORT || port);
+app.listen(process.env.PORT || port)
+    .on('error', function(err) {
+        if (err) {
+            console.error('Error while trying to launch the server: “' + err + '”.');
+        }
+    }
+);
 
 console.log(meta.name +
             ' version ' + meta.version +
