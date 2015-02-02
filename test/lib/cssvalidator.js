@@ -5,15 +5,15 @@ var validator = express();
 module.exports = validator;
 
 validator.get('/css-validator/validator', function (req, res) {
-  var uri = req.param("uri") || "";
-  var profile = req.param("profile") || "css3";
+  var uri = req.query.uri || "";
+  var profile = req.query.profile || "css3";
   var today = new Date();
   var errors = [{
     "source" : uri,
     "context" : ".ds",
     "type" : "value",
     "message" : "inline-box is not a display value : "},
-    {"source" : req.param("uri"),
+    {"source" : uri,
     "context" : ".kd-button-submit",
     "type"    : "value",
     "message" : "top is not a color value"}];
