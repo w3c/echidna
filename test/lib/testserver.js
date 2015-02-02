@@ -14,7 +14,7 @@ var draftsSystemPath = require('./utils').draftsSystemPath;
 
 var port = (process.env.PORT || 3000) + 1;
 
-var TestServer   = function () {};
+var TestServer = function () {};
 
 app.use(morgan('dev',
     {stream: fs.createWriteStream("/tmp/echidna-testserver.log", {flags: 'w'})}));
@@ -63,7 +63,14 @@ TestServer.start = function () {
     init();
   }
   do {
-    server = app.listen(port);
+    server = app.listen(port)
+      .on('error', function(err) {
+        if ('EADDRINUSE' === err.code) {
+          // Just continue trying.
+        } else {
+          throw new Error('Error while trying to launch the test server: ' + err);
+        }
+      });
     port += 1;
   } while ((server.address() === null) && (port < limit_port));
   if (server.address() === null) {
@@ -72,7 +79,9 @@ TestServer.start = function () {
 };
 
 TestServer.location = function () {
-  return "http://localhost:" + server.address().port;
+  if (server && server.address()) {
+    return "http://localhost:" + server.address().port;
+  }
 };
 
 // this will return metadata associate with a draft
