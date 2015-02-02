@@ -59,7 +59,7 @@
     <div class="container">
 
       <section>
-        <p class="info">This invokes the method <a href="/api/version"><code>/api/version</code></a>.</p>
+        <p class="info">This invokes the method <a href="api/version"><code>api/version</code></a>.</p>
 
         <h2>Basic info</h2>
 
@@ -71,11 +71,11 @@
       <hr>
 
       <section>
-        <p class="info">This invokes the method <code>/api/request</code> (<code>POST</code>) with params <code>{url, decision, token}</code>.</p>
+        <p class="info">This invokes the method <code>api/request</code> (<code>POST</code>) with params <code>{url, decision, token}</code>.</p>
 
         <h2>New publication request</h2>
 
-        <form role="form" id="submitForm" method="POST" action="/api/request" class="form-horizontal">
+        <form role="form" id="submitForm" method="POST" action="api/request" class="form-horizontal">
 
           <div class="form-group">
             <label for="url" class="col-sm-2 control-label">Document URL</label>
@@ -112,7 +112,7 @@
       <hr>
 
       <section>
-        <p class="info">This invokes the method <a href="/api/status"><code>/api/status</code></a> and splits results in two groups.</p>
+        <p class="info">This invokes the method <a href="api/status"><code>api/status</code></a> and splits results in two groups.</p>
 
         <h2>Publication requests</h2>
 
@@ -130,14 +130,14 @@
 
     </div>
 
-    <script type="text/javascript" src="/scripts/jquery-2.1.1.min.js"></script>
+    <script type="text/javascript" src="scripts/jquery-2.1.1.min.js"></script>
 
     <script type="text/javascript">
 
       $(document).ready(function() {
 
         function getStatus() {
-          $.get('/api/status', function(data) {
+          $.get('api/status', function(data) {
             console.dir(data);
             $('#queueText').text(JSON.stringify(data.requests, null, 2));
              $('#lastUpdate > span').text(new Date().toLocaleTimeString());
@@ -148,7 +148,7 @@
         }
 
         $('#infoButton').click(function() {
-          $.get('/api/version', function(data) {
+          $.get('api/version', function(data) {
             $('#infoButton').hide();
             $('#infoText').text(data).show();
           });
