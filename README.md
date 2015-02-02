@@ -62,24 +62,31 @@ $ npm start /home/nick/public_html/staging/ http://localhost/~nick/staging/ 80
 $ npm start ../tmp/echidna-files/
 ```
 
-## Automated tests and builds
+## Automated testing
 
-Use
+### Command line script
+
+Type this to launch `mocha` and its associated tests:
+
 ```bash
 $ npm test
 ```
-This will launch mocha and its associated tests.
 
-### test server
+### Web-based testbed
 
-For testing purposes, we're using an internal test server at `http://localhost:3001/` . It will get started and stopped automatically when launching mocha. One can launch this test server separately by using:
+For testing purposes, we are using an internal web server by default at `http://localhost:3001`.
+The test server simulates some of the W3C services, such as the CSS and HTML validators, or the token authorization checker.
+It also serves a set of sample drafts.
+
+It will get started and stopped automatically when launching `mocha`.
+
+One may launch this test server separately by using:
 
 ```bash
 $ npm run testserver
 ```
 
-The test server simulates some of the W3C services, such as the CSS and HTML Validators or the token authorization checker. It also serves the sample drafts
-listed at `http://localhost:3001/`.
+When the test server is running, the testbed with all drafts will be available in `http://localhost:3001/`.
 
 ## Sub-projects, and related tools
 
