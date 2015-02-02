@@ -44,7 +44,6 @@
   },
   "dependencies": {
     "express": "~4.10.7",
-    "ejs": "1.0.x",
     "promise": "~6.0.1",
     "immutable": "~3.5.0",
     "request": "~2.51.0",
