@@ -1,3 +1,5 @@
+'use strict';
+
 // switch the environment into testing mode
 process.env.NODE_ENV = 'dev';
 
