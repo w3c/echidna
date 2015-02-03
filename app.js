@@ -11,6 +11,7 @@ var path = require('path');
 var Moment = require('moment');
 var Request = require('request');
 var Promise = require('promise');
+var uuid = require('node-uuid');
 
 var DocumentDownloader = require("./lib/document-downloader");
 var SpecberusWrapper = require("./functions.js").SpecberusWrapper;
@@ -75,6 +76,7 @@ app.post('/api/request', function(req, res) {
     var decision = req.body ? req.body.decision : null;
     var isManifest = req.body ? req.body.isManifest === 'true' : false;
     var token = req.body ? req.body.token : null;
+    var id = uuid.v4();
 
     if (!url || !decision || !token) {
         res.status(500).send({error: 'Missing parameters {url, decision, token}.'});
@@ -85,6 +87,7 @@ app.post('/api/request', function(req, res) {
         }
         else {
             requests[url] = {
+                'id': id,
                 'url': url,
                 'decision': decision,
                 'isManifest': isManifest,
@@ -97,7 +100,7 @@ app.post('/api/request', function(req, res) {
             }, function (err) {
                 console.log('Spec at ' + url + ' (decision: ' + decision + ') has FAILED.');
             });
-            res.send('Spec at ' + url + ' (decision: ' + decision + ') added to the queue.');
+            res.send(id);
         }
     }
 });
@@ -195,9 +198,8 @@ function orchestrate(spec, isManifest, token) {
 
     var W3C_PREFIX = 'http://www.w3.org';
 
-    var date = new Date().getTime();
-    var tempLocation = (argTempLocation || global.DEFAULT_TEMP_LOCATION) + path.sep + date + path.sep;
-    var httpLocation = (argHttpLocation || global.DEFAULT_SPECBERUS_LOCATION) + '/' + date + '/Overview.html';
+    var tempLocation = (argTempLocation || global.DEFAULT_TEMP_LOCATION) + path.sep + spec.id + path.sep;
+    var httpLocation = (argHttpLocation || global.DEFAULT_SPECBERUS_LOCATION) + '/' + spec.id + '/Overview.html';
     var finalTRpath;
 
     spec.jobs['retrieve-resources'].status = 'pending';

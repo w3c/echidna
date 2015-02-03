@@ -50,7 +50,8 @@
     "moment": "2.x.x",
     "promise": "6.x.x",
     "request": "2.x.x",
-    "specberus": "w3c/specberus"
+    "specberus": "w3c/specberus",
+    "node-uuid": "1.x.x"
   },
   "devDependencies": {
     "chai": "1.x.x",
