@@ -6,7 +6,6 @@ var meta = require('./package.json');
 var express = require('express');
 var compression = require('compression');
 var bodyParser = require('body-parser');
-var ejs = require('ejs');
 var exec = require('child_process').exec;
 var path = require('path');
 var Moment = require('moment');
@@ -31,9 +30,6 @@ var port = process.argv[4] || global.DEFAULT_PORT;
 app.use(compression());
 app.use(bodyParser.urlencoded({ extended: false }));
 
-app.set('view engine', 'ejs');
-app.engine('.html', ejs.renderFile);
-
 if (process.env.NODE_ENV === 'production') {
     app.set('views', __dirname + '/dist/views');
     app.use(express.static(__dirname + '/dist/assets'));
@@ -44,7 +40,7 @@ if (process.env.NODE_ENV === 'production') {
 
 // Index Page
 app.get('/', function(request, response, next) {
-    response.render('index.html');
+    response.sendFile(__dirname + '/views/index.html');
 });
 
 // API methods
