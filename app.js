@@ -23,6 +23,11 @@ var History = require("./lib/history");
 // Configuration file
 require('./config.js');
 
+// Pseudo-constants:
+var STATUS_STARTED = 'started';
+var STATUS_ERROR = 'error';
+var STATUS_SUCCESS = 'success';
+
 var app = express();
 var requests = {};
 var argTempLocation = process.argv[2] || global.DEFAULT_TEMP_LOCATION;
@@ -66,12 +71,13 @@ app.get('/api/status', function(req, res) {
 
     if (id) {
         Fs.exists(file, function(exists) {
-            if (exists) res.sendFile(file);
-            else res.status(404).send({ error: 'Request id ' + id + ' not found.'});
+            if (exists) res.status(200).sendFile(file);
+            else res.status(404).send('No job found with ID “' + id + '”.');
         });
     } else {
-        res.status(500).send({ error: 'You must provide an id.' });
+        res.status(400).send('Missing required parameter “ID”.');
     }
+
 });
 
 app.post('/api/request', function(req, res) {
@@ -82,11 +88,11 @@ app.post('/api/request', function(req, res) {
     var id = uuid.v4();
 
     if (!url || !decision || !token) {
-        res.status(500).send({error: 'Missing parameters {url, decision, token}.'});
+        res.status(500).send('Missing required parameters “url”, “decision” and/or “token”.');
     }
     else {
-        if (typeof requests[url] !== 'undefined' && requests[url].status === 'error') {
-            res.send('Spec at ' + url + ' is yet being processed. Check "/api/status?id=' + requests[url].id + '".');
+        if (requests[url] && STATUS_STARTED === requests[url].status) {
+            res.status(200).send('This publication request is currently pending; check progress with the ID that was returned when it was submitted.');
         }
         else {
             requests[url] = {
@@ -96,7 +102,7 @@ app.post('/api/request', function(req, res) {
                 'isManifest': isManifest,
                 'jobs': {},
                 'history': new History(),
-                'status': 'started'
+                'status': STATUS_STARTED
             };
 
             orchestrate(requests[url], isManifest, token).then(function () {
@@ -104,7 +110,7 @@ app.post('/api/request', function(req, res) {
             }, function (err) {
                 console.log('Spec at ' + url + ' (decision: ' + decision + ') has FAILED.');
             });
-            res.send("Follow the status of the request at /api/status?id=" + id);
+            res.status(202).send(id);
         }
     }
 });
@@ -192,7 +198,7 @@ function Job() {
 }
 
 function dumpJobResult(dest, result) {
-    Fs.writeFile(dest, JSON.stringify(result, null, 2), function (err) {
+    Fs.writeFile(dest, JSON.stringify(result, null, 2) + '\n', function (err) {
         if (err) return console.error(err);
     });
 }
@@ -256,20 +262,20 @@ function orchestrate(spec, isManifest, token) {
                                                 });
                                                 spec.history = spec.history.add('The document has been published at <a href="' +
                                                     report.metadata.get('thisVersion') + '">' + report.metadata.get('thisVersion') + '</a>.');
-                                                spec.status = 'success';
+                                                spec.status = STATUS_SUCCESS;
                                                 dumpJobResult(resultLocation, spec);
                                                 return Promise.resolve("finished");
                                             }, function (err) {
                                                 spec.jobs['update-tr-shortlink'].status = 'error';
                                                 spec.jobs['update-tr-shortlink'].errors.push(err.toString());
-                                                spec.status = 'error';
+                                                spec.status = STATUS_ERROR;
                                                 dumpJobResult(resultLocation, spec);
                                                 return Promise.reject(err);
                                             });
                                         }, function (err) {
                                             spec.jobs['tr-install'].status = 'error';
                                             spec.jobs['tr-install'].errors.push(err.toString());
-                                            spec.status = 'error';
+                                            spec.status = STATUS_ERROR;
                                             dumpJobResult(resultLocation, spec);
                                             return Promise.reject(err);
                                         });
@@ -280,14 +286,14 @@ function orchestrate(spec, isManifest, token) {
                                         spec.history = spec.history.add('The document could not be published: ' + errors.map(function (error) {
                                             return error.message;
                                         }));
-                                        spec.status = 'error';
+                                        spec.status = STATUS_ERROR;
                                         dumpJobResult(resultLocation, spec);
                                         return Promise.reject(new Error("Failed the publication system"));
                                     }
                                 }, function (err) {
                                     spec.jobs['publish'].status = 'error';
                                     spec.jobs['publish'].errors.push(err.toString());
-                                    spec.status = 'error';
+                                    spec.status = STATUS_ERROR;
                                     spec.history = spec.history.add('The document could not be published: ' + err.message);
                                     return Promise.reject(err);
                                 });
@@ -296,14 +302,14 @@ function orchestrate(spec, isManifest, token) {
                                 spec.history = spec.history.add('The document contains non-authorized resources');
                                 spec.jobs['third-party-checker'].status = 'failure';
                                 spec.jobs['third-party-checker'].errors = extResources;
-                                spec.status = 'error';
+                                spec.status = STATUS_ERROR;
                                 dumpJobResult(resultLocation, spec);
                                 return Promise.reject(new Error("Failed Third-Party checker"));
                             }
                         }, function (err) {
                             spec.jobs['third-party-checker'].status = 'error';
                             spec.jobs['third-party-checker'].errors.push(err.toString());
-                            spec.status = 'error';
+                            spec.status = STATUS_ERROR;
                             dumpJobResult(resultLocation, spec);
                             return Promise.reject(err);
                         });
@@ -312,14 +318,14 @@ function orchestrate(spec, isManifest, token) {
                         spec.jobs['token-checker'].status = 'failure';
                         spec.jobs['token-checker'].errors.push('Not authorized');
                         spec.history = spec.history.add('You are not authorized to publish');
-                        spec.status = 'error';
+                        spec.status = STATUS_ERROR;
                         dumpJobResult(resultLocation, spec);
                         return Promise.reject(new Error("Failed Token checker"));
                     }
                 }, function (err) {
                     spec.jobs['token-checker'].status = 'error';
                     spec.jobs['token-checker'].errors.push(err.toString());
-                    spec.status = 'error';
+                    spec.status = STATUS_ERROR;
                     dumpJobResult(resultLocation, spec);
                     return Promise.reject(err);
                 });
@@ -328,14 +334,14 @@ function orchestrate(spec, isManifest, token) {
                 spec.jobs['specberus'].status = 'failure';
                 spec.jobs['specberus'].errors = report.errors;
                 spec.history = spec.history.add('The document failed specberus.');
-                spec.status = 'error';
+                spec.status = STATUS_ERROR;
                 dumpJobResult(resultLocation, spec);
                 return Promise.reject(new Error("Failed Specberus"));
             }
         }, function (err) {
             spec.jobs['specberus'].status = 'error';
             spec.jobs['specberus'].errors.push(err.toString());
-            spec.status = 'error';
+            spec.status = STATUS_ERROR;
             dumpJobResult(resultLocation, spec);
             return Promise.reject(err);
         });
@@ -343,11 +349,12 @@ function orchestrate(spec, isManifest, token) {
         spec.history = spec.history.add('The document could not be retrieved.');
         spec.jobs['retrieve-resources'].status = 'error';
         spec.jobs['retrieve-resources'].errors.push(err.toString());
-        spec.status = 'error';
+        spec.status = STATUS_ERROR;
         dumpJobResult(resultLocation, spec);
         return Promise.reject(err);
     }).catch(function (err) {
         spec.history = spec.history.add('A system error occurred during the process.');
+        spec.status = STATUS_ERROR;
         spec.status = 'error';
         var cmd = global.SENDMAIL + ' ERROR ' + global.MAILING_LIST + ' ' + spec.url + '\'' + JSON.stringify(spec, null, 2) + '\'';
         exec(cmd, function (err, stdout, stderr) {
