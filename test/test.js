@@ -433,12 +433,12 @@ describe('Publisher', function () {
 
     it('should reject if metadata corresponds a feature not yet implemented', function () {
       var reject_promise = new Publisher(new NotImplementedService()).publish(metadata);
-      return expect(reject_promise).to.eventually.be.rejectedWith(Error);
+      return expect(reject_promise).to.eventually.be.rejectedWith(/Not Implemented/);
     });
 
     it('should reject if the remote server is having an issue', function () {
       var reject_promise = new Publisher(new ServerErrorService()).publish(metadata);
-      return expect(reject_promise).to.eventually.be.rejectedWith(Error);
+      return expect(reject_promise).to.eventually.be.rejectedWith(/code 500/);
     });
   });
 });
