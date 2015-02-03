@@ -39,8 +39,9 @@ Then simply open [`http://localhost:3000`](http://localhost:3000) on your web br
 
 ## Syntax and command-line parameters
 
+(with npm >= 2)
 ```
-$ npm start [STAGING_PATH [HTTP_BASE_URI [PORT]]]
+$ npm start [-- STAGING_PATH [HTTP_BASE_URI [PORT]]]
 ```
 
 Meaning of positional parameters:
@@ -55,11 +56,11 @@ Meaning of positional parameters:
 Examples:
 
 ```bash
-$ npm start /home/nick/public_html/staging/ http://localhost/~nick/staging/ 80
+$ npm start -- /home/nick/public_html/staging/ http://localhost/~nick/staging/ 80
 ```
 
 ```bash
-$ npm start ../tmp/echidna-files/
+$ npm start -- ../tmp/echidna-files/
 ```
 
 ## Automated tests and builds
