@@ -12,6 +12,7 @@ var Moment = require('moment');
 var Request = require('request');
 var Promise = require('promise');
 var uuid = require('node-uuid');
+var Fs = require('fs');
 
 var DocumentDownloader = require("./lib/document-downloader");
 var SpecberusWrapper = require("./functions.js").SpecberusWrapper;
@@ -27,6 +28,7 @@ var requests = {};
 var argTempLocation = process.argv[2] || global.DEFAULT_TEMP_LOCATION;
 var argHttpLocation  = process.argv[3] || global.DEFAULT_HTTP_LOCATION;
 var port = process.argv[4] || global.DEFAULT_PORT;
+var argResultLocation = process.argv[5] || global.DEFAULT_RESULT_LOCATION;
 
 app.use(compression());
 app.use(bodyParser.urlencoded({ extended: false }));
@@ -59,16 +61,17 @@ app.get('/api/version', function(req, res) {
 
 app.get('/api/status', function(req, res) {
     var result;
-    var url = req.query ? req.query.url : null;
-    var entry;
+    var id = req.query ? req.query.id : null;
+    var file = argResultLocation + path.sep + id + '.json';
 
-    if (url) {
-        if (requests[url]) res.json({ 'request': requests[url] });
-        else {
-            res.status(500).send({ error: 'Request of URL ' + url + ' does not exist.' });
-        }
+    if (id) {
+        Fs.exists(file, function(exists) {
+            if (exists) res.sendFile(file);
+            else res.status(404).send({ error: 'Request id ' + id + ' not found.'});
+        });
+    } else {
+        res.status(500).send({ error: 'You must provide an id.' });
     }
-    else res.json({ 'requests': requests });
 });
 
 app.post('/api/request', function(req, res) {
@@ -82,8 +85,8 @@ app.post('/api/request', function(req, res) {
         res.status(500).send({error: 'Missing parameters {url, decision, token}.'});
     }
     else {
-        if (requests[url]) {
-            res.send('Spec at ' + url + ' is yet pending validation OR has been already submitted. Check “/api/status”.');
+        if (typeof requests[url] !== 'undefined' && requests[url].status === 'error') {
+            res.send('Spec at ' + url + ' is yet being processed. Check "/api/status?id=' + requests[url].id + '".');
         }
         else {
             requests[url] = {
@@ -91,16 +94,17 @@ app.post('/api/request', function(req, res) {
                 'url': url,
                 'decision': decision,
                 'isManifest': isManifest,
-                'token': token,
                 'jobs': {},
-                'history': new History()
+                'history': new History(),
+                'status': 'started'
             };
+
             orchestrate(requests[url], isManifest, token).then(function () {
                 console.log('Spec at ' + url + ' (decision: ' + decision + ') has FINISHED.');
             }, function (err) {
                 console.log('Spec at ' + url + ' (decision: ' + decision + ') has FAILED.');
             });
-            res.send(id);
+            res.send("Follow the status of the request at /api/status?id=" + id);
         }
     }
 });
@@ -187,6 +191,12 @@ function Job() {
     this.errors = [];
 }
 
+function dumpJobResult(dest, result) {
+    Fs.writeFile(dest, JSON.stringify(result, null, 2), function (err) {
+        if (err) return console.error(err);
+    });
+}
+
 function orchestrate(spec, isManifest, token) {
     spec.jobs['retrieve-resources'] = new Job();
     spec.jobs['specberus'] = new Job();
@@ -198,8 +208,9 @@ function orchestrate(spec, isManifest, token) {
 
     var W3C_PREFIX = 'http://www.w3.org';
 
-    var tempLocation = (argTempLocation || global.DEFAULT_TEMP_LOCATION) + path.sep + spec.id + path.sep;
-    var httpLocation = (argHttpLocation || global.DEFAULT_SPECBERUS_LOCATION) + '/' + spec.id + '/Overview.html';
+    var tempLocation = argTempLocation + path.sep + spec.id + path.sep;
+    var resultLocation = argResultLocation + path.sep + spec.id + '.json';
+    var httpLocation = argHttpLocation + '/' + spec.id + '/Overview.html';
     var finalTRpath;
 
     spec.jobs['retrieve-resources'].status = 'pending';
@@ -245,15 +256,21 @@ function orchestrate(spec, isManifest, token) {
                                                 });
                                                 spec.history = spec.history.add('The document has been published at <a href="' +
                                                     report.metadata.get('thisVersion') + '">' + report.metadata.get('thisVersion') + '</a>.');
+                                                spec.status = 'success';
+                                                dumpJobResult(resultLocation, spec);
                                                 return Promise.resolve("finished");
                                             }, function (err) {
                                                 spec.jobs['update-tr-shortlink'].status = 'error';
                                                 spec.jobs['update-tr-shortlink'].errors.push(err.toString());
+                                                spec.status = 'error';
+                                                dumpJobResult(resultLocation, spec);
                                                 return Promise.reject(err);
                                             });
                                         }, function (err) {
                                             spec.jobs['tr-install'].status = 'error';
                                             spec.jobs['tr-install'].errors.push(err.toString());
+                                            spec.status = 'error';
+                                            dumpJobResult(resultLocation, spec);
                                             return Promise.reject(err);
                                         });
                                     }
@@ -263,11 +280,14 @@ function orchestrate(spec, isManifest, token) {
                                         spec.history = spec.history.add('The document could not be published: ' + errors.map(function (error) {
                                             return error.message;
                                         }));
+                                        spec.status = 'error';
+                                        dumpJobResult(resultLocation, spec);
                                         return Promise.reject(new Error("Failed the publication system"));
                                     }
                                 }, function (err) {
                                     spec.jobs['publish'].status = 'error';
                                     spec.jobs['publish'].errors.push(err.toString());
+                                    spec.status = 'error';
                                     spec.history = spec.history.add('The document could not be published: ' + err.message);
                                     return Promise.reject(err);
                                 });
@@ -276,11 +296,15 @@ function orchestrate(spec, isManifest, token) {
                                 spec.history = spec.history.add('The document contains non-authorized resources');
                                 spec.jobs['third-party-checker'].status = 'failure';
                                 spec.jobs['third-party-checker'].errors = extResources;
+                                spec.status = 'error';
+                                dumpJobResult(resultLocation, spec);
                                 return Promise.reject(new Error("Failed Third-Party checker"));
                             }
                         }, function (err) {
                             spec.jobs['third-party-checker'].status = 'error';
                             spec.jobs['third-party-checker'].errors.push(err.toString());
+                            spec.status = 'error';
+                            dumpJobResult(resultLocation, spec);
                             return Promise.reject(err);
                         });
                     }
@@ -288,11 +312,15 @@ function orchestrate(spec, isManifest, token) {
                         spec.jobs['token-checker'].status = 'failure';
                         spec.jobs['token-checker'].errors.push('Not authorized');
                         spec.history = spec.history.add('You are not authorized to publish');
+                        spec.status = 'error';
+                        dumpJobResult(resultLocation, spec);
                         return Promise.reject(new Error("Failed Token checker"));
                     }
                 }, function (err) {
                     spec.jobs['token-checker'].status = 'error';
                     spec.jobs['token-checker'].errors.push(err.toString());
+                    spec.status = 'error';
+                    dumpJobResult(resultLocation, spec);
                     return Promise.reject(err);
                 });
             }
@@ -300,20 +328,27 @@ function orchestrate(spec, isManifest, token) {
                 spec.jobs['specberus'].status = 'failure';
                 spec.jobs['specberus'].errors = report.errors;
                 spec.history = spec.history.add('The document failed specberus.');
+                spec.status = 'error';
+                dumpJobResult(resultLocation, spec);
                 return Promise.reject(new Error("Failed Specberus"));
             }
         }, function (err) {
             spec.jobs['specberus'].status = 'error';
             spec.jobs['specberus'].errors.push(err.toString());
+            spec.status = 'error';
+            dumpJobResult(resultLocation, spec);
             return Promise.reject(err);
         });
     }, function (err) {
         spec.history = spec.history.add('The document could not be retrieved.');
         spec.jobs['retrieve-resources'].status = 'error';
         spec.jobs['retrieve-resources'].errors.push(err.toString());
+        spec.status = 'error';
+        dumpJobResult(resultLocation, spec);
         return Promise.reject(err);
     }).catch(function (err) {
         spec.history = spec.history.add('A system error occurred during the process.');
+        spec.status = 'error';
         var cmd = global.SENDMAIL + ' ERROR ' + global.MAILING_LIST + ' ' + spec.url + '\'' + JSON.stringify(spec, null, 2) + '\'';
         exec(cmd, function (err, stdout, stderr) {
             if (err) console.error(stderr);
