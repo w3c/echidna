@@ -174,6 +174,26 @@ describe('DocumentDownloader', function () {
         Fs.rmdirSync('/tmp/testechidnaManifest');
       });
     });
+
+    it('should read a manifest and install its content after spec generation',
+       function () {
+      return DocumentDownloader.fetchAndInstall(
+        server.getMetadata('navigation-timing-2-generated').location +
+          'W3CTRMANIFEST',
+        '/tmp/testechidnaSpecGeneration',
+        true
+      ).then(function() {
+        expect(Fs.readFileSync('/tmp/testechidnaSpecGeneration/Overview.html', { 'encoding': 'utf8' })).to.contain("Spec-generated Navigation Timing 2");
+        expect(Fs.existsSync('/tmp/testechidnaSpecGeneration/spec.css')).to.be.true;
+        expect(Fs.existsSync('/tmp/testechidnaSpecGeneration/timing-overview.png')).to.be.true;
+
+        Fs.unlinkSync('/tmp/testechidnaSpecGeneration/Overview.html');
+        Fs.unlinkSync('/tmp/testechidnaSpecGeneration/spec.css');
+        Fs.unlinkSync('/tmp/testechidnaSpecGeneration/timing-overview.png');
+        Fs.rmdirSync('/tmp/testechidnaSpecGeneration');
+      });
+    });
+
   });
 
   describe('getFilenames(manifestContent)', function () {

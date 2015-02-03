@@ -8,6 +8,7 @@ var tokenChecker = require("./tokenchecker");
 var htmlTemplate = require("./htmltemplate");
 var getMetadata = require('./utils').getMetadata;
 var draftsSystemPath = require('./utils').draftsSystemPath;
+var request = require('request');
 
 var port = (process.env.PORT || 3000) + 1;
 
@@ -42,6 +43,17 @@ app.get('/elvis', function(req, res) {
   res.send('<!doctype html><p>Elvis is alive.');
 });
 
+// pseudo-endpoint for spec generator
+app.get('/generate', function(req, res) {
+  var type = (req.query.type || "").toLowerCase()
+  ,   url = req.query.url
+  if (!url || !type) return res.status(500).json({ error: "Both 'type' and 'url' are required." });
+  if (type !== "test")  return res.status(500).json({ error: "Unknown type '" + type + "'"});
+  request(url, function(err, response, body) {
+    res.send(body.replace("<title>", "<title>Spec-generated "));
+  });
+});
+
 var server;
 
 TestServer.start = function () {
@@ -56,6 +68,7 @@ TestServer.start = function () {
   if (server.address() === null) {
     throw new Error("Can't find a free port for the test server " + port);
   }
+  global.SPEC_GENERATOR = this.location() + '/generate';
 };
 
 TestServer.location = function () {
