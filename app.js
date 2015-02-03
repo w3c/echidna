@@ -171,7 +171,7 @@ function orchestrate(spec, isManifest, token) {
     spec.jobs['tr-install'] = new Job();
     spec.jobs['update-tr-shortlink'] = new Job();
 
-    var W3C_PREFIX = /^https?:\/\/(www\.)?w3c?\.org/i;
+    var W3C_PREFIX = 'http://www.w3.org';
 
     var date = new Date().getTime();
     var tempLocation = (argTempLocation || global.DEFAULT_TEMP_LOCATION) + path.sep + date + path.sep;
@@ -206,7 +206,6 @@ function orchestrate(spec, isManifest, token) {
                                 return publish(report.metadata).then(function (errors) {
                                     if(errors.length === 0) {
                                         spec.jobs['publish'].status = 'ok';
-
                                         spec.jobs['tr-install'].status = 'pending';
                                         finalTRpath = report.metadata.get('thisVersion').replace(W3C_PREFIX, '');
                                         return trInstaller(tempLocation, finalTRpath).then(function () {
@@ -220,7 +219,8 @@ function orchestrate(spec, isManifest, token) {
                                                 exec(cmd, function (err, stdout, stderr) {
                                                   if (err) console.error(stderr);
                                                 });
-                                                spec.history = spec.history.add('The document has been published at <a href="' + report.metadata.get('thisVersion') + '">' + report.metadata.get('thisVersion') + '</a>.');
+                                                spec.history = spec.history.add('The document has been published at <a href="' +
+                                                    report.metadata.get('thisVersion') + '">' + report.metadata.get('thisVersion') + '</a>.');
                                                 return Promise.resolve("finished");
                                             }, function (err) {
                                                 spec.jobs['update-tr-shortlink'].status = 'error';
