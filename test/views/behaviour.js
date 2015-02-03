@@ -189,5 +189,3 @@ $(document).ready(function() {
 
 });
 
-// EOF
-
