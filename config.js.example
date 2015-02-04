@@ -1,9 +1,12 @@
-global.DEFAULT_TEMP_LOCATION = '/var/www/tr';
-global.DEFAULT_HTTP_LOCATION = 'http://localhost/tr';
+
+'use strict';
+
+global.DEFAULT_TEMP_LOCATION = '/var/www/';
+global.DEFAULT_HTTP_LOCATION = 'http://spec-server/';
 global.DEFAULT_LOG_LOCATION = '.';
 global.DEFAULT_PORT = 3000;
 global.PHANTOM = '/usr/bin/phantomjs';
-global.RESOURCES_WHITELIST = '/tmp/whitelist.txt';
+global.RESOURCES_WHITELIST = '/var/echidna/whitelist.txt';
 global.TOKEN_ENDPOINT = 'https://www.w3.org/Web/publications/authorize';
 global.USERNAME = process.env.USERNAME;
 global.PASSWORD = process.env.PASSWORD;
@@ -12,3 +15,12 @@ global.TR_INSTALL_CMD = '/bin/cp -R';
 global.UPDATE_TR_SHORTLINK_CMD = '';
 global.SENDMAIL = 'stubs/sendmail.sh';
 global.MAILING_LIST = 'foobar@w3.org';
+global.ALLOWED_CLIENTS = [
+    // Same host (for tests):
+    /https?:\/\/localhost(:\d{1,4})?/i,
+    // W3C:
+    /https?:\/\/(www\.)?w3c?\.org/i,
+    // GitHub:
+    /https?:\/\/github\.com/i
+];
+

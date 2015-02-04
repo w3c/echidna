@@ -38,7 +38,7 @@ describe('DocumentDownloader', function () {
     });
 
     it('should download a file', function () {
-      return expect(content).to.eventually.contain("Sample Drafts");
+      return expect(content).to.eventually.contain("Echidna testbed");
     });
   });
 
@@ -154,7 +154,7 @@ describe('DocumentDownloader', function () {
 
     it('should create the file with proper content', function () {
       return promise.then(function() {
-        expect(Fs.readFileSync('/tmp/testechidna/Overview.html', { 'encoding': 'utf8' })).to.contain("Sample Drafts");
+        expect(Fs.readFileSync('/tmp/testechidna/Overview.html', { 'encoding': 'utf8' })).to.contain("Echidna testbed");
       });
     });
 
