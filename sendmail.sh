@@ -23,7 +23,7 @@ elif [ "ERROR" == "$STATUS" ]; then
 $RESULT"
 fi
 
-if [ ! -z "$SUBJECT" -a ! -z "$BODY" ]; then
+if [ "$NODE_ENV" == "production" -a ! -z "$SUBJECT" -a ! -z "$BODY" ]; then
     mail -aFrom:webreq@w3.org -s "$SUBJECT" $DEST <<< "$BODY"
 fi
 
