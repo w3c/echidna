@@ -194,7 +194,7 @@ function orchestrate(spec, isManifest, token) {
 
                                 var pubsystemService = new JsonHttpService(global.W3C_PUBSYSTEM_URL, global.USERNAME, global.PASSWORD);
                                 return new Publisher(pubsystemService).publish(report.metadata).then(function (errors) {
-                                    if (errors.length === 0) {
+                                    if (errors.size === 0) {
                                         spec.jobs['publish'].status = 'ok';
                                         spec.jobs['tr-install'].status = 'pending';
                                         finalTRpath = report.metadata.get('thisVersion').replace(W3C_PREFIX, '');
@@ -225,7 +225,7 @@ function orchestrate(spec, isManifest, token) {
                                     }
                                     else {
                                         spec.jobs['publish'].status = 'failure';
-                                        spec.jobs['publish'].errors.push(errors);
+                                        spec.jobs['publish'].errors = errors;
                                         spec.history = spec.history.add('The document could not be published: ' + errors.map(function (error) {
                                             return error.message;
                                         }));
