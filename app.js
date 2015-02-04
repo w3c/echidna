@@ -215,7 +215,7 @@ function orchestrate(spec, isManifest, token) {
                                             return updateTrShortlink(report.metadata.get('thisVersion')).then(function () {
                                                 spec.jobs['update-tr-shortlink'].status = 'ok';
 
-                                                var cmd = global.SENDMAIL + ' ' + global.MAILING_LIST + ' ' + report.metadata.get('thisVersion');
+                                                var cmd = global.SENDMAIL + ' SUCCESS ' + global.MAILING_LIST + ' ' + report.metadata.get('thisVersion');
                                                 exec(cmd, function (err, stdout, stderr) {
                                                   if (err) console.error(stderr);
                                                 });
@@ -290,6 +290,10 @@ function orchestrate(spec, isManifest, token) {
         return Promise.reject(err);
     }).catch(function (err) {
         spec.history = spec.history.add('A system error occurred during the process.');
+        var cmd = global.SENDMAIL + ' ERROR ' + global.MAILING_LIST + ' ' + spec.url + '\'' + JSON.stringify(spec, null, 2) + '\'';
+        exec(cmd, function (err, stdout, stderr) {
+            if (err) console.error(stderr);
+        });
         return Promise.reject(new Error('Orchestrator has failed.'));
     });
 }
