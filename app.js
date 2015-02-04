@@ -91,27 +91,22 @@ app.post('/api/request', function(req, res) {
         res.status(500).send('Missing required parameters “url”, “decision” and/or “token”.');
     }
     else {
-        if (requests[url] && STATUS_STARTED === requests[url].status) {
-            res.status(200).send('This publication request is currently pending; check progress with the ID that was returned when it was submitted.');
-        }
-        else {
-            requests[url] = {
-                'id': id,
-                'url': url,
-                'decision': decision,
-                'isManifest': isManifest,
-                'jobs': {},
-                'history': new History(),
-                'status': STATUS_STARTED
-            };
+        requests[id] = {
+            'id': id,
+            'url': url,
+            'decision': decision,
+            'isManifest': isManifest,
+            'jobs': {},
+            'history': new History(),
+            'status': STATUS_STARTED
+        };
 
-            orchestrate(requests[url], isManifest, token).then(function () {
-                console.log('Spec at ' + url + ' (decision: ' + decision + ') has FINISHED.');
-            }, function (err) {
-                console.log('Spec at ' + url + ' (decision: ' + decision + ') has FAILED.');
-            });
-            res.status(202).send(id);
-        }
+        orchestrate(requests[id], isManifest, token).then(function () {
+            console.log('Spec at ' + url + ' (decision: ' + decision + ') has FINISHED.');
+        }, function (err) {
+            console.log('Spec at ' + url + ' (decision: ' + decision + ') has FAILED.');
+        });
+        res.status(202).send(id);
     }
 });
 
