@@ -48,10 +48,10 @@
     "express": "4.x.x",
     "immutable": "3.x.x",
     "moment": "2.x.x",
+    "node-uuid": "1.x.x",
     "promise": "6.x.x",
     "request": "2.x.x",
-    "specberus": "w3c/specberus",
-    "node-uuid": "1.x.x"
+    "specberus": "w3c/specberus"
   },
   "devDependencies": {
     "chai": "1.x.x",
