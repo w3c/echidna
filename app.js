@@ -8,11 +8,11 @@ var compression = require('compression');
 var bodyParser = require('body-parser');
 var exec = require('child_process').exec;
 var path = require('path');
-var Moment = require('moment');
-var Request = require('request');
-var Promise = require('promise');
-var uuid = require('node-uuid');
 var Fs = require('fs');
+var Moment = require('moment');
+var Promise = require('promise');
+var Request = require('request');
+var Uuid = require('node-uuid');
 
 var DocumentDownloader = require("./lib/document-downloader");
 var SpecberusWrapper = require("./functions.js").SpecberusWrapper;
@@ -85,7 +85,7 @@ app.post('/api/request', function(req, res) {
     var decision = req.body ? req.body.decision : null;
     var isManifest = req.body ? req.body.isManifest === 'true' : false;
     var token = req.body ? req.body.token : null;
-    var id = uuid.v4();
+    var id = Uuid.v4();
 
     if (!url || !decision || !token) {
         res.status(500).send('Missing required parameters “url”, “decision” and/or “token”.');
