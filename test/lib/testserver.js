@@ -65,9 +65,8 @@ TestServer.start = function () {
   do {
     server = app.listen(port)
       .on('error', function(err) {
-        if ('EADDRINUSE' === err.code) {
-          // Just continue trying.
-        } else {
+        // Only when there's an error because the port is already in use, we simply continue trying.
+        if ('EADDRINUSE' !== err.code) {
           throw new Error('Error while trying to launch the test server: ' + err);
         }
       });

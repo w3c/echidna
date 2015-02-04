@@ -26,12 +26,8 @@ function dumpObject(obj) {
 
     inspector = inspector || $('pre#inspector');
 
-    if (!obj) {
-        inspector.text('');
-    }
-    else {
-        inspector.text(JSON.stringify(obj, null, 2));
-    }
+    if (!obj) inspector.text('');
+    else inspector.text(JSON.stringify(obj, null, 2));
 
     inspector[0].scrollTop = 0;
 
