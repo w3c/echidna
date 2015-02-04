@@ -74,10 +74,7 @@ app.get('/api/status', function(req, res) {
             if (exists) res.status(200).sendFile(file);
             else res.status(404).send('No job found with ID “' + id + '”.');
         });
-    } else {
-        res.status(400).send('Missing required parameter “ID”.');
-    }
-
+    } else res.status(400).send('Missing required parameter “ID”.');
 });
 
 app.post('/api/request', function(req, res) {
