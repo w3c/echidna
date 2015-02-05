@@ -1,3 +1,6 @@
+
+'use strict';
+
 var fs = require('fs');
 var express = require('express');
 var app = express();
@@ -11,7 +14,7 @@ var draftsSystemPath = require('./utils').draftsSystemPath;
 
 var port = (process.env.PORT || 3000) + 1;
 
-var TestServer   = function () {};
+var TestServer = function () {};
 
 app.use(morgan('dev',
     {stream: fs.createWriteStream("/tmp/echidna-testserver.log", {flags: 'w'})}));
@@ -23,18 +26,28 @@ app.use(tokenChecker);
 // setup the templating before using express static
 app.use(htmlTemplate('/drafts', draftsSystemPath));
 app.use('/drafts', express.static(draftsSystemPath));
+app.use(express.static('test/views/'));
 
-// three resources to test if the test is alive and kicking
-app.get('/', function(req, res) {
-  var index = "<!doctype html><h1>Sample Drafts</h1><ul>"
-  var item = "<li><a href='"+TestServer.location()+"/drafts/";
+app.get('/data/specs.json', function(req, res) {
+
+  var specs = [];
+  var metadata;
   var listing = fs.readdirSync(draftsSystemPath);
-  for (var i = listing.length - 1; i >= 0; i--) {
-    index += item + listing[i] + "/'>" + listing[i] + "</a></li>"
+
+  for (var i in listing) {
+    metadata = getMetadata(listing[i]);
+    if (metadata) {
+      specs.push({id: listing[i], metadata: metadata});
+    }
+    else {
+      throw new Error('Spec “' + listing[i] + '” does not have associated metadata!');
+    }
   };
-  index += "</ul>";
-  res.send(index);
+
+  res.send({specs: specs});
+
 });
+
 app.get('/robots', function(req, res) {
   res.send("<!doctype html><p>Those are not the robots you're looking for.");
 });
@@ -50,7 +63,13 @@ TestServer.start = function () {
     init();
   }
   do {
-    server = app.listen(port);
+    server = app.listen(port)
+      .on('error', function(err) {
+        // Only when there's an error because the port is already in use, we simply continue trying.
+        if ('EADDRINUSE' !== err.code) {
+          throw new Error('Error while trying to launch the test server: ' + err);
+        }
+      });
     port += 1;
   } while ((server.address() === null) && (port < limit_port));
   if (server.address() === null) {
@@ -59,7 +78,9 @@ TestServer.start = function () {
 };
 
 TestServer.location = function () {
-  return "http://localhost:" + server.address().port;
+  if (server && server.address()) {
+    return "http://localhost:" + server.address().port;
+  }
 };
 
 // this will return metadata associate with a draft

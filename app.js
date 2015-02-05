@@ -29,6 +29,7 @@ var port = process.argv[4] || global.DEFAULT_PORT;
 
 app.use(compression());
 app.use(bodyParser.urlencoded({ extended: false }));
+app.use(corsHandler);
 
 if (process.env.NODE_ENV === 'production') {
     app.set('views', __dirname + '/dist/views');
@@ -101,6 +102,27 @@ app.post('/api/request', function(req, res) {
     }
 });
 
+/**
+ * Add CORS headers to responses if the client is explicitly allowed.
+ *
+ * First, this ensures that the testbed page on the test server, listening on a different port, can GET and POST to Echidna.
+ * Most importantly, this is necessary to attend publication requests from third parties, eg GitHub.
+ */
+
+function corsHandler (req, res, next) {
+
+    if (req && req.headers && req.headers.origin) {
+        if (global.ALLOWED_CLIENTS.some(function(regex) {
+            return regex.test(req.headers.origin);
+        })) {
+            res.header('Access-Control-Allow-Origin', req.headers.origin);
+            res.header('Access-Control-Allow-Methods', 'GET,POST');
+            res.header('Access-Control-Allow-Headers', 'Content-Type');
+        }
+    }
+    next();
+}
+
 function trInstaller(source, dest) {
     return new Promise(function (resolve, reject) {
         var cmd = global.TR_INSTALL_CMD + ' ' + source + ' ' + dest;
@@ -172,7 +194,7 @@ function orchestrate(spec, isManifest, token) {
 
                                 var pubsystemService = new JsonHttpService(global.W3C_PUBSYSTEM_URL, global.USERNAME, global.PASSWORD);
                                 return new Publisher(pubsystemService).publish(report.metadata).then(function (errors) {
-                                    if (errors.length === 0) {
+                                    if (errors.size === 0) {
                                         spec.jobs['publish'].status = 'ok';
                                         spec.jobs['tr-install'].status = 'pending';
                                         finalTRpath = report.metadata.get('thisVersion').replace(W3C_PREFIX, '');
@@ -183,7 +205,7 @@ function orchestrate(spec, isManifest, token) {
                                             return updateTrShortlink(report.metadata.get('thisVersion')).then(function () {
                                                 spec.jobs['update-tr-shortlink'].status = 'ok';
 
-                                                var cmd = global.SENDMAIL + ' ' + global.MAILING_LIST + ' ' + report.metadata.get('thisVersion');
+                                                var cmd = global.SENDMAIL + ' SUCCESS ' + global.MAILING_LIST + ' ' + report.metadata.get('thisVersion');
                                                 exec(cmd, function (err, stdout, stderr) {
                                                   if (err) console.error(stderr);
                                                 });
@@ -203,7 +225,7 @@ function orchestrate(spec, isManifest, token) {
                                     }
                                     else {
                                         spec.jobs['publish'].status = 'failure';
-                                        spec.jobs['publish'].errors.push(errors);
+                                        spec.jobs['publish'].errors = errors;
                                         spec.history = spec.history.add('The document could not be published: ' + errors.map(function (error) {
                                             return error.message;
                                         }));
@@ -258,11 +280,21 @@ function orchestrate(spec, isManifest, token) {
         return Promise.reject(err);
     }).catch(function (err) {
         spec.history = spec.history.add('A system error occurred during the process.');
+        var cmd = global.SENDMAIL + ' ERROR ' + global.MAILING_LIST + ' ' + spec.url + '\'' + JSON.stringify(spec, null, 2) + '\'';
+        exec(cmd, function (err, stdout, stderr) {
+            if (err) console.error(stderr);
+        });
         return Promise.reject(new Error('Orchestrator has failed.'));
     });
 }
 
-app.listen(process.env.PORT || port);
+app.listen(process.env.PORT || port)
+    .on('error', function(err) {
+        if (err) {
+            console.error('Error while trying to launch the server: “' + err + '”.');
+        }
+    }
+);
 
 console.log(meta.name +
             ' version ' + meta.version +

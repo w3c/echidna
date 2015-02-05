@@ -46,7 +46,7 @@ describe('DocumentDownloader', function () {
     });
 
     it('should download a file', function () {
-      return expect(content).to.eventually.contain("Sample Drafts");
+      return expect(content).to.eventually.contain("Echidna testbed");
     });
   });
 
@@ -162,7 +162,7 @@ describe('DocumentDownloader', function () {
 
     it('should create the file with proper content', function () {
       return promise.then(function() {
-        expect(Fs.readFileSync('/tmp/testechidna/Overview.html', { 'encoding': 'utf8' })).to.contain("Sample Drafts");
+        expect(Fs.readFileSync('/tmp/testechidna/Overview.html', { 'encoding': 'utf8' })).to.contain("Echidna testbed");
       });
     });
 
@@ -419,16 +419,16 @@ describe('Publisher', function () {
     });
 
     it('should promise an array', function () {
-      return expect(promise).to.eventually.be.an.instanceOf(Array);
+      return expect(promise).to.eventually.be.an.instanceOf(List);
     });
 
     it('should return no errors when the publication is successful', function () {
-      return expect(promise).to.eventually.be.empty;
+      return expect(promise).to.eventually.have.property('size', 0);
     });
 
     it('should return errors when the publication has failed', function () {
       var err_promise = new Publisher(new BadRequestService()).publish(metadata);
-      return expect(err_promise).to.eventually.have.length(1);
+      return expect(err_promise).to.eventually.have.property('size', 1);
     });
 
     it('should reject if metadata corresponds a feature not yet implemented', function () {
