@@ -4,6 +4,7 @@
 global.DEFAULT_TEMP_LOCATION = '/var/www/';
 global.DEFAULT_HTTP_LOCATION = 'http://spec-server/';
 global.DEFAULT_LOG_LOCATION = '.';
+global.DEFAULT_RESULT_LOCATION = '/var/www/';
 global.DEFAULT_PORT = 3000;
 global.PHANTOM = '/usr/bin/phantomjs';
 global.RESOURCES_WHITELIST = '/var/echidna/whitelist.txt';

@@ -41,7 +41,7 @@ Then simply open [`http://localhost:3000`](http://localhost:3000) on your web br
 
 (with npm >= 2)
 ```
-$ npm start [-- STAGING_PATH [HTTP_BASE_URI [PORT]]]
+$ npm start [-- STAGING_PATH [HTTP_BASE_URI [PORT [RESULT_PATH]]]]
 ```
 
 Meaning of positional parameters:
@@ -52,6 +52,7 @@ Meaning of positional parameters:
 (Default `http://localhost/trstaging/`.)
 3. `PORT`: where Echidna will be listening for publication requests.
 (Default `3000`.)
+4. `RESULT_PATH`: local path where Echidna will dump the results of publication requests in JSON format.
 
 Examples:
 

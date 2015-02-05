@@ -9,18 +9,32 @@
 
 $(document).ready(function() {
 
+    var jobs = [];
+
     function getStatus() {
-
-        $.get('api/status', function(data) {
-            $('#queueText').text(JSON.stringify(data.requests, null, 2));
-            $('#lastUpdate > span').text(new Date().toLocaleTimeString());
-
-            if ($('#auto').prop('checked')) {
-                window.setTimeout(getStatus, 2000);
-            }
-
-        });
-
+        var result = [];
+        for (var i in jobs) {
+            $.get('api/status',
+                {id: jobs[i]},
+                function(data, foo, xhr) {
+                    if (200 === xhr.status) {
+                        // Status retrieved OK:
+                        result.push(data);
+                        $('#queueText').text(JSON.stringify(result, null, 2));
+                        $('#lastUpdate > span').text(new Date().toLocaleTimeString());
+                    } else if (400 === xhr.status || 404 === xhr.status) {
+                        // No job found with that ID, or the parameter is missing:
+                        console.log(data);
+                    } else {
+                        // Some other kind of error:
+                        window.alert(data);
+                    }
+                }
+            );
+        }
+        if ($('#auto').prop('checked')) {
+          window.setTimeout(getStatus, 2000);
+        }
     }
 
     $('#infoButton').click(function() {
@@ -41,8 +55,21 @@ $(document).ready(function() {
              decision: $('#decision').prop('value'),
              isManifest: $('#isManifest').prop('checked'),
              token: $('#token').prop('value')},
-            function(data) {
-                window.alert(data);
+            function(data, foo, xhr) {
+                if (200 === xhr.status) {
+                    // Already submitted, and in progress:
+                    window.alert(data);
+                } else if (202 === xhr.status) {
+                    // OK:
+                    window.alert('Job submitted OK.\nThe ID is “' + data + '”.');
+                    jobs.push(data);
+                } else if (500 === xhr.status) {
+                    // Missing parameters:
+                    window.alert(data);
+                } else {
+                    // Some other kind of error:
+                    window.alert(data);
+                }
             }
         );
 

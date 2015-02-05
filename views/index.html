@@ -28,7 +28,7 @@
     <div class="container">
 
       <section>
-        <p class="info">This invokes the method <a href="api/version"><code>api/version</code></a>.</p>
+        <p class="info">This <code>GET</code>s <a href="api/version"><code>api/version</code></a>.</p>
 
         <h2>Basic info</h2>
 
@@ -40,7 +40,7 @@
       <hr>
 
       <section>
-        <p class="info">This invokes the method <code>api/request</code> (<code>POST</code>) with params <code>{url, decision, token}</code>.</p>
+        <p class="info">This <code>POST</code>s to <code>api/request</code> with params <code>{url, decision, token, isManifest}</code>.</p>
 
         <h2>New publication request</h2>
 
@@ -81,7 +81,7 @@
       <hr>
 
       <section>
-        <p class="info">This invokes the method <a href="api/status"><code>api/status</code></a> and splits results in two groups.</p>
+        <p class="info">This <code>GET</code>s <a href="api/status"><code>api/status</code></a> with an <code>id</code>, as many times as jobs were submitted.</p>
 
         <h2>Publication requests</h2>
 
@@ -91,9 +91,8 @@
         <br>
         <p id="lastUpdate">Last updated: <span></span></p>
 
-        <button id="queueButton" type="submit" class="btn btn-default" disabled>Refresh now</button>
+        <p><button id="queueButton" type="submit" class="btn btn-default" disabled>Refresh now</button></p>
 
-        <h3>Requests</h3>
         <pre id="queueText"></pre>
       </section>
 
