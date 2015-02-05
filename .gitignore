@@ -30,6 +30,7 @@ node_modules
 # Configuration
 config.js
 
-# Deployment directory
-.dist
+# Grunt-related directories
+dist
+.tmp
 
