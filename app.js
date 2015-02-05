@@ -302,7 +302,7 @@ function orchestrate(spec, isManifest, token) {
     }).catch(function (err) {
         spec.history = spec.history.add('A system error occurred during the process.');
         spec.status = STATUS_ERROR;
-        var cmd = global.SENDMAIL + ' ERROR ' + global.MAILING_LIST + ' ' + spec.url + '\'' + JSON.stringify(spec, null, 2) + '\'';
+        var cmd = global.SENDMAIL + ' ERROR ' + global.MAILING_LIST + ' ' + spec.url + ' \'' + JSON.stringify(spec, null, 2) + '\'';
         exec(cmd, function (err, stdout, stderr) {
             if (err) console.error(stderr);
         });
