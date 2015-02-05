@@ -9,16 +9,17 @@ var bodyParser = require('body-parser');
 var exec = require('child_process').exec;
 var path = require('path');
 var Fs = require('fs');
-var Moment = require('moment');
 var Promise = require('promise');
 var Request = require('request');
 var Uuid = require('node-uuid');
 
 var DocumentDownloader = require("./lib/document-downloader");
+var History = require("./lib/history");
+var JsonHttpService = require("./lib/json-http-service");
+var Publisher = require("./lib/publisher");
 var SpecberusWrapper = require("./functions.js").SpecberusWrapper;
 var ThirdPartyChecker = require("./functions.js").ThirdPartyChecker;
 var TokenChecker = require("./functions.js").TokenChecker;
-var History = require("./lib/history");
 
 // Configuration file
 require('./config.js');
@@ -148,40 +149,6 @@ function updateTrShortlink(uri) {
     });
 }
 
-function publish(metadata) {
-    return new Promise(function (resolve, reject) {
-        Request.post({
-            url: global.W3C_PUBSYSTEM_URL,
-            json: true,
-            auth: {
-                user: global.USERNAME,
-                pass: global.PASSWORD
-            },
-            form: {
-                specversion: {
-                    status: metadata.get('status'),
-                    uri: metadata.get('thisVersion'),
-                    latestVersionUri: metadata.get('latestVersion'),
-                    previousVersionUri: metadata.get('previousVersion'),
-                    date: Moment(metadata.get('docDate')).format('YYYY-MM-DD'),
-                    title: metadata.get('title'),
-                    deliverers: metadata.get('delivererIDs'),
-                    editors: metadata.get('editorIds'),
-                    informative: false, // FIXME Not always true
-                    editorDraft: metadata.get('editorsDraft'),
-                    processRules: metadata.get('process')
-                }
-            }
-        }, function(error, response, body) {
-            if (error) reject(error);
-            else if (response.statusCode === 501) reject(new Error(body.message));
-            else if (response.statusCode === 400) resolve(body.errors);
-            else if (response.statusCode === 201) resolve([]);
-            else reject(new Error("There was an error when publishing: code " + response.statusCode));
-        });
-    });
-}
-
 function Job() {
     if (typeof this !== 'object') throw new TypeError('Jobs must be constructed via new');
 
@@ -236,8 +203,10 @@ function orchestrate(spec, isManifest, token) {
                                 spec.history = spec.history.add('The document passed the third party checker.');
 
                                 spec.jobs['publish'].status = 'pending';
-                                return publish(report.metadata).then(function (errors) {
-                                    if(errors.length === 0) {
+
+                                var pubsystemService = new JsonHttpService(global.W3C_PUBSYSTEM_URL, global.USERNAME, global.PASSWORD);
+                                return new Publisher(pubsystemService).publish(report.metadata).then(function (errors) {
+                                    if (errors.size === 0) {
                                         spec.jobs['publish'].status = 'ok';
                                         spec.jobs['tr-install'].status = 'pending';
                                         finalTRpath = report.metadata.get('thisVersion').replace(W3C_PREFIX, '');
@@ -270,7 +239,7 @@ function orchestrate(spec, isManifest, token) {
                                     }
                                     else {
                                         spec.jobs['publish'].status = 'failure';
-                                        spec.jobs['publish'].errors.push(errors);
+                                        spec.jobs['publish'].errors = errors;
                                         spec.history = spec.history.add('The document could not be published: ' + errors.map(function (error) {
                                             return error.message;
                                         }));

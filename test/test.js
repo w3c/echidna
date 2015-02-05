@@ -1,3 +1,5 @@
+'use strict';
+
 // switch the environment into testing mode
 process.env.NODE_ENV = 'dev';
 
@@ -10,6 +12,11 @@ var Map = Immutable.Map;
 require('../config.js');
 
 var server = require("./lib/testserver");
+var FakeHttpServices = require('./lib/fake-http-services');
+var CreatedService = FakeHttpServices.CreatedService;
+var BadRequestService = FakeHttpServices.BadRequestService;
+var NotImplementedService = FakeHttpServices.NotImplementedService;
+var ServerErrorService = FakeHttpServices.ServerErrorService;
 
 // used by the TokenChecker
 global.TOKEN_ENDPOINT = server.location() + '/authorize';
@@ -17,6 +24,7 @@ global.USERNAME = "toto";
 global.PASSWORD = "secret";
 
 var DocumentDownloader = require('../lib/document-downloader');
+var Publisher = require('../lib/publisher');
 var SpecberusWrapper = require("../functions.js").SpecberusWrapper;
 var TokenChecker = require("../functions.js").TokenChecker;
 
@@ -417,5 +425,40 @@ describe('TokenChecker', function () {
         .that.is.equals(true);
     });
 
+  });
+});
+
+describe('Publisher', function () {
+  var metadata = Map({});
+
+  describe('publish(metadata)', function () {
+    var promise = new Publisher(new CreatedService()).publish(metadata);
+
+    it('should return a promise', function () {
+      expect(promise).to.be.an.instanceOf(Promise);
+    });
+
+    it('should promise an array', function () {
+      return expect(promise).to.eventually.be.an.instanceOf(List);
+    });
+
+    it('should return no errors when the publication is successful', function () {
+      return expect(promise).to.eventually.have.property('size', 0);
+    });
+
+    it('should return errors when the publication has failed', function () {
+      var err_promise = new Publisher(new BadRequestService()).publish(metadata);
+      return expect(err_promise).to.eventually.have.property('size', 1);
+    });
+
+    it('should reject if metadata corresponds a feature not yet implemented', function () {
+      var reject_promise = new Publisher(new NotImplementedService()).publish(metadata);
+      return expect(reject_promise).to.eventually.be.rejectedWith(/Not Implemented/);
+    });
+
+    it('should reject if the remote server is having an issue', function () {
+      var reject_promise = new Publisher(new ServerErrorService()).publish(metadata);
+      return expect(reject_promise).to.eventually.be.rejectedWith(/code 500/);
+    });
   });
 });
