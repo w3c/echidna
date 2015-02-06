@@ -58,7 +58,6 @@ describe('DocumentDownloader', function () {
       var notReachable = DocumentDownloader.fetch('http://youdbetternotexist/');
       return expect(notReachable).to.eventually.be.rejectedWith(/network error/);
     });
-
   });
 
   describe('fetchAll(urls)', function () {
@@ -184,6 +183,15 @@ describe('DocumentDownloader', function () {
         false
       );
       return expect(notFound).to.eventually.be.rejectedWith(/code 404/);
+    });
+
+    it('should reject if the server is not reachable', function () {
+      var notReachable = DocumentDownloader.fetchAndInstall(
+        'https://non-rien.de/rien',
+        '/tmp/whatever',
+        false
+      );
+      return expect(notReachable).to.eventually.be.rejectedWith(/network error/);
     });
 
     it('should read a manifest and install its content', function () {
