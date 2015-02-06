@@ -188,8 +188,7 @@ describe('DocumentDownloader', function () {
     it('should reject if the server is not reachable', function () {
       var notReachable = DocumentDownloader.fetchAndInstall(
         'https://non-rien.de/rien',
-        '/tmp/whatever',
-        false
+        '/tmp/whatever'
       );
       return expect(notReachable).to.eventually.be.rejectedWith(/network error/);
     });
