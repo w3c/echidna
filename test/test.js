@@ -48,6 +48,17 @@ describe('DocumentDownloader', function () {
     it('should download a file', function () {
       return expect(content).to.eventually.contain("Echidna testbed");
     });
+
+    it('should reject if the resource does not exist', function () {
+      var notFound = DocumentDownloader.fetch(server.location() + '/et/si/tu/n/existais/pas');
+      return expect(notFound).to.eventually.be.rejectedWith(/code 404/);
+    });
+
+    it('should reject if the server is not reachable', function () {
+      var notReachable = DocumentDownloader.fetch('http://youdbetternotexist/');
+      return expect(notReachable).to.eventually.be.rejectedWith(/network error/);
+    });
+
   });
 
   describe('fetchAll(urls)', function () {
@@ -164,6 +175,15 @@ describe('DocumentDownloader', function () {
       return promise.then(function() {
         expect(Fs.readFileSync('/tmp/testechidna/Overview.html', { 'encoding': 'utf8' })).to.contain("Echidna testbed");
       });
+    });
+
+    it('should reject if the resource does not exist', function () {
+      var notFound = DocumentDownloader.fetchAndInstall(
+        server.location() + '/et/si/tu/n/existais/pas',
+        '/tmp/whatever',
+        false
+      );
+      return expect(notFound).to.eventually.be.rejectedWith(/code 404/);
     });
 
     it('should read a manifest and install its content', function () {
