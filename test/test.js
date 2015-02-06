@@ -179,8 +179,7 @@ describe('DocumentDownloader', function () {
     it('should reject if the resource does not exist', function () {
       var notFound = DocumentDownloader.fetchAndInstall(
         server.location() + '/et/si/tu/n/existais/pas',
-        '/tmp/whatever',
-        false
+        '/tmp/whatever'
       );
       return expect(notFound).to.eventually.be.rejectedWith(/code 404/);
     });
