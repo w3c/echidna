@@ -45,6 +45,12 @@ describe('DocumentDownloader', function () {
       var notFound = DocumentDownloader.fetch(server.location() + '/et/si/tu/n/existais/pas');
       return expect(notFound).to.eventually.be.rejectedWith(/code 404/);
     });
+
+    it('should reject if the server is not reachable', function () {
+      var notReachable = DocumentDownloader.fetch('http://youdbetternotexist/');
+      return expect(notReachable).to.eventually.be.rejectedWith(/network error/);
+    });
+
   });
 
   describe('fetchAll(urls)', function () {
