@@ -49,4 +49,3 @@ Finally, we value testing a lot. Before committing anything, make sure the test 
 # Documentation
 
 Documentation can be found on [the wiki](https://github.com/w3c/echidna/wiki). You can help us improving it by adding missing pieces, clarifying unclear parts, or asking us to do that.
-
