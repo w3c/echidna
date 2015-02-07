@@ -4,7 +4,7 @@ This is the contribution reference of Echidna. Great to have you here. Here are 
 
 ## Talk with us
 
-Talk with us directly on IRC. Here are some [detailed instructions to connect](http://www.w3.org/wiki/IRC). The server is `irc.w3.org` and the corresponding channel is `#pub`.
+Talk with us directly on IRC. Here are some [detailed instructions to connect](http://www.w3.org/wiki/IRC). The server is `irc.w3.org` and the corresponding channel is `#pub`. If you do not have an IRC client on hand, you can log into the [W3C Public IRC Web Client](http://irc.w3.org/).
 
 Discuss the publication workflow and related tools [on the mailing list](http://lists.w3.org/Archives/Public/spec-prod/).
 
