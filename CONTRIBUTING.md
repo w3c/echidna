@@ -1,5 +1,13 @@
 # Contribute to Echidna
 
+This is the contribution reference of Echidna. Great to have you here. Here are a few ways you can help make this project better!
+
+## Talk to us
+
+Talk to us directly on IRC. Here are some [detailed instructions to connect](http://www.w3.org/wiki/IRC)). The server is `irc.w3.org` and the corresponding channel is `#pub`.
+
+Discuss the publication workflow and related tools [on the mailing list](http://lists.w3.org/Archives/Public/spec-prod/).
+
 ## Report a bug or suggest a feature idea
 
 Start by looking through the [existing bugs](https://github.com/w3c/echidna/issues) to see if this was already asked earlier. You might even find your solution there.
