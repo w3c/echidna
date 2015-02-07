@@ -2,15 +2,15 @@
 
 This is the contribution reference of Echidna. Great to have you here. Here are a few ways you can help make this project better!
 
-## Talk to us
+## Talk with us
 
-Talk to us directly on IRC. Here are some [detailed instructions to connect](http://www.w3.org/wiki/IRC)). The server is `irc.w3.org` and the corresponding channel is `#pub`.
+Talk with us directly on IRC. Here are some [detailed instructions to connect](http://www.w3.org/wiki/IRC). The server is `irc.w3.org` and the corresponding channel is `#pub`.
 
 Discuss the publication workflow and related tools [on the mailing list](http://lists.w3.org/Archives/Public/spec-prod/).
 
 ## Report a bug or suggest a feature idea
 
-Start by looking through the [existing bugs](https://github.com/w3c/echidna/issues) to see if this was already asked earlier. You might even find your solution there.
+Start by looking through the [existing bugs](https://github.com/w3c/echidna/issues) to see if this was already discussed earlier. You might even find your solution there.
 
 If you do not find anything, you can help report bugs by [filing them here](https://github.com/w3c/echidna/issues/new). Please use the following template when doing so:
 
@@ -40,11 +40,11 @@ Please enter your actual results in this space. When running the steps supplied 
 
 First of all, thank you very much for offering your help. This is much appreciated.
 
-Before adding a new feature, or submitting a bugfix, please refer to the [existing issues](https://github.com/w3c/echidna/issues) to check if it was already discussed before. If it wasn't, please [create a new one](https://github.com/w3c/echidna/issues/new) so that we can discuss together about it before you start coding. It would be frustrating for everyone if we had to refuse your contribution because we did not share the same opinion!
+Before adding a new feature or submitting a bugfix, please refer to the [existing issues](https://github.com/w3c/echidna/issues) to check if it was already discussed before. If it wasn't, please [create a new one](https://github.com/w3c/echidna/issues/new) so that we can discuss together about it before you start coding. It would be frustrating for everyone if we had to refuse your contribution because we did not share the same opinion!
 
 To make sure we are on the same page, you should refer to our [coding style guide](https://github.com/w3c/echidna/wiki/Coding-style-guide) and [coding practices guide](https://github.com/w3c/echidna/wiki/Coding-practices-guide) before coding.
 
-Finally, we value testing a lot. Before committing anything, make sure the test suite passes by running `npm test` to make sure there is no regression. If you submit a bugfix, try to write tests to reproduce this bug to ensure the same bug will not come up again in the future. And if you submit a new feature, provide tests to ensure the correct behavior of the nominal and edge cases.
+Finally, we value testing a lot. Before committing anything, make sure the test suite still passes by running `npm test` to make sure there is no regression. If you submit a bugfix, try to write tests to reproduce this bug to ensure the same bug will not come up again in the future. And if you submit a new feature, provide tests to ensure the correct behavior of the nominal and edge cases.
 
 # Documentation
 
