@@ -62,6 +62,12 @@ A couple of things you should consider before committing and [opening a pull req
   - When commiting a bug fix, start your line with "Fix #xx", xx being the issue number. For example: `git commit -m 'Fix #42: Answer the Ultimate Question of Life, The Universe, and Everything'`
 - To ease the merge of pull requests, make sure your branch is up-to-date with `master` when submitting it. Always use `git rebase` instead of `git merge` and `git pull --rebase` instead of `git pull` to avoid merge commits in your submissions.
 
-# Documentation
+## Documentation
 
 Documentation can be found on [the wiki](https://github.com/w3c/echidna/wiki). You can help us improving it by adding missing pieces, clarifying unclear parts, or asking us to do that.
+
+## Code of Conduct
+
+All contributors to this project agree to follow the [W3C Code of Ethics and Professional Conduct](http://www.w3.org/Consortium/cepc/).
+
+If you want to take action, you can contact W3C Staff as explained in [W3C Procedures](http://www.w3.org/Consortium/pwe/#Procedures).
