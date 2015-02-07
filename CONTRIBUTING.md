@@ -55,6 +55,13 @@ To make sure we are on the same page, you should refer to our [coding style guid
 
 Finally, we value testing a lot. Before committing anything, make sure the test suite still passes by running `npm test` to make sure there is no regression. If you submit a bugfix, try to write tests to reproduce this bug to ensure the same bug will not come up again in the future. And if you submit a new feature, provide tests to ensure the correct behavior of the nominal and edge cases.
 
+A couple of things you should consider before committing and [opening a pull request](https://github.com/w3c/echidna/pulls):
+
+- Regarding your Git commit messages:
+  - Use imperative present tense for commit messages as [suggested in the official documentation](http://git-scm.com/book/en/v2/Distributed-Git-Contributing-to-a-Project#Commit-Guidelines).
+  - When commiting a bug fix, start your line with "Fix #xx", xx being the issue number. For example: `git commit -m 'Fix #42: Answer the Ultimate Question of Life, The Universe, and Everything'`
+- To ease the merge of pull requests, make sure your branch is up-to-date with `master` when submitting it. Always use `git rebase` instead of `git merge` and `git pull --rebase` instead of `git pull` to avoid merge commits in your submissions.
+
 # Documentation
 
 Documentation can be found on [the wiki](https://github.com/w3c/echidna/wiki). You can help us improving it by adding missing pieces, clarifying unclear parts, or asking us to do that.
