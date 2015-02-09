@@ -88,7 +88,6 @@ app.get('/api/status', function(req, res) {
 app.post('/api/request', function(req, res) {
     var url = req.body ? req.body.url : null;
     var decision = req.body ? req.body.decision : null;
-    var isManifest = req.body ? req.body.isManifest === 'true' : false;
     var token = req.body ? req.body.token : null;
     var id = Uuid.v4();
 
@@ -100,13 +99,12 @@ app.post('/api/request', function(req, res) {
             'id': id,
             'url': url,
             'decision': decision,
-            'isManifest': isManifest,
             'jobs': {},
             'history': new History(),
             'status': STATUS_STARTED
         };
 
-        orchestrate(requests[id], isManifest, token).then(function () {
+        orchestrate(requests[id], token).then(function () {
             console.log('Spec at ' + url + ' (decision: ' + decision + ') has FINISHED.');
         }, function (err) {
             console.log('Spec at ' + url + ' (decision: ' + decision + ') has FAILED.');
@@ -169,7 +167,7 @@ function dumpJobResult(dest, result) {
     });
 }
 
-function orchestrate(spec, isManifest, token) {
+function orchestrate(spec, token) {
     spec.jobs['retrieve-resources'] = new Job();
     spec.jobs['specberus'] = new Job();
     spec.jobs['token-checker'] = new Job();
@@ -186,7 +184,7 @@ function orchestrate(spec, isManifest, token) {
     var finalTRpath;
 
     spec.jobs['retrieve-resources'].status = 'pending';
-    return DocumentDownloader.fetchAndInstall(spec.url, tempLocation, isManifest).then(function () {
+    return DocumentDownloader.fetchAndInstall(spec.url, tempLocation).then(function () {
         spec.jobs['retrieve-resources'].status = 'ok';
         spec.history = spec.history.add('The file has been retrieved.');
 

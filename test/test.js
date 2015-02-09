@@ -144,11 +144,11 @@ describe('DocumentDownloader', function () {
     });
   });
 
-  describe('fetchAndInstall(url, dest, isManifest)', function () {
+  describe('fetchAndInstall(url, dest)', function () {
     var promise;
 
     before(function() {
-      promise = DocumentDownloader.fetchAndInstall(server.location(), '/tmp/testechidna', false);
+      promise = DocumentDownloader.fetchAndInstall(server.location(), '/tmp/testechidna');
     });
 
     after(function(){
@@ -179,8 +179,7 @@ describe('DocumentDownloader', function () {
     it('should reject if the resource does not exist', function () {
       var notFound = DocumentDownloader.fetchAndInstall(
         server.location() + '/et/si/tu/n/existais/pas',
-        '/tmp/whatever',
-        false
+        '/tmp/whatever'
       );
       return expect(notFound).to.eventually.be.rejectedWith(/code 404/);
     });
@@ -188,8 +187,7 @@ describe('DocumentDownloader', function () {
     it('should reject if the server is not reachable', function () {
       var notReachable = DocumentDownloader.fetchAndInstall(
         'https://non-rien.de/rien',
-        '/tmp/whatever',
-        false
+        '/tmp/whatever'
       );
       return expect(notReachable).to.eventually.be.rejectedWith(/network error/);
     });
@@ -197,8 +195,7 @@ describe('DocumentDownloader', function () {
     it('should read a manifest and install its content', function () {
       return DocumentDownloader.fetchAndInstall(
         server.getMetadata('navigation-timing-2').location + 'W3CTRMANIFEST',
-        '/tmp/testechidnaManifest',
-        true
+        '/tmp/testechidnaManifest'
       ).then(function() {
         expect(Fs.readFileSync('/tmp/testechidnaManifest/Overview.html', { 'encoding': 'utf8' })).to.contain("Navigation Timing 2");
         expect(Fs.existsSync('/tmp/testechidnaManifest/spec.css')).to.be.true;
@@ -216,8 +213,7 @@ describe('DocumentDownloader', function () {
       return DocumentDownloader.fetchAndInstall(
         server.getMetadata('navigation-timing-2-generated').location +
           'W3CTRMANIFEST',
-        '/tmp/testechidnaSpecGeneration',
-        true
+        '/tmp/testechidnaSpecGeneration'
       ).then(function() {
         expect(Fs.readFileSync('/tmp/testechidnaSpecGeneration/Overview.html', { 'encoding': 'utf8' })).to.contain("Spec-generated Navigation Timing 2");
         expect(Fs.existsSync('/tmp/testechidnaSpecGeneration/spec.css')).to.be.true;
