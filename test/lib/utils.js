@@ -9,7 +9,7 @@ var draftsSystemPath = __dirname + "/../drafts";
 // v8 doesn't support String.endsWith
 function endsWith(subjectString, searchString) {
   var s = subjectString.toString();
-  position = s.length - searchString.length;
+  var position = s.length - searchString.length;
   var lastIndex = s.indexOf(searchString, position);
   return lastIndex !== -1 && lastIndex === position;
 }
@@ -83,7 +83,9 @@ function getMetadata(name) {
       ));
       augmentMetadata(name);
     }
-    catch (e) metadata[name] = {};
+    catch (e) {
+      metadata[name] = {};
+    }
   }
   return metadata[name];
 }

@@ -59,7 +59,9 @@ function htmlTemplate(serverPath, fileSystemPath) {
       var name = dirpath.substring(dirpath.lastIndexOf('/')+1);
       metadata = getMetadata(name);
     }
-    catch (e) return next();
+    catch (e) {
+      return next();
+    }
 
     res.send(applyTemplate(content, metadata));
   };

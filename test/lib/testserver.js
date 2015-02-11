@@ -96,7 +96,7 @@ TestServer.start = function () {
 };
 
 TestServer.location = function () {
-  if (server && server.address())
+  if (server && server.address()) {
     return "http://localhost:" + server.address().port;
   }
 };
