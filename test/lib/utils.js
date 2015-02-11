@@ -1,3 +1,5 @@
+'use strict';
+
 var fs = require('fs');
 
 var utils = function () {};
@@ -21,25 +23,30 @@ function fullDate(dateObj) {
     pn(dateObj.getMonth()+1) + "" + pn(dateObj.getDate());
 }
 
-var months = ['January','February','March','April','May','June','July',
-      'August','September','October','November','December'];
+var months = [
+  'January','February','March','April','May','June','July',
+  'August','September','October','November','December'
+];
 
 var today = (function () {
   // we strip off the time
   var t = new Date();
   return new Date(t.getFullYear(), t.getMonth(), t.getDate());
 })();
+
 var tomorrow = new Date(today.getTime() + 24 * 60 * 60 * 1000);
 
 // the global substitutions
-var subtitutions = { "DATE": fullDate(today),
-    "DATE+1": fullDate(tomorrow),
-    "YYYY": today.getFullYear(),
-    "YYYY+1": today.getFullYear()+1,
-    "mm": today.getMonth() + 1,
-    "MM": months[today.getMonth()],
-    "DD+1": tomorrow.getDate(),
-    "DD": today.getDate() };
+var subtitutions = {
+  "DATE": fullDate(today),
+  "DATE+1": fullDate(tomorrow),
+  "YYYY": today.getFullYear(),
+  "YYYY+1": today.getFullYear()+1,
+  "mm": today.getMonth() + 1,
+  "MM": months[today.getMonth()],
+  "DD+1": tomorrow.getDate(),
+  "DD": today.getDate()
+};
 
 // storage for metadata associated with the drafts
 var metadata = {};
@@ -49,8 +56,7 @@ var metadata = {};
 function augmentMetadata(name) {
   var data = metadata[name];
 
-  if (data.docData === undefined)
-    data.docDate = today;
+  if (data.docData === undefined) data.docDate = today;
 
   if (data.thisVersion === undefined) {
     data.thisVersion = "http://www.w3.org/TR/" + subtitutions.YYYY + "/" +
@@ -62,8 +68,7 @@ function augmentMetadata(name) {
   }
 
   if (data.deliverers === undefined) {
-    data.deliverers =
-     [{ name: data.groupName, homepage: data.groupHomepage }];
+    data.deliverers = [{ name: data.groupName, homepage: data.groupHomepage }];
   }
 }
 
@@ -73,12 +78,12 @@ function augmentMetadata(name) {
 function getMetadata(name) {
   if (metadata[name] === undefined) {
     try {
-      metadata[name] = JSON.parse(fs.readFileSync(draftsSystemPath + "/" + name + "/meta.json",
-                                             {options: "utf-8"}));
+      metadata[name] = JSON.parse(fs.readFileSync(
+        draftsSystemPath + "/" + name + "/meta.json", {options: "utf-8"}
+      ));
       augmentMetadata(name);
-    } catch (e) {
-      metadata[name] = {};
     }
+    catch (e) metadata[name] = {};
   }
   return metadata[name];
 }

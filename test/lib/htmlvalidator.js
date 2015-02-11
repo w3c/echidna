@@ -1,4 +1,5 @@
 // Simulates the HTML validator
+'use strict';
 
 var express = require('express');
 var validator = express();
