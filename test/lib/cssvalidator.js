@@ -1,4 +1,5 @@
 // Simulates the CSS Validator
+'use strict';
 
 var express = require('express');
 var validator = express();

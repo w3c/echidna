@@ -1,3 +1,5 @@
+'use strict';
+
 var Request = require('request');
 var Promise = require('promise');
 var List = require('immutable').List;
@@ -10,6 +12,7 @@ var SpecberusWrapper = function () {};
 SpecberusWrapper.validate = function (url) {
   return new Promise(function (resolve, reject) {
     function Sink () {}
+
     require("util").inherits(Sink, require("events").EventEmitter);
 
     var sink = new Sink();
@@ -17,10 +20,7 @@ SpecberusWrapper.validate = function (url) {
     var metadata = Map();
 
     sink.on("end-all", function (profilename) {
-      resolve({
-        errors: errors,
-        metadata: metadata
-      });
+      resolve({errors: errors, metadata: metadata});
     });
 
     sink.on("metadata", function (key, value) {
@@ -62,16 +62,18 @@ exports.SpecberusWrapper = SpecberusWrapper;
 var ThirdPartyChecker = function () {};
 
 ThirdPartyChecker.check = function (url) {
-  var args  = ['../third-party-resources-checker/detect-phantom.js', url, global.RESOURCES_WHITELIST];
+  var args  = [
+    '../third-party-resources-checker/detect-phantom.js',
+    url,
+    global.RESOURCES_WHITELIST
+  ];
   var spawn = require('child_process').spawn;
 
   return new Promise(function (resolve) {
     var phantom = spawn(global.PHANTOM, args);
     var buffer = "";
 
-    phantom.stdout.on('data', function(data) {
-      buffer += data;
-    });
+    phantom.stdout.on('data', function (data) { buffer += data; });
 
     phantom.on('close', function() {
       var consoleout = buffer.replace(global.DEFAULT_HTTP_LOCATION, '', 'g').split("\n");
@@ -89,14 +91,8 @@ TokenChecker.check = function (url, token) {
   return new Promise(function (resolve, reject) {
     Request.get({
       uri: global.TOKEN_ENDPOINT,
-      auth: {
-        user: global.USERNAME,
-        pass: global.PASSWORD
-      },
-      qs: {
-        spec: url,
-        token: token
-      }
+      auth: {user: global.USERNAME, pass: global.PASSWORD},
+      qs: {spec: url, token: token}
     }, function (err, res, body) {
       if (err) reject(new Error("There was an error while checking the token: ", err));
       else resolve(JSON.parse(body));
