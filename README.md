@@ -104,6 +104,4 @@ When the test server is running, the testbed with all drafts will be available i
 
 ## Feedback and contributions
 
-* **File** bugs and suggestions [here on GitHub](https://github.com/w3c/echidna/issues).
-* **Talk to us** on IRC: server `irc.w3.org`, channel `#pub` (here are [detailed instructions to connect](http://www.w3.org/wiki/IRC)).
-* **Discuss** the publication workflow and related tools [on the mailing list](http://lists.w3.org/Archives/Public/spec-prod/).
+Please refer to our [contribution reference](https://github.com/w3c/echidna/blob/master/CONTRIBUTING.md) to learn how to contact us, give feedback, or actively contribute to this project.
