@@ -358,9 +358,22 @@ function orchestrate(spec, token) {
     });
   }
 
-  function runShortlink(specberusReport) {
+  function runShortlink(specberusReport, spec) {
+    spec.jobs['update-tr-shortlink'].status = 'pending';
+
     return specberusReport.then(function (report) {
-      return updateTrShortlink(report.metadata.get('thisVersion'));
+      return updateTrShortlink(report.metadata.get('thisVersion'))
+        .then(function () {
+          spec.jobs['update-tr-shortlink'].status = 'ok';
+
+          return Promise.resolve();
+        }).catch(function (error) {
+          spec.jobs['update-tr-shortlink'].status = 'error';
+          spec.jobs['update-tr-shortlink'].errors.push(error.toString());
+          spec.history = spec.history.add('An error occurred while updating the shortlink.');
+
+          return Promise.reject(error);
+        });
     });
   }
 
@@ -400,7 +413,7 @@ function orchestrate(spec, token) {
       return runTrInstaller(specberusReport, tempLocation, spec);
     })
     .then(function () {
-      return runShortlink(specberusReport);
+      return runShortlink(specberusReport, spec);
     })
     .then(function () {
       return finishTasks(specberusReport, spec, resultLocation);
@@ -424,15 +437,8 @@ function orchestrate(spec, token) {
 
     spec.jobs['retrieve-resources'].status = 'ok';
     spec.history = spec.history.add('The file has been retrieved.');
-
-              spec.jobs['update-tr-shortlink'].status = 'pending';
-
-                spec.jobs['update-tr-shortlink'].status = 'ok';
                 spec.history = spec.history.add('The document has been published at <a href="' + report.metadata.get('thisVersion') + '">' + report.metadata.get('thisVersion') + '</a>.');
                 spec.status = STATUS_SUCCESS;
-
-                spec.jobs['update-tr-shortlink'].status = 'error';
-                spec.jobs['update-tr-shortlink'].errors.push(err.toString());
 
     spec.history = spec.history.add('The document could not be retrieved.');
     spec.jobs['retrieve-resources'].status = 'error';
