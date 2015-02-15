@@ -370,7 +370,9 @@ function orchestrate(spec, token) {
         }).catch(function (error) {
           spec.jobs['update-tr-shortlink'].status = 'error';
           spec.jobs['update-tr-shortlink'].errors.push(error.toString());
-          spec.history = spec.history.add('An error occurred while updating the shortlink.');
+          spec.history = spec.history.add(
+            'An error occurred while updating the shortlink.'
+          );
 
           return Promise.reject(error);
         });
@@ -387,7 +389,14 @@ function orchestrate(spec, token) {
         if (err) console.error(stderr);
       });
 
+      spec.history = spec.history.add(
+        'The document has been published at ' +
+        '<a href="' + report.metadata.get('thisVersion') + '">' +
+        report.metadata.get('thisVersion') +
+        '</a>.'
+      );
       spec.status = STATUS_SUCCESS;
+
       dumpJobResult(resultLocation, spec);
       return Promise.resolve('finished');
     });
@@ -428,6 +437,11 @@ function orchestrate(spec, token) {
       exec(cmd, function (err, stdout, stderr) {
         if (err) console.error(stderr);
       });
+
+      spec.history = spec.history.add(
+        'A system error occurred during the process.'
+      );
+
       dumpJobResult(resultLocation, spec);
       return Promise.reject(new Error('Orchestrator has failed.'));
     });
@@ -437,14 +451,10 @@ function orchestrate(spec, token) {
 
     spec.jobs['retrieve-resources'].status = 'ok';
     spec.history = spec.history.add('The file has been retrieved.');
-                spec.history = spec.history.add('The document has been published at <a href="' + report.metadata.get('thisVersion') + '">' + report.metadata.get('thisVersion') + '</a>.');
-                spec.status = STATUS_SUCCESS;
 
     spec.history = spec.history.add('The document could not be retrieved.');
     spec.jobs['retrieve-resources'].status = 'error';
     spec.jobs['retrieve-resources'].errors.push(err.toString());
-
-  spec.history = spec.history.add('A system error occurred during the process.');
 */
 }
 
