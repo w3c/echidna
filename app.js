@@ -187,6 +187,24 @@ function orchestrate(spec, token) {
   var resultLocation = argResultLocation + path.sep + spec.id + '.json';
   var httpLocation = argHttpLocation + '/' + spec.id + '/Overview.html';
 
+  function runDocumentDownloader(url, tempLocation, spec) {
+    spec.jobs['retrieve-resources'].status = 'pending';
+
+    return DocumentDownloader.fetchAndInstall(url, tempLocation)
+      .then(function () {
+        spec.jobs['retrieve-resources'].status = 'ok';
+        spec.history = spec.history.add('The file has been retrieved.');
+
+        return Promise.resolve();
+      }).catch(function (error) {
+        spec.jobs['retrieve-resources'].status = 'error';
+        spec.jobs['retrieve-resources'].errors.push(error.toString());
+        spec.history = spec.history.add('The document could not be retrieved.');
+
+        return Promise.reject(error);
+      });
+  }
+
   function runSpecberus(httpLocation, spec) {
     spec.jobs['specberus'].status = 'pending';
 
@@ -402,12 +420,10 @@ function orchestrate(spec, token) {
     });
   }
 
-  var specberusReport = DocumentDownloader.fetchAndInstall(
-    spec.url,
-    tempLocation
-  ).then(function () {
-    return runSpecberus(httpLocation, spec);
-  });
+  var specberusReport = runDocumentDownloader(spec.url, tempLocation, spec)
+    .then(function () {
+      return runSpecberus(httpLocation, spec);
+    });
 
   return specberusReport
     .then(function (report) {
@@ -445,17 +461,6 @@ function orchestrate(spec, token) {
       dumpJobResult(resultLocation, spec);
       return Promise.reject(new Error('Orchestrator has failed.'));
     });
-
-  /*
-  spec.jobs['retrieve-resources'].status = 'pending';
-
-    spec.jobs['retrieve-resources'].status = 'ok';
-    spec.history = spec.history.add('The file has been retrieved.');
-
-    spec.history = spec.history.add('The document could not be retrieved.');
-    spec.jobs['retrieve-resources'].status = 'error';
-    spec.jobs['retrieve-resources'].errors.push(err.toString());
-*/
 }
 
 app.listen(process.env.PORT || port).on('error', function (err) {
