@@ -334,11 +334,27 @@ function orchestrate(spec, token) {
     });
   }
 
-  function runTrInstaller(specberusReport, tempLocation) {
+  function runTrInstaller(specberusReport, tempLocation, spec) {
+    spec.jobs['tr-install'].status = 'pending';
+
     return specberusReport.then(function (report) {
       var finalTRpath = report.metadata.get('thisVersion')
         .replace(W3C_PREFIX, '');
-      return trInstaller(tempLocation, finalTRpath);
+
+      return trInstaller(tempLocation, finalTRpath)
+        .then(function () {
+          spec.jobs['tr-install'].status = 'ok';
+
+          return Promise.resolve();
+        }).catch(function (error) {
+          spec.jobs['tr-install'].status = 'error';
+          spec.jobs['tr-install'].errors.push(error.toString());
+          spec.history = spec.history.add(
+            'An error occurred while installing the document in TR'
+          );
+
+          return Promise.reject(error);
+        });
     });
   }
 
@@ -381,7 +397,7 @@ function orchestrate(spec, token) {
       return runPublisher(specberusReport, spec);
     })
     .then(function () {
-      return runTrInstaller(specberusReport, tempLocation);
+      return runTrInstaller(specberusReport, tempLocation, spec);
     })
     .then(function () {
       return runShortlink(specberusReport);
@@ -409,9 +425,6 @@ function orchestrate(spec, token) {
     spec.jobs['retrieve-resources'].status = 'ok';
     spec.history = spec.history.add('The file has been retrieved.');
 
-            spec.jobs['tr-install'].status = 'pending';
-
-              spec.jobs['tr-install'].status = 'ok';
               spec.jobs['update-tr-shortlink'].status = 'pending';
 
                 spec.jobs['update-tr-shortlink'].status = 'ok';
@@ -420,9 +433,6 @@ function orchestrate(spec, token) {
 
                 spec.jobs['update-tr-shortlink'].status = 'error';
                 spec.jobs['update-tr-shortlink'].errors.push(err.toString());
-
-              spec.jobs['tr-install'].status = 'error';
-              spec.jobs['tr-install'].errors.push(err.toString());
 
     spec.history = spec.history.add('The document could not be retrieved.');
     spec.jobs['retrieve-resources'].status = 'error';
