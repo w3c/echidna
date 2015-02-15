@@ -187,261 +187,268 @@ function orchestrate(spec, token) {
   var resultLocation = argResultLocation + path.sep + spec.id + '.json';
   var httpLocation = argHttpLocation + '/' + spec.id + '/Overview.html';
 
-  function runDocumentDownloader(url, tempLocation, spec) {
-    spec.jobs['retrieve-resources'].status = 'pending';
+  function runDocumentDownloader(url, tempLocation) {
+    return function (state) {
+      state.jobs['retrieve-resources'].status = 'pending';
 
-    return DocumentDownloader.fetchAndInstall(url, tempLocation)
-      .then(function () {
-        spec.jobs['retrieve-resources'].status = 'ok';
-        spec.history = spec.history.add('The file has been retrieved.');
+      return DocumentDownloader.fetchAndInstall(url, tempLocation)
+        .then(function () {
+          state.jobs['retrieve-resources'].status = 'ok';
+          state.history = state.history.add('The file has been retrieved.');
 
-        return Promise.resolve();
-      }).catch(function (error) {
-        spec.jobs['retrieve-resources'].status = 'error';
-        spec.jobs['retrieve-resources'].errors.push(error.toString());
-        spec.history = spec.history.add('The document could not be retrieved.');
+          return state;
+        }).catch(function (error) {
+          state.jobs['retrieve-resources'].status = 'error';
+          state.jobs['retrieve-resources'].errors.push(error.toString());
+          state.history = state.history.add(
+            'The document could not be retrieved.'
+          );
 
-        return Promise.reject(error);
-      });
+          return state;
+        });
+    };
   }
 
-  function runSpecberus(httpLocation, spec) {
-    spec.jobs['specberus'].status = 'pending';
+  function runSpecberus(httpLocation) {
+    return function (state) {
+      state.jobs['specberus'].status = 'pending';
 
-    return SpecberusWrapper.validate(httpLocation)
-      .then(function (report) {
-        if (report.errors.isEmpty()) {
-          spec.jobs['specberus'].status = 'ok';
-          spec.history = spec.history.add('The document passed specberus.');
+      return SpecberusWrapper.validate(httpLocation)
+        .then(function (report) {
+          if (report.errors.isEmpty()) {
+            state.jobs['specberus'].status = 'ok';
+            state.history = state.history.add('The document passed specberus.');
+            state.metadata = report.metadata;
 
-          return Promise.resolve(report);
-        }
-        else {
-          spec.jobs['specberus'].status = 'failure';
-          spec.jobs['specberus'].errors = report.errors;
-          spec.history = spec.history.add('The document failed Specberus.');
+            return state;
+          }
+          else {
+            state.jobs['specberus'].status = 'failure';
+            state.jobs['specberus'].errors = report.errors;
+            state.history = state.history.add('The document failed Specberus.');
 
-          return Promise.reject(
-            new Error('This document has failed Specberus.')
+            return state;
+          }
+        }).catch(function (error) {
+          state.jobs['specberus'].status = 'error';
+          state.jobs['specberus'].errors.push(error.toString());
+          state.history = state.history.add(
+            'An error occurred while running Specberus.'
           );
-        }
-      }).catch(function (error) {
-        spec.jobs['specberus'].status = 'error';
-        spec.jobs['specberus'].errors.push(error.toString());
-        spec.history = spec.history.add(
-          'An error occurred while running Specberus.'
-        );
 
-        return Promise.reject(error);
-      });
+          return state;
+        });
+    };
   }
 
-  function runTokenChecker(report, url, spec) {
-    spec.jobs['token-checker'].status = 'pending';
+  function runTokenChecker(latestVersion, url) {
+    return function (state) {
+      state.jobs['token-checker'].status = 'pending';
 
-    return TokenChecker.check(report.metadata.get('latestVersion'), token)
-      .then(function (authReport) {
-        var simpleSource1 = authReport.source.replace(/^https:/i, 'http:');
-        var simpleSource2 = authReport.source.replace(/^http:/i, 'https:');
-        var matchSource = (
-          url.indexOf(simpleSource1) === 0 ||
-          url.indexOf(simpleSource2) === 0
-        );
-
-        if (authReport.authorized && matchSource) {
-          spec.jobs['token-checker'].status = 'ok';
-          spec.history = spec.history.add('You are authorized to publish');
-
-          return Promise.resolve(authReport);
-        }
-        else {
-          spec.jobs['token-checker'].status = 'failure';
-          spec.jobs['token-checker'].errors.push('Not authorized');
-          spec.history = spec.history.add('You are not authorized to publish');
-
-          return Promise.reject(
-            new Error('You are not allowed to publish this document.')
+      return TokenChecker.check(latestVersion, token)
+        .then(function (authReport) {
+          var simpleSource1 = authReport.source.replace(/^https:/i, 'http:');
+          var simpleSource2 = authReport.source.replace(/^http:/i, 'https:');
+          var matchSource = (
+            url.indexOf(simpleSource1) === 0 ||
+            url.indexOf(simpleSource2) === 0
           );
-        }
-      }).catch(function (error) {
-        spec.jobs['token-checker'].status = 'error';
-        spec.jobs['token-checker'].errors.push(error.toString());
-        spec.history = spec.history.add(
-          'An error occurred while running the Token Checker.'
-        );
 
-        return Promise.reject(error);
-      });
+          if (authReport.authorized && matchSource) {
+            state.jobs['token-checker'].status = 'ok';
+            state.history = state.history.add('You are authorized to publish');
+
+            return state;
+          }
+          else {
+            state.jobs['token-checker'].status = 'failure';
+            state.jobs['token-checker'].errors.push('Not authorized');
+            state.history = state.history.add(
+              'You are not authorized to publish'
+            );
+
+            return state;
+          }
+        }).catch(function (error) {
+          state.jobs['token-checker'].status = 'error';
+          state.jobs['token-checker'].errors.push(error.toString());
+          state.history = state.history.add(
+            'An error occurred while running the Token Checker.'
+          );
+
+          return state;
+        });
+    };
   }
 
-  function runThirdPartyResourcesChecker(httpLocation, spec) {
-    spec.jobs['third-party-checker'].status = 'pending';
+  function runThirdPartyResourcesChecker(httpLocation) {
+    return function (state) {
+      state.jobs['third-party-checker'].status = 'pending';
 
-    return ThirdPartyResourcesChecker.check(httpLocation)
-      .then(function (extResources) {
-        if (extResources.length === 0) {
-          spec.jobs['third-party-checker'].status = 'ok';
-          spec.history = spec.history.add(
-            'The document passed the third party checker.'
+      return ThirdPartyResourcesChecker.check(httpLocation)
+        .then(function (extResources) {
+          if (extResources.length === 0) {
+            state.jobs['third-party-checker'].status = 'ok';
+            state.history = state.history.add(
+              'The document passed the third party checker.'
+            );
+
+            return state;
+          }
+          else {
+            state.history = state.history.add(
+              'The document contains non-authorized resources'
+            );
+            state.jobs['third-party-checker'].status = 'failure';
+            state.jobs['third-party-checker'].errors = extResources;
+
+            return state;
+          }
+        }).catch(function (error) {
+          state.jobs['third-party-checker'].status = 'error';
+          state.jobs['third-party-checker'].errors.push(error.toString());
+          state.history = state.history.add(
+            'An error occurred while running the Third Party Resources Checker.'
           );
 
-          return Promise.resolve(extResources);
-        }
-        else {
-          spec.history = spec.history.add(
-            'The document contains non-authorized resources'
-          );
-          spec.jobs['third-party-checker'].status = 'failure';
-          spec.jobs['third-party-checker'].errors = extResources;
-
-          return Promise.reject(
-            new Error('There are external resources in this document.')
-          );
-        }
-      }).catch(function (error) {
-        spec.jobs['third-party-checker'].status = 'error';
-        spec.jobs['third-party-checker'].errors.push(error.toString());
-        spec.history = spec.history.add(
-          'An error occurred while running the Third Party Resources Checker.'
-        );
-
-        return Promise.reject(error);
-      });
+          return state;
+        });
+    };
   }
 
-  function runPublisher(specberusReport, spec) {
-    spec.jobs['publish'].status = 'pending';
+  function runPublisher(metadata) {
+    return function (state) {
+      state.jobs['publish'].status = 'pending';
 
-    return specberusReport.then(function (report) {
       var pubsystemService = new JsonHttpService(
         global.W3C_PUBSYSTEM_URL,
         global.USERNAME,
         global.PASSWORD
       );
 
-      return new Publisher(pubsystemService).publish(report.metadata)
+      return new Publisher(pubsystemService).publish(metadata)
         .then(function (errors) {
           if (errors.isEmpty()) {
-            spec.jobs['publish'].status = 'ok';
+            state.jobs['publish'].status = 'ok';
 
-            return Promise.resolve(errors);
+            return state;
           }
           else {
-            spec.jobs['publish'].status = 'failure';
-            spec.jobs['publish'].errors = errors;
-            spec.history = spec.history.add(
+            state.jobs['publish'].status = 'failure';
+            state.jobs['publish'].errors = errors;
+            state.history = state.history.add(
               'The document could not be published: ' +
               errors.map(function (error) {
                 return error.message;
               })
             );
 
-            return Promise.reject(
-              new Error('There was a problem with the publication system.')
-            );
+            return state;
           }
         }).catch(function (error) {
-          spec.jobs['publish'].status = 'error';
-          spec.jobs['publish'].errors.push(error.toString());
-          spec.history = spec.history.add(
-            'The document could not be published: ' + error.message
+          state.jobs['publish'].status = 'error';
+          state.jobs['publish'].errors.push(error.toString());
+          state.history = state.history.add(
+            'The document could not be published: ' +
+            error.message
           );
 
-          return Promise.reject(error);
+          return state;
         });
-    });
+    };
   }
 
-  function runTrInstaller(specberusReport, tempLocation, spec) {
-    spec.jobs['tr-install'].status = 'pending';
+  function runTrInstaller(thisVersion, tempLocation) {
+    return function (state) {
+      state.jobs['tr-install'].status = 'pending';
 
-    return specberusReport.then(function (report) {
-      var finalTRpath = report.metadata.get('thisVersion')
-        .replace(W3C_PREFIX, '');
+      var finalTRpath = thisVersion.replace(W3C_PREFIX, '');
 
       return trInstaller(tempLocation, finalTRpath)
         .then(function () {
-          spec.jobs['tr-install'].status = 'ok';
+          state.jobs['tr-install'].status = 'ok';
 
-          return Promise.resolve();
+          return state;
         }).catch(function (error) {
-          spec.jobs['tr-install'].status = 'error';
-          spec.jobs['tr-install'].errors.push(error.toString());
-          spec.history = spec.history.add(
+          state.jobs['tr-install'].status = 'error';
+          state.jobs['tr-install'].errors.push(error.toString());
+          state.history = state.history.add(
             'An error occurred while installing the document in TR'
           );
 
-          return Promise.reject(error);
+          return state;
         });
-    });
+    };
   }
 
-  function runShortlink(specberusReport, spec) {
-    spec.jobs['update-tr-shortlink'].status = 'pending';
+  function runShortlink(thisVersion) {
+    return function (state) {
+      state.jobs['update-tr-shortlink'].status = 'pending';
 
-    return specberusReport.then(function (report) {
-      return updateTrShortlink(report.metadata.get('thisVersion'))
+      return updateTrShortlink(thisVersion)
         .then(function () {
-          spec.jobs['update-tr-shortlink'].status = 'ok';
+          state.jobs['update-tr-shortlink'].status = 'ok';
 
-          return Promise.resolve();
+          return state;
         }).catch(function (error) {
-          spec.jobs['update-tr-shortlink'].status = 'error';
-          spec.jobs['update-tr-shortlink'].errors.push(error.toString());
-          spec.history = spec.history.add(
+          state.jobs['update-tr-shortlink'].status = 'error';
+          state.jobs['update-tr-shortlink'].errors.push(error.toString());
+          state.history = state.history.add(
             'An error occurred while updating the shortlink.'
           );
 
-          return Promise.reject(error);
+          return state;
         });
-    });
+    };
   }
 
-  function finishTasks(specberusReport, spec, resultLocation) {
-    return specberusReport.then(function (report) {
+  function finishTasks(thisVersion, resultLocation) {
+    return function (state) {
       var cmd =
-        global.SENDMAIL + ' SUCCESS ' + global.MAILING_LIST + ' ' +
-        report.metadata.get('thisVersion');
+        global.SENDMAIL + ' SUCCESS ' + global.MAILING_LIST + ' ' + thisVersion;
 
       exec(cmd, function (err, stdout, stderr) {
         if (err) console.error(stderr);
       });
 
-      spec.history = spec.history.add(
+      state.history = state.history.add(
         'The document has been published at ' +
-        '<a href="' + report.metadata.get('thisVersion') + '">' +
-        report.metadata.get('thisVersion') +
-        '</a>.'
+        '<a href="' + thisVersion + '">' + thisVersion + '</a>.'
       );
-      spec.status = STATUS_SUCCESS;
+      state.status = STATUS_SUCCESS;
 
-      dumpJobResult(resultLocation, spec);
-      return Promise.resolve('finished');
-    });
+      dumpJobResult(resultLocation, state);
+
+      return state;
+    };
   }
 
-  var specberusReport = runDocumentDownloader(spec.url, tempLocation, spec)
-    .then(function () {
-      return runSpecberus(httpLocation, spec);
-    });
-
-  return specberusReport
-    .then(function (report) {
-      return runTokenChecker(report, spec.url, spec);
-    }).then(function () {
-      return runThirdPartyResourcesChecker(httpLocation, spec);
+  return runDocumentDownloader(spec.url, tempLocation)(spec)
+    .then(runSpecberus(httpLocation))
+    .then(function (state) {
+      return runTokenChecker(
+        state.metadata.get('latestVersion'),
+        spec.url
+      )(state);
     })
-    .then(function () {
-      return runPublisher(specberusReport, spec);
+    .then(runThirdPartyResourcesChecker(httpLocation))
+    .then(function (state) {
+      return runPublisher(state.metadata)(state);
     })
-    .then(function () {
-      return runTrInstaller(specberusReport, tempLocation, spec);
+    .then(function (state) {
+      return runTrInstaller(
+        state.metadata.get('thisVersion'),
+        tempLocation
+      )(state);
     })
-    .then(function () {
-      return runShortlink(specberusReport, spec);
+    .then(function (state) {
+      return runShortlink(state.metadata.get('thisVersion'))(state);
     })
-    .then(function () {
-      return finishTasks(specberusReport, spec, resultLocation);
+    .then(function (state) {
+      return finishTasks(
+        state.metadata.get('thisVersion'),
+        resultLocation
+      )(state);
     })
     .catch(function (err) {
       console.log(err.stack);
