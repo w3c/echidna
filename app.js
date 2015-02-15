@@ -187,20 +187,34 @@ function orchestrate(spec, token) {
   var resultLocation = argResultLocation + path.sep + spec.id + '.json';
   var httpLocation = argHttpLocation + '/' + spec.id + '/Overview.html';
 
-  function runSpecberus(httpLocation) {
+  function runSpecberus(httpLocation, spec) {
+    spec.jobs['specberus'].status = 'pending';
+
     return SpecberusWrapper.validate(httpLocation)
       .then(function (report) {
         if (report.errors.isEmpty()) {
-          console.log('Specberus SUCCESS');
+          spec.jobs['specberus'].status = 'ok';
+          spec.history = spec.history.add('The document passed specberus.');
+
           return Promise.resolve(report);
         }
         else {
-          console.log('Specberus FAILURE');
-          console.log(report.errors.toJSON());
+          spec.jobs['specberus'].status = 'failure';
+          spec.jobs['specberus'].errors = report.errors;
+          spec.history = spec.history.add('The document failed Specberus.');
+
           return Promise.reject(
             new Error('This document has failed Specberus.')
           );
         }
+      }).catch(function (error) {
+        spec.jobs['specberus'].status = 'error';
+        spec.jobs['specberus'].errors.push(error.toString());
+        spec.history = spec.history.add(
+          'An error occurred while running Specberus.'
+        );
+
+        return Promise.reject(error);
       });
   }
 
@@ -304,7 +318,7 @@ function orchestrate(spec, token) {
     spec.url,
     tempLocation
   ).then(function () {
-    return runSpecberus(httpLocation);
+    return runSpecberus(httpLocation, spec);
   });
 
   return specberusReport
@@ -344,10 +358,7 @@ function orchestrate(spec, token) {
 
     spec.jobs['retrieve-resources'].status = 'ok';
     spec.history = spec.history.add('The file has been retrieved.');
-    spec.jobs['specberus'].status = 'pending';
 
-      spec.jobs['specberus'].status = 'ok';
-      spec.history = spec.history.add('The document passed specberus.');
       spec.jobs['token-checker'].status = 'pending';
 
         spec.jobs['token-checker'].status = 'ok';
@@ -397,13 +408,6 @@ function orchestrate(spec, token) {
 
         spec.jobs['third-party-checker'].status = 'error';
         spec.jobs['third-party-checker'].errors.push(err.toString());
-
-      spec.jobs['specberus'].status = 'failure';
-      spec.jobs['specberus'].errors = report.errors;
-      spec.history = spec.history.add('The document failed specberus.');
-
-      spec.jobs['specberus'].status = 'error';
-      spec.jobs['specberus'].errors.push(err.toString());
 
     spec.history = spec.history.add('The document could not be retrieved.');
     spec.jobs['retrieve-resources'].status = 'error';
