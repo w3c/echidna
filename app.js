@@ -219,16 +219,14 @@ function orchestrate(spec, token) {
             state.jobs['specberus'].status = 'ok';
             state.history = state.history.add('The document passed specberus.');
             state.metadata = report.metadata;
-
-            return state;
           }
           else {
             state.jobs['specberus'].status = 'failure';
             state.jobs['specberus'].errors = report.errors;
             state.history = state.history.add('The document failed Specberus.');
-
-            return state;
           }
+
+          return state;
         }).catch(function (error) {
           state.jobs['specberus'].status = 'error';
           state.jobs['specberus'].errors.push(error.toString());
@@ -426,47 +424,33 @@ function orchestrate(spec, token) {
   return runDocumentDownloader(spec.url, tempLocation)(spec)
     .then(runSpecberus(httpLocation))
     .then(function (state) {
-      return runTokenChecker(
-        state.metadata.get('latestVersion'),
-        spec.url
-      )(state);
-    })
-    .then(runThirdPartyResourcesChecker(httpLocation))
-    .then(function (state) {
-      return runPublisher(state.metadata)(state);
-    })
-    .then(function (state) {
-      return runTrInstaller(
-        state.metadata.get('thisVersion'),
-        tempLocation
-      )(state);
-    })
-    .then(function (state) {
-      return runShortlink(state.metadata.get('thisVersion'))(state);
-    })
-    .then(function (state) {
-      return finishTasks(
-        state.metadata.get('thisVersion'),
-        resultLocation
-      )(state);
-    })
-    .catch(function (err) {
-      console.log(err.stack);
+      var metadata = state.metadata;
 
-      spec.status = STATUS_ERROR;
-      var cmd =
-        global.SENDMAIL + ' ERROR ' + global.MAILING_LIST + ' ' + spec.url +
-        ' \'' + JSON.stringify(spec, null, 2) + '\'';
-      exec(cmd, function (err, stdout, stderr) {
-        if (err) console.error(stderr);
-      });
+      return runTokenChecker(metadata.get('latestVersion'), spec.url)(state)
+        .then(runThirdPartyResourcesChecker(httpLocation))
+        .then(runPublisher(metadata))
+        .then(runTrInstaller(metadata.get('thisVersion'), tempLocation))
+        .then(runShortlink(metadata.get('thisVersion')))
+        .then(finishTasks(metadata.get('thisVersion'), resultLocation))
+        .catch(function (err) {
+          console.log(err.stack);
 
-      spec.history = spec.history.add(
-        'A system error occurred during the process.'
-      );
+          spec.status = STATUS_ERROR;
+          var cmd =
+            global.SENDMAIL + ' ERROR ' + global.MAILING_LIST + ' ' +
+            spec.url + ' \'' + JSON.stringify(spec, null, 2) + '\'';
 
-      dumpJobResult(resultLocation, spec);
-      return Promise.reject(new Error('Orchestrator has failed.'));
+          exec(cmd, function (err, stdout, stderr) {
+            if (err) console.error(stderr);
+          });
+
+          spec.history = spec.history.add(
+            'A system error occurred during the process.'
+          );
+
+          dumpJobResult(resultLocation, spec);
+          return Promise.reject(new Error('Orchestrator has failed.'));
+        });
     });
 }
 
