@@ -6,10 +6,8 @@ var meta = require('./package.json');
 var express = require('express');
 var compression = require('compression');
 var bodyParser = require('body-parser');
-var exec = require('child_process').exec;
 var path = require('path');
 var Fs = require('fs');
-var Promise = require('promise');
 var Uuid = require('node-uuid');
 
 var History = require('./lib/history');
@@ -20,12 +18,9 @@ require('./config.js');
 
 // Pseudo-constants:
 var STATUS_STARTED = 'started';
-var STATUS_ERROR = 'error';
 
 var app = express();
 var requests = {};
-var argTempLocation = process.argv[2] || global.DEFAULT_TEMP_LOCATION;
-var argHttpLocation  = process.argv[3] || global.DEFAULT_HTTP_LOCATION;
 var port = process.argv[4] || global.DEFAULT_PORT;
 var argResultLocation = process.argv[5] || global.DEFAULT_RESULT_LOCATION;
 
@@ -98,7 +93,7 @@ app.post('/api/request', function (req, res) {
       status: STATUS_STARTED
     };
 
-    orchestrate(requests[id], token).then(function () {
+    new Orchestrator().run(requests[id], token).then(function () {
       console.log(
         'Spec at ' + url + ' (decision: ' + decision + ') has FINISHED.'
       );
@@ -129,74 +124,6 @@ function corsHandler(req, res, next) {
     }
   }
   next();
-}
-
-function Job() {
-  if (typeof this !== 'object') {
-    throw new TypeError('Jobs must be constructed via new');
-  }
-
-  this.status = '';
-  this.errors = [];
-}
-
-function dumpJobResult(dest, result) {
-  Fs.writeFile(dest, JSON.stringify(result, null, 2) + '\n', function (err) {
-    if (err) return console.error(err);
-  });
-}
-
-function orchestrate(spec, token) {
-  spec.jobs['retrieve-resources'] = new Job();
-  spec.jobs['specberus'] = new Job();
-  spec.jobs['token-checker'] = new Job();
-  spec.jobs['third-party-checker'] = new Job();
-  spec.jobs['publish'] = new Job();
-  spec.jobs['tr-install'] = new Job();
-  spec.jobs['update-tr-shortlink'] = new Job();
-
-  var tempLocation = argTempLocation + path.sep + spec.id + path.sep;
-  var resultLocation = argResultLocation + path.sep + spec.id + '.json';
-  var httpLocation = argHttpLocation + '/' + spec.id + '/Overview.html';
-
-  var o = new Orchestrator();
-
-  return o.runDocumentDownloader(spec.url, tempLocation)(spec)
-    .then(o.runSpecberus(httpLocation))
-    .then(function (state) {
-      var metadata = state.metadata;
-
-      return o.runTokenChecker(
-          metadata.get('latestVersion'),
-          spec.url,
-          token
-        )(state)
-        .then(o.runThirdPartyChecker(httpLocation))
-        .then(o.runPublisher(metadata))
-        .then(o.runTrInstaller(metadata.get('thisVersion'), tempLocation))
-        .then(o.runShortlink(metadata.get('thisVersion')))
-        .then(o.finishTasks(metadata.get('thisVersion'), resultLocation));
-    })
-    .catch(function (err) {
-      console.log(err.stack);
-
-      spec.status = STATUS_ERROR;
-
-      var cmd =
-        global.SENDMAIL + ' ERROR ' + global.MAILING_LIST + ' ' + spec.url +
-        ' \'' + JSON.stringify(spec, null, 2) + '\'';
-
-      exec(cmd, function (err, stdout, stderr) {
-        if (err) console.error(stderr);
-      });
-
-      spec.history = spec.history.add(
-        'A system error occurred during the process.'
-      );
-
-      dumpJobResult(resultLocation, spec);
-      return Promise.reject(new Error('Orchestrator has failed.'));
-    });
 }
 
 app.listen(process.env.PORT || port).on('error', function (err) {
