@@ -54,7 +54,7 @@
     "specberus": "w3c/specberus"
   },
   "devDependencies": {
-    "chai": "1.x.x",
+    "chai": "2.x.x",
     "chai-as-promised": "4.x.x",
     "grunt": "0.4.x",
     "grunt-concurrent": "1.x.x",
