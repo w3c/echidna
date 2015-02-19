@@ -18,7 +18,7 @@ var History = require("./lib/history");
 var JsonHttpService = require("./lib/json-http-service");
 var Publisher = require("./lib/publisher");
 var SpecberusWrapper = require("./functions.js").SpecberusWrapper;
-var ThirdPartyChecker = require("./functions.js").ThirdPartyChecker;
+var ThirdPartyResourcesChecker = require('./lib/third-party-resources-checker');
 var TokenChecker = require("./functions.js").TokenChecker;
 
 // Configuration file
@@ -198,8 +198,9 @@ function orchestrate(spec, token) {
             spec.history = spec.history.add('You are authorized to publish');
 
             spec.jobs['third-party-checker'].status = 'pending';
-            return ThirdPartyChecker.check(httpLocation).then(function (extResources) {
-              if (extResources.length === 0) {
+            return ThirdPartyResourcesChecker.check(httpLocation, global.RESOURCES_WHITELIST)
+            .then(function (extResources) {
+              if (extResources.isEmpty()) {
                 spec.jobs['third-party-checker'].status = 'ok';
                 spec.history = spec.history.add('The document passed the third party checker.');
 

@@ -12,7 +12,6 @@ Echidna is the central piece of software taking care of the new publication work
 
 * [Node.js](http://nodejs.org/)
 * [npm](https://www.npmjs.org/)
-* [PhantomJS](http://phantomjs.org/)
 
 ### npm dependencies
 
@@ -24,6 +23,7 @@ These will be resolved automatically by simply running `npm install` on the dire
 * [Promise](https://github.com/then/promise)
 * [Moment](http://momentjs.com/)
 * [Specberus](https://github.com/w3c/specberus)
+* [`third-party-resources-checker`](https://github.com/dontcallmedom/third-party-resources-checker)
 
 ## How to get it up and running
 

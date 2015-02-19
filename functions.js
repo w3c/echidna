@@ -59,32 +59,6 @@ SpecberusWrapper.validate = function (url) {
 
 exports.SpecberusWrapper = SpecberusWrapper;
 
-var ThirdPartyChecker = function () {};
-
-ThirdPartyChecker.check = function (url) {
-  var args  = [
-    '../third-party-resources-checker/detect-phantom.js',
-    url,
-    global.RESOURCES_WHITELIST
-  ];
-  var spawn = require('child_process').spawn;
-
-  return new Promise(function (resolve) {
-    var phantom = spawn(global.PHANTOM, args);
-    var buffer = "";
-
-    phantom.stdout.on('data', function (data) { buffer += data; });
-
-    phantom.on('close', function() {
-      var consoleout = buffer.replace(global.DEFAULT_HTTP_LOCATION, '', 'g').split("\n");
-      consoleout.pop();
-      resolve(consoleout);
-    });
-  });
-}
-
-exports.ThirdPartyChecker = ThirdPartyChecker;
-
 var TokenChecker = function () {};
 
 TokenChecker.check = function (url, token) {
