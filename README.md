@@ -37,6 +37,8 @@ $ npm start
 
 Then simply open [`http://localhost:3000`](http://localhost:3000) on your web browser and start throwing publication requests at it.
 
+Note: local setup of the full system is not supported currently due to dependency on W3C's DB and IPP system.
+
 ## Syntax and command-line parameters
 
 (with npm >= 2)
