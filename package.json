@@ -51,7 +51,8 @@
     "node-uuid": "1.x.x",
     "promise": "6.x.x",
     "request": "2.x.x",
-    "specberus": "w3c/specberus"
+    "specberus": "w3c/specberus",
+    "third-party-resources-checker": "dontcallmedom/third-party-resources-checker"
   },
   "devDependencies": {
     "chai": "2.x.x",
