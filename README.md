@@ -6,25 +6,6 @@
 
 Echidna is the central piece of software taking care of the new publication workflow at [W3C](http://www.w3.org/). The plan is for Echidna and related sub-projects (see below) to automatise the publication of new specs under [`http://www.w3.org/TR/`](http://www.w3.org/TR/).
 
-## Dependencies
-
-### OS-level dependencies
-
-* [Node.js](http://nodejs.org/)
-* [npm](https://www.npmjs.org/)
-* [PhantomJS](http://phantomjs.org/)
-
-### npm dependencies
-
-These will be resolved automatically by simply running `npm install` on the directory of the project.
-
-* [express](https://github.com/strongloop/express)
-* [ejs](https://github.com/tj/ejs)
-* [Immutable.js](https://github.com/facebook/immutable-js/)
-* [Promise](https://github.com/then/promise)
-* [Moment](http://momentjs.com/)
-* [Specberus](https://github.com/w3c/specberus)
-
 ## How to get it up and running
 
 ```bash
