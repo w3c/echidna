@@ -6,74 +6,52 @@
 
 Echidna is the central piece of software taking care of the new publication workflow at [W3C](http://www.w3.org/). The plan is for Echidna and related sub-projects (see below) to automatise the publication of new specs under [`http://www.w3.org/TR/`](http://www.w3.org/TR/).
 
-## Dependencies
+## Installation
 
-### OS-level dependencies
+To run Echidna, you need to install [Node.js](http://nodejs.org/) first.
+This will install [npm](https://www.npmjs.org/) at the same time, which is required as well.
 
-* [Node.js](http://nodejs.org/)
-* [npm](https://www.npmjs.org/)
-
-### npm dependencies
-
-These will be resolved automatically by simply running `npm install` on the directory of the project.
-
-* [express](https://github.com/strongloop/express)
-* [ejs](https://github.com/tj/ejs)
-* [Immutable.js](https://github.com/facebook/immutable-js/)
-* [Promise](https://github.com/then/promise)
-* [Moment](http://momentjs.com/)
-* [Specberus](https://github.com/w3c/specberus)
-* [`third-party-resources-checker`](https://github.com/dontcallmedom/third-party-resources-checker)
-
-## How to get it up and running
+Then run the following commands with your favorite terminal:
 
 ```bash
-$ git clone git@github.com:w3c/echidna.git
-$ cd echidna
-$ cp config.js.example config.js
-$ npm install
-$ npm start
+git clone https://github.com/w3c/echidna.git
+cd echidna
+cp config.js.example config.js
+npm install
 ```
 
-Then simply open [`http://localhost:3000`](http://localhost:3000) on your web browser and start throwing publication requests at it.
+## Usage
 
-Note: local setup of the full system is not supported currently due to dependency on W3C's DB and IPP system.
+*Note: local setup of the full system is not supported currently due to dependency on W3C's DB and IPP system, but having mock services that emulate these pieces is our short-term goal.*
 
-## Syntax and command-line parameters
+In your terminal, run the following:
 
-(with npm >= 2)
+```bash
+npm start [-- STAGING_PATH [HTTP_LOCATION [PORT [RESULT_PATH]]]]
 ```
-$ npm start [-- STAGING_PATH [HTTP_BASE_URI [PORT [RESULT_PATH]]]]
-```
 
-Meaning of positional parameters:
+You may use the optional defined below:
 
 1. `STAGING_PATH`: path in the local filesystem where documents will be downloaded; *staged*.
 (Default `/var/www/html/trstaging/`.)
-2. `HTTP_LOCATION`: HTTP endpoint for [Specberus](https://github.com/w3c/specberus) and the [Third-party checker](https://github.com/dontcallmedom/third-party-resources-checker).
+2. `HTTP_LOCATION`: HTTP endpoint for [Specberus](https://github.com/w3c/specberus) and the [Third Party Resources Checker](https://github.com/dontcallmedom/third-party-resources-checker).
 (Default `http://localhost/trstaging/`.)
 3. `PORT`: where Echidna will be listening for publication requests.
 (Default `3000`.)
 4. `RESULT_PATH`: local path where Echidna will dump the results of publication requests in JSON format.
 
-Examples:
+Note that they are only supported by npm 2 and above. Alternatively, you can use the configuration file `config.js`.
 
-```bash
-$ npm start -- /home/nick/public_html/staging/ http://localhost/~nick/staging/ 80
-```
-
-```bash
-$ npm start -- ../tmp/echidna-files/
-```
+Once the server is started, you can throw publication requests at it through a `curl`/`POST` request to its enpoint, [`http://localhost:3000/api/`](http://localhost:3000/api/), or using the web-based test based (described below).
 
 ## Automated testing
 
 ### Command line script
 
-Type this to launch `mocha` and its associated tests:
+You can run the test suite with the following command line:
 
 ```bash
-$ npm test
+npm test
 ```
 
 ### Web-based testbed
@@ -82,27 +60,13 @@ For testing purposes, we are using an internal web server by default at `http://
 The test server simulates some of the W3C services, such as the CSS and HTML validators, or the token authorization checker.
 It also serves a set of sample drafts.
 
-It will get started and stopped automatically when launching `mocha`.
-
-One may launch this test server separately by using:
+You can launch this test server separately by using:
 
 ```bash
 $ npm run testserver
 ```
 
 When the test server is running, the testbed with all drafts will be available in `http://localhost:3001/`.
-
-## Sub-projects, and related tools
-
-* [Specberus](https://github.com/w3c/specberus)
-* [LinkChecker](https://github.com/halindrome/linkchecker)
-* [`third-party-resources-checker`](https://github.com/dontcallmedom/third-party-resources-checker)
-* [`w3c-validate`](https://github.com/busbud/w3c-validate)
-* [`w3cjs`](https://github.com/thomasdavis/w3cjs)
-* [Tenon](http://www.tenon.io/documentation/)
-* Generators (see [`spec-generator`](https://github.com/w3c/spec-generator)):
- * Respec
- * [CSS Spec Preprocessor](https://api.csswg.org/bikeshed/) for Bikeshed
 
 ## Feedback and contributions
 
