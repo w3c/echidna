@@ -63,7 +63,7 @@ It also serves a set of sample drafts.
 You can launch this test server separately by using:
 
 ```bash
-$ npm run testserver
+npm run testserver
 ```
 
 When the test server is running, the testbed with all drafts will be available in `http://localhost:3001/`.
