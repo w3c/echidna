@@ -6,6 +6,11 @@
 
 Echidna is the central piece of software taking care of the new publication workflow at [W3C](http://www.w3.org/). The plan is for Echidna and related sub-projects (see below) to automatise the publication of new specs under [`http://www.w3.org/TR/`](http://www.w3.org/TR/).
 
+## OS-level dependencies
+
+* [Node.js](http://nodejs.org/)
+* [PhantomJS](http://phantomjs.org/)
+
 ## How to get it up and running
 
 ```bash
