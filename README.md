@@ -44,7 +44,9 @@ Note that they are only supported by npm 2 and above. Alternatively, you can use
 
 Once the server is started, you can throw publication requests at it through a `curl`/`POST` request to its enpoint, [`http://localhost:3000/api/`](http://localhost:3000/api/), or using the web-based test based (described below).
 
-## Automated testing
+## Running tests
+
+This section describes how to run Echidna's test suite to make sure that the project itself is working properly over time. Note that the test suite is not intended to test actual documents.
 
 ### Command line script
 
