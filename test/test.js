@@ -459,7 +459,7 @@ describe('TokenChecker', function () {
 
     it('should promise an object with a token property', function () {
       return expect(check).to.eventually.have.property('token')
-        .that.is.equals(token);
+        .that.equals(token);
     });
 
     it('should promise an object with a source property', function () {
@@ -468,7 +468,7 @@ describe('TokenChecker', function () {
 
     it('should promise an object with an authorized property', function () {
       return expect(check).to.eventually.have.property('authorized')
-        .that.is.equals(true);
+        .that.is.true;
     });
   });
 });
