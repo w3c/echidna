@@ -363,8 +363,6 @@ describe('SpecberusWrapper', function () {
     it('should promise the proper metadata.title', function () {
       return content.then(function (result) {
         expect(result.metadata.get('title')).to.equal(myDraft.title);
-      }, function (err) {
-        console.log('error: ' + err);
       });
     });
 
@@ -372,8 +370,6 @@ describe('SpecberusWrapper', function () {
       return content.then(function (result) {
         expect(result.metadata.get('thisVersion'))
           .to.equal(myDraft.thisVersion);
-      }, function (err) {
-        console.log('error: ' + err);
       });
     });
 
@@ -381,8 +377,6 @@ describe('SpecberusWrapper', function () {
       return content.then(function (result) {
         expect(result.metadata.get('latestVersion'))
           .to.equal(myDraft.latestVersion);
-      }, function (err) {
-        console.log('error: ' + err);
       });
     });
 
@@ -391,16 +385,12 @@ describe('SpecberusWrapper', function () {
         expect(result.metadata.get('docDate')).to.be.an.instanceOf(Date);
         expect(result.metadata.get('docDate').toISOString())
           .to.equal(myDraft.docDate.toISOString());
-      }, function (err) {
-        console.log('error: ' + err);
       });
     });
 
     it('should promise the proper metadata.process', function () {
       return content.then(function (result) {
         expect(result.metadata.get('process')).to.equal(myDraft.processURI);
-      }, function (err) {
-        console.log('error: ' + err);
       });
     });
 
@@ -408,8 +398,6 @@ describe('SpecberusWrapper', function () {
       return content.then(function (result) {
         expect(result.metadata.get('editorsDraft'))
           .to.equal(myDraft.editorsDraft);
-      }, function (err) {
-        console.log('error: ' + err);
       });
     });
 
@@ -417,8 +405,6 @@ describe('SpecberusWrapper', function () {
       return content.then(function (result) {
         expect(result.metadata.get('editorIDs'))
           .to.deep.equal(myDraft.editorIDs);
-      }, function (err) {
-        console.log('error: ' + err);
       });
     });
 
@@ -426,8 +412,6 @@ describe('SpecberusWrapper', function () {
       return content.then(function (result) {
         expect(result.metadata.get('deliverers'))
           .to.deep.equal(myDraft.deliverers);
-      }, function (err) {
-        console.log('error: ' + err);
       });
     });
   });
