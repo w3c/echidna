@@ -16,10 +16,10 @@ SpecberusWrapper.validate = function (url) {
     require('util').inherits(Sink, require('events').EventEmitter);
 
     var sink = new Sink();
-    var errors = List();
-    var metadata = Map();
+    var errors = new List();
+    var metadata = new Map();
 
-    sink.on('end-all', function (profilename) {
+    sink.on('end-all', function () {
       resolve({ errors: errors, metadata: metadata });
     });
 
@@ -46,7 +46,7 @@ SpecberusWrapper.validate = function (url) {
       processDocument: '2014'
     };
 
-    if (process.env.NODE_ENV == 'dev') {
+    if (process.env.NODE_ENV === 'dev') {
       var host = 'http://localhost:' + ((process.env.PORT || 3000) + 1);
       options.cssValidator = host + '/css-validator/validator';
       options.htmlValidator = host + '/check';
@@ -74,6 +74,6 @@ TokenChecker.check = function (url, token) {
       else resolve(JSON.parse(body));
     });
   });
-}
+};
 
 exports.TokenChecker = TokenChecker;

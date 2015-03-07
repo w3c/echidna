@@ -34,13 +34,13 @@ app.get('/data/specs.json', function (req, res) {
   var metadata;
   var listing = fs.readdirSync(draftsSystemPath);
 
-  for (var i in listing) {
+  for (var i = 0; i < listing.length; ++i) {
     metadata = getMetadata(listing[i]);
     if (metadata) specs.push({ id: listing[i], metadata: metadata });
     else throw new Error(
       'Spec “' + listing[i] + '” does not have associated metadata!'
     );
-  };
+  }
 
   res.send({ specs: specs });
 });
@@ -77,8 +77,6 @@ var server;
 TestServer.start = function () {
   var limitPort = port + 30;
 
-  if (app === undefined) init();
-
   do {
     server = app.listen(port).on('error', function (err) {
       // Only when there's an error because the port is already in use,
@@ -88,7 +86,7 @@ TestServer.start = function () {
       }
     });
     port += 1;
-  } while ((server.address() === null) && (port < limitPort));
+  } while (server.address() === null && port < limitPort);
 
   if (server.address() === null) {
     throw new Error('Cannot find a free port for the test server ' + port);

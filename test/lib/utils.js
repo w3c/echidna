@@ -2,8 +2,6 @@
 
 var fs = require('fs');
 
-var utils = function () {};
-
 var draftsSystemPath = __dirname + '/../drafts';
 
 // V8 doesn't support String.endsWith

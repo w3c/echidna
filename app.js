@@ -10,7 +10,6 @@ var exec = require('child_process').exec;
 var path = require('path');
 var Fs = require('fs');
 var Promise = require('promise');
-var Request = require('request');
 var Uuid = require('node-uuid');
 
 var DocumentDownloader = require('./lib/document-downloader');
@@ -50,7 +49,7 @@ else {
 }
 
 // Index Page
-app.get('/', function (request, response, next) {
+app.get('/', function (request, response) {
   response.sendFile(__dirname + '/views/index.html');
 });
 
@@ -67,7 +66,6 @@ app.get('/api/version', function (req, res) {
 });
 
 app.get('/api/status', function (req, res) {
-  var result;
   var id = req.query ? req.query.id : null;
   var file = argResultLocation + path.sep + id + '.json';
 
@@ -108,7 +106,7 @@ app.post('/api/request', function (req, res) {
       console.log(
         'Spec at ' + url + ' (decision: ' + decision + ') has FINISHED.'
       );
-    }, function (err) {
+    }, function () {
       console.log(
         'Spec at ' + url + ' (decision: ' + decision + ') has FAILED.'
       );
@@ -140,7 +138,7 @@ function corsHandler(req, res, next) {
 function trInstaller(source, dest) {
   return new Promise(function (resolve, reject) {
     var cmd = global.TR_INSTALL_CMD + ' ' + source + ' ' + dest;
-    exec(cmd, function (err, stdout, stderr) {
+    exec(cmd, function (err) {
       if (err) reject(err);
       else resolve();
     });
@@ -150,7 +148,7 @@ function trInstaller(source, dest) {
 function updateTrShortlink(uri) {
   return new Promise(function (resolve, reject) {
     var cmd = global.UPDATE_TR_SHORTLINK_CMD + ' ' + uri;
-    exec(cmd, function (err, stdout, stderr) {
+    exec(cmd, function (err) {
       if (err) reject(err);
       else resolve();
     });
@@ -341,7 +339,7 @@ function orchestrate(spec, token) {
     spec.jobs['retrieve-resources'].status = 'error';
     spec.jobs['retrieve-resources'].errors.push(err.toString());
     return Promise.reject(err);
-  }).catch(function (err) {
+  }).catch(function () {
     spec.history = spec.history.add(
       'A system error occurred during the process.'
     );

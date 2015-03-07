@@ -20,7 +20,7 @@ function htmlTemplate(serverPath, fileSystemPath) {
       var start = str.indexOf('{{', oldstart);
       var end = str.indexOf('}}', oldstart);
 
-      if (start === -1 || end === -1 || (end <= (start + 1))) {
+      if (start === -1 || end === -1 || end <= start + 1) {
         return str.substring(oldstart);
       }
 
@@ -45,7 +45,7 @@ function htmlTemplate(serverPath, fileSystemPath) {
     var path = url.parse(req.url).path;
     if (path.indexOf(serverPath) !== 0) return next();
     if (endsWith(path, '/')) path += 'index.html';
-    if (!(endsWith(path, '.html'))) return next();
+    if (!endsWith(path, '.html')) return next();
 
     var filepath = fileSystemPath + path.substring(serverPath.length);
     var content = null;
