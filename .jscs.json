@@ -4,7 +4,6 @@
     "**/*.min.js", "Gruntfile.js", "config.js"
   ],
   "fileExtensions": [".js"],
-  "maxErrors": 10,
   "disallowDanglingUnderscores": true,
   "disallowEmptyBlocks": true,
   "disallowImplicitTypeConversion": ["numeric", "boolean", "binary", "string"],
@@ -18,44 +17,32 @@
   "disallowPaddingNewlinesBeforeKeywords": ["else", "case", "catch", "typeof"],
   "disallowPaddingNewlinesInBlocks": true,
   "disallowSpaceAfterObjectKeys": true,
-  "disallowSpaceAfterPrefixUnaryOperators": ["++", "--", "+", "-", "~", "!"],
-  "disallowSpaceBeforePostfixUnaryOperators": ["++", "--"],
+  "disallowSpaceAfterPrefixUnaryOperators": true,
+  "disallowSpaceBeforePostfixUnaryOperators": true,
   "disallowSpacesInCallExpression": true,
-  "disallowSpacesInFunctionDeclaration": {
-    "beforeOpeningRoundBrace": true
-  },
+  "disallowSpacesInFunctionDeclaration": { "beforeOpeningRoundBrace": true },
+  "disallowSpacesInNamedFunctionExpression": { "beforeOpeningRoundBrace": true },
+  "disallowSpacesInsideArrayBrackets": true,
   "disallowSpacesInsideParentheses": true,
   "disallowTrailingComma": true,
   "disallowTrailingWhitespace": true,
-  "maximumLineLength": {
-    "value": 80,
-    "allowComments": true
-  },
+  "maximumLineLength": { "value": 80, "allowComments": true },
   "requireBlocksOnNewline": 1,
   "requireCamelCaseOrUpperCaseIdentifiers": true,
   "requireCapitalizedComments": true,
   "requireCapitalizedConstructors": true,
   "requireCommaBeforeLineBreak": true,
-  "requireKeywordsOnNewLine": ["else"],
+  "requireCurlyBraces": ["for", "while", "do", "try", "catch"],
+  "requireKeywordsOnNewLine": ["catch", "else"],
   "requireLineBreakAfterVariableAssignment": true,
   "requireLineFeedAtFileEnd": true,
-  "requireOperatorBeforeLineBreak": [
-    "?", "=", "+", "-", "/", "*", "==", "===", "!=", "!==", ">", ">=", "<", "<="
-  ],
+  "requireOperatorBeforeLineBreak": true,
   "requireParenthesesAroundIIFE": true,
-  "requireSpaceAfterBinaryOperators": [
-    "=", ",", "+", "-", "/", "*", "==", "===", "!=", "!=="
-  ],
-  "requireSpaceAfterKeywords": [
-    "do", "for", "if", "else", "switch", "case", "try", "catch", "void",
-    "while", "return", "typeof", "function"
-  ],
+  "requireSpaceAfterBinaryOperators": true,
+  "requireSpaceAfterKeywords": true,
   "requireSpaceAfterLineComment": true,
-  "requireSpaceBeforeBinaryOperators": [
-    "=", "+", "-", "/", "*", "==", "===", "!=", "!=="
-  ],
+  "requireSpaceBeforeBinaryOperators": true,
   "requireSpaceBeforeBlockStatements": true,
-  "requireSpaceBeforeKeywords": ["else", "while", "catch"],
   "requireSpaceBeforeObjectValues": true,
   "requireSpaceBetweenArguments": true,
   "requireSpacesInAnonymousFunctionExpression": {
@@ -64,15 +51,9 @@
   },
   "requireSpacesInConditionalExpression": true,
   "requireSpacesInForStatement": true,
-  "requireSpacesInFunctionDeclaration": {
-    "beforeOpeningCurlyBrace": true
-  },
-  "requireSpacesInFunctionExpression": {
-    "beforeOpeningCurlyBrace": true
-  },
-  "requireSpacesInNamedFunctionExpression": {
-    "beforeOpeningCurlyBrace": true
-  },
+  "requireSpacesInFunctionDeclaration": { "beforeOpeningCurlyBrace": true },
+  "requireSpacesInFunctionExpression": { "beforeOpeningCurlyBrace": true },
+  "requireSpacesInNamedFunctionExpression": { "beforeOpeningCurlyBrace": true },
   "requireSpacesInsideObjectBrackets": "all",
   "safeContextKeyword": ["self"],
   "validateIndentation": 2,

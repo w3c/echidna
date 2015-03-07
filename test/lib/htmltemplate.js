@@ -13,6 +13,7 @@ function htmlTemplate(serverPath, fileSystemPath) {
 
   function applyTemplate(s, metadata) {
     var str = s.toString();
+
     function replace(oldstart) {
       if (oldstart > str.length) return '';
 
