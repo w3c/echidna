@@ -76,6 +76,7 @@
     "grunt-svgmin": "2.x.x",
     "grunt-usemin": "3.x.x",
     "jscs": "1.x.x",
+    "jshint": "2.x.x",
     "load-grunt-tasks": "3.x.x",
     "mocha": "2.x.x",
     "morgan": "1.x.x",
@@ -83,6 +84,7 @@
   },
   "scripts": {
     "check-style": "jscs .",
+    "lint": "jshint .",
     "start": "node app.js",
     "test": "npm run check-style && mocha",
     "testserver": "node test/lib/testserver"
