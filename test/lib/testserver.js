@@ -17,7 +17,7 @@ var port = (process.env.PORT || 3000) + 1;
 var TestServer = function () {};
 
 app.use(morgan('dev', {
-  stream: fs.createWriteStream('/tmp/echidna-testserver.log', {flags: 'w'})
+  stream: fs.createWriteStream('/tmp/echidna-testserver.log', { flags: 'w' })
 }));
 
 app.use(cssvalidator);
@@ -36,13 +36,13 @@ app.get('/data/specs.json', function (req, res) {
 
   for (var i in listing) {
     metadata = getMetadata(listing[i]);
-    if (metadata) specs.push({id: listing[i], metadata: metadata});
+    if (metadata) specs.push({ id: listing[i], metadata: metadata });
     else throw new Error(
       'Spec “' + listing[i] + '” does not have associated metadata!'
     );
   };
 
-  res.send({specs: specs});
+  res.send({ specs: specs });
 });
 
 app.get('/robots', function (req, res) {
@@ -59,10 +59,12 @@ app.get('/generate', function (req, res) {
   var url = req.query.url;
 
   if (!url || !type) {
-    return res.status(500).json({error: 'Both `type` and `url` are required.'});
+    return res.status(500).json({
+      error: 'Both `type` and `url` are required.'
+    });
   }
   if (type !== 'test') {
-    return res.status(500).json({error: 'Unknown type `' + type + '`'});
+    return res.status(500).json({ error: 'Unknown type `' + type + '`' });
   }
 
   request(url, function (err, response, body) {

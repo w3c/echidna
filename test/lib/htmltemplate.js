@@ -52,7 +52,7 @@ function htmlTemplate(serverPath, fileSystemPath) {
 
     try {
       // load the file
-      content = fs.readFileSync(filepath, {options: 'utf-8'});
+      content = fs.readFileSync(filepath, { options: 'utf-8' });
       // load the metadata associated with the file (if any)
       var dirpath = filepath.substring(0, filepath.lastIndexOf('/'));
       var name = dirpath.substring(dirpath.lastIndexOf('/') + 1);

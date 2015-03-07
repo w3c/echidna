@@ -80,7 +80,7 @@ function getMetadata(name) {
   if (metadata[name] === undefined) {
     try {
       metadata[name] = JSON.parse(fs.readFileSync(
-        draftsSystemPath + '/' + name + '/meta.json', {options: 'utf-8'}
+        draftsSystemPath + '/' + name + '/meta.json', { options: 'utf-8' }
       ));
       augmentMetadata(name);
     }

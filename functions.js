@@ -20,7 +20,7 @@ SpecberusWrapper.validate = function (url) {
     var metadata = Map();
 
     sink.on('end-all', function (profilename) {
-      resolve({errors: errors, metadata: metadata});
+      resolve({ errors: errors, metadata: metadata });
     });
 
     sink.on('metadata', function (key, value) {
@@ -64,8 +64,8 @@ TokenChecker.check = function (url, token) {
   return new Promise(function (resolve, reject) {
     Request.get({
       uri: global.TOKEN_ENDPOINT,
-      auth: {user: global.USERNAME, pass: global.PASSWORD},
-      qs: {spec: url, token: token}
+      auth: { user: global.USERNAME, pass: global.PASSWORD },
+      qs: { spec: url, token: token }
     }, function (err, res, body) {
       if (err) reject(new Error(
         'There was an error while checking the token: ',

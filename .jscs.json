@@ -73,6 +73,7 @@
   "requireSpacesInNamedFunctionExpression": {
     "beforeOpeningCurlyBrace": true
   },
+  "requireSpacesInsideObjectBrackets": "all",
   "safeContextKeyword": ["self"],
   "validateIndentation": 2,
   "validateLineBreaks": "LF",
