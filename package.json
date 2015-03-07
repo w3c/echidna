@@ -86,7 +86,7 @@
     "check-style": "jscs .",
     "lint": "jshint .",
     "start": "node app.js",
-    "test": "npm run check-style && mocha",
+    "test": "npm run check-style && npm run lint && mocha",
     "testserver": "node test/lib/testserver"
   },
   "engines": {
