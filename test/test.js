@@ -1,35 +1,38 @@
 'use strict';
 
-// switch the environment into testing mode
+// Switch the environment into testing mode
 process.env.NODE_ENV = 'dev';
 
-var expect = require("chai").use(require("chai-as-promised")).expect;
-var Promise = require("promise");
-var Fs = require("fs");
+var expect = require('chai').use(require('chai-as-promised')).expect;
+var Promise = require('promise');
+var Fs = require('fs');
 var Immutable = require('immutable');
 var List = Immutable.List;
 var Map = Immutable.Map;
 require('../config.js');
 
-var server = require("./lib/testserver");
+var server = require('./lib/testserver');
 var FakeHttpServices = require('./lib/fake-http-services');
 var CreatedService = FakeHttpServices.CreatedService;
 var BadRequestService = FakeHttpServices.BadRequestService;
 var NotImplementedService = FakeHttpServices.NotImplementedService;
 var ServerErrorService = FakeHttpServices.ServerErrorService;
 
-// used by the TokenChecker
+// Used by the TokenChecker
 global.TOKEN_ENDPOINT = server.location() + '/authorize';
-global.USERNAME = "toto";
-global.PASSWORD = "secret";
+global.USERNAME = 'toto';
+global.PASSWORD = 'secret';
 
 var DocumentDownloader = require('../lib/document-downloader');
 var Publisher = require('../lib/publisher');
-var SpecberusWrapper = require("../functions.js").SpecberusWrapper;
-var TokenChecker = require("../functions.js").TokenChecker;
+var SpecberusWrapper = require('../functions.js').SpecberusWrapper;
+var TokenChecker = require('../functions.js').TokenChecker;
+
+function readFileSyncUtf8(file) {
+  return Fs.readFileSync(file, { encoding: 'utf8' });
+}
 
 describe('DocumentDownloader', function () {
-
   describe('fetch(url)', function () {
     it('should be a function', function () {
       expect(DocumentDownloader.fetch).to.be.a('function');
@@ -46,24 +49,28 @@ describe('DocumentDownloader', function () {
     });
 
     it('should download a file', function () {
-      return expect(content).to.eventually.contain("Echidna testbed");
+      return expect(content).to.eventually.contain('Echidna testbed');
     });
 
     it('should reject if the resource does not exist', function () {
-      var notFound = DocumentDownloader.fetch(server.location() + '/et/si/tu/n/existais/pas');
+      var notFound = DocumentDownloader.fetch(
+        server.location() + '/et/si/tu/n/existais/pas'
+      );
+
       return expect(notFound).to.eventually.be.rejectedWith(/code 404/);
     });
 
     it('should reject if the server is not reachable', function () {
       var notReachable = DocumentDownloader.fetch('http://youdbetternotexist/');
-      return expect(notReachable).to.eventually.be.rejectedWith(/network error/);
+      return expect(notReachable)
+        .to.eventually.be.rejectedWith(/network error/);
     });
   });
 
   describe('fetchAll(urls)', function () {
     var content = DocumentDownloader.fetchAll(List.of(
-      server.location() + "/robots",
-      server.location() + "/elvis"
+      server.location() + '/robots',
+      server.location() + '/elvis'
     ));
 
     it('should be a function', function () {
@@ -75,13 +82,14 @@ describe('DocumentDownloader', function () {
     });
 
     it('should promise a List of size 2', function () {
-      return expect(content).to.eventually.be.an.instanceOf(List).of.property('size', 2);
+      return expect(content).to.eventually.be.an.instanceOf(List)
+        .of.property('size', 2);
     });
 
     it('should fetch multiple URLs', function () {
       return content.then(function (content) {
-        expect(content.get(0)).to.contain("looking for");
-        expect(content.get(1)).to.contain("alive");
+        expect(content.get(0)).to.contain('looking for');
+        expect(content.get(1)).to.contain('alive');
       });
     });
   });
@@ -89,11 +97,11 @@ describe('DocumentDownloader', function () {
   describe('install(dest, content)', function () {
     var promise;
 
-    before(function() {
+    before(function () {
       promise = DocumentDownloader.install('/tmp/foo', 'bar');
     });
 
-    after(function(){
+    after(function () {
       Fs.unlinkSync('/tmp/foo');
     });
 
@@ -106,8 +114,8 @@ describe('DocumentDownloader', function () {
     });
 
     it('should create the file with proper content', function () {
-      return promise.then(function() {
-        expect(Fs.readFileSync('/tmp/foo', { 'encoding': 'utf8' })).to.equal('bar');
+      return promise.then(function () {
+        expect(readFileSyncUtf8('/tmp/foo')).to.equal('bar');
       });
     });
   });
@@ -115,14 +123,14 @@ describe('DocumentDownloader', function () {
   describe('installAll(dests, contents)', function () {
     var promise;
 
-    before(function() {
+    before(function () {
       promise = DocumentDownloader.installAll(List.of(
         ['/tmp/multiple_foo1', 'multiple_bar1'],
         ['/tmp/multiple_foo2', 'multiple_bar2']
       ));
     });
 
-    after(function(){
+    after(function () {
       Fs.unlinkSync('/tmp/multiple_foo1');
       Fs.unlinkSync('/tmp/multiple_foo2');
     });
@@ -131,15 +139,16 @@ describe('DocumentDownloader', function () {
       expect(DocumentDownloader.installAll).to.be.a('function');
     });
 
-
     it('should return a promise', function () {
       return expect(promise).to.be.an.instanceOf(Promise);
     });
 
     it('should create multiple files with proper contents', function () {
-      return promise.then(function() {
-        expect(Fs.readFileSync('/tmp/multiple_foo1', { 'encoding': 'utf8' })).to.equal('multiple_bar1');
-        expect(Fs.readFileSync('/tmp/multiple_foo2', { 'encoding': 'utf8' })).to.equal('multiple_bar2');
+      return promise.then(function () {
+        expect(readFileSyncUtf8('/tmp/multiple_foo1'))
+          .to.equal('multiple_bar1');
+        expect(readFileSyncUtf8('/tmp/multiple_foo2'))
+          .to.equal('multiple_bar2');
       });
     });
   });
@@ -147,11 +156,14 @@ describe('DocumentDownloader', function () {
   describe('fetchAndInstall(url, dest)', function () {
     var promise;
 
-    before(function() {
-      promise = DocumentDownloader.fetchAndInstall(server.location(), '/tmp/testechidna');
+    before(function () {
+      promise = DocumentDownloader.fetchAndInstall(
+        server.location(),
+        '/tmp/testechidna'
+      );
     });
 
-    after(function(){
+    after(function () {
       Fs.unlinkSync('/tmp/testechidna/Overview.html');
       Fs.rmdirSync('/tmp/testechidna');
     });
@@ -165,14 +177,15 @@ describe('DocumentDownloader', function () {
     });
 
     it('should create the folder if it does not exist', function () {
-      return promise.then(function() {
+      return promise.then(function () {
         expect(Fs.existsSync('/tmp/testechidna')).to.be.true;
       });
     });
 
     it('should create the file with proper content', function () {
-      return promise.then(function() {
-        expect(Fs.readFileSync('/tmp/testechidna/Overview.html', { 'encoding': 'utf8' })).to.contain("Echidna testbed");
+      return promise.then(function () {
+        expect(readFileSyncUtf8('/tmp/testechidna/Overview.html'))
+          .to.contain('Echidna testbed');
       });
     });
 
@@ -189,17 +202,21 @@ describe('DocumentDownloader', function () {
         'https://non-rien.de/rien',
         '/tmp/whatever'
       );
-      return expect(notReachable).to.eventually.be.rejectedWith(/network error/);
+
+      return expect(notReachable)
+        .to.eventually.be.rejectedWith(/network error/);
     });
 
     it('should read a manifest and install its content', function () {
       return DocumentDownloader.fetchAndInstall(
         server.getMetadata('navigation-timing-2').location + 'W3CTRMANIFEST',
         '/tmp/testechidnaManifest'
-      ).then(function() {
-        expect(Fs.readFileSync('/tmp/testechidnaManifest/Overview.html', { 'encoding': 'utf8' })).to.contain("Navigation Timing 2");
+      ).then(function () {
+        expect(readFileSyncUtf8('/tmp/testechidnaManifest/Overview.html'))
+          .to.contain('Navigation Timing 2');
         expect(Fs.existsSync('/tmp/testechidnaManifest/spec.css')).to.be.true;
-        expect(Fs.existsSync('/tmp/testechidnaManifest/timing-overview.png')).to.be.true;
+        expect(Fs.existsSync('/tmp/testechidnaManifest/timing-overview.png'))
+          .to.be.true;
 
         Fs.unlinkSync('/tmp/testechidnaManifest/Overview.html');
         Fs.unlinkSync('/tmp/testechidnaManifest/spec.css');
@@ -214,10 +231,14 @@ describe('DocumentDownloader', function () {
         server.getMetadata('navigation-timing-2-generated').location +
           'W3CTRMANIFEST',
         '/tmp/testechidnaSpecGeneration'
-      ).then(function() {
-        expect(Fs.readFileSync('/tmp/testechidnaSpecGeneration/Overview.html', { 'encoding': 'utf8' })).to.contain("Spec-generated Navigation Timing 2");
-        expect(Fs.existsSync('/tmp/testechidnaSpecGeneration/spec.css')).to.be.true;
-        expect(Fs.existsSync('/tmp/testechidnaSpecGeneration/timing-overview.png')).to.be.true;
+      ).then(function () {
+        expect(readFileSyncUtf8('/tmp/testechidnaSpecGeneration/Overview.html'))
+          .to.contain('Spec-generated Navigation Timing 2');
+        expect(Fs.existsSync('/tmp/testechidnaSpecGeneration/spec.css'))
+          .to.be.true;
+        expect(Fs.existsSync(
+          '/tmp/testechidnaSpecGeneration/timing-overview.png'
+        )).to.be.true;
 
         Fs.unlinkSync('/tmp/testechidnaSpecGeneration/Overview.html');
         Fs.unlinkSync('/tmp/testechidnaSpecGeneration/spec.css');
@@ -225,7 +246,6 @@ describe('DocumentDownloader', function () {
         Fs.rmdirSync('/tmp/testechidnaSpecGeneration');
       });
     });
-
   });
 
   describe('getFilenames(manifestContent)', function () {
@@ -262,7 +282,8 @@ describe('DocumentDownloader', function () {
         'img/image2.jpg'
       ];
 
-      expect(DocumentDownloader.getFilenames(manifest).toArray()).to.eql(filenames);
+      expect(DocumentDownloader.getFilenames(manifest).toArray())
+        .to.eql(filenames);
     });
   });
 
@@ -276,21 +297,27 @@ describe('DocumentDownloader', function () {
     });
 
     it('should return a list of string', function () {
-      expect(DocumentDownloader.sanitize(List('test')).first()).to.be.a('string');
+      expect(DocumentDownloader.sanitize(List('test')).first())
+        .to.be.a('string');
     });
 
     it('should filter out .htaccess files', function () {
-      expect(Immutable.is(DocumentDownloader.sanitize(List.of('allowed_file', '.htaccess')), List.of('allowed_file'))).to.be.true;
+      expect(Immutable.is(
+        DocumentDownloader.sanitize(List.of('allowed_file', '.htaccess')),
+        List.of('allowed_file')
+      )).to.be.true;
     });
 
     it('should filter out PHP files', function () {
-      expect(Immutable.is(DocumentDownloader.sanitize(List.of('allowed_file', 'not_allowed.php')), List.of('allowed_file'))).to.be.true;
+      expect(Immutable.is(
+        DocumentDownloader.sanitize(List.of('allowed_file', 'not_allowed.php')),
+        List.of('allowed_file'))
+      ).to.be.true;
     });
   });
 });
 
 describe('SpecberusWrapper', function () {
-
   describe('validate(url)', function () {
     it('should be a function', function () {
       expect(SpecberusWrapper.validate).to.be.a('function');
@@ -308,123 +335,131 @@ describe('SpecberusWrapper', function () {
     });
 
     it('should promise an object with an error property', function () {
-      return expect(content).to.eventually.have.property("errors");
+      return expect(content).to.eventually.have.property('errors');
     });
 
     it('should return an error property that is a list', function () {
-      return expect(content).that.eventually.has.property("errors")
+      return expect(content).that.eventually.has.property('errors')
         .that.is.an.instanceOf(List);
     });
 
     it('should return an error property that is an empty list', function () {
-      return expect(content).that.eventually.has.property("errors")
+      return expect(content).that.eventually.has.property('errors')
         .that.has.property('size', 0);
     });
 
     it('should promise an object with a metadata property', function () {
-      return expect(content).to.eventually.have.property("metadata");
+      return expect(content).to.eventually.have.property('metadata');
     });
 
     it('should return a metadata property that is a Map', function () {
-      return expect(content).to.eventually.have.property("metadata")
+      return expect(content).to.eventually.have.property('metadata')
           .that.is.an.instanceOf(Map);
     });
 
-    it('should promise an object with the proper metadata.title', function () {
+    it('should promise the proper metadata.title', function () {
       return content.then(function (result) {
-        expect(result.metadata.get("title")).to.equal(myDraft.title);
+        expect(result.metadata.get('title')).to.equal(myDraft.title);
       }, function (err) {
         console.log('error: ' + err);
       });
     });
 
-    it('should promise an object with the proper metadata.thisVersion', function () {
+    it('should promise the proper metadata.thisVersion', function () {
       return content.then(function (result) {
-        expect(result.metadata.get("thisVersion")).to.equal(myDraft.thisVersion);
+        expect(result.metadata.get('thisVersion'))
+          .to.equal(myDraft.thisVersion);
       }, function (err) {
         console.log('error: ' + err);
       });
     });
 
-    it('should promise an object with the proper metadata.latestVersion', function () {
+    it('should promise the proper metadata.latestVersion', function () {
       return content.then(function (result) {
-        expect(result.metadata.get("latestVersion")).to.equal(myDraft.latestVersion);
+        expect(result.metadata.get('latestVersion'))
+          .to.equal(myDraft.latestVersion);
       }, function (err) {
         console.log('error: ' + err);
       });
     });
 
-    it('should promise an object with the proper metadata.docDate', function () {
+    it('should promise the proper metadata.docDate', function () {
       return content.then(function (result) {
-        expect(result.metadata.get("docDate")).to.be.a('Date');
-        expect(result.metadata.get("docDate").toISOString()).to.equal(myDraft.docDate.toISOString());
+        expect(result.metadata.get('docDate')).to.be.an.instanceOf(Date);
+        expect(result.metadata.get('docDate').toISOString())
+          .to.equal(myDraft.docDate.toISOString());
       }, function (err) {
         console.log('error: ' + err);
       });
     });
 
-    it('should promise an object with the proper metadata.process', function () {
+    it('should promise the proper metadata.process', function () {
       return content.then(function (result) {
-        expect(result.metadata.get("process")).to.equal(myDraft.processURI);
+        expect(result.metadata.get('process')).to.equal(myDraft.processURI);
       }, function (err) {
         console.log('error: ' + err);
       });
     });
 
-    it('should promise an object with the proper metadata.editorsDraft', function () {
+    it('should promise the proper metadata.editorsDraft', function () {
       return content.then(function (result) {
-        expect(result.metadata.get("editorsDraft")).to.equal(myDraft.editorsDraft);
+        expect(result.metadata.get('editorsDraft'))
+          .to.equal(myDraft.editorsDraft);
       }, function (err) {
         console.log('error: ' + err);
       });
     });
 
-    it('should promise an object with the proper metadata.editorIDs', function () {
+    it('should promise the proper metadata.editorIDs', function () {
       return content.then(function (result) {
-        expect(result.metadata.get("editorIDs")).to.deep.equal(myDraft.editorIDs);
+        expect(result.metadata.get('editorIDs'))
+          .to.deep.equal(myDraft.editorIDs);
       }, function (err) {
         console.log('error: ' + err);
       });
     });
 
-    it('should promise an object with the proper metadata.deliverers', function () {
+    it('should promise the proper metadata.deliverers', function () {
       return content.then(function (result) {
-        expect(result.metadata.get("deliverers")).to.deep.equal(myDraft.deliverers);
+        expect(result.metadata.get('deliverers'))
+          .to.deep.equal(myDraft.deliverers);
       }, function (err) {
         console.log('error: ' + err);
       });
     });
-
   });
 
   describe('validate(url-with-css-errors)', function () {
-    var content = SpecberusWrapper.validate(server.getMetadata('nav-csserror').location);
+    var content = SpecberusWrapper.validate(
+      server.getMetadata('nav-csserror').location
+    );
 
     it('should return an error property that has 2 errors', function () {
-      return expect(content).that.eventually.has.property("errors")
+      return expect(content).that.eventually.has.property('errors')
         .that.has.property('size', 2);
     });
   });
 
   describe('validate(url-with-css-warnings)', function () {
-    var content = SpecberusWrapper.validate(server.getMetadata('nav-csswarning').location);
+    var content = SpecberusWrapper.validate(
+      server.getMetadata('nav-csswarning').location
+    );
 
     it('should return an error property that has no errors', function () {
-      return expect(content).that.eventually.has.property("errors")
+      return expect(content).that.eventually.has.property('errors')
         .that.has.property('size', 0);
     });
   });
 });
 
 describe('TokenChecker', function () {
-
   describe('check(url, token)', function () {
     it('should be a function', function () {
       expect(TokenChecker.check).to.be.a('function');
     });
 
     var myDraft = server.getMetadata('navigation-timing-2');
-    var token = "98345098A98F345F";
+    var token = '98345098A98F345F';
     var check = TokenChecker.check(myDraft.latestVersion, token);
 
     it('should return a promise', function () {
@@ -436,19 +471,18 @@ describe('TokenChecker', function () {
     });
 
     it('should promise an object with a token property', function () {
-      return expect(check).to.eventually.have.property("token")
+      return expect(check).to.eventually.have.property('token')
         .that.is.equals(token);
     });
 
     it('should promise an object with a source property', function () {
-      return expect(check).to.eventually.have.property("source");
+      return expect(check).to.eventually.have.property('source');
     });
 
     it('should promise an object with an authorized property', function () {
-      return expect(check).to.eventually.have.property("authorized")
+      return expect(check).to.eventually.have.property('authorized')
         .that.is.equals(true);
     });
-
   });
 });
 
@@ -466,23 +500,31 @@ describe('Publisher', function () {
       return expect(promise).to.eventually.be.an.instanceOf(List);
     });
 
-    it('should return no errors when the publication is successful', function () {
+    it('should return no errors if publication is successful', function () {
       return expect(promise).to.eventually.have.property('size', 0);
     });
 
     it('should return errors when the publication has failed', function () {
-      var err_promise = new Publisher(new BadRequestService()).publish(metadata);
-      return expect(err_promise).to.eventually.have.property('size', 1);
+      var errPromise = new Publisher(new BadRequestService()).publish(metadata);
+      return expect(errPromise).to.eventually.have.property('size', 1);
     });
 
-    it('should reject if metadata corresponds a feature not yet implemented', function () {
-      var reject_promise = new Publisher(new NotImplementedService()).publish(metadata);
-      return expect(reject_promise).to.eventually.be.rejectedWith(/Not Implemented/);
+    it('should reject if not yet implemented', function () {
+      var rejectPromise = new Publisher(
+        new NotImplementedService()
+      ).publish(metadata);
+
+      return expect(rejectPromise)
+        .to.eventually.be.rejectedWith(/Not Implemented/);
     });
 
     it('should reject if the remote server is having an issue', function () {
-      var reject_promise = new Publisher(new ServerErrorService()).publish(metadata);
-      return expect(reject_promise).to.eventually.be.rejectedWith(/code 500/);
+      var rejectPromise = new Publisher(
+        new ServerErrorService()
+      ).publish(metadata);
+
+      return expect(rejectPromise)
+        .to.eventually.be.rejectedWith(/code 500/);
     });
   });
 });

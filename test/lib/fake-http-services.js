@@ -8,7 +8,7 @@ var Promise = require('promise');
  */
 var CreatedService = function () {}
 
-CreatedService.prototype.post = function(body) {
+CreatedService.prototype.post = function (body) {
   return new Promise.resolve({ response: { statusCode: 201 }, body: {} });
 };
 
@@ -18,10 +18,10 @@ CreatedService.prototype.post = function(body) {
  */
 var NotImplementedService = function () {}
 
-NotImplementedService.prototype.post = function(body) {
+NotImplementedService.prototype.post = function (body) {
   return new Promise.resolve({
     response: { statusCode: 501 },
-    body: { message: "Not Implemented" }
+    body: { message: 'Not Implemented' }
   });
 };
 
@@ -31,7 +31,7 @@ NotImplementedService.prototype.post = function(body) {
  */
 var BadRequestService = function () {}
 
-BadRequestService.prototype.post = function(body) {
+BadRequestService.prototype.post = function (body) {
   return new Promise.resolve({
     response: { statusCode: 400 },
     body: { errors: ['Bad Request'] }
@@ -44,7 +44,7 @@ BadRequestService.prototype.post = function(body) {
  */
 var ServerErrorService = function () {}
 
-ServerErrorService.prototype.post = function(body) {
+ServerErrorService.prototype.post = function (body) {
   return new Promise.resolve({
     response: { statusCode: 500 },
     body: { errors: ['Internal Server Error'] }

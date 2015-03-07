@@ -13,13 +13,13 @@ var Promise = require('promise');
 var Request = require('request');
 var Uuid = require('node-uuid');
 
-var DocumentDownloader = require("./lib/document-downloader");
-var History = require("./lib/history");
-var JsonHttpService = require("./lib/json-http-service");
-var Publisher = require("./lib/publisher");
-var SpecberusWrapper = require("./functions.js").SpecberusWrapper;
+var DocumentDownloader = require('./lib/document-downloader');
+var History = require('./lib/history');
+var JsonHttpService = require('./lib/json-http-service');
+var Publisher = require('./lib/publisher');
+var SpecberusWrapper = require('./functions.js').SpecberusWrapper;
 var ThirdPartyResourcesChecker = require('./lib/third-party-resources-checker');
-var TokenChecker = require("./functions.js").TokenChecker;
+var TokenChecker = require('./functions.js').TokenChecker;
 
 // Configuration file
 require('./config.js');
@@ -43,19 +43,20 @@ app.use(corsHandler);
 if (process.env.NODE_ENV === 'production') {
   app.set('views', __dirname + '/dist/views');
   app.use(express.static(__dirname + '/dist/assets'));
-} else {
+}
+else {
   app.set('views', __dirname + '/views');
   app.use(express.static(__dirname + '/assets'));
 }
 
 // Index Page
-app.get('/', function(request, response, next) {
+app.get('/', function (request, response, next) {
   response.sendFile(__dirname + '/views/index.html');
 });
 
 // API methods
 
-app.get('/api/version', function(req, res) {
+app.get('/api/version', function (req, res) {
   res.send(
     meta.name +
     ' version ' + meta.version +
@@ -65,13 +66,13 @@ app.get('/api/version', function(req, res) {
   );
 });
 
-app.get('/api/status', function(req, res) {
+app.get('/api/status', function (req, res) {
   var result;
   var id = req.query ? req.query.id : null;
   var file = argResultLocation + path.sep + id + '.json';
 
   if (id) {
-    Fs.exists(file, function(exists) {
+    Fs.exists(file, function (exists) {
       if (exists) res.status(200).sendFile(file);
       else if (requests && requests[id]) {
         res.status(200).send(JSON.stringify(requests[id], null, 2) + '\n');
@@ -82,29 +83,35 @@ app.get('/api/status', function(req, res) {
   else res.status(400).send('Missing required parameter “ID”.');
 });
 
-app.post('/api/request', function(req, res) {
+app.post('/api/request', function (req, res) {
   var url = req.body ? req.body.url : null;
   var decision = req.body ? req.body.decision : null;
   var token = req.body ? req.body.token : null;
   var id = Uuid.v4();
 
   if (!url || !decision || !token) {
-    res.status(500).send('Missing required parameters “url”, “decision” and/or “token”.');
+    res.status(500).send(
+      'Missing required parameters “url”, “decision” and/or “token”.'
+    );
   }
   else {
     requests[id] = {
-      'id': id,
-      'url': url,
-      'decision': decision,
-      'jobs': {},
-      'history': new History(),
-      'status': STATUS_STARTED
+      id: id,
+      url: url,
+      decision: decision,
+      jobs: {},
+      history: new History(),
+      status: STATUS_STARTED
     };
 
     orchestrate(requests[id], token).then(function () {
-      console.log('Spec at ' + url + ' (decision: ' + decision + ') has FINISHED.');
+      console.log(
+        'Spec at ' + url + ' (decision: ' + decision + ') has FINISHED.'
+      );
     }, function (err) {
-      console.log('Spec at ' + url + ' (decision: ' + decision + ') has FAILED.');
+      console.log(
+        'Spec at ' + url + ' (decision: ' + decision + ') has FAILED.'
+      );
     });
     res.status(202).send(id);
   }
@@ -119,7 +126,7 @@ app.post('/api/request', function(req, res) {
 
 function corsHandler (req, res, next) {
   if (req && req.headers && req.headers.origin) {
-    if (global.ALLOWED_CLIENTS.some(function(regex) {
+    if (global.ALLOWED_CLIENTS.some(function (regex) {
       return regex.test(req.headers.origin);
     })) {
       res.header('Access-Control-Allow-Origin', req.headers.origin);
@@ -151,7 +158,9 @@ function updateTrShortlink(uri) {
 }
 
 function Job() {
-  if (typeof this !== 'object') throw new TypeError('Jobs must be constructed via new');
+  if (typeof this !== 'object') {
+    throw new TypeError('Jobs must be constructed via new');
+  }
 
   this.status = '';
   this.errors = [];
@@ -180,29 +189,38 @@ function orchestrate(spec, token) {
   var finalTRpath;
 
   spec.jobs['retrieve-resources'].status = 'pending';
-  return DocumentDownloader.fetchAndInstall(spec.url, tempLocation).then(function () {
+  return DocumentDownloader.fetchAndInstall(spec.url, tempLocation)
+  .then(function () {
     spec.jobs['retrieve-resources'].status = 'ok';
     spec.history = spec.history.add('The file has been retrieved.');
 
     spec.jobs['specberus'].status = 'pending';
     return SpecberusWrapper.validate(httpLocation).then(function (report) {
-      if(report.errors.size === 0) {
+      if (report.errors.size === 0) {
         spec.jobs['specberus'].status = 'ok';
         spec.history = spec.history.add('The document passed specberus.');
         spec.jobs['token-checker'].status = 'pending';
         var shortlink = report.metadata.get('latestVersion');
-        return TokenChecker.check(shortlink, token).then(function(authReport) {
-          var matchSource = spec.url.substring(0, authReport.source.length) === authReport.source;
-          if(authReport.authorized && matchSource) {
+        return TokenChecker.check(shortlink, token).then(function (authReport) {
+          var matchSource = spec.url.substring(
+            0,
+            authReport.source.length
+          ) === authReport.source;
+          if (authReport.authorized && matchSource) {
             spec.jobs['token-checker'].status = 'ok';
             spec.history = spec.history.add('You are authorized to publish');
 
             spec.jobs['third-party-checker'].status = 'pending';
-            return ThirdPartyResourcesChecker.check(httpLocation, global.RESOURCES_WHITELIST)
+            return ThirdPartyResourcesChecker.check(
+              httpLocation,
+              global.RESOURCES_WHITELIST
+            )
             .then(function (extResources) {
               if (extResources.isEmpty()) {
                 spec.jobs['third-party-checker'].status = 'ok';
-                spec.history = spec.history.add('The document passed the third party checker.');
+                spec.history = spec.history.add(
+                  'The document passed the third party checker.'
+                );
 
                 spec.jobs['publish'].status = 'pending';
 
@@ -211,19 +229,28 @@ function orchestrate(spec, token) {
                   global.USERNAME,
                   global.PASSWORD
                 );
-                return new Publisher(pubsystemService).publish(report.metadata).then(function (errors) {
+                return new Publisher(pubsystemService).publish(report.metadata)
+                  .then(function (errors) {
                   if (errors.size === 0) {
                     spec.jobs['publish'].status = 'ok';
                     spec.jobs['tr-install'].status = 'pending';
-                    finalTRpath = report.metadata.get('thisVersion').replace(W3C_PREFIX, '');
-                    return trInstaller(tempLocation, finalTRpath).then(function () {
+                    finalTRpath = report.metadata.get('thisVersion')
+                      .replace(W3C_PREFIX, '');
+                    return trInstaller(tempLocation, finalTRpath)
+                    .then(function () {
                       spec.jobs['tr-install'].status = 'ok';
 
                       spec.jobs['update-tr-shortlink'].status = 'pending';
-                      return updateTrShortlink(report.metadata.get('thisVersion')).then(function () {
+                      return updateTrShortlink(
+                        report.metadata.get('thisVersion')
+                      )
+                      .then(function () {
                         spec.jobs['update-tr-shortlink'].status = 'ok';
 
-                        var cmd = global.SENDMAIL + ' SUCCESS ' + global.MAILING_LIST + ' ' + report.metadata.get('thisVersion');
+                        var cmd =
+                          global.SENDMAIL + ' SUCCESS ' + global.MAILING_LIST +
+                          ' ' + report.metadata.get('thisVersion');
+
                         exec(cmd, function (err, stdout, stderr) {
                           if (err) console.error(stderr);
                         });
@@ -234,10 +261,12 @@ function orchestrate(spec, token) {
                         );
                         spec.status = STATUS_SUCCESS;
                         dumpJobResult(resultLocation, spec);
-                        return Promise.resolve("finished");
+                        return Promise.resolve('finished');
                       }, function (err) {
                         spec.jobs['update-tr-shortlink'].status = 'error';
-                        spec.jobs['update-tr-shortlink'].errors.push(err.toString());
+                        spec.jobs['update-tr-shortlink'].errors.push(
+                          err.toString()
+                        );
                         return Promise.reject(err);
                       });
                     }, function (err) {
@@ -255,7 +284,9 @@ function orchestrate(spec, token) {
                         return error.message;
                       })
                     );
-                    return Promise.reject(new Error("Failed the publication system"));
+                    return Promise.reject(new Error(
+                      'Failed the publication system'
+                    ));
                   }
                 }, function (err) {
                   spec.jobs['publish'].status = 'error';
@@ -272,7 +303,7 @@ function orchestrate(spec, token) {
                 );
                 spec.jobs['third-party-checker'].status = 'failure';
                 spec.jobs['third-party-checker'].errors = extResources;
-                return Promise.reject(new Error("Failed Third-Party checker"));
+                return Promise.reject(new Error('Failed Third-Party checker'));
               }
             }, function (err) {
               spec.jobs['third-party-checker'].status = 'error';
@@ -283,8 +314,10 @@ function orchestrate(spec, token) {
           else {
             spec.jobs['token-checker'].status = 'failure';
             spec.jobs['token-checker'].errors.push('Not authorized');
-            spec.history = spec.history.add('You are not authorized to publish');
-            return Promise.reject(new Error("Failed Token checker"));
+            spec.history = spec.history.add(
+              'You are not authorized to publish'
+            );
+            return Promise.reject(new Error('Failed Token checker'));
           }
         }, function (err) {
           spec.jobs['token-checker'].status = 'error';
@@ -296,7 +329,7 @@ function orchestrate(spec, token) {
         spec.jobs['specberus'].status = 'failure';
         spec.jobs['specberus'].errors = report.errors;
         spec.history = spec.history.add('The document failed specberus.');
-        return Promise.reject(new Error("Failed Specberus"));
+        return Promise.reject(new Error('Failed Specberus'));
       }
     }, function (err) {
       spec.jobs['specberus'].status = 'error';
@@ -309,9 +342,15 @@ function orchestrate(spec, token) {
     spec.jobs['retrieve-resources'].errors.push(err.toString());
     return Promise.reject(err);
   }).catch(function (err) {
-    spec.history = spec.history.add('A system error occurred during the process.');
+    spec.history = spec.history.add(
+      'A system error occurred during the process.'
+    );
     spec.status = STATUS_ERROR;
-    var cmd = global.SENDMAIL + ' ERROR ' + global.MAILING_LIST + ' ' + spec.url + ' \'' + JSON.stringify(spec, null, 2) + '\'';
+
+    var cmd =
+      global.SENDMAIL + ' ERROR ' + global.MAILING_LIST + ' ' + spec.url
+      + ' \'' + JSON.stringify(spec, null, 2) + '\'';
+
     exec(cmd, function (err, stdout, stderr) {
       if (err) console.error(stderr);
     });
@@ -320,7 +359,7 @@ function orchestrate(spec, token) {
   });
 }
 
-app.listen(process.env.PORT || port).on('error', function(err) {
+app.listen(process.env.PORT || port).on('error', function (err) {
   if (err) {
     console.error('Error while trying to launch the server: “' + err + '”.');
   }

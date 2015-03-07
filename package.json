@@ -75,6 +75,7 @@
     "grunt-rev": "0.1.x",
     "grunt-svgmin": "2.x.x",
     "grunt-usemin": "3.x.x",
+    "jscs": "1.x.x",
     "load-grunt-tasks": "3.x.x",
     "mocha": "2.x.x",
     "morgan": "1.x.x",
@@ -82,7 +83,6 @@
   },
   "scripts": {
     "start": "node app.js",
-    "test": "mocha",
     "testserver": "node test/lib/testserver"
   },
   "engines": {

@@ -4,9 +4,9 @@ var fs = require('fs');
 
 var utils = function () {};
 
-var draftsSystemPath = __dirname + "/../drafts";
+var draftsSystemPath = __dirname + '/../drafts';
 
-// v8 doesn't support String.endsWith
+// V8 doesn't support String.endsWith
 function endsWith(subjectString, searchString) {
   var s = subjectString.toString();
   var position = s.length - searchString.length;
@@ -14,57 +14,58 @@ function endsWith(subjectString, searchString) {
   return lastIndex !== -1 && lastIndex === position;
 }
 
-// returns date as "YYYYMMDD"
-function fullDate(dateObj) {
-  function pn(n) {
-    return (n<10)?"0"+n:""+n;
+// Returns date as 'YYYYMMDD'
+function fullDate (dateObj) {
+  function pn (n) {
+    return (n < 10 ? '0' : '') + String(n);
   }
-  return dateObj.getFullYear() + "" +
-    pn(dateObj.getMonth()+1) + "" + pn(dateObj.getDate());
+
+  return String(dateObj.getFullYear()) +
+    pn(dateObj.getMonth() + 1) + pn(dateObj.getDate());
 }
 
 var months = [
-  'January','February','March','April','May','June','July',
-  'August','September','October','November','December'
+  'January', 'February', 'March', 'April', 'May', 'June', 'July',
+  'August', 'September', 'October', 'November', 'December'
 ];
 
 var today = (function () {
-  // we strip off the time
+  // We strip off the time
   var t = new Date();
   return new Date(t.getFullYear(), t.getMonth(), t.getDate());
 })();
 
 var tomorrow = new Date(today.getTime() + 24 * 60 * 60 * 1000);
 
-// the global substitutions
+// The global substitutions
 var subtitutions = {
-  "DATE": fullDate(today),
-  "DATE+1": fullDate(tomorrow),
-  "YYYY": today.getFullYear(),
-  "YYYY+1": today.getFullYear()+1,
-  "mm": today.getMonth() + 1,
-  "MM": months[today.getMonth()],
-  "DD+1": tomorrow.getDate(),
-  "DD": today.getDate()
+  'DATE': fullDate(today),
+  'DATE+1': fullDate(tomorrow),
+  'YYYY': today.getFullYear(),
+  'YYYY+1': today.getFullYear() + 1,
+  'mm': today.getMonth() + 1,
+  'MM': months[today.getMonth()],
+  'DD+1': tomorrow.getDate(),
+  'DD': today.getDate()
 };
 
-// storage for metadata associated with the drafts
+// Storage for metadata associated with the drafts
 var metadata = {};
 
-// decorate the loaded metadata even more
-// return void
+// Decorate the loaded metadata even more
+// Return void
 function augmentMetadata(name) {
   var data = metadata[name];
 
   if (data.docData === undefined) data.docDate = today;
 
   if (data.thisVersion === undefined) {
-    data.thisVersion = "http://www.w3.org/TR/" + subtitutions.YYYY + "/" +
-    data.status + "-" + data.shortname + "-" + subtitutions.DATE + "/";
+    data.thisVersion = 'http://www.w3.org/TR/' + subtitutions.YYYY + '/' +
+    data.status + '-' + data.shortname + '-' + subtitutions.DATE + '/';
   }
 
   if (data.latestVersion === undefined) {
-    data.latestVersion = "http://www.w3.org/TR/" + data.shortname + "/";
+    data.latestVersion = 'http://www.w3.org/TR/' + data.shortname + '/';
   }
 
   if (data.deliverers === undefined) {
@@ -72,14 +73,14 @@ function augmentMetadata(name) {
   }
 }
 
-// look for /meta.json based on filepath
+// Look for /meta.json based on filepath
 // and store if any using name found in filepath (subdirectory name)
-// return the loaded metadata
+// Return the loaded metadata
 function getMetadata(name) {
   if (metadata[name] === undefined) {
     try {
       metadata[name] = JSON.parse(fs.readFileSync(
-        draftsSystemPath + "/" + name + "/meta.json", {options: "utf-8"}
+        draftsSystemPath + '/' + name + '/meta.json', {options: 'utf-8'}
       ));
       augmentMetadata(name);
     }
