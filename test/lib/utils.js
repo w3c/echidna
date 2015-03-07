@@ -15,8 +15,8 @@ function endsWith(subjectString, searchString) {
 }
 
 // Returns date as 'YYYYMMDD'
-function fullDate (dateObj) {
-  function pn (n) {
+function fullDate(dateObj) {
+  function pn(n) {
     return (n < 10 ? '0' : '') + String(n);
   }
 

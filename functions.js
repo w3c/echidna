@@ -11,7 +11,7 @@ var SpecberusWrapper = function () {};
 
 SpecberusWrapper.validate = function (url) {
   return new Promise(function (resolve, reject) {
-    function Sink () {}
+    function Sink() {}
 
     require('util').inherits(Sink, require('events').EventEmitter);
 

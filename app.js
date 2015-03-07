@@ -124,7 +124,7 @@ app.post('/api/request', function (req, res) {
 * Most importantly, this is necessary to attend publication requests from third parties, eg GitHub.
 */
 
-function corsHandler (req, res, next) {
+function corsHandler(req, res, next) {
   if (req && req.headers && req.headers.origin) {
     if (global.ALLOWED_CLIENTS.some(function (regex) {
       return regex.test(req.headers.origin);
