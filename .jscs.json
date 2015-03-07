@@ -36,6 +36,9 @@
   "requireKeywordsOnNewLine": ["else"],
   "requireLineBreakAfterVariableAssignment": true,
   "requireLineFeedAtFileEnd": true,
+  "requireOperatorBeforeLineBreak": [
+    "?", "=", "+", "-", "/", "*", "==", "===", "!=", "!==", ">", ">=", "<", "<="
+  ],
   "requireParenthesesAroundIIFE": true,
   "requireSpaceAfterBinaryOperators": [
     "=", ",", "+", "-", "/", "*", "==", "===", "!=", "!=="

@@ -348,8 +348,8 @@ function orchestrate(spec, token) {
     spec.status = STATUS_ERROR;
 
     var cmd =
-      global.SENDMAIL + ' ERROR ' + global.MAILING_LIST + ' ' + spec.url
-      + ' \'' + JSON.stringify(spec, null, 2) + '\'';
+      global.SENDMAIL + ' ERROR ' + global.MAILING_LIST + ' ' + spec.url +
+      ' \'' + JSON.stringify(spec, null, 2) + '\'';
 
     exec(cmd, function (err, stdout, stderr) {
       if (err) console.error(stderr);
