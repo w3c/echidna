@@ -82,7 +82,9 @@
     "time-grunt": "1.x.x"
   },
   "scripts": {
+    "check-style": "jscs .",
     "start": "node app.js",
+    "test": "npm run check-style && mocha",
     "testserver": "node test/lib/testserver"
   },
   "engines": {
