@@ -75,6 +75,7 @@
     "grunt-rev": "0.1.x",
     "grunt-svgmin": "2.x.x",
     "grunt-usemin": "3.x.x",
+    "istanbul": "0.3.x",
     "jscs": "1.x.x",
     "jshint": "2.x.x",
     "load-grunt-tasks": "3.x.x",
@@ -84,6 +85,7 @@
   },
   "scripts": {
     "check-style": "jscs .",
+    "coverage": "istanbul cover _mocha",
     "lint": "jshint .",
     "start": "node app.js",
     "test": "npm run check-style && npm run lint && mocha",
