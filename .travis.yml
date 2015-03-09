@@ -4,6 +4,8 @@ node_js:
   - "0.10"
 before_script:
   - cp config.js.example config.js
+after_script:
+  - npm run coveralls
 notifications:
   email: false
   irc:

@@ -57,6 +57,7 @@
   "devDependencies": {
     "chai": "2.x.x",
     "chai-as-promised": "4.x.x",
+    "coveralls": "2.x.x",
     "grunt": "0.4.x",
     "grunt-concurrent": "1.x.x",
     "grunt-contrib-clean": "0.6.x",
@@ -86,6 +87,7 @@
   "scripts": {
     "check-style": "jscs .",
     "coverage": "istanbul cover _mocha",
+    "coveralls": "npm run coverage && cat ./coverage/lcov.info | coveralls",
     "lint": "jshint .",
     "start": "node app.js",
     "test": "npm run check-style && npm run lint && mocha",
