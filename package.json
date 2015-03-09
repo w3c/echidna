@@ -75,14 +75,18 @@
     "grunt-rev": "0.1.x",
     "grunt-svgmin": "2.x.x",
     "grunt-usemin": "3.x.x",
+    "jscs": "1.x.x",
+    "jshint": "2.x.x",
     "load-grunt-tasks": "3.x.x",
     "mocha": "2.x.x",
     "morgan": "1.x.x",
     "time-grunt": "1.x.x"
   },
   "scripts": {
+    "check-style": "jscs .",
+    "lint": "jshint .",
     "start": "node app.js",
-    "test": "mocha",
+    "test": "npm run check-style && npm run lint && mocha",
     "testserver": "node test/lib/testserver"
   },
   "engines": {

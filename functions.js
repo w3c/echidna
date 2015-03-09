@@ -4,53 +4,52 @@ var Request = require('request');
 var Promise = require('promise');
 var List = require('immutable').List;
 var Map = require('immutable').Map;
-var Specberus = require("specberus/lib/validator").Specberus;
+var Specberus = require('specberus/lib/validator').Specberus;
 require('./config.js');
 
 var SpecberusWrapper = function () {};
 
 SpecberusWrapper.validate = function (url) {
   return new Promise(function (resolve, reject) {
-    function Sink () {}
+    function Sink() {}
 
-    require("util").inherits(Sink, require("events").EventEmitter);
+    require('util').inherits(Sink, require('events').EventEmitter);
 
     var sink = new Sink();
-    var errors = List();
-    var metadata = Map();
+    var errors = new List();
+    var metadata = new Map();
 
-    sink.on("end-all", function (profilename) {
-      resolve({errors: errors, metadata: metadata});
+    sink.on('end-all', function () {
+      resolve({ errors: errors, metadata: metadata });
     });
 
-    sink.on("metadata", function (key, value) {
+    sink.on('metadata', function (key, value) {
       metadata = metadata.set(key, value);
     });
 
-    sink.on("err", function (type, data) {
+    sink.on('err', function (type, data) {
       data.type = type;
       errors = errors.push(data);
     });
 
-    sink.on("exception", function (exception) {
+    sink.on('exception', function (exception) {
       reject(new Error(exception.message));
     });
 
     var options = {
       url: url,
-      profile: require("specberus/lib/profiles/WD"),
+      profile: require('specberus/lib/profiles/WD'),
       events: sink,
-      // validation: "recursive",
-      validation: "simple-validation",
+      validation: 'simple-validation',
       noRecTrack: false,
       informativeOnly: false,
-      processDocument: "2014"
+      processDocument: '2014'
     };
 
-    if (process.env.NODE_ENV == "dev") {
-      var port = (process.env.PORT || 3000) + 1;
-      options.cssValidator = "http://localhost:" + port + "/css-validator/validator";
-      options.htmlValidator = "http://localhost:" + port + "/check";
+    if (process.env.NODE_ENV === 'dev') {
+      var host = 'http://localhost:' + ((process.env.PORT || 3000) + 1);
+      options.cssValidator = host + '/css-validator/validator';
+      options.htmlValidator = host + '/check';
     }
 
     new Specberus().validate(options);
@@ -65,13 +64,16 @@ TokenChecker.check = function (url, token) {
   return new Promise(function (resolve, reject) {
     Request.get({
       uri: global.TOKEN_ENDPOINT,
-      auth: {user: global.USERNAME, pass: global.PASSWORD},
-      qs: {spec: url, token: token}
+      auth: { user: global.USERNAME, pass: global.PASSWORD },
+      qs: { spec: url, token: token }
     }, function (err, res, body) {
-      if (err) reject(new Error("There was an error while checking the token: ", err));
+      if (err) reject(new Error(
+        'There was an error while checking the token: ',
+        err
+      ));
       else resolve(JSON.parse(body));
     });
   });
-}
+};
 
 exports.TokenChecker = TokenChecker;

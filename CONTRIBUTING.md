@@ -53,7 +53,7 @@ Before adding a new feature or submitting a bugfix, please refer to the [existin
 
 To make sure we are on the same page, you should refer to our [coding style guide](https://github.com/w3c/echidna/wiki/Coding-style-guide) and [coding practices guide](https://github.com/w3c/echidna/wiki/Coding-practices-guide) before coding.
 
-Finally, we value testing a lot. Before committing anything, make sure the test suite still passes by running `npm test` to make sure there is no regression. If you submit a bugfix, try to write tests to reproduce this bug to ensure the same bug will not come up again in the future. And if you submit a new feature, provide tests to ensure the correct behavior of the nominal and edge cases.
+Finally, we value testing a lot. Before committing anything, make sure the style is respected and the test suite passes by running `npm test`. If you submit a bugfix, try to write tests to reproduce this bug to ensure the same bug will not come up again in the future. And if you submit a new feature, provide tests to ensure the correct behavior of the nominal and edge cases.
 
 A couple of things you should consider before committing and [opening a pull request](https://github.com/w3c/echidna/pulls):
 
