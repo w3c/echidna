@@ -1,4 +1,5 @@
 [![Build Status](https://travis-ci.org/w3c/echidna.svg?branch=master)](https://travis-ci.org/w3c/echidna)
+[![Coverage Status](https://coveralls.io/repos/w3c/echidna/badge.svg)](https://coveralls.io/r/w3c/echidna)
 [![Dependency Status](https://david-dm.org/w3c/echidna.svg)](https://david-dm.org/w3c/echidna)
 [![devDependency Status](https://david-dm.org/w3c/echidna/dev-status.svg)](https://david-dm.org/w3c/echidna#info=devDependencies)
 
