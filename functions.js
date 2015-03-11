@@ -38,7 +38,7 @@ SpecberusWrapper.validate = function (url) {
 
     var options = {
       url: url,
-      profile: require('specberus/lib/profiles/WD'),
+      profile: require('specberus/lib/profiles/WD-Echidna'),
       events: sink,
       validation: 'simple-validation',
       noRecTrack: false,
