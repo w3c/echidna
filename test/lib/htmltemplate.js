@@ -2,7 +2,7 @@
 
 var fs = require('fs');
 var url = require('url');
-var subtitutions = require('./utils').subtitutions;
+var substitutions = require('./utils').substitutions;
 var getMetadata = require('./utils').getMetadata;
 var endsWith = require('./utils').endsWith;
 
@@ -27,8 +27,8 @@ function htmlTemplate(serverPath, fileSystemPath) {
       var name = str.substring(start + 2, end).trim();
       var replacement = '';
 
-      if (subtitutions[name] !== undefined) {
-        replacement += subtitutions[name];
+      if (substitutions[name] !== undefined) {
+        replacement += substitutions[name];
       }
       else if (metadata[name] !== undefined) {
         replacement += metadata[name];
