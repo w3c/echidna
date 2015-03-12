@@ -36,7 +36,7 @@ var today = (function () {
 var tomorrow = new Date(today.getTime() + 24 * 60 * 60 * 1000);
 
 // The global substitutions
-var subtitutions = {
+var substitutions = {
   'DATE': fullDate(today),
   'DATE+1': fullDate(tomorrow),
   'YYYY': today.getFullYear(),
@@ -58,8 +58,8 @@ function augmentMetadata(name) {
   if (data.docData === undefined) data.docDate = today;
 
   if (data.thisVersion === undefined) {
-    data.thisVersion = 'http://www.w3.org/TR/' + subtitutions.YYYY + '/' +
-    data.status + '-' + data.shortname + '-' + subtitutions.DATE + '/';
+    data.thisVersion = 'http://www.w3.org/TR/' + substitutions.YYYY + '/' +
+    data.status + '-' + data.shortname + '-' + substitutions.DATE + '/';
   }
 
   if (data.latestVersion === undefined) {
@@ -91,5 +91,5 @@ function getMetadata(name) {
 
 module.exports.draftsSystemPath = draftsSystemPath;
 module.exports.endsWith = endsWith;
-module.exports.subtitutions = subtitutions;
+module.exports.substitutions = substitutions;
 module.exports.getMetadata = getMetadata;
