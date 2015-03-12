@@ -12,7 +12,7 @@ if [ $# -lt 3 ]; then
 fi
 
 if [ "SUCCESS" == "$STATUS" ]; then
-    SUBJECT="[W3C Publication] $URI had been published on http://www.w3.org/TR/"
+    SUBJECT="[W3C Publication] $URI has been published on http://www.w3.org/TR/"
     BODY="On `date -u`, $URI has been published by the W3C automated publication system.
 
 If you believe there's an error, please contact webreq@w3.org."
