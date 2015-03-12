@@ -38,6 +38,7 @@ var argResultLocation = process.argv[5] || global.DEFAULT_RESULT_LOCATION;
 app.use(compression());
 app.use(bodyParser.urlencoded({ extended: false }));
 app.use(corsHandler);
+app.use(express.static('views'));
 
 if (process.env.NODE_ENV === 'production') {
   app.set('views', __dirname + '/dist/views');
