@@ -56,6 +56,8 @@ SpecberusWrapper.validate = function (url) {
   });
 };
 
+SpecberusWrapper.version = new Specberus().version;
+
 exports.SpecberusWrapper = SpecberusWrapper;
 
 var TokenChecker = function () {};

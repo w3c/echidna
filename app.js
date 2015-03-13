@@ -57,13 +57,11 @@ app.get('/', function (request, response) {
 // API methods
 
 app.get('/api/version', function (req, res) {
-  res.send(
-    meta.name +
-    ' version ' + meta.version +
-    ' running on ' + process.platform +
-    ' and listening on port ' + port +
-    '. The server time is ' + new Date().toLocaleTimeString() + '.'
-  );
+  res.send(meta.version);
+});
+
+app.get('/api/version-specberus', function (req, res) {
+  res.send(SpecberusWrapper.version);
 });
 
 app.get('/api/status', function (req, res) {
