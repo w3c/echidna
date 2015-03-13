@@ -65,8 +65,8 @@ function activateActions() {
 
 function retrieveStatus(id) {
   $.get(endpoint() + '/status/?id=' + allIDs[id], function (data) {
+    logMessage('Retrieved status of job "' + id + '".');
     dumpObject(data);
-    logMessage(data);
   });
 }
 
@@ -123,7 +123,8 @@ function publishOneSpec(id) {
   var spec = findSpec(id);
   var params = {};
 
-  logMessage('Sumitting spec &ldquo;' + id + '&rdquo; for publication&hellip;');
+  logMessage('Submitting spec &ldquo;' + id +
+    '&rdquo; for publication&hellip;');
   params.url = location.href + 'drafts/' + spec.id;
   params.decision = 'foo';
   params.token = '34';
@@ -142,7 +143,7 @@ function publishAllSpecs(delay) {
   }
   else {
     logMessage(
-      'Sumitting all ' + allSpecs.length + ' specs for publication&hellip;'
+      'Submitting all ' + allSpecs.length + ' specs for publication&hellip;'
     );
 
     for (var i in allSpecs) {
