@@ -17,12 +17,37 @@
     <style type="text/css">
 
       body {
-        margin:                2rem 4rem 2rem 0;
-        padding:               0 0 0 256px;
-        background-image:      url('w3c-labs-logo.svg');
+        margin:                53px 4rem 2rem 212px;
+        padding:               1rem 0 0 2rem;
+      }
+
+      div#gutter-top {
+        position:              fixed;
+        left:                  0;
+        right:                 0;
+        top:                   0;
+        height:                53px;
+        background-color:      #2975ac;
+        background-image:      url('images/logo-w3c-mobile-lg.png');
         background-repeat:     no-repeat;
-        background-size:       192px;
+        background-size:       90px;
+        background-position-x: 0;
         background-position-y: 0;
+      }
+
+      div#gutter-left {
+        position:              fixed;
+        left:                  0;
+        top:                   53px;
+        width:                 212px;
+        height:                212px;
+        opacity:               0;
+        background-image:      url('images/w3c-labs-logo.svg');
+        background-repeat:     no-repeat;
+        background-size:       212px;
+        background-position-x: 0;
+        background-position-y: 0;
+        transition:            all 1s ease-in-out;
       }
 
       article {
@@ -66,6 +91,10 @@
   </head>
 
   <body>
+
+    <div id="gutter-left"></div>
+
+    <div id="gutter-top"></div>
 
     <header>
       <h1><abbr title="World Wide Web Consortium">W3C</abbr>'s Echidna</h1>
@@ -131,6 +160,13 @@
           $('h3#header-specberus').html($('h3#header-specberus').text() +
             ' <a href="https://github.com/w3c/specberus/releases/tag/v' + data + '">' + data + '</a>');
         });
+
+        window.setTimeout(function() {
+          $('div#gutter-left')
+            .css('top', '106px')
+            .css('opacity', 1);
+          }, 500
+        );
 
       });
 
