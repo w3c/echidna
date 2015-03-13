@@ -56,6 +56,8 @@ Alternatively, you can use the configuration file `config.js`.
 
 Once the server is started, you can throw publication requests at it through a `curl`/`POST` request to its enpoint, <http://localhost:3000/api>, or using the web-based testbed (described below).
 
+You can also use a simple web client to send and monitor those requests, at <http://localhost:3000/ui>.
+
 ### Testing Echidna
 
 This section describes how to run Echidna's test suite to make sure that the project itself is working properly over time. Note that the test suite is not intended to test actual documents.
