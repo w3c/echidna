@@ -48,6 +48,10 @@ form.right {
     float:            right;
 }
 
+form.hidden {
+    display:          none;
+}
+
 form.left > * {
     padding:          0 1rem 0 0;
     display:          inline;
