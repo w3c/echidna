@@ -1,0 +1,1602 @@
+<!DOCTYPE html>
+<!-- saved from url=(0133)https://labs.w3.org/spec-generator/?type=respec&url=http://w3c.github.io/navigation-timing/?specStatus=WD;shortName=navigation-timing -->
+<html lang="en" typeof="bibo:Document w3p:WD" prefix="bibo: http://purl.org/ontology/bibo/ w3p: http://www.w3.org/2001/02pd/rec54#"><head><meta http-equiv="Content-Type" content="text/html; charset=UTF-8"><meta lang="" property="dc:language" content="en">
+  <meta charset="utf-8">
+  <title>Navigation Timing 2</title>
+  
+  
+<style>/*****************************************************************
+ * ReSpec 3 CSS
+ * Robin Berjon - http://berjon.com/
+ *****************************************************************/
+
+/* --- INLINES --- */
+em.rfc2119 { 
+    text-transform:     lowercase;
+    font-variant:       small-caps;
+    font-style:         normal;
+    color:              #900;
+}
+
+h1 acronym, h2 acronym, h3 acronym, h4 acronym, h5 acronym, h6 acronym, a acronym,
+h1 abbr, h2 abbr, h3 abbr, h4 abbr, h5 abbr, h6 abbr, a abbr {
+    border: none;
+}
+
+dfn {
+    font-weight:    bold;
+}
+
+a.internalDFN {
+    color:  inherit;
+    border-bottom:  1px solid #99c;
+    text-decoration:    none;
+}
+
+a.externalDFN {
+    color:  inherit;
+    border-bottom:  1px dotted #ccc;
+    text-decoration:    none;
+}
+
+a.bibref {
+    text-decoration:    none;
+}
+
+cite .bibref {
+    font-style: normal;
+}
+
+code {
+    color:  #C83500;
+}
+
+/* --- TOC --- */
+.toc a, .tof a {
+    text-decoration:    none;
+}
+
+a .secno, a .figno {
+    color:  #000;
+}
+
+ul.tof, ol.tof {
+    list-style: none outside none;
+}
+
+.caption {
+    margin-top: 0.5em;
+    font-style:   italic;
+}
+
+/* --- TABLE --- */
+table.simple {
+    border-spacing: 0;
+    border-collapse:    collapse;
+    border-bottom:  3px solid #005a9c;
+}
+
+.simple th {
+    background: #005a9c;
+    color:  #fff;
+    padding:    3px 5px;
+    text-align: left;
+}
+
+.simple th[scope="row"] {
+    background: inherit;
+    color:  inherit;
+    border-top: 1px solid #ddd;
+}
+
+.simple td {
+    padding:    3px 10px;
+    border-top: 1px solid #ddd;
+}
+
+.simple tr:nth-child(even) {
+    background: #f0f6ff;
+}
+
+/* --- DL --- */
+.section dd > p:first-child {
+    margin-top: 0;
+}
+
+.section dd > p:last-child {
+    margin-bottom: 0;
+}
+
+.section dd {
+    margin-bottom:  1em;
+}
+
+.section dl.attrs dd, .section dl.eldef dd {
+    margin-bottom:  0;
+}
+
+@media print {
+    .removeOnSave {
+        display: none;
+    }
+}
+</style><style>/* --- EXAMPLES --- */
+div.example-title {
+    min-width: 7.5em;
+    color: #b9ab2d;
+}
+div.example-title span {
+    text-transform: uppercase;   
+}
+aside.example, div.example, div.illegal-example {
+    padding: 0.5em;
+    margin: 1em 0;
+    position: relative;
+    clear: both;
+}
+div.illegal-example { color: red }
+div.illegal-example p { color: black }
+aside.example, div.example {
+    padding: .5em;
+    border-left-width: .5em;
+    border-left-style: solid;
+    border-color: #e0cb52;
+    background: #fcfaee;    
+}
+
+aside.example div.example {
+    border-left-width: .1em;
+    border-color: #999;
+    background: #fff;
+}
+aside.example div.example div.example-title {
+    color: #999;
+}
+</style><style>/* --- ISSUES/NOTES --- */
+div.issue-title, div.note-title , div.warning-title {
+    padding-right:  1em;
+    min-width: 7.5em;
+    color: #b9ab2d;
+}
+div.issue-title { color: #e05252; }
+div.note-title { color: #2b2; }
+div.warning-title { color: #f22; }
+div.issue-title span, div.note-title span, div.warning-title span {
+    text-transform: uppercase;
+}
+div.note, div.issue, div.warning {
+    margin-top: 1em;
+    margin-bottom: 1em;
+}
+.note > p:first-child, .issue > p:first-child, .warning > p:first-child { margin-top: 0 }
+.issue, .note, .warning {
+    padding: .5em;
+    border-left-width: .5em;
+    border-left-style: solid;
+}
+div.issue, div.note , div.warning {
+    padding: 1em 1.2em 0.5em;
+    margin: 1em 0;
+    position: relative;
+    clear: both;
+}
+span.note, span.issue, span.warning { padding: .1em .5em .15em; }
+
+.issue {
+    border-color: #e05252;
+    background: #fbe9e9;
+}
+.note {
+    border-color: #52e052;
+    background: #e9fbe9;
+}
+
+.warning {
+    border-color: #f11;
+    border-right-width: .2em;
+    border-top-width: .2em;
+    border-bottom-width: .2em;
+    border-style: solid;
+    background: #fbe9e9;
+}
+
+.warning-title:before{
+    content: "⚠"; /*U+26A0 WARNING SIGN*/
+    font-size: 3em;
+    float: left;
+    height: 100%;
+    padding-right: .3em;
+    vertical-align: top;
+    margin-top: -0.5em;
+}
+</style><style>/* HIGHLIGHTS */
+code.prettyprint {
+    color:  inherit;
+}
+
+/* this from google-code-prettify */
+.pln{color:#000}@media screen{.str{color:#080}.kwd{color:#008}.com{color:#800}.typ{color:#606}.lit{color:#066}.pun,.opn,.clo{color:#660}.tag{color:#008}.atn{color:#606}.atv{color:#080}.dec,.var{color:#606}.fun{color:red}}@media print,projection{.str{color:#060}.kwd{color:#006;font-weight:bold}.com{color:#600;font-style:italic}.typ{color:#404;font-weight:bold}.lit{color:#044}.pun,.opn,.clo{color:#440}.tag{color:#006;font-weight:bold}.atn{color:#404}.atv{color:#060}}ol.linenums{margin-top:0;margin-bottom:0}li.L0,li.L1,li.L2,li.L3,li.L5,li.L6,li.L7,li.L8{list-style-type:none}li.L1,li.L3,li.L5,li.L7,li.L9{background:#eee}
+</style><style>/* --- WEB IDL --- */
+pre.idl {
+    border-top: 1px solid #90b8de;
+    border-bottom: 1px solid #90b8de;
+    padding:    1em;
+    line-height:    120%;
+}
+
+pre.idl::before {
+    content:    "WebIDL";
+    display:    block;
+    width:      150px;
+    background: #90b8de;
+    color:  #fff;
+    font-family:    initial;
+    padding:    3px;
+    font-weight:    bold;
+    margin: -1em 0 1em -1em;
+}
+
+.idlType {
+    color:  #ff4500;
+    font-weight:    bold;
+    text-decoration:    none;
+}
+
+/*.idlModule*/
+/*.idlModuleID*/
+/*.idlInterface*/
+.idlInterfaceID, .idlDictionaryID, .idlCallbackID, .idlEnumID {
+    font-weight:    bold;
+    color:  #005a9c;
+}
+a.idlEnumItem {
+    color:  #000;
+    border-bottom:  1px dotted #ccc;
+    text-decoration: none;
+}
+
+.idlSuperclass {
+    font-style: italic;
+    color:  #005a9c;
+}
+
+/*.idlAttribute*/
+.idlAttrType, .idlFieldType, .idlMemberType {
+    color:  #005a9c;
+}
+.idlAttrName, .idlFieldName, .idlMemberName {
+    color:  #ff4500;
+}
+.idlAttrName a, .idlFieldName a, .idlMemberName a {
+    color:  #ff4500;
+    border-bottom:  1px dotted #ff4500;
+    text-decoration: none;
+}
+
+/*.idlMethod*/
+.idlMethType, .idlCallbackType {
+    color:  #005a9c;
+}
+.idlMethName {
+    color:  #ff4500;
+}
+.idlMethName a {
+    color:  #ff4500;
+    border-bottom:  1px dotted #ff4500;
+    text-decoration: none;
+}
+
+/*.idlCtor*/
+.idlCtorName {
+    color:  #ff4500;
+}
+.idlCtorName a {
+    color:  #ff4500;
+    border-bottom:  1px dotted #ff4500;
+    text-decoration: none;
+}
+
+/*.idlParam*/
+.idlParamType {
+    color:  #005a9c;
+}
+.idlParamName, .idlDefaultValue {
+    font-style: italic;
+}
+
+.extAttr {
+    color:  #666;
+}
+
+/*.idlSectionComment*/
+.idlSectionComment {
+    color: gray;
+}
+
+/*.idlConst*/
+.idlConstType {
+    color:  #005a9c;
+}
+.idlConstName {
+    color:  #ff4500;
+}
+.idlConstName a {
+    color:  #ff4500;
+    border-bottom:  1px dotted #ff4500;
+    text-decoration: none;
+}
+
+/*.idlException*/
+.idlExceptionID {
+    font-weight:    bold;
+    color:  #c00;
+}
+
+.idlTypedefID, .idlTypedefType {
+    color:  #005a9c;
+}
+
+.idlRaises, .idlRaises a.idlType, .idlRaises a.idlType code, .excName a, .excName a code {
+    color:  #c00;
+    font-weight:    normal;
+}
+
+.excName a {
+    font-family:    monospace;
+}
+
+.idlRaises a.idlType, .excName a.idlType {
+    border-bottom:  1px dotted #c00;
+}
+
+.excGetSetTrue, .excGetSetFalse, .prmNullTrue, .prmNullFalse, .prmOptTrue, .prmOptFalse {
+    width:  45px;
+    text-align: center;
+}
+.excGetSetTrue, .prmNullTrue, .prmOptTrue { color:  #0c0; }
+.excGetSetFalse, .prmNullFalse, .prmOptFalse { color:  #c00; }
+
+.idlImplements a {
+    font-weight:    bold;
+}
+
+dl.attributes, dl.methods, dl.constants, dl.constructors, dl.fields, dl.dictionary-members {
+    margin-left:    2em;
+}
+
+.attributes dt, .methods dt, .constants dt, .constructors dt, .fields dt, .dictionary-members dt {
+    font-weight:    normal;
+}
+
+.attributes dt code, .methods dt code, .constants dt code, .constructors dt code, .fields dt code, .dictionary-members dt code {
+    font-weight:    bold;
+    color:  #000;
+    font-family:    monospace;
+}
+
+.attributes dt code, .fields dt code, .dictionary-members dt code {
+    background:  #ffffd2;
+}
+
+.attributes dt .idlAttrType code, .fields dt .idlFieldType code, .dictionary-members dt .idlMemberType code {
+    color:  #005a9c;
+    background:  transparent;
+    font-family:    inherit;
+    font-weight:    normal;
+    font-style: italic;
+}
+
+.methods dt code {
+    background:  #d9e6f8;
+}
+
+.constants dt code {
+    background:  #ddffd2;
+}
+
+.constructors dt code {
+    background:  #cfc;
+}
+
+.attributes dd, .methods dd, .constants dd, .constructors dd, .fields dd, .dictionary-members dd {
+    margin-bottom:  1em;
+}
+
+table.parameters, table.exceptions {
+    border-spacing: 0;
+    border-collapse:    collapse;
+    margin: 0.5em 0;
+    width:  100%;
+}
+table.parameters { border-bottom:  1px solid #90b8de; }
+table.exceptions { border-bottom:  1px solid #deb890; }
+
+.parameters th, .exceptions th {
+    color:  #fff;
+    padding:    3px 5px;
+    text-align: left;
+    font-family:    initial;
+    font-weight:    normal;
+    text-shadow:    #666 1px 1px 0;
+}
+.parameters th { background: #90b8de; }
+.exceptions th { background: #deb890; }
+
+.parameters td, .exceptions td {
+    padding:    3px 10px;
+    border-top: 1px solid #ddd;
+    vertical-align: top;
+}
+
+.parameters tr:first-child td, .exceptions tr:first-child td {
+    border-top: none;
+}
+
+.parameters td.prmName, .exceptions td.excName, .exceptions td.excCodeName {
+    width:  100px;
+}
+
+.parameters td.prmType {
+    width:  120px;
+}
+
+table.exceptions table {
+    border-spacing: 0;
+    border-collapse:    collapse;
+    width:  100%;
+}
+</style><link rel="stylesheet" href="https://www.w3.org/StyleSheets/TR/W3C-WD"><!--[if lt IE 9]><script src='https://www.w3.org/2008/site/js/html5shiv.js'></script><![endif]--><meta name="d41d8cd98f00b204e9800998ecf8427e_lib_detect" id="d41d8cd98f00b204e9800998ecf8427e_lib_detect"><script type="text/javascript" src="chrome-extension://cgaocdmhkmfnkdkbnckgmpopcbpaaejo/library/libraries.js"></script><script type="text/javascript" src="chrome-extension://cgaocdmhkmfnkdkbnckgmpopcbpaaejo/content_scripts/lib_detect.js"></script></head>
+
+<body style="" class="h-entry" role="document" id="respecDocument"><div class="head" role="contentinfo" id="respecHeader">
+  <p>
+      
+        
+            <a href="http://www.w3.org/"><img width="72" height="48" src="//www.w3.org/Icons/w3c_home" alt="W3C"></a>
+        
+      
+  </p>
+  <h1 class="title p-name" id="title" property="dcterms:title">Navigation Timing 2</h1>
+  
+  <h2 id="w3c-working-draft-05-february-2015"><abbr title="World Wide Web Consortium">W3C</abbr> Working Draft <time property="dcterms:issued" class="dt-published" datetime="2015-02-05">05 February 2015</time></h2>
+  <dl>
+    
+      <dt>This version:</dt>
+      <dd><a class="u-url" href="http://www.w3.org/TR/2015/WD-navigation-timing-20150205/">http://www.w3.org/TR/2015/WD-navigation-timing-20150205/</a></dd>
+      <dt>Latest published version:</dt>
+      <dd><a href="http://www.w3.org/TR/navigation-timing/">http://www.w3.org/TR/navigation-timing/</a></dd>
+    
+    
+      <dt>Latest editor's draft:</dt>
+      <dd><a href="https://w3c.github.io/navigation-timing/">https://w3c.github.io/navigation-timing/</a></dd>
+    
+    
+    
+    
+    
+    
+      <dt>Previous version:</dt>
+      <dd><a rel="dcterms:replaces" href="http://www.w3.org/TR/2012/REC-navigation-timing-20121217/">http://www.w3.org/TR/2012/REC-navigation-timing-20121217/</a></dd>
+    
+    
+    <dt>Editors:</dt>
+    <dd class="p-author h-card vcard" property="bibo:editor" resource="_:editor0" data-editor-id="69474"><span property="rdf:first" typeof="foaf:Person"><span property="foaf:name" class="p-name fn">Tobin Titus</span>, Microsoft Corp., <span class="ed_mailto"><a class="u-email email" property="foaf:mbox" href="mailto:tobint@microsoft.com">tobint@microsoft.com</a></span></span>
+<span property="rdf:rest" resource="_:editor1"></span>
+</dd>
+<dd class="p-author h-card vcard" resource="_:editor1" data-editor-id="44357"><span property="rdf:first" typeof="foaf:Person"><span property="foaf:name" class="p-name fn">Jatinder Mann</span>, Microsoft Corp., <span class="ed_mailto"><a class="u-email email" property="foaf:mbox" href="mailto:jmann@microsoft.com">jmann@microsoft.com</a></span></span>
+<span property="rdf:rest" resource="_:editor2"></span>
+</dd>
+<dd class="p-author h-card vcard" resource="_:editor2" data-editor-id="45188"><span property="rdf:first" typeof="foaf:Person"><span property="foaf:name" class="p-name fn">Arvind Jain</span>, Google Inc., <span class="ed_mailto"><a class="u-email email" property="foaf:mbox" href="mailto:arvind@google.com">arvind@google.com</a></span></span>
+<span property="rdf:rest" resource="rdf:nil"></span>
+</dd>
+
+    
+    
+      
+        
+          <dt>Repository:</dt>
+          
+             
+                
+                  <dd>
+                    <a href="https://github.com/w3c/navigation-timing/">
+                      We are on Github.
+                    </a>
+                  </dd>
+                
+             
+                
+                  <dd>
+                    <a href="https://github.com/w3c/navigation-timing/issues">
+                      File a bug.
+                    </a>
+                  </dd>
+                
+             
+                
+                  <dd>
+                    <a href="https://github.com/w3c/resource-timing/commits/gh-pages/index.html">
+                      Commit history.
+                    </a>
+                  </dd>
+                
+             
+                
+                  <dd>
+                    <a href="https://github.com/w3c/web-platform-tests/tree/master/resource-timing">
+                      Tests.
+                    </a>
+                  </dd>
+                
+             
+          
+        
+      
+    
+  </dl>
+  
+  
+  
+  
+    
+      <p class="copyright">
+        <a href="http://www.w3.org/Consortium/Legal/ipr-notice#Copyright">Copyright</a> ©
+        2015
+        
+        <a href="http://www.w3.org/"><abbr title="World Wide Web Consortium">W3C</abbr></a><sup>®</sup>
+        (<a href="http://www.csail.mit.edu/"><abbr title="Massachusetts Institute of Technology">MIT</abbr></a>,
+        <a href="http://www.ercim.eu/"><abbr title="European Research Consortium for Informatics and Mathematics">ERCIM</abbr></a>,
+        <a href="http://www.keio.ac.jp/">Keio</a>, <a href="http://ev.buaa.edu.cn/">Beihang</a>), 
+        
+        All Rights Reserved.
+        
+        <abbr title="World Wide Web Consortium">W3C</abbr> <a href="http://www.w3.org/Consortium/Legal/ipr-notice#Legal_Disclaimer">liability</a>,
+        <a href="http://www.w3.org/Consortium/Legal/ipr-notice#W3C_Trademarks">trademark</a> and
+        
+          <a href="http://www.w3.org/Consortium/Legal/copyright-documents">document use</a>
+        
+        rules apply.
+      </p>
+    
+  
+  <hr>
+</div>
+
+<section id="abstract" class="introductory" property="dc:abstract"><h2 id="h-abstract" resource="#h-abstract"><span property="xhv:role" resource="xhv:heading">Abstract</span></h2>
+
+<p>This specification defines a unified interface to store and retrieve high resolution performance metric data
+related to the navigation of a document.</p>
+</section><section id="sotd" class="introductory"><h2 id="h-sotd" resource="#h-sotd"><span property="xhv:role" resource="xhv:heading">Status of This Document</span></h2>
+  
+    
+      
+        <p>
+          <em>This section describes the status of this document at the time of its publication.
+          Other documents may supersede this document. A list of current <abbr title="World Wide Web Consortium">W3C</abbr> publications and the
+          latest revision of this technical report can be found in the <a href="http://www.w3.org/TR/"><abbr title="World Wide Web Consortium">W3C</abbr> technical reports index</a> at
+          http://www.w3.org/TR/.</em>
+        </p>
+        
+        
+
+<p>This is a <strong>work in progress</strong> and may change without any
+notices. </p>
+
+<p>
+ Navigation Timing 2 replaces the first version of <a href="http://www.w3.org/TR/navigation-timing/">Navigation Timing</a> [<cite><a class="bibref" href="https://labs.w3.org/spec-generator/?type=respec&url=http://w3c.github.io/navigation-timing/?specStatus=WD;shortName=navigation-timing#bib-Navigation-Timing">Navigation-Timing</a></cite>]
+ and includes the following changes:
+</p>
+<ul>
+<li><a href="https://labs.w3.org/spec-generator/?type=respec&url=http://w3c.github.io/navigation-timing/?specStatus=WD;shortName=navigation-timing#idl-def-Performance" class="idlType"><code>Performance</code></a> interface implements EventTarget;</li>
+<li>support for <code>PerformanceTimeline</code> [<cite><a class="bibref" href="https://labs.w3.org/spec-generator/?type=respec&url=http://w3c.github.io/navigation-timing/?specStatus=WD;shortName=navigation-timing#bib-Performance-Timeline">Performance-Timeline</a></cite>];</li>
+<li>support for <a href="http://www.w3.org/TR/hr-time/">High Resolution Time</a> [<cite><a class="bibref" href="https://labs.w3.org/spec-generator/?type=respec&url=http://w3c.github.io/navigation-timing/?specStatus=WD;shortName=navigation-timing#bib-HR-Time">HR-Time</a></cite>];</li>
+<li>timing information for <a href="https://labs.w3.org/spec-generator/?type=respec&url=http://w3c.github.io/navigation-timing/?specStatus=WD;shortName=navigation-timing#widl-PerformanceNavigationTiming-linkNegotiationStart">link negotiation</a>;</li>
+<li>the <a href="https://labs.w3.org/spec-generator/?type=respec&url=http://w3c.github.io/navigation-timing/?specStatus=WD;shortName=navigation-timing#widl-PerformanceNavigationTiming-redirectCount">number of redirects</a>  since the last non-redirect navigation;</li>
+<li><a href="https://labs.w3.org/spec-generator/?type=respec&url=http://w3c.github.io/navigation-timing/?specStatus=WD;shortName=navigation-timing#widl-PerformanceNavigationTiming-linkNegotiationStart">protocol</a> information; <strong>NEW!</strong></li>
+<li><a href="https://labs.w3.org/spec-generator/?type=respec&url=http://w3c.github.io/navigation-timing/?specStatus=WD;shortName=navigation-timing#widl-PerformanceNavigationTiming-transferSize">transfer</a> and <a href="https://labs.w3.org/spec-generator/?type=respec&url=http://w3c.github.io/navigation-timing/?specStatus=WD;shortName=navigation-timing#widl-PerformanceNavigationTiming-encodedBodySize">body</a> size information; <strong>NEW!</strong></li>
+<li>support for <a href="http://microformats.org/wiki/rel-prerender">prerender</a> navigation [<cite><a class="bibref" href="https://labs.w3.org/spec-generator/?type=respec&url=http://w3c.github.io/navigation-timing/?specStatus=WD;shortName=navigation-timing#bib-prerender">prerender</a></cite>].</li>
+</ul>
+
+<p id="unstable"><strong class="redNote">Implementers <em class="rfc2119" title="SHOULD">SHOULD</em> be aware that this document is not
+        stable.</strong> Implementers who are not taking part in the discussions
+        are likely to find the specification changing out from under them in
+        incompatible ways. Vendors interested in implementing this document
+        before it eventually reaches the Candidate Recommendation stage <em class="rfc2119" title="SHOULD">SHOULD</em>
+        join the aforementioned mailing lists and take part in the discussions.</p>
+
+        
+        <p>
+          This document was published by the <a href="http://www.w3.org/2010/webperf/">Web Performance Working Group</a> as a Working Draft.
+          
+            This document is intended to become a <abbr title="World Wide Web Consortium">W3C</abbr> Recommendation.
+          
+          
+            If you wish to make comments regarding this document, please send them to 
+            <a href="mailto:public-web-perf@w3.org?subject=%5BNavigationTiming2%5D">public-web-perf@w3.org</a> 
+            (<a href="mailto:public-web-perf-request@w3.org?subject=subscribe">subscribe</a>,
+            <a href="http://lists.w3.org/Archives/Public/public-web-perf/">archives</a>)
+              with <code>[NavigationTiming2]</code> at the start of your email's subject.
+          
+          
+          
+          
+          
+            
+            All comments are welcome.
+            
+          
+        </p>
+        
+        
+        
+          <p>
+            Publication as a Working Draft does not imply endorsement by the <abbr title="World Wide Web Consortium">W3C</abbr>
+            Membership. This is a draft document and may be updated, replaced or obsoleted by other
+            documents at any time. It is inappropriate to cite this document as other than work in
+            progress.
+          </p>
+        
+        
+        
+        <p>
+          
+            This document was produced by a group operating under the 
+            <a id="sotd_patent" property="w3p:patentRules" href="http://www.w3.org/Consortium/Patent-Policy-20040205/">5 February 2004 <abbr title="World Wide Web Consortium">W3C</abbr> Patent
+            Policy</a>.
+          
+          
+          
+            
+              <abbr title="World Wide Web Consortium">W3C</abbr> maintains a <a href="http://www.w3.org/2004/01/pp-impl/45211/status" rel="disclosure">public list of any patent
+              disclosures</a> 
+            
+            made in connection with the deliverables of the group; that page also includes
+            instructions for disclosing a patent. An individual who has actual knowledge of a patent
+            which the individual believes contains
+            <a href="http://www.w3.org/Consortium/Patent-Policy-20040205/#def-essential">Essential
+            Claim(s)</a> must disclose the information in accordance with
+            <a href="http://www.w3.org/Consortium/Patent-Policy-20040205/#sec-Disclosure">section
+            6 of the <abbr title="World Wide Web Consortium">W3C</abbr> Patent Policy</a>.
+          
+          
+        </p>
+        
+          <p>This document is governed by the <a id="w3c_process_revision" href="http://www.w3.org/2014/Process-20140801/">1 August 2014 <abbr title="World Wide Web Consortium">W3C</abbr> Process Document</a>.
+          </p>
+        
+        
+      
+    
+  
+</section><section id="toc"><h2 class="introductory" id="h-toc" resource="#h-toc"><span property="xhv:role" resource="xhv:heading">Table of Contents</span></h2><ul class="toc" role="directory" id="respecContents"><li class="tocline"><a href="https://labs.w3.org/spec-generator/?type=respec&url=http://w3c.github.io/navigation-timing/?specStatus=WD;shortName=navigation-timing#introduction" class="tocxref"><span class="secno">1. </span>Introduction</a></li><li class="tocline"><a href="https://labs.w3.org/spec-generator/?type=respec&url=http://w3c.github.io/navigation-timing/?specStatus=WD;shortName=navigation-timing#conformance" class="tocxref"><span class="secno">2. </span>Conformance</a></li><li class="tocline"><a href="https://labs.w3.org/spec-generator/?type=respec&url=http://w3c.github.io/navigation-timing/?specStatus=WD;shortName=navigation-timing#terminology" class="tocxref"><span class="secno">3. </span>Terminology</a></li><li class="tocline"><a href="https://labs.w3.org/spec-generator/?type=respec&url=http://w3c.github.io/navigation-timing/?specStatus=WD;shortName=navigation-timing#sec-navigation-timing" class="tocxref"><span class="secno">4. </span>Navigation Timing</a><ul class="toc"><li class="tocline"><a href="https://labs.w3.org/spec-generator/?type=respec&url=http://w3c.github.io/navigation-timing/?specStatus=WD;shortName=navigation-timing#sec-Introduction" class="tocxref"><span class="secno">4.1 </span>Introduction</a></li><li class="tocline"><a href="https://labs.w3.org/spec-generator/?type=respec&url=http://w3c.github.io/navigation-timing/?specStatus=WD;shortName=navigation-timing#sec-performance-interface" class="tocxref"><span class="secno">4.2 </span>The <code>Performance</code> interface</a><ul class="toc"><li class="tocline"><a href="https://labs.w3.org/spec-generator/?type=respec&url=http://w3c.github.io/navigation-timing/?specStatus=WD;shortName=navigation-timing#attributes" class="tocxref"><span class="secno">4.2.1 </span>Attributes</a></li></ul></li><li class="tocline"><a href="https://labs.w3.org/spec-generator/?type=respec&url=http://w3c.github.io/navigation-timing/?specStatus=WD;shortName=navigation-timing#sec-PerformanceNavigationTiming" class="tocxref"><span class="secno">4.3 </span>The <code>PerformanceNavigationTiming</code> interface</a><ul class="toc"><li class="tocline"><a href="https://labs.w3.org/spec-generator/?type=respec&url=http://w3c.github.io/navigation-timing/?specStatus=WD;shortName=navigation-timing#attributes-1" class="tocxref"><span class="secno">4.3.1 </span>Attributes</a></li><li class="tocline"><a href="https://labs.w3.org/spec-generator/?type=respec&url=http://w3c.github.io/navigation-timing/?specStatus=WD;shortName=navigation-timing#serializer" class="tocxref"><span class="secno">4.3.2 </span>Serializer</a></li><li class="tocline"><a href="https://labs.w3.org/spec-generator/?type=respec&url=http://w3c.github.io/navigation-timing/?specStatus=WD;shortName=navigation-timing#sec-performance-navigation-types" class="tocxref"><span class="secno">4.3.3 </span>Navigation types</a></li></ul></li></ul></li><li class="tocline"><a href="https://labs.w3.org/spec-generator/?type=respec&url=http://w3c.github.io/navigation-timing/?specStatus=WD;shortName=navigation-timing#process" class="tocxref"><span class="secno">5. </span>Process</a><ul class="toc"><li class="tocline"><a href="https://labs.w3.org/spec-generator/?type=respec&url=http://w3c.github.io/navigation-timing/?specStatus=WD;shortName=navigation-timing#processing-model" class="tocxref"><span class="secno">5.1 </span>Processing Model</a></li><li class="tocline"><a href="https://labs.w3.org/spec-generator/?type=respec&url=http://w3c.github.io/navigation-timing/?specStatus=WD;shortName=navigation-timing#vendor-prefixes" class="tocxref"><span class="secno">5.2 </span>Vendor Prefixes</a></li></ul></li><li class="tocline"><a href="https://labs.w3.org/spec-generator/?type=respec&url=http://w3c.github.io/navigation-timing/?specStatus=WD;shortName=navigation-timing#privacy" class="tocxref"><span class="secno">6. </span>Privacy</a><ul class="toc"><li class="tocline"><a href="https://labs.w3.org/spec-generator/?type=respec&url=http://w3c.github.io/navigation-timing/?specStatus=WD;shortName=navigation-timing#info_disclosure" class="tocxref"><span class="secno">6.1 </span>Information disclosure</a></li><li class="tocline"><a href="https://labs.w3.org/spec-generator/?type=respec&url=http://w3c.github.io/navigation-timing/?specStatus=WD;shortName=navigation-timing#cross-directory" class="tocxref"><span class="secno">6.2 </span>Cross-directory access</a></li></ul></li><li class="tocline"><a href="https://labs.w3.org/spec-generator/?type=respec&url=http://w3c.github.io/navigation-timing/?specStatus=WD;shortName=navigation-timing#security" class="tocxref"><span class="secno">7. </span>Security</a><ul class="toc"><li class="tocline"><a href="https://labs.w3.org/spec-generator/?type=respec&url=http://w3c.github.io/navigation-timing/?specStatus=WD;shortName=navigation-timing#authentication" class="tocxref"><span class="secno">7.1 </span>Detecting proxy servers</a></li></ul></li><li class="tocline"><a href="https://labs.w3.org/spec-generator/?type=respec&url=http://w3c.github.io/navigation-timing/?specStatus=WD;shortName=navigation-timing#acknowledgements" class="tocxref"><span class="secno">A. </span>Acknowledgments</a></li><li class="tocline"><a href="https://labs.w3.org/spec-generator/?type=respec&url=http://w3c.github.io/navigation-timing/?specStatus=WD;shortName=navigation-timing#references" class="tocxref"><span class="secno">B. </span>References</a><ul class="toc"><li class="tocline"><a href="https://labs.w3.org/spec-generator/?type=respec&url=http://w3c.github.io/navigation-timing/?specStatus=WD;shortName=navigation-timing#normative-references" class="tocxref"><span class="secno">B.1 </span>Normative references</a></li><li class="tocline"><a href="https://labs.w3.org/spec-generator/?type=respec&url=http://w3c.github.io/navigation-timing/?specStatus=WD;shortName=navigation-timing#informative-references" class="tocxref"><span class="secno">B.2 </span>Informative references</a></li></ul></li></ul></section>
+
+
+
+<section id="introduction" class="informative" typeof="bibo:Chapter" resource="#introduction" property="bibo:hasPart">
+<!--OddPage--><h2 id="h-introduction" resource="#h-introduction"><span property="xhv:role" resource="xhv:heading"><span class="secno">1. </span>Introduction</span></h2><p><em>This section is non-normative.</em></p>
+
+<p>
+Accurately measuring performance characteristics of web applications is an important
+aspect of making web applications faster.
+While JavaScript-based mechanisms, such as the one described in
+[<cite><a class="bibref" href="https://labs.w3.org/spec-generator/?type=respec&url=http://w3c.github.io/navigation-timing/?specStatus=WD;shortName=navigation-timing#bib-JSMEASURE">JSMEASURE</a></cite>], can
+provide comprehensive instrumentation for
+user latency measurements within an application, in many cases, they are
+unable to provide a complete or detailed end-to-end latency picture.
+</p>
+
+<p>For example, the following JavaScript shows a naive attempt to
+measure the time it takes to fully load a page:</p>
+<div class="example"><div class="example-title"><span>Example 1</span></div><pre class="example highlight prettyprint prettyprinted" style=""><span class="tag">&lt;html&gt;</span><span class="pln">
+</span><span class="tag">&lt;head&gt;</span><span class="pln">
+</span><span class="tag">&lt;script</span><span class="pln"> </span><span class="atn">type</span><span class="pun">=</span><span class="atv">"text/javascript"</span><span class="tag">&gt;</span><span class="pln">
+</span><span class="kwd">var</span><span class="pln"> start </span><span class="pun">=</span><span class="pln"> </span><span class="kwd">new</span><span class="pln"> </span><span class="typ">Date</span><span class="pun">().</span><span class="pln">getTime</span><span class="pun">();</span><span class="pln">
+</span><span class="kwd">function</span><span class="pln"> onLoad</span><span class="pun">()</span><span class="pln"> </span><span class="pun">{</span><span class="pln">
+  </span><span class="kwd">var</span><span class="pln"> now </span><span class="pun">=</span><span class="pln"> </span><span class="kwd">new</span><span class="pln"> </span><span class="typ">Date</span><span class="pun">().</span><span class="pln">getTime</span><span class="pun">();</span><span class="pln">
+  </span><span class="kwd">var</span><span class="pln"> latency </span><span class="pun">=</span><span class="pln"> now </span><span class="pun">-</span><span class="pln"> start</span><span class="pun">;</span><span class="pln">
+  alert</span><span class="pun">(</span><span class="str">"page loading time: "</span><span class="pln"> </span><span class="pun">+</span><span class="pln"> latency</span><span class="pun">);</span><span class="pln">
+</span><span class="pun">}</span><span class="pln">
+</span><span class="tag">&lt;/script&gt;</span><span class="pln">
+</span><span class="tag">&lt;/head&gt;</span><span class="pln">
+</span><span class="tag">&lt;body</span><span class="pln"> </span><span class="atn">onload</span><span class="pun">=</span><span class="atv">"</span><span class="pln">onLoad</span><span class="pun">()</span><span class="atv">"</span><span class="tag">&gt;</span><span class="pln">
+&lt;!- Main page body goes from here. --&gt;
+</span><span class="tag">&lt;/body&gt;</span><span class="pln">
+</span><span class="tag">&lt;/html&gt;</span></pre></div>
+
+<p>The script calculates the time it takes to load the page <b>after</b> the
+first bit of JavaScript in the head is executed, but it does not give any
+information about the time it takes to get the page from the server. </p>
+
+<p>To address the need for complete and detailed information on the navigation of the
+document, the <a href="http://www.w3.org/TR/navigation-timing/">Navigation Timing</a>
+specification [<cite><a class="bibref" href="https://labs.w3.org/spec-generator/?type=respec&url=http://w3c.github.io/navigation-timing/?specStatus=WD;shortName=navigation-timing#bib-Navigation-Timing">Navigation-Timing</a></cite>] defines the <a href="http://www.w3.org/TR/navigation-timing/#performancetiming">PerformanceTiming</a>
+interface. This interface allows JavaScript mechanisms to provide complete client-side latency
+measurements within applications. </p>
+
+<p>
+However, the <a href="http://www.w3.org/TR/navigation-timing/#performancetiming">PerformanceTiming</a>
+interface was not defined to provide data in sub-millisecond resolution, which can be useful for analysis purposes.
+Further, the <a href="http://www.w3.org/TR/navigation-timing/#performancetiming">PerformanceTiming</a> interface
+does not participate in the
+<a href="https://w3c.github.io/web-performance/specs/PerformanceTimeline/Overview.html">Performance Timeline</a> [<cite><a class="bibref" href="https://labs.w3.org/spec-generator/?type=respec&url=http://w3c.github.io/navigation-timing/?specStatus=WD;shortName=navigation-timing#bib-Performance-Timeline">Performance-Timeline</a></cite>], a unifying
+interface to access and retrieve performance metrics from the performance timeline of a web application.
+</p>
+
+<p>
+Additionally, the <a href="http://www.w3.org/TR/navigation-timing/#performancetiming">PerformanceTiming</a>
+interface measures the time of its attributes from January 01 1970, leading to very large numbers representing the time values.
+</p>
+
+<p>For example, if we know that the response end occurs 100ms after the start of navigation, we <em class="rfc2119" title="MAY">MAY</em> find data that the
+the <a href="http://www.w3.org/TR/navigation-timing/#performancetiming">PerformanceTiming</a> data looks like so:
+</p>
+<div class="example"><div class="example-title"><span>Example 2</span></div><pre class="example highlight prettyprint prettyprinted" style=""><span class="pln">navigationStart</span><span class="pun">:</span><span class="pln">   </span><span class="lit">1314223489190</span><span class="pln">
+responseEnd</span><span class="pun">:</span><span class="pln">       </span><span class="lit">1314223489290</span></pre></div>
+
+<p>
+This specification defines the <a href="https://labs.w3.org/spec-generator/?type=respec&url=http://w3c.github.io/navigation-timing/?specStatus=WD;shortName=navigation-timing#idl-def-PerformanceNavigationTiming" class="idlType"><code>PerformanceNavigationTiming</code></a> interface which participates
+in the <a href="https://w3c.github.io/web-performance/specs/PerformanceTimeline/Overview.html">Performance Timeline</a>
+to store and retrieve high resolution performance metric data related to the navigation of a document.
+As the <a href="https://labs.w3.org/spec-generator/?type=respec&url=http://w3c.github.io/navigation-timing/?specStatus=WD;shortName=navigation-timing#idl-def-PerformanceNavigationTiming" class="idlType"><code>PerformanceNavigationTiming</code></a> interface uses
+<a href="http://www.w3.org/TR/hr-time/">High Resolution Time</a> [<cite><a class="bibref" href="https://labs.w3.org/spec-generator/?type=respec&url=http://w3c.github.io/navigation-timing/?specStatus=WD;shortName=navigation-timing#bib-HR-Time">HR-Time</a></cite>], all time values are measured from the start
+of the navigation.
+</p>
+
+<p>For example, if we know that the response end occurs 100ms after the start of navigation, we <em class="rfc2119" title="MAY">MAY</em> find data that the <a href="https://labs.w3.org/spec-generator/?type=respec&url=http://w3c.github.io/navigation-timing/?specStatus=WD;shortName=navigation-timing#idl-def-PerformanceNavigationTiming" class="idlType"><code>PerformanceNavigationTiming</code></a> data looks like so:
+</p>
+<div class="example"><div class="example-title"><span>Example 3</span></div><pre class="example highlight prettyprint prettyprinted" style=""><span class="pln">startTime</span><span class="pun">:</span><span class="pln">           </span><span class="lit">0.000</span><span class="pln">
+responseEnd</span><span class="pun">:</span><span class="pln">       </span><span class="lit">100.000</span></pre></div>
+
+<p>The following script shows how a developer can use the <a href="https://labs.w3.org/spec-generator/?type=respec&url=http://w3c.github.io/navigation-timing/?specStatus=WD;shortName=navigation-timing#idl-def-PerformanceNavigationTiming" class="idlType"><code>PerformanceNavigationTiming</code></a> interface
+to obtain accurate timing data related to the navigation of the document.
+</p>
+
+<div class="example"><div class="example-title"><span>Example 4</span></div><pre class="example highlight prettyprint prettyprinted" style=""><span class="dec">&lt;!doctype html&gt;</span><span class="pln">
+</span><span class="tag">&lt;html&gt;</span><span class="pln">
+</span><span class="tag">&lt;head&gt;</span><span class="pln">
+</span><span class="tag">&lt;/head&gt;</span><span class="pln">
+</span><span class="tag">&lt;body</span><span class="pln"> </span><span class="atn">onload</span><span class="pun">=</span><span class="atv">"</span><span class="pln">init</span><span class="pun">()</span><span class="atv">"</span><span class="tag">&gt;</span><span class="pln">
+</span><span class="tag">&lt;script&gt;</span><span class="pln">
+</span><span class="kwd">function</span><span class="pln"> init</span><span class="pun">()</span><span class="pln"> </span><span class="pun">{</span><span class="pln">
+  </span><span class="kwd">var</span><span class="pln"> navigationTiming </span><span class="pun">=</span><span class="pln"> performance</span><span class="pun">.</span><span class="pln">getEntriesByType</span><span class="pun">(</span><span class="str">"navigation"</span><span class="pun">)[</span><span class="lit">0</span><span class="pun">];</span><span class="pln">
+  </span><span class="kwd">if</span><span class="pln"> </span><span class="pun">(</span><span class="pln">window</span><span class="pun">.</span><span class="pln">console</span><span class="pun">)</span><span class="pln"> </span><span class="pun">{</span><span class="pln">
+    console</span><span class="pun">.</span><span class="pln">log</span><span class="pun">(</span><span class="str">"Name: "</span><span class="pln">        </span><span class="pun">+</span><span class="pln"> navigationTiming</span><span class="pun">.</span><span class="pln">name      </span><span class="pun">+</span><span class="pln"> </span><span class="str">"\n"</span><span class="pln"> </span><span class="pun">+</span><span class="pln">
+                </span><span class="str">"Entry Type: "</span><span class="pln"> </span><span class="pun">+</span><span class="pln"> navigationTiming</span><span class="pun">.</span><span class="pln">entryType </span><span class="pun">+</span><span class="pln"> </span><span class="str">"\n"</span><span class="pln"> </span><span class="pun">+</span><span class="pln">
+                </span><span class="str">"Start Time: "</span><span class="pln"> </span><span class="pun">+</span><span class="pln"> navigationTiming</span><span class="pun">.</span><span class="pln">startTime </span><span class="pun">+</span><span class="pln"> </span><span class="str">"\n"</span><span class="pln"> </span><span class="pun">+</span><span class="pln">
+                </span><span class="str">"Duration: "</span><span class="pln">   </span><span class="pun">+</span><span class="pln"> navigationTiming</span><span class="pun">.</span><span class="pln">duration  </span><span class="pun">+</span><span class="pln"> </span><span class="str">"\n"</span><span class="pln"> </span><span class="pun">+</span><span class="pln">
+                </span><span class="str">"Unload: "</span><span class="pln">     </span><span class="pun">+</span><span class="pln"> </span><span class="pun">(</span><span class="pln">navigationTiming</span><span class="pun">.</span><span class="pln">unloadEventEnd </span><span class="pun">-</span><span class="pln">
+                                  navigationTiming</span><span class="pun">.</span><span class="pln">unloadEventStart</span><span class="pun">)</span><span class="pln">  </span><span class="pun">+</span><span class="pln"> </span><span class="str">"\n"</span><span class="pln"> </span><span class="pun">+</span><span class="pln">
+                </span><span class="str">"Redirect: "</span><span class="pln">   </span><span class="pun">+</span><span class="pln"> </span><span class="pun">(</span><span class="pln">navigationTiming</span><span class="pun">.</span><span class="pln">redirectEnd </span><span class="pun">-</span><span class="pln">
+                                  navigationTiming</span><span class="pun">.</span><span class="pln">redirectStart</span><span class="pun">)</span><span class="pln">     </span><span class="pun">+</span><span class="pln"> </span><span class="str">"\n"</span><span class="pln"> </span><span class="pun">+</span><span class="pln">
+                </span><span class="str">"App Cache: "</span><span class="pln">  </span><span class="pun">+</span><span class="pln"> </span><span class="pun">(</span><span class="pln">navigationTiming</span><span class="pun">.</span><span class="pln">domainLookupStart </span><span class="pun">-</span><span class="pln">
+                                  navigationTiming</span><span class="pun">.</span><span class="pln">fetchStart</span><span class="pun">)</span><span class="pln">        </span><span class="pun">+</span><span class="pln"> </span><span class="str">"\n"</span><span class="pln"> </span><span class="pun">+</span><span class="pln">
+                </span><span class="str">"DNS: "</span><span class="pln">        </span><span class="pun">+</span><span class="pln"> </span><span class="pun">(</span><span class="pln">navigationTiming</span><span class="pun">.</span><span class="pln">domainLookupEnd </span><span class="pun">-</span><span class="pln">
+                                  navigationTiming</span><span class="pun">.</span><span class="pln">domainLookupStart</span><span class="pun">)</span><span class="pln"> </span><span class="pun">+</span><span class="pln"> </span><span class="str">"\n"</span><span class="pln"> </span><span class="pun">+</span><span class="pln">
+                </span><span class="str">"TCP: "</span><span class="pln">        </span><span class="pun">+</span><span class="pln"> </span><span class="pun">(</span><span class="pln">navigationTiming</span><span class="pun">.</span><span class="pln">connectEnd </span><span class="pun">-</span><span class="pln">
+                                  navigationTiming</span><span class="pun">.</span><span class="pln">connectStart</span><span class="pun">)</span><span class="pln">      </span><span class="pun">+</span><span class="pln"> </span><span class="str">"\n"</span><span class="pln"> </span><span class="pun">+</span><span class="pln">
+                </span><span class="str">"Request: "</span><span class="pln">    </span><span class="pun">+</span><span class="pln"> </span><span class="pun">(</span><span class="pln">navigationTiming</span><span class="pun">.</span><span class="pln">responseStart </span><span class="pun">-</span><span class="pln">
+                                  navigationTiming</span><span class="pun">.</span><span class="pln">requestStart</span><span class="pun">)</span><span class="pln">      </span><span class="pun">+</span><span class="pln"> </span><span class="str">"\n"</span><span class="pln"> </span><span class="pun">+</span><span class="pln">
+                </span><span class="str">"Response: "</span><span class="pln">   </span><span class="pun">+</span><span class="pln"> </span><span class="pun">(</span><span class="pln">navigationTiming</span><span class="pun">.</span><span class="pln">responseEnd </span><span class="pun">-</span><span class="pln">
+                                  navigationTiming</span><span class="pun">.</span><span class="pln">responseStart</span><span class="pun">)</span><span class="pln">     </span><span class="pun">+</span><span class="pln"> </span><span class="str">"\n"</span><span class="pln"> </span><span class="pun">+</span><span class="pln">
+                </span><span class="str">"Processing: "</span><span class="pln"> </span><span class="pun">+</span><span class="pln"> </span><span class="pun">(</span><span class="pln">navigationTiming</span><span class="pun">.</span><span class="pln">loadEventStart </span><span class="pun">-</span><span class="pln">
+                                  navigationTiming</span><span class="pun">.</span><span class="pln">responseEnd</span><span class="pun">)</span><span class="pln">       </span><span class="pun">+</span><span class="pln"> </span><span class="str">"\n"</span><span class="pln"> </span><span class="pun">+</span><span class="pln">
+                </span><span class="str">"Onload: "</span><span class="pln">     </span><span class="pun">+</span><span class="pln"> </span><span class="pun">(</span><span class="pln">navigationTiming</span><span class="pun">.</span><span class="pln">loadEventEnd </span><span class="pun">-</span><span class="pln">
+                                  navigationTiming</span><span class="pun">.</span><span class="pln">loadEventStart</span><span class="pun">)</span><span class="pln">    </span><span class="pun">+</span><span class="pln"> </span><span class="str">"\n"</span><span class="pun">);</span><span class="pln">
+  </span><span class="pun">}</span><span class="pln">
+</span><span class="pun">}</span><span class="pln">
+</span><span class="tag">&lt;/script&gt;</span><span class="pln">
+</span><span class="tag">&lt;/body&gt;</span><span class="pln">
+</span><span class="tag">&lt;/html&gt;</span></pre></div>
+
+</section>
+
+<section id="conformance" typeof="bibo:Chapter" resource="#conformance" property="bibo:hasPart"><!--OddPage--><h2 id="h-conformance" resource="#h-conformance"><span property="xhv:role" resource="xhv:heading"><span class="secno">2. </span>Conformance</span></h2>
+<p>
+  As well as sections marked as non-normative, all authoring guidelines, diagrams, examples,
+  and notes in this specification are non-normative. Everything else in this specification is
+  normative.
+</p>
+<p id="respecRFC2119">The key words <em class="rfc2119" title="MAY">MAY</em>, <em class="rfc2119" title="MUST">MUST</em>, <em class="rfc2119" title="MUST NOT">MUST NOT</em>, <em class="rfc2119" title="SHOULD">SHOULD</em>, and <em class="rfc2119" title="SHOULD NOT">SHOULD NOT</em> are 
+  to be interpreted as described in [<cite><a class="bibref" href="https://labs.w3.org/spec-generator/?type=respec&url=http://w3c.github.io/navigation-timing/?specStatus=WD;shortName=navigation-timing#bib-RFC2119">RFC2119</a></cite>].
+</p>
+
+
+<p>Requirements phrased in the imperative as part of algorithms (such as
+"strip any leading space characters" or "return false and abort these steps")
+are to be interpreted with the meaning of the key word ("<em class="rfc2119" title="MUST">MUST</em>", "<em class="rfc2119" title="SHOULD">SHOULD</em>",
+"<em class="rfc2119" title="MAY">MAY</em>", etc) used in introducing the algorithm. </p>
+
+<p>Some conformance requirements are phrased as requirements on attributes,
+methods or objects. Such requirements are to be interpreted as requirements
+on user agents. </p>
+
+<p>Conformance requirements phrased as algorithms or specific steps <em class="rfc2119" title="MAY">MAY</em> be
+implemented in any manner, so long as the end result is equivalent. (In
+particular, the algorithms defined in this specification are intended to be
+easy to follow, and not intended to be performant.) </p>
+
+    <p>The IDL fragments in this specification must be interpreted as
+    required for conforming IDL fragments, as described in the Web IDL
+    specification. [<cite><a class="bibref" href="https://labs.w3.org/spec-generator/?type=respec&url=http://w3c.github.io/navigation-timing/?specStatus=WD;shortName=navigation-timing#bib-WebIDL">WebIDL</a></cite>]</p>
+</section>
+
+<section id="terminology" typeof="bibo:Chapter" resource="#terminology" property="bibo:hasPart">
+<!--OddPage--><h2 id="h-terminology" resource="#h-terminology"><span property="xhv:role" resource="xhv:heading"><span class="secno">3. </span>Terminology</span></h2>
+
+<p>The construction "a <code class="example">Foo</code> object", where <code class="example">Foo</code> is actually an interface, is sometimes used instead of the more accurate "an object implementing the interface <code class="example">Foo</code>". </p>
+
+<p>The term "navigation" refers to the act of
+<a href="http://www.w3.org/TR/html5/browsers.html#navigate" title="navigation">navigating</a>.</p>
+
+<p>The term "JavaScript" is used to refer to ECMA262, rather than the
+official term ECMAScript, since the term JavaScript is more widely known. [<cite><a class="bibref" href="https://labs.w3.org/spec-generator/?type=respec&url=http://w3c.github.io/navigation-timing/?specStatus=WD;shortName=navigation-timing#bib-ECMA-262">ECMA-262</a></cite>]
+</p>
+<p>
+  Throughout this work, all time values are measured in milliseconds since the start of
+  navigation of the document. For example, the start of navigation of the document
+  occurs at time 0. The term <i>current time</i> refers to the number of milliseconds
+  since the start of navigation of the document until the current moment in time.
+  This definition of time is based on the High Resolution Time specification
+  [[high-resolution-time] and is different
+  from the definition of time used in the Navigation Timing specification
+  [<cite><a class="bibref" href="https://labs.w3.org/spec-generator/?type=respec&url=http://w3c.github.io/navigation-timing/?specStatus=WD;shortName=navigation-timing#bib-Navigation-Timing">Navigation-Timing</a></cite>],
+  where time is measured in milliseconds since midnight of January 1, 1970 (UTC).
+</p>
+</section>
+
+<section id="sec-navigation-timing" typeof="bibo:Chapter" resource="#sec-navigation-timing" property="bibo:hasPart">
+<!--OddPage--><h2 id="h-sec-navigation-timing" resource="#h-sec-navigation-timing"><span property="xhv:role" resource="xhv:heading"><span class="secno">4. </span>Navigation Timing</span></h2>
+
+<section id="sec-Introduction" class="informative" typeof="bibo:Chapter" resource="#sec-Introduction" property="bibo:hasPart">
+<h3 id="h-sec-introduction" resource="#h-sec-introduction"><span property="xhv:role" resource="xhv:heading"><span class="secno">4.1 </span>Introduction</span></h3><p><em>This section is non-normative.</em></p>
+
+<p>
+	This specification defines the <a href="https://labs.w3.org/spec-generator/?type=respec&url=http://w3c.github.io/navigation-timing/?specStatus=WD;shortName=navigation-timing#idl-def-Performance" class="idlType"><code>Performance</code></a> interface
+  to host performance related attributes and methods, and the
+  <a href="https://labs.w3.org/spec-generator/?type=respec&url=http://w3c.github.io/navigation-timing/?specStatus=WD;shortName=navigation-timing#idl-def-PerformanceNavigationTiming" class="idlType"><code>PerformanceNavigationTiming</code></a> interface
+  to store and retrieve high resolution performance metric data related to the navigation of a document.
+</p>
+</section>
+
+<section id="sec-performance-interface" typeof="bibo:Chapter" resource="#sec-performance-interface" property="bibo:hasPart">
+<h3 id="h-sec-performance-interface" resource="#h-sec-performance-interface"><span property="xhv:role" resource="xhv:heading"><span class="secno">4.2 </span>The <code>Performance</code> interface</span></h3>
+
+<p>
+The <a href="https://labs.w3.org/spec-generator/?type=respec&url=http://w3c.github.io/navigation-timing/?specStatus=WD;shortName=navigation-timing#idl-def-Performance" class="idlType"><code>Performance</code></a> interface hosts performance related attributes and methods.
+</p>
+
+<pre class="idl"><span class="idlInterface" id="idl-def-Performance">interface <span class="idlInterfaceID">Performance</span> : <span class="idlSuperclass">EventTarget</span> {
+};</span></pre>
+
+<pre class="idl"><span class="idlInterface" id="idl-def-Window">partial interface <span class="idlInterfaceID">Window</span> {
+<span class="idlAttribute">    [<span class="extAttr">Replaceable</span>]
+    readonly    attribute <span class="idlAttrType"><a href="https://labs.w3.org/spec-generator/?type=respec&url=http://w3c.github.io/navigation-timing/?specStatus=WD;shortName=navigation-timing#idl-def-Performance" class="idlType"><code>Performance</code></a></span> <span class="idlAttrName"><a href="https://labs.w3.org/spec-generator/?type=respec&url=http://w3c.github.io/navigation-timing/?specStatus=WD;shortName=navigation-timing#widl-Window-performance">performance</a></span>;</span>
+};</span></pre><section id="attributes" typeof="bibo:Chapter" resource="#attributes" property="bibo:hasPart"><h4 id="h-attributes" resource="#h-attributes"><span property="xhv:role" resource="xhv:heading"><span class="secno">4.2.1 </span>Attributes</span></h4><dl class="attributes"><dt id="widl-Window-performance"><code>performance</code> of type <span class="idlAttrType"><a href="https://labs.w3.org/spec-generator/?type=respec&url=http://w3c.github.io/navigation-timing/?specStatus=WD;shortName=navigation-timing#idl-def-Performance" class="idlType"><code>Performance</code></a></span>, readonly   </dt><dd>
+<p>This attribute allows access to performance related attributes and methods.</p>
+</dd></dl></section>
+
+</section>
+
+<section id="sec-PerformanceNavigationTiming" typeof="bibo:Chapter" resource="#sec-PerformanceNavigationTiming" property="bibo:hasPart">
+<h3 id="h-sec-performancenavigationtiming" resource="#h-sec-performancenavigationtiming"><span property="xhv:role" resource="xhv:heading"><span class="secno">4.3 </span>The <code>PerformanceNavigationTiming</code> interface</span></h3>
+<p>
+The <a href="https://labs.w3.org/spec-generator/?type=respec&url=http://w3c.github.io/navigation-timing/?specStatus=WD;shortName=navigation-timing#idl-def-PerformanceNavigationTiming" class="idlType"><code>PerformanceNavigationTiming</code></a> interface participates in the
+	<a href="http://www.w3.org/TR/performance-timeline/#sec-performance-timeline">Performance Timeline</a> [<cite><a class="bibref" href="https://labs.w3.org/spec-generator/?type=respec&url=http://w3c.github.io/navigation-timing/?specStatus=WD;shortName=navigation-timing#bib-Performance-Timeline">Performance-Timeline</a></cite>] and extends the following attributes of the
+    <a href="http://www.w3.org/TR/performance-timeline/#performanceentry">PerformanceEntry</a> interface:
+</p>
+
+<dl class="attributes">
+<dt id="widl-PerformanceNavigationTiming-name"><code>name</code></dt>
+<dd>
+This attribute <em class="rfc2119" title="MUST">MUST</em> return the <code>DOMString</code> "<code>document</code>".
+</dd>
+<dt id="widl-PerformanceNavigationTiming-entryType"><code>entryType</code></dt>
+<dd>
+This attribute <em class="rfc2119" title="MUST">MUST</em> return the <code>DOMString</code> "<code id="perf-navigation">navigation</code>".
+</dd>
+<dt id="widl-PerformanceNavigationTiming-startTime"><code>startTime</code></dt>
+<dd>
+This attribute <em class="rfc2119" title="MUST">MUST</em> return a <a href="http://www.w3.org/TR/hr-time/#domhighrestimestamp">DOMHighResTimeStamp</a>
+	    with a time value of 0. [<cite><a class="bibref" href="https://labs.w3.org/spec-generator/?type=respec&url=http://w3c.github.io/navigation-timing/?specStatus=WD;shortName=navigation-timing#bib-HR-Time">HR-Time</a></cite>]
+</dd>
+<dt id="widl-PerformanceNavigationTiming-duration"><code>duration</code></dt>
+<dd>
+This attribute <em class="rfc2119" title="MUST">MUST</em> return a <a href="http://www.w3.org/TR/hr-time/#domhighrestimestamp">DOMHighResTimeStamp</a>
+	    equal to the difference between <a href="https://labs.w3.org/spec-generator/?type=respec&url=http://w3c.github.io/navigation-timing/?specStatus=WD;shortName=navigation-timing#widl-PerformanceNavigationTiming-loadEventEnd">loadEventEnd</a> and <a href="https://labs.w3.org/spec-generator/?type=respec&url=http://w3c.github.io/navigation-timing/?specStatus=WD;shortName=navigation-timing#widl-PerformanceNavigationTiming-startTime">startTime</a>, respectively.
+</dd>
+</dl>
+
+<pre class="idl"><span class="idlInterface" id="idl-def-PerformanceNavigationTiming">interface <span class="idlInterfaceID">PerformanceNavigationTiming</span> : <span class="idlSuperclass">PerformanceEntry</span> {
+<span class="idlAttribute">    readonly    attribute <span class="idlAttrType">DOMHighResTimeStamp</span> <span class="idlAttrName"><a href="https://labs.w3.org/spec-generator/?type=respec&url=http://w3c.github.io/navigation-timing/?specStatus=WD;shortName=navigation-timing#widl-PerformanceNavigationTiming-unloadEventStart">unloadEventStart</a></span>;</span>
+<span class="idlAttribute">    readonly    attribute <span class="idlAttrType">DOMHighResTimeStamp</span> <span class="idlAttrName"><a href="https://labs.w3.org/spec-generator/?type=respec&url=http://w3c.github.io/navigation-timing/?specStatus=WD;shortName=navigation-timing#widl-PerformanceNavigationTiming-unloadEventEnd">unloadEventEnd</a></span>;</span>
+<span class="idlAttribute">    readonly    attribute <span class="idlAttrType">DOMHighResTimeStamp</span> <span class="idlAttrName"><a href="https://labs.w3.org/spec-generator/?type=respec&url=http://w3c.github.io/navigation-timing/?specStatus=WD;shortName=navigation-timing#widl-PerformanceNavigationTiming-linkNegotiationStart">linkNegotiationStart</a></span>;</span>
+<span class="idlAttribute">    readonly    attribute <span class="idlAttrType">DOMHighResTimeStamp</span> <span class="idlAttrName"><a href="https://labs.w3.org/spec-generator/?type=respec&url=http://w3c.github.io/navigation-timing/?specStatus=WD;shortName=navigation-timing#widl-PerformanceNavigationTiming-linkNegotiationEnd">linkNegotiationEnd</a></span>;</span>
+<span class="idlAttribute">    readonly    attribute <span class="idlAttrType">DOMHighResTimeStamp</span> <span class="idlAttrName"><a href="https://labs.w3.org/spec-generator/?type=respec&url=http://w3c.github.io/navigation-timing/?specStatus=WD;shortName=navigation-timing#widl-PerformanceNavigationTiming-redirectStart">redirectStart</a></span>;</span>
+<span class="idlAttribute">    readonly    attribute <span class="idlAttrType">DOMHighResTimeStamp</span> <span class="idlAttrName"><a href="https://labs.w3.org/spec-generator/?type=respec&url=http://w3c.github.io/navigation-timing/?specStatus=WD;shortName=navigation-timing#widl-PerformanceNavigationTiming-redirectEnd">redirectEnd</a></span>;</span>
+<span class="idlAttribute">    readonly    attribute <span class="idlAttrType">DOMHighResTimeStamp</span> <span class="idlAttrName"><a href="https://labs.w3.org/spec-generator/?type=respec&url=http://w3c.github.io/navigation-timing/?specStatus=WD;shortName=navigation-timing#widl-PerformanceNavigationTiming-fetchStart">fetchStart</a></span>;</span>
+<span class="idlAttribute">    readonly    attribute <span class="idlAttrType">DOMHighResTimeStamp</span> <span class="idlAttrName"><a href="https://labs.w3.org/spec-generator/?type=respec&url=http://w3c.github.io/navigation-timing/?specStatus=WD;shortName=navigation-timing#widl-PerformanceNavigationTiming-domainLookupStart">domainLookupStart</a></span>;</span>
+<span class="idlAttribute">    readonly    attribute <span class="idlAttrType">DOMHighResTimeStamp</span> <span class="idlAttrName"><a href="https://labs.w3.org/spec-generator/?type=respec&url=http://w3c.github.io/navigation-timing/?specStatus=WD;shortName=navigation-timing#widl-PerformanceNavigationTiming-domainLookupEnd">domainLookupEnd</a></span>;</span>
+<span class="idlAttribute">    readonly    attribute <span class="idlAttrType">DOMHighResTimeStamp</span> <span class="idlAttrName"><a href="https://labs.w3.org/spec-generator/?type=respec&url=http://w3c.github.io/navigation-timing/?specStatus=WD;shortName=navigation-timing#widl-PerformanceNavigationTiming-connectStart">connectStart</a></span>;</span>
+<span class="idlAttribute">    readonly    attribute <span class="idlAttrType">DOMHighResTimeStamp</span> <span class="idlAttrName"><a href="https://labs.w3.org/spec-generator/?type=respec&url=http://w3c.github.io/navigation-timing/?specStatus=WD;shortName=navigation-timing#widl-PerformanceNavigationTiming-connectEnd">connectEnd</a></span>;</span>
+<span class="idlAttribute">    readonly    attribute <span class="idlAttrType">DOMHighResTimeStamp</span> <span class="idlAttrName"><a href="https://labs.w3.org/spec-generator/?type=respec&url=http://w3c.github.io/navigation-timing/?specStatus=WD;shortName=navigation-timing#widl-PerformanceNavigationTiming-secureConnectionStart">secureConnectionStart</a></span>;</span>
+<span class="idlAttribute">    readonly    attribute <span class="idlAttrType">DOMHighResTimeStamp</span> <span class="idlAttrName"><a href="https://labs.w3.org/spec-generator/?type=respec&url=http://w3c.github.io/navigation-timing/?specStatus=WD;shortName=navigation-timing#widl-PerformanceNavigationTiming-requestStart">requestStart</a></span>;</span>
+<span class="idlAttribute">    readonly    attribute <span class="idlAttrType">DOMHighResTimeStamp</span> <span class="idlAttrName"><a href="https://labs.w3.org/spec-generator/?type=respec&url=http://w3c.github.io/navigation-timing/?specStatus=WD;shortName=navigation-timing#widl-PerformanceNavigationTiming-responseStart">responseStart</a></span>;</span>
+<span class="idlAttribute">    readonly    attribute <span class="idlAttrType">DOMHighResTimeStamp</span> <span class="idlAttrName"><a href="https://labs.w3.org/spec-generator/?type=respec&url=http://w3c.github.io/navigation-timing/?specStatus=WD;shortName=navigation-timing#widl-PerformanceNavigationTiming-responseEnd">responseEnd</a></span>;</span>
+<span class="idlAttribute">    readonly    attribute <span class="idlAttrType">DOMHighResTimeStamp</span> <span class="idlAttrName"><a href="https://labs.w3.org/spec-generator/?type=respec&url=http://w3c.github.io/navigation-timing/?specStatus=WD;shortName=navigation-timing#widl-PerformanceNavigationTiming-domLoading">domLoading</a></span>;</span>
+<span class="idlAttribute">    readonly    attribute <span class="idlAttrType">DOMHighResTimeStamp</span> <span class="idlAttrName"><a href="https://labs.w3.org/spec-generator/?type=respec&url=http://w3c.github.io/navigation-timing/?specStatus=WD;shortName=navigation-timing#widl-PerformanceNavigationTiming-domInteractive">domInteractive</a></span>;</span>
+<span class="idlAttribute">    readonly    attribute <span class="idlAttrType">DOMHighResTimeStamp</span> <span class="idlAttrName"><a href="https://labs.w3.org/spec-generator/?type=respec&url=http://w3c.github.io/navigation-timing/?specStatus=WD;shortName=navigation-timing#widl-PerformanceNavigationTiming-domContentLoadedEventStart">domContentLoadedEventStart</a></span>;</span>
+<span class="idlAttribute">    readonly    attribute <span class="idlAttrType">DOMHighResTimeStamp</span> <span class="idlAttrName"><a href="https://labs.w3.org/spec-generator/?type=respec&url=http://w3c.github.io/navigation-timing/?specStatus=WD;shortName=navigation-timing#widl-PerformanceNavigationTiming-domContentLoadedEventEnd">domContentLoadedEventEnd</a></span>;</span>
+<span class="idlAttribute">    readonly    attribute <span class="idlAttrType">DOMHighResTimeStamp</span> <span class="idlAttrName"><a href="https://labs.w3.org/spec-generator/?type=respec&url=http://w3c.github.io/navigation-timing/?specStatus=WD;shortName=navigation-timing#widl-PerformanceNavigationTiming-domComplete">domComplete</a></span>;</span>
+<span class="idlAttribute">    readonly    attribute <span class="idlAttrType">DOMHighResTimeStamp</span> <span class="idlAttrName"><a href="https://labs.w3.org/spec-generator/?type=respec&url=http://w3c.github.io/navigation-timing/?specStatus=WD;shortName=navigation-timing#widl-PerformanceNavigationTiming-loadEventStart">loadEventStart</a></span>;</span>
+<span class="idlAttribute">    readonly    attribute <span class="idlAttrType">DOMHighResTimeStamp</span> <span class="idlAttrName"><a href="https://labs.w3.org/spec-generator/?type=respec&url=http://w3c.github.io/navigation-timing/?specStatus=WD;shortName=navigation-timing#widl-PerformanceNavigationTiming-loadEventEnd">loadEventEnd</a></span>;</span>
+<span class="idlAttribute">    readonly    attribute <span class="idlAttrType">DOMHighResTimeStamp</span> <span class="idlAttrName"><a href="https://labs.w3.org/spec-generator/?type=respec&url=http://w3c.github.io/navigation-timing/?specStatus=WD;shortName=navigation-timing#widl-PerformanceNavigationTiming-prerenderSwitch">prerenderSwitch</a></span>;</span>
+<span class="idlAttribute">    readonly    attribute <span class="idlAttrType"><a href="https://labs.w3.org/spec-generator/?type=respec&url=http://w3c.github.io/navigation-timing/?specStatus=WD;shortName=navigation-timing#idl-def-NavigationType" class="idlType"><code>NavigationType</code></a></span>      <span class="idlAttrName"><a href="https://labs.w3.org/spec-generator/?type=respec&url=http://w3c.github.io/navigation-timing/?specStatus=WD;shortName=navigation-timing#widl-PerformanceNavigationTiming-type">type</a></span>;</span>
+<span class="idlAttribute">    readonly    attribute <span class="idlAttrType">DOMString</span>           <span class="idlAttrName"><a href="https://labs.w3.org/spec-generator/?type=respec&url=http://w3c.github.io/navigation-timing/?specStatus=WD;shortName=navigation-timing#widl-PerformanceNavigationTiming-nextHopProtocol">nextHopProtocol</a></span>;</span>
+<span class="idlAttribute">    readonly    attribute <span class="idlAttrType">unsigned short</span>      <span class="idlAttrName"><a href="https://labs.w3.org/spec-generator/?type=respec&url=http://w3c.github.io/navigation-timing/?specStatus=WD;shortName=navigation-timing#widl-PerformanceNavigationTiming-redirectCount">redirectCount</a></span>;</span>
+<span class="idlAttribute">    readonly    attribute <span class="idlAttrType">unsigned short</span>      <span class="idlAttrName"><a href="https://labs.w3.org/spec-generator/?type=respec&url=http://w3c.github.io/navigation-timing/?specStatus=WD;shortName=navigation-timing#widl-PerformanceNavigationTiming-transferSize">transferSize</a></span>;</span>
+<span class="idlAttribute">    readonly    attribute <span class="idlAttrType">unsigned short</span>      <span class="idlAttrName"><a href="https://labs.w3.org/spec-generator/?type=respec&url=http://w3c.github.io/navigation-timing/?specStatus=WD;shortName=navigation-timing#widl-PerformanceNavigationTiming-encodedBodySize">encodedBodySize</a></span>;</span>
+<span class="idlAttribute">    readonly    attribute <span class="idlAttrType">unsigned short</span>      <span class="idlAttrName"><a href="https://labs.w3.org/spec-generator/?type=respec&url=http://w3c.github.io/navigation-timing/?specStatus=WD;shortName=navigation-timing#widl-PerformanceNavigationTiming-decodedBodySize">decodedBodySize</a></span>;</span>
+<span class="idlSerializer">    serializer = <span class="idlSerializerValues">{inherit, attribute}</span>;</span>
+};</span></pre><section id="attributes-1" typeof="bibo:Chapter" resource="#attributes-1" property="bibo:hasPart"><h4 id="h-attributes-1" resource="#h-attributes-1"><span property="xhv:role" resource="xhv:heading"><span class="secno">4.3.1 </span>Attributes</span></h4><dl class="attributes"><dt id="widl-PerformanceNavigationTiming-connectEnd"><code>connectEnd</code> of type <span class="idlAttrType">DOMHighResTimeStamp</span>, readonly   </dt><dd>
+<p>This attribute <em class="rfc2119" title="MUST">MUST</em> return a <a href="http://www.w3.org/TR/hr-time/#domhighrestimestamp">DOMHighResTimeStamp</a>
+with a time value equal to the time immediately after the user agent
+finishes establishing the connection to the server to retrieve the current document.
+If a <a href="https://tools.ietf.org/html/rfc7230#section-6.3">persistent
+connection</a> [<cite><a class="bibref" href="https://labs.w3.org/spec-generator/?type=respec&url=http://w3c.github.io/navigation-timing/?specStatus=WD;shortName=navigation-timing#bib-RFC7230">RFC7230</a></cite>] is used or the current document is retrieved from <a href="http://www.w3.org/TR/html5/browsers.html#relevant-application-cache" title="relevant application cache">relevant
+application caches</a>  [<cite><a class="bibref" href="https://labs.w3.org/spec-generator/?type=respec&url=http://w3c.github.io/navigation-timing/?specStatus=WD;shortName=navigation-timing#bib-HTML5">HTML5</a></cite>] or local resources,
+this attribute <em class="rfc2119" title="MUST">MUST</em> return the value of <a href="https://labs.w3.org/spec-generator/?type=respec&url=http://w3c.github.io/navigation-timing/?specStatus=WD;shortName=navigation-timing#widl-PerformanceNavigationTiming-domainLookupEnd">domainLookupEnd</a>
+</p>
+
+<p>If the transport connection fails and the user agent reopens a connection,
+connectStart and
+<a href="https://labs.w3.org/spec-generator/?type=respec&url=http://w3c.github.io/navigation-timing/?specStatus=WD;shortName=navigation-timing#widl-PerformanceNavigationTiming-connectEnd">connectEnd</a> <em class="rfc2119" title="SHOULD">SHOULD</em> return the corresponding
+values of the new connection. </p>
+<p>
+<a href="https://labs.w3.org/spec-generator/?type=respec&url=http://w3c.github.io/navigation-timing/?specStatus=WD;shortName=navigation-timing#widl-PerformanceNavigationTiming-connectEnd">connectEnd</a> <em class="rfc2119" title="MUST">MUST</em> include the time interval to
+establish the transport connection as well as other time interval
+such as SSL handshake and SOCKS authentication.
+</p>
+</dd><dt id="widl-PerformanceNavigationTiming-connectStart"><code>connectStart</code> of type <span class="idlAttrType">DOMHighResTimeStamp</span>, readonly   </dt><dd>
+<p>This attribute <em class="rfc2119" title="MUST">MUST</em> return a <a href="http://www.w3.org/TR/hr-time/#domhighrestimestamp">DOMHighResTimeStamp</a>
+with a time value equal to the time immediately before the user agent start
+establishing the connection to the server to retrieve the document.
+If a <a href="https://tools.ietf.org/html/rfc7230#section-6.3">persistent
+connection</a> [<cite><a class="bibref" href="https://labs.w3.org/spec-generator/?type=respec&url=http://w3c.github.io/navigation-timing/?specStatus=WD;shortName=navigation-timing#bib-RFC7230">RFC7230</a></cite>] is used or the current document is retrieved from <a href="http://www.w3.org/TR/html5/browsers.html#relevant-application-cache" title="relevant application cache">relevant
+application caches</a> or local resources,
+this attribute <em class="rfc2119" title="MUST">MUST</em> return value of <a href="https://labs.w3.org/spec-generator/?type=respec&url=http://w3c.github.io/navigation-timing/?specStatus=WD;shortName=navigation-timing#widl-PerformanceNavigationTiming-domainLookupEnd">domainLookupEnd</a>.</p>
+</dd><dt id="widl-PerformanceNavigationTiming-decodedBodySize"><code>decodedBodySize</code> of type <span class="idlAttrType">unsigned short</span>, readonly   </dt><dd>
+<p>This attribute <em class="rfc2119" title="MUST">MUST</em> return the size, in octets received by the client, of the <a href="http://httpwg.github.io/specs/rfc7230.html#message.body">message body</a> [<cite><a class="bibref" href="https://labs.w3.org/spec-generator/?type=respec&url=http://w3c.github.io/navigation-timing/?specStatus=WD;shortName=navigation-timing#bib-RFC7230">RFC7230</a></cite>], after removing any applied <a href="http://httpwg.github.io/specs/rfc7231.html#data.encoding">content-codings</a> [<cite><a class="bibref" href="https://labs.w3.org/spec-generator/?type=respec&url=http://w3c.github.io/navigation-timing/?specStatus=WD;shortName=navigation-timing#bib-RFC7231">RFC7231</a></cite>].</p>
+</dd><dt id="widl-PerformanceNavigationTiming-domComplete"><code>domComplete</code> of type <span class="idlAttrType">DOMHighResTimeStamp</span>, readonly   </dt><dd>
+<p>This attribute <em class="rfc2119" title="MUST">MUST</em> return a <a href="http://www.w3.org/TR/hr-time/#domhighrestimestamp">DOMHighResTimeStamp</a>
+with a time value equal to the time immediately before the user agent sets the
+<a href="http://www.w3.org/TR/html5/dom.html#current-document-readiness">current
+document readiness</a> to
+<a href="http://www.w3.org/TR/html5/syntax.html#the-end" title="&quot;complete&quot; document readiness">"complete"</a> [<cite><a class="bibref" href="https://labs.w3.org/spec-generator/?type=respec&url=http://w3c.github.io/navigation-timing/?specStatus=WD;shortName=navigation-timing#bib-HTML5">HTML5</a></cite>].</p>
+
+<p>If the <a href="http://www.w3.org/TR/html5/dom.html#current-document-readiness">
+current document readiness</a> changes to the same state multiple times,
+<a href="https://labs.w3.org/spec-generator/?type=respec&url=http://w3c.github.io/navigation-timing/?specStatus=WD;shortName=navigation-timing#widl-PerformanceNavigationTiming-domLoading">domLoading</a>,
+<a href="https://labs.w3.org/spec-generator/?type=respec&url=http://w3c.github.io/navigation-timing/?specStatus=WD;shortName=navigation-timing#widl-PerformanceNavigationTiming-domInteractive">domInteractive</a>,
+<a href="https://labs.w3.org/spec-generator/?type=respec&url=http://w3c.github.io/navigation-timing/?specStatus=WD;shortName=navigation-timing#widl-PerformanceNavigationTiming-domContentLoadedEventStart">domContentLoadedEventStart</a>,
+<a href="https://labs.w3.org/spec-generator/?type=respec&url=http://w3c.github.io/navigation-timing/?specStatus=WD;shortName=navigation-timing#widl-PerformanceNavigationTiming-domContentLoadedEventEnd">domContentLoadedEventEnd</a> and
+<a href="https://labs.w3.org/spec-generator/?type=respec&url=http://w3c.github.io/navigation-timing/?specStatus=WD;shortName=navigation-timing#widl-PerformanceNavigationTiming-domComplete">domComplete</a> <em class="rfc2119" title="MUST">MUST</em> return a <a href="http://www.w3.org/TR/hr-time/#domhighrestimestamp">DOMHighResTimeStamp</a>
+with a time value equal to the time of the first
+occurrence of the corresponding
+<a href="http://www.w3.org/TR/html5/dom.html#current-document-readiness" title="current document readiness">document readiness</a>
+change [<cite><a class="bibref" href="https://labs.w3.org/spec-generator/?type=respec&url=http://w3c.github.io/navigation-timing/?specStatus=WD;shortName=navigation-timing#bib-HTML5">HTML5</a></cite>].</p>
+</dd><dt id="widl-PerformanceNavigationTiming-domContentLoadedEventEnd"><code>domContentLoadedEventEnd</code> of type <span class="idlAttrType">DOMHighResTimeStamp</span>, readonly   </dt><dd>
+<p>This attribute <em class="rfc2119" title="MUST">MUST</em> return a <a href="http://www.w3.org/TR/hr-time/#domhighrestimestamp">DOMHighResTimeStamp</a>
+with a time value equal to the time immediately after the document's <a href="http://www.w3.org/TR/html5/syntax.html#the-end">DOMContentLoaded
+event</a> completes.</p>
+</dd><dt id="widl-PerformanceNavigationTiming-domContentLoadedEventStart"><code>domContentLoadedEventStart</code> of type <span class="idlAttrType">DOMHighResTimeStamp</span>, readonly   </dt><dd>
+<p>This attribute <em class="rfc2119" title="MUST">MUST</em> return a <a href="http://www.w3.org/TR/hr-time/#domhighrestimestamp">DOMHighResTimeStamp</a>
+with a time value equal to the time immediately before the user agent fires the <a href="http://www.w3.org/TR/html5/syntax.html#the-end">DOMContentLoaded
+event</a> at the Document.</p>
+</dd><dt id="widl-PerformanceNavigationTiming-domInteractive"><code>domInteractive</code> of type <span class="idlAttrType">DOMHighResTimeStamp</span>, readonly   </dt><dd>
+<p>This attribute <em class="rfc2119" title="MUST">MUST</em> return a <a href="http://www.w3.org/TR/hr-time/#domhighrestimestamp">DOMHighResTimeStamp</a>
+with a time value equal to the time immediately before the user agent sets the
+<a href="http://www.w3.org/TR/html5/dom.html#current-document-readiness">current
+document readiness</a> to
+<a href="http://www.w3.org/TR/html5/syntax.html#the-end" title="&quot;interactive&quot; document readiness">"interactive"</a> [<cite><a class="bibref" href="https://labs.w3.org/spec-generator/?type=respec&url=http://w3c.github.io/navigation-timing/?specStatus=WD;shortName=navigation-timing#bib-HTML5">HTML5</a></cite>].</p>
+</dd><dt id="widl-PerformanceNavigationTiming-domLoading"><code>domLoading</code> of type <span class="idlAttrType">DOMHighResTimeStamp</span>, readonly   </dt><dd>
+<p>This attribute <em class="rfc2119" title="MUST">MUST</em> return a <a href="http://www.w3.org/TR/hr-time/#domhighrestimestamp">DOMHighResTimeStamp</a>
+with a time value equal to the time immediately before the user agent sets the
+<a href="http://www.w3.org/TR/html5/dom.html#current-document-readiness">current
+document readiness</a> to
+<a href="http://www.w3.org/TR/html5/dom.html#current-document-readiness" title="&quot;loading&quot; document readiness">"loading"</a> [<cite><a class="bibref" href="https://labs.w3.org/spec-generator/?type=respec&url=http://w3c.github.io/navigation-timing/?specStatus=WD;shortName=navigation-timing#bib-HTML5">HTML5</a></cite>].</p>
+</dd><dt id="widl-PerformanceNavigationTiming-domainLookupEnd"><code>domainLookupEnd</code> of type <span class="idlAttrType">DOMHighResTimeStamp</span>, readonly   </dt><dd>
+<p>This attribute <em class="rfc2119" title="MUST">MUST</em> return a <a href="http://www.w3.org/TR/hr-time/#domhighrestimestamp">DOMHighResTimeStamp</a>
+with a time value equal to the time immediately after the user agent
+finishes the domain name lookup for the current document.
+If a <a href="https://tools.ietf.org/html/rfc7230#section-6.3">persistent
+connection</a> [<cite><a class="bibref" href="https://labs.w3.org/spec-generator/?type=respec&url=http://w3c.github.io/navigation-timing/?specStatus=WD;shortName=navigation-timing#bib-RFC7230">RFC7230</a></cite>] is used or the current document
+is retrieved from <a href="http://www.w3.org/TR/html5/browsers.html#relevant-application-cache" title="relevant application cache">relevant
+application caches</a> or local resources,
+this attribute <em class="rfc2119" title="MUST">MUST</em> return the same value as <a href="https://labs.w3.org/spec-generator/?type=respec&url=http://w3c.github.io/navigation-timing/?specStatus=WD;shortName=navigation-timing#widl-PerformanceNavigationTiming-fetchStart">fetchStart</a>. </p>
+
+<div class="note"><div class="note-title" aria-level="5" role="heading" id="h-note1"><span>Note</span></div><div class="">
+<p>Checking and retrieving contents from the
+<a href="https://tools.ietf.org/html/rfc7234">HTTP cache</a> [<cite><a class="bibref" href="https://labs.w3.org/spec-generator/?type=respec&url=http://w3c.github.io/navigation-timing/?specStatus=WD;shortName=navigation-timing#bib-RFC7234">RFC7234</a></cite>]
+is part of the <a href="http://www.w3.org/TR/html5/infrastructure.html#fetch" title="fetch">
+fetching process</a>. It's covered by the
+<a href="https://labs.w3.org/spec-generator/?type=respec&url=http://w3c.github.io/navigation-timing/?specStatus=WD;shortName=navigation-timing#widl-PerformanceNavigationTiming-requestStart">requestStart</a>,
+<a href="https://labs.w3.org/spec-generator/?type=respec&url=http://w3c.github.io/navigation-timing/?specStatus=WD;shortName=navigation-timing#widl-PerformanceNavigationTiming-responseStart">responseStart</a> and
+<a href="https://labs.w3.org/spec-generator/?type=respec&url=http://w3c.github.io/navigation-timing/?specStatus=WD;shortName=navigation-timing#widl-PerformanceNavigationTiming-responseEnd">responseEnd</a> attributes.</p>
+</div></div>
+<div class="note"><div class="note-title" aria-level="5" role="heading" id="h-note2"><span>Note</span></div><div class="">
+<p>In case where the user agent already has the domain information in cache,
+domainLookupStart and domainLookupEnd represent the times when the user agent
+starts and ends the domain data retrieval from the cache. </p>
+</div></div>
+</dd><dt id="widl-PerformanceNavigationTiming-domainLookupStart"><code>domainLookupStart</code> of type <span class="idlAttrType">DOMHighResTimeStamp</span>, readonly   </dt><dd>
+<p>This attribute <em class="rfc2119" title="MUST">MUST</em> return a <a href="http://www.w3.org/TR/hr-time/#domhighrestimestamp">DOMHighResTimeStamp</a>
+with a time value equal to the time immediately before the user agent starts the domain name
+lookup for the current document.
+If a <a href="https://tools.ietf.org/html/rfc7230#section-6.3">persistent
+connection</a> [<cite><a class="bibref" href="https://labs.w3.org/spec-generator/?type=respec&url=http://w3c.github.io/navigation-timing/?specStatus=WD;shortName=navigation-timing#bib-RFC7230">RFC7230</a></cite>] is used or the current document
+is retrieved from <a href="http://www.w3.org/TR/html5/browsers.html#relevant-application-cache" title="relevant application cache">relevant
+application caches</a> or local resources,
+this attribute <em class="rfc2119" title="MUST">MUST</em> return the same value as <a href="https://labs.w3.org/spec-generator/?type=respec&url=http://w3c.github.io/navigation-timing/?specStatus=WD;shortName=navigation-timing#widl-PerformanceNavigationTiming-fetchStart">fetchStart</a>. </p>
+</dd><dt id="widl-PerformanceNavigationTiming-encodedBodySize"><code>encodedBodySize</code> of type <span class="idlAttrType">unsigned short</span>, readonly   </dt><dd>
+<p>This attribute <em class="rfc2119" title="MUST">MUST</em> return the size, in octets received by the client, of the <a href="http://httpwg.github.io/specs/rfc7230.html#message.body">payload body</a> [<cite><a class="bibref" href="https://labs.w3.org/spec-generator/?type=respec&url=http://w3c.github.io/navigation-timing/?specStatus=WD;shortName=navigation-timing#bib-RFC7230">RFC7230</a></cite>], prior to removing any applied <a href="http://httpwg.github.io/specs/rfc7231.html#data.encoding">content-codings</a> [<cite><a class="bibref" href="https://labs.w3.org/spec-generator/?type=respec&url=http://w3c.github.io/navigation-timing/?specStatus=WD;shortName=navigation-timing#bib-RFC7231">RFC7231</a></cite>].
+</p>
+</dd><dt id="widl-PerformanceNavigationTiming-fetchStart"><code>fetchStart</code> of type <span class="idlAttrType">DOMHighResTimeStamp</span>, readonly   </dt><dd>
+<p>If the new resource is to be
+<a href="http://www.w3.org/TR/html5/infrastructure.html#fetch" title="fetch">fetched</a> using HTTP GET or
+<a href="http://www.w3.org/TR/html5/infrastructure.html#concept-http-equivalent-get" title="HTTP GET method equivalence">equivalent</a>, fetchStart <em class="rfc2119" title="MUST">MUST</em> return a <a href="http://www.w3.org/TR/hr-time/#domhighrestimestamp">DOMHighResTimeStamp</a>
+with a time value equal to the time immediately before the user agent starts
+checking <a href="http://www.w3.org/TR/html5/browsers.html#relevant-application-cache" title="relevant application cache">
+any relevant application caches</a>. Otherwise, it <em class="rfc2119" title="MUST">MUST</em> return a <a href="http://www.w3.org/TR/hr-time/#domhighrestimestamp">DOMHighResTimeStamp</a>
+with a time value equal to the time when the user agent starts
+<a href="http://www.w3.org/TR/html5/infrastructure.html#fetch" title="fetch">fetching</a> the resource.</p>
+</dd><dt id="widl-PerformanceNavigationTiming-linkNegotiationEnd"><code>linkNegotiationEnd</code> of type <span class="idlAttrType">DOMHighResTimeStamp</span>, readonly   </dt><dd>
+<p>This attribute is optional. User agents that don't have this attribute
+available <em class="rfc2119" title="MUST">MUST</em> set it as undefined.  If the network interface is not immediately available and <em class="rfc2119" title="MUST">MUST</em> be powered on, or cycled, before a network connection can be made, this attribute <em class="rfc2119" title="MUST">MUST</em> return a <a href="http://www.w3.org/TR/hr-time/#domhighrestimestamp">DOMHighResTimeStamp</a>
+ with a time value equal to the time immediately after the network interface becomes available. If the network interface is immediately available, this attribute <em class="rfc2119" title="MUST">MUST</em> return the same value as <a href="https://labs.w3.org/spec-generator/?type=respec&url=http://w3c.github.io/navigation-timing/?specStatus=WD;shortName=navigation-timing#widl-PerformanceNavigationTiming-startTime">startTime</a>. </p>
+</dd><dt id="widl-PerformanceNavigationTiming-linkNegotiationStart"><code>linkNegotiationStart</code> of type <span class="idlAttrType">DOMHighResTimeStamp</span>, readonly   </dt><dd>
+<p>This attribute is optional. User agents that don't have this attribute
+available <em class="rfc2119" title="MUST">MUST</em> set it as undefined. If the network interface is not immediately available and <em class="rfc2119" title="MUST">MUST</em> be powered on, or cycled, before a network connection can be made, this attribute <em class="rfc2119" title="MUST">MUST</em> return a <a href="http://www.w3.org/TR/hr-time/#domhighrestimestamp">DOMHighResTimeStamp</a>
+ with a time value equal to the time immediately before starting that process. If the network interface is immediately available, this attribute <em class="rfc2119" title="MUST">MUST</em> return the same value as <a href="https://labs.w3.org/spec-generator/?type=respec&url=http://w3c.github.io/navigation-timing/?specStatus=WD;shortName=navigation-timing#widl-PerformanceNavigationTiming-startTime">startTime</a>. </p>
+</dd><dt id="widl-PerformanceNavigationTiming-loadEventEnd"><code>loadEventEnd</code> of type <span class="idlAttrType">DOMHighResTimeStamp</span>, readonly   </dt><dd>
+<p>This attribute <em class="rfc2119" title="MUST">MUST</em> return a <a href="http://www.w3.org/TR/hr-time/#domhighrestimestamp">DOMHighResTimeStamp</a>
+with a time value equal to the time when the load event of the current
+document is completed. It <em class="rfc2119" title="MUST">MUST</em> return a <a href="http://www.w3.org/TR/hr-time/#domhighrestimestamp">DOMHighResTimeStamp</a>
+with a time value equal to zero when the load event is not fired
+or is not completed.</p>
+</dd><dt id="widl-PerformanceNavigationTiming-loadEventStart"><code>loadEventStart</code> of type <span class="idlAttrType">DOMHighResTimeStamp</span>, readonly   </dt><dd>
+<p>This attribute <em class="rfc2119" title="MUST">MUST</em> return a <a href="http://www.w3.org/TR/hr-time/#domhighrestimestamp">DOMHighResTimeStamp</a>
+with a time value equal to the time immediately before the load event of
+the current document is fired. It <em class="rfc2119" title="MUST">MUST</em> return a <a href="http://www.w3.org/TR/hr-time/#domhighrestimestamp">DOMHighResTimeStamp</a>
+with a time value equal to zero when the load event is not
+fired yet.</p>
+</dd><dt id="widl-PerformanceNavigationTiming-nextHopProtocol"><code>nextHopProtocol</code> of type <span class="idlAttrType">DOMString</span>, readonly   </dt><dd>
+<p>This attribute <em class="rfc2119" title="MUST">MUST</em> return the network protocol used to fetch the resource, as identified by the ALPN Protocol ID [<cite><a class="bibref" href="https://labs.w3.org/spec-generator/?type=respec&url=http://w3c.github.io/navigation-timing/?specStatus=WD;shortName=navigation-timing#bib-RFC7301">RFC7301</a></cite>]. When a proxy is configured, if a tunnel connection is established then this attribute <em class="rfc2119" title="MUST">MUST</em> return the ALPN Protocol ID of the tunneled protocol, otherwise it <em class="rfc2119" title="MUST">MUST</em> return the ALPN Protocol ID of the first hop to the proxy.</p>
+
+<p>In order to have precisely one way to represent any ALPN protocol ID, the following additional constraints apply: octets in the ALPN protocol <em class="rfc2119" title="MUST NOT">MUST NOT</em> be percent-encoded if they are valid token characters except "%", and when using percent-encoding, uppercase hex digits <em class="rfc2119" title="MUST">MUST</em> be used.</p>
+
+<p>Note that this attribute is intended to identify the network protocol in use for the fetch regardless of how it was actually negotiated; that is, even if ALPN is not used to negotiate the network protocol, this attribute still uses the ALPN Protocol ID's to indicate the protocol in use.</p>
+</dd><dt id="widl-PerformanceNavigationTiming-prerenderSwitch"><code>prerenderSwitch</code> of type <span class="idlAttrType">DOMHighResTimeStamp</span>, readonly   </dt><dd>
+<p>This attribute <em class="rfc2119" title="MUST">MUST</em> return a <a href="http://www.w3.org/TR/hr-time/#domhighrestimestamp">DOMHighResTimeStamp</a>
+with a time value equal to the time immediately after the User Agent changes the <a href="http://www.w3.org/TR/page-visibility/#dom-document-visibilitystate">visibilityState</a>
+from <code>prerender</code> to <code>visible</code> [<cite><a class="bibref" href="https://labs.w3.org/spec-generator/?type=respec&url=http://w3c.github.io/navigation-timing/?specStatus=WD;shortName=navigation-timing#bib-Page-Visibility">Page-Visibility</a></cite>]. If the document has not been <a href="http://microformats.org/wiki/rel-prerender" title="prerender">prerendered</a> by the User Agent [<cite><a class="bibref" href="https://labs.w3.org/spec-generator/?type=respec&url=http://w3c.github.io/navigation-timing/?specStatus=WD;shortName=navigation-timing#bib-prerender">prerender</a></cite>], this attribute <em class="rfc2119" title="MUST">MUST</em> return a
+<a href="http://www.w3.org/TR/hr-time/#domhighrestimestamp">DOMHighResTimeStamp</a> with a time value equal to zero.
+</p>
+</dd><dt id="widl-PerformanceNavigationTiming-redirectCount"><code>redirectCount</code> of type <span class="idlAttrType">unsigned short</span>, readonly   </dt><dd>
+<p>This attribute <em class="rfc2119" title="MUST">MUST</em> return the number of redirects since the last
+non-redirect navigation under the current browsing context. If there is no
+redirect or there is any redirect that is not from the same
+<a href="http://tools.ietf.org/html/rfc6454">
+origin</a> [<cite><a class="bibref" href="https://labs.w3.org/spec-generator/?type=respec&url=http://w3c.github.io/navigation-timing/?specStatus=WD;shortName=navigation-timing#bib-RFC6454">RFC6454</a></cite>] as the destination document, this attribute <em class="rfc2119" title="MUST">MUST</em> return zero. </p>
+</dd><dt id="widl-PerformanceNavigationTiming-redirectEnd"><code>redirectEnd</code> of type <span class="idlAttrType">DOMHighResTimeStamp</span>, readonly   </dt><dd>
+<p>If there are HTTP redirects
+or <a href="http://www.w3.org/TR/html5/infrastructure.html#concept-http-equivalent-codes" title="HTTP response codes equivalence">equivalent</a>
+when navigating and all redirects and equivalents are from the
+same <a href="http://tools.ietf.org/html/rfc6454">origin</a>,
+this attribute <em class="rfc2119" title="MUST">MUST</em> return a <a href="http://www.w3.org/TR/hr-time/#domhighrestimestamp">DOMHighResTimeStamp</a>
+with a time value equal to the time immediately after receiving the last byte of
+the response of the last redirect. Otherwise, this attribute <em class="rfc2119" title="MUST">MUST</em> return a <a href="http://www.w3.org/TR/hr-time/#domhighrestimestamp">DOMHighResTimeStamp</a>
+with a time value equal to zero.</p>
+</dd><dt id="widl-PerformanceNavigationTiming-redirectStart"><code>redirectStart</code> of type <span class="idlAttrType">DOMHighResTimeStamp</span>, readonly   </dt><dd>
+<p>If there are HTTP redirects or
+<a href="http://www.w3.org/TR/html5/infrastructure.html#concept-http-equivalent-codes" title="HTTP response codes equivalence">equivalent</a>
+when navigating and if all the redirects or equivalent are from the
+same <a href="http://tools.ietf.org/html/rfc6454">origin</a>,
+this attribute <em class="rfc2119" title="MUST">MUST</em> return a <a href="http://www.w3.org/TR/hr-time/#domhighrestimestamp">DOMHighResTimeStamp</a>
+with a time value equal to the <a href="https://labs.w3.org/spec-generator/?type=respec&url=http://w3c.github.io/navigation-timing/?specStatus=WD;shortName=navigation-timing#widl-PerformanceNavigationTiming-fetchStart">starting time
+of the fetch</a> that initiates the redirect. Otherwise, this attribute <em class="rfc2119" title="MUST">MUST</em> return a <a href="http://www.w3.org/TR/hr-time/#domhighrestimestamp">DOMHighResTimeStamp</a>
+with a time value equal to zero.</p>
+</dd><dt id="widl-PerformanceNavigationTiming-requestStart"><code>requestStart</code> of type <span class="idlAttrType">DOMHighResTimeStamp</span>, readonly   </dt><dd>
+<p>This attribute <em class="rfc2119" title="MUST">MUST</em> return a <a href="http://www.w3.org/TR/hr-time/#domhighrestimestamp">DOMHighResTimeStamp</a>
+with a time value equal to the time immediately before the user agent
+starts requesting the current document from the server, or from
+<a href="http://www.w3.org/TR/html5/browsers.html#relevant-application-cache" title="relevant application cache">relevant application caches</a> or from local resources.</p>
+
+<p>If the transport connection fails after a request is sent and the user
+agent reopens a connection and resend the request, <a href="https://labs.w3.org/spec-generator/?type=respec&url=http://w3c.github.io/navigation-timing/?specStatus=WD;shortName=navigation-timing#widl-PerformanceNavigationTiming-requestStart">requestStart</a> <em class="rfc2119" title="SHOULD">SHOULD</em> return the corresponding values
+of the new request.</p>
+
+<div class="note"><div class="note-title" aria-level="5" role="heading" id="h-note3"><span>Note</span></div><div class="">
+<p>This interface does not include an attribute to represent the completion of
+sending the request, e.g., requestEnd.</p>
+<ul>
+<li>Completion of sending the request from the user agent does not always
+indicate the corresponding completion time in the network transport, which
+brings most of the benefit of having such an attribute.</li>
+<li>Some user agents have high cost to determine the actual completion time of
+sending the request due to the HTTP layer encapsulation.</li>
+</ul>
+</div></div>
+</dd><dt id="widl-PerformanceNavigationTiming-responseEnd"><code>responseEnd</code> of type <span class="idlAttrType">DOMHighResTimeStamp</span>, readonly   </dt><dd>
+<p>This attribute <em class="rfc2119" title="MUST">MUST</em> return a <a href="http://www.w3.org/TR/hr-time/#domhighrestimestamp">DOMHighResTimeStamp</a>
+with a time value equal to the time immediately after the user agent
+receives the last byte of the current document or immediately before the
+transport connection is closed, whichever comes first. The document here
+can be received either from the server,
+<a href="http://www.w3.org/TR/html5/browsers.html#relevant-application-cache" title="relevant application cache">relevant
+application caches</a> or from local resources.</p>
+</dd><dt id="widl-PerformanceNavigationTiming-responseStart"><code>responseStart</code> of type <span class="idlAttrType">DOMHighResTimeStamp</span>, readonly   </dt><dd>
+<p>This attribute <em class="rfc2119" title="MUST">MUST</em> return a <a href="http://www.w3.org/TR/hr-time/#domhighrestimestamp">DOMHighResTimeStamp</a>
+with a time value equal to the time immediately after the user agent receives the first
+byte of the response from the server, or from
+<a href="http://www.w3.org/TR/html5/browsers.html#relevant-application-cache" title="relevant application cache">relevant
+application caches</a> or from local resources. </p>
+</dd><dt id="widl-PerformanceNavigationTiming-secureConnectionStart"><code>secureConnectionStart</code> of type <span class="idlAttrType">DOMHighResTimeStamp</span>, readonly   </dt><dd>
+<p>This attribute is optional. User agents that don't have this attribute
+available <em class="rfc2119" title="MUST">MUST</em> set it as undefined. When this attribute is available, if the
+<a href="http://www.w3.org/TR/url/#concept-url-scheme">scheme</a> [<cite><a class="bibref" href="https://labs.w3.org/spec-generator/?type=respec&url=http://w3c.github.io/navigation-timing/?specStatus=WD;shortName=navigation-timing#bib-URL">URL</a></cite>] of the
+current page is <a href="http://tools.ietf.org/html/rfc2817">HTTPS</a> [<cite><a class="bibref" href="https://labs.w3.org/spec-generator/?type=respec&url=http://w3c.github.io/navigation-timing/?specStatus=WD;shortName=navigation-timing#bib-RFC2817">RFC2817</a></cite>], this
+attribute <em class="rfc2119" title="MUST">MUST</em> return a <a href="http://www.w3.org/TR/hr-time/#domhighrestimestamp">DOMHighResTimeStamp</a>
+with a time value equal to the time immediately before the user agent starts the
+handshake process to secure the current connection. If this attribute is
+available but HTTPS is not used, this attribute <em class="rfc2119" title="MUST">MUST</em> return zero.
+</p>
+</dd><dt id="widl-PerformanceNavigationTiming-transferSize"><code>transferSize</code> of type <span class="idlAttrType">unsigned short</span>, readonly   </dt><dd>
+<p>This attribute <em class="rfc2119" title="MUST">MUST</em> return the size, in octets received by the client, consumed by the response header fields and the response <a href="http://httpwg.github.io/specs/rfc7230.html#message.body">payload body</a> [<cite><a class="bibref" href="https://labs.w3.org/spec-generator/?type=respec&url=http://w3c.github.io/navigation-timing/?specStatus=WD;shortName=navigation-timing#bib-RFC7230">RFC7230</a></cite>].</p>
+
+<p>This attribute <em class="rfc2119" title="SHOULD">SHOULD</em> include HTTP overhead (such as HTTP/1.1 chunked encoding and whitespace around header fields, including newlines, and HTTP/2 frame overhead, along with other server-to-client frames on the same stream), but <em class="rfc2119" title="SHOULD NOT">SHOULD NOT</em> include lower-layer protocol overhead (such as TLS or TCP). If there are HTTP redirects or
+<a href="http://www.w3.org/TR/html5/infrastructure.html#concept-http-equivalent-codes" title="HTTP response codes equivalence">equivalent</a>
+when navigating and if all the redirects or equivalent are from the
+same <a href="http://tools.ietf.org/html/rfc6454">origin</a>,
+this attribute <em class="rfc2119" title="SHOULD">SHOULD</em> include the HTTP overhead of incurred redirects.</p>
+</dd><dt id="widl-PerformanceNavigationTiming-type"><code>type</code> of type <span class="idlAttrType"><a href="https://labs.w3.org/spec-generator/?type=respec&url=http://w3c.github.io/navigation-timing/?specStatus=WD;shortName=navigation-timing#idl-def-NavigationType" class="idlType"><code>NavigationType</code></a></span>, readonly   </dt><dd>
+<p>This attribute <em class="rfc2119" title="MUST">MUST</em> return a <code>DOMString</code> describing the type of the last non-redirect <a href="http://www.w3.org/TR/html5/browsers.html#navigate">navigation</a>
+in the current browsing context. It <em class="rfc2119" title="MUST">MUST</em> have one of the <a href="https://labs.w3.org/spec-generator/?type=respec&url=http://w3c.github.io/navigation-timing/?specStatus=WD;shortName=navigation-timing#idl-def-NavigationType" class="idlType"><code>NavigationType</code></a> values. </p>
+
+<div class="note"><div class="note-title" aria-level="5" role="heading" id="h-note4"><span>Note</span></div><div class="">
+<p>Client-side redirects, such as those using the <a href="http://www.w3.org/TR/html5/document-metadata.html#attr-meta-http-equiv-refresh">Refresh pragma directive</a>,
+are not considered HTTP redirects or <a href="http://www.w3.org/TR/html5/infrastructure.html#concept-http-equivalent-codes" title="HTTP response codes equivalence">equivalent</a> by this spec.
+In those cases, the <a href="https://labs.w3.org/spec-generator/?type=respec&url=http://w3c.github.io/navigation-timing/?specStatus=WD;shortName=navigation-timing#widl-PerformanceNavigationTiming-type">type</a> attribute <em class="rfc2119" title="SHOULD">SHOULD</em> return appropriate value,
+such as <a href="https://labs.w3.org/spec-generator/?type=respec&url=http://w3c.github.io/navigation-timing/?specStatus=WD;shortName=navigation-timing#idl-def-NavigationType.navigate">reload</a> if reloading the current page, or
+<a href="https://labs.w3.org/spec-generator/?type=respec&url=http://w3c.github.io/navigation-timing/?specStatus=WD;shortName=navigation-timing#idl-def-NavigationType.navigate">navigate</a> if navigating to a new URL.</p>
+</div></div>
+</dd><dt id="widl-PerformanceNavigationTiming-unloadEventEnd"><code>unloadEventEnd</code> of type <span class="idlAttrType">DOMHighResTimeStamp</span>, readonly   </dt><dd>
+<p>If the previous document and the current document have the
+same <a href="http://tools.ietf.org/html/rfc6454">same origin</a>,
+this attribute <em class="rfc2119" title="MUST">MUST</em> return a <a href="http://www.w3.org/TR/hr-time/#domhighrestimestamp">DOMHighResTimeStamp</a>
+with a time value equal to the time immediately after the user agent finishes the
+<a href="http://www.w3.org/TR/html5/browsers.html#unloading-documents">unload event</a> of the previous document. If there is no previous document or the previous document has
+a different <a href="http://tools.ietf.org/html/rfc6454">origin</a> than the
+current document or the unload is not yet completed, this attribute <em class="rfc2119" title="MUST">MUST</em> return a <a href="http://www.w3.org/TR/hr-time/#domhighrestimestamp">DOMHighResTimeStamp</a>
+with a time value equal to zero.</p>
+
+<p>If there are HTTP redirects or
+<a href="http://www.w3.org/TR/html5/infrastructure.html#concept-http-equivalent-codes" title="HTTP response codes equivalence">equivalent</a>
+when navigating and not all the redirects or equivalent are from the
+same <a href="http://tools.ietf.org/html/rfc6454">origin</a>,
+both <a href="https://labs.w3.org/spec-generator/?type=respec&url=http://w3c.github.io/navigation-timing/?specStatus=WD;shortName=navigation-timing#widl-PerformanceNavigationTiming-unloadEventStart">unloadEventStart</a> and
+<a href="https://labs.w3.org/spec-generator/?type=respec&url=http://w3c.github.io/navigation-timing/?specStatus=WD;shortName=navigation-timing#widl-PerformanceNavigationTiming-unloadEventEnd">unloadEventEnd</a> <em class="rfc2119" title="MUST">MUST</em> return a <a href="http://www.w3.org/TR/hr-time/#domhighrestimestamp">DOMHighResTimeStamp</a>
+with a time value equal to zero.</p>
+</dd><dt id="widl-PerformanceNavigationTiming-unloadEventStart"><code>unloadEventStart</code> of type <span class="idlAttrType">DOMHighResTimeStamp</span>, readonly   </dt><dd>
+<p>If the previous document and the current document have the same
+<a href="http://tools.ietf.org/html/rfc6454">origin</a>
+[<cite><a class="bibref" href="https://labs.w3.org/spec-generator/?type=respec&url=http://w3c.github.io/navigation-timing/?specStatus=WD;shortName=navigation-timing#bib-RFC6454">RFC6454</a></cite>],
+this attribute <em class="rfc2119" title="MUST">MUST</em> return a <a href="http://www.w3.org/TR/hr-time/#domhighrestimestamp">DOMHighResTimeStamp</a>
+with a time value equal to the time immediately before the user agent starts
+the <a href="http://www.w3.org/TR/html5/browsers.html#unloading-documents">unload event</a> of the previous document.
+
+If there is no previous document or the previous document has a
+different <a href="http://tools.ietf.org/html/rfc6454">origin</a> than the
+current document, this attribute <em class="rfc2119" title="MUST">MUST</em> return a <a href="http://www.w3.org/TR/hr-time/#domhighrestimestamp">DOMHighResTimeStamp</a>
+with a time value equal to zero.</p>
+</dd></dl></section><section id="serializer" typeof="bibo:Chapter" resource="#serializer" property="bibo:hasPart"><h4 id="h-serializer" resource="#h-serializer"><span property="xhv:role" resource="xhv:heading"><span class="secno">4.3.2 </span>Serializer</span></h4><div><p>Instances of this interface are serialized as a map with entries from the closest inherited interface and with entries for each of the serializable attributes.</p><p></p></div></section>
+
+<section id="sec-performance-navigation-types" typeof="bibo:Chapter" resource="#sec-performance-navigation-types" property="bibo:hasPart">
+<h4 id="h-sec-performance-navigation-types" resource="#h-sec-performance-navigation-types"><span property="xhv:role" resource="xhv:heading"><span class="secno">4.3.3 </span>Navigation types</span></h4>
+
+
+<pre class="idl"><span class="idlEnum" id="idl-def-NavigationType">enum <span class="idlEnumID">NavigationType</span> {
+    "<a href="https://labs.w3.org/spec-generator/?type=respec&url=http://w3c.github.io/navigation-timing/?specStatus=WD;shortName=navigation-timing#idl-def-NavigationType.navigate" class="idlEnumItem">navigate</a>",
+    "<a href="https://labs.w3.org/spec-generator/?type=respec&url=http://w3c.github.io/navigation-timing/?specStatus=WD;shortName=navigation-timing#idl-def-NavigationType.reload" class="idlEnumItem">reload</a>",
+    "<a href="https://labs.w3.org/spec-generator/?type=respec&url=http://w3c.github.io/navigation-timing/?specStatus=WD;shortName=navigation-timing#idl-def-NavigationType.back_forward" class="idlEnumItem">back_forward</a>",
+    "<a href="https://labs.w3.org/spec-generator/?type=respec&url=http://w3c.github.io/navigation-timing/?specStatus=WD;shortName=navigation-timing#idl-def-NavigationType.prerender" class="idlEnumItem">prerender</a>"
+};</span></pre><table class="simple"><tbody><tr><th colspan="2">Enumeration description</th></tr><tr><td><code id="idl-def-NavigationType.navigate">navigate</code></td><td>
+<p>Navigation started by clicking on a link, or entering the URL in the user
+agent's address bar, or form submission, or initializing through a script operation other than the ones used by <a href="https://labs.w3.org/spec-generator/?type=respec&url=http://w3c.github.io/navigation-timing/?specStatus=WD;shortName=navigation-timing#idl-def-NavigationType.navigate">reload</a> and <a href="https://labs.w3.org/spec-generator/?type=respec&url=http://w3c.github.io/navigation-timing/?specStatus=WD;shortName=navigation-timing#idl-def-NavigationType.back_forward">back_forward</a> as listed below.</p>
+</td></tr><tr><td><code id="idl-def-NavigationType.reload">reload</code></td><td>
+<p>Navigation through the reload operation or the
+    <a href="http://www.w3.org/TR/html5/browsers.html#dom-location-reload">location.reload()</a>
+    method.</p>
+    </td></tr><tr><td><code id="idl-def-NavigationType.back_forward">back_forward</code></td><td>
+<p>Navigation
+  through a <a href="http://www.w3.org/TR/html5/browsers.html#traverse-the-history">history traversal</a> operation.</p>
+  </td></tr><tr><td><code id="idl-def-NavigationType.prerender">prerender</code></td><td>
+<p>Navigation initiated by a <a href="http://microformats.org/wiki/rel-prerender">prerender</a> hint.</p>
+</td></tr></tbody></table>
+
+</section>
+
+</section>
+</section>
+
+<section id="process" typeof="bibo:Chapter" resource="#process" property="bibo:hasPart">
+<!--OddPage--><h2 id="h-process" resource="#h-process"><span property="xhv:role" resource="xhv:heading"><span class="secno">5. </span>Process</span></h2>
+
+<section id="processing-model" typeof="bibo:Chapter" resource="#processing-model" property="bibo:hasPart">
+<h3 id="h-processing-model" resource="#h-processing-model"><span property="xhv:role" resource="xhv:heading"><span class="secno">5.1 </span>Processing Model</span></h3>
+
+<figure title="Timing attributes" id="fig-this-figure-illustrates-the-timing-attributes-defined-by-the-performancenavigationtiming-interface.-attributes-in-parenthesis-may-not-be-available-in-navigation-involving-documents-from-different-origins.-user-agents-may-perform-internal-processing-in-between-timings-which-allow-for-non-normative-intervals-between-timings.x">
+<figcaption>Fig. <span class="figno">1</span> <span class="fig-title">
+This figure illustrates the timing attributes defined by the
+<a href="https://labs.w3.org/spec-generator/?type=respec&url=http://w3c.github.io/navigation-timing/?specStatus=WD;shortName=navigation-timing#idl-def-PerformanceNavigationTiming" class="idlType"><code>PerformanceNavigationTiming</code></a> interface. Attributes in parenthesis may not be
+available in navigation involving documents from different
+<a href="http://tools.ietf.org/html/rfc6454" title="origin">origins</a>. User
+agents may perform internal processing in between timings, which allow for
+non-normative intervals between timings.
+</span></figcaption>
+<svg xmlns="http://www.w3.org/2000/svg" width="942" height="501" style="display:block;margin:auto">
+  <defs>
+    <marker refX="0" refY="0" orient="auto" id="Arrow2Mend" style="overflow:visible">
+      <path d="M 8.7185878,4.0337352 -2.2072895,0.01601326 8.7185884,-4.0017078 c -1.7454984,2.3720609 -1.7354408,5.6174519 -6e-7,8.035443 z" transform="scale(-0.6,-0.6)" id="path4234" style="fill-rule:evenodd;stroke-width:0.625;stroke-linejoin:round"></path>
+    </marker>
+  </defs>
+  <style type="text/css">
+   path { fill:none;stroke:#000080;stroke-width:1.5;stroke-opacity:1;stroke-dasharray:none;marker-end:url(#Arrow2Mend); }
+   rect { fill:#00ffff;fill-opacity:1;stroke:#0000ff;stroke-width:2; }
+   text { font-size:12px;font-weight: bold;text-align:center;fill:#000000;fill-opacity:1;stroke:none;font-family:monospace; }
+   .middle { text-anchor:middle; }
+   .end { text-anchor:end; }
+   .highlight { font-style: italic; }
+  </style>
+  <g transform="translate(-4.3,-477.125)">
+    <rect width="80" height="80" x="10" y="702"></rect>
+    <rect width="70" height="80" x="100" y="702"></rect>
+    <rect width="59.999966" height="79.999962" x="880" y="702"></rect>
+    <rect width="210" height="80" x="660" y="702"></rect>
+    <rect width="90" height="80" x="560" y="702"></rect>
+    <rect width="90" height="80" x="470" y="702"></rect>
+    <rect width="60" height="80" x="400" y="702"></rect>
+    <rect width="50" height="80" x="340" y="702"></rect>
+    <rect width="60" height="80" x="270" y="702"></rect>
+    <rect width="80" height="80" x="180" y="702"></rect>
+    <rect width="160" height="50" x="690" y="762"></rect>
+    <rect width="80" height="50" x="200" y="762"></rect>
+    <text class="middle"><tspan x="50" y="729">Prompt</tspan><tspan x="50" y="747">for</tspan><tspan x="50" y="764">unload</tspan></text>
+    <text class="middle"><tspan x="135.28711" y="738">Negotiate</tspan><tspan x="135" y="756">link</tspan></text>
+    <text x="219.94189" y="747.12683" class="middle"><tspan>redirect</tspan></text>
+    <text class="middle"><tspan x="299.95557" y="738">App</tspan><tspan x="300" y="755.7572">cache</tspan></text>
+    <text x="365.25977" y="745" class="middle"><tspan>DNS</tspan></text>
+    <text x="430.0376" y="745" class="middle"><tspan>TCP</tspan></text>
+    <text x="514.8667" y="745" class="middle"><tspan>Request</tspan></text>
+    <text x="605.0752" y="745" class="middle"><tspan>Response</tspan></text>
+    <text x="765.01025" y="745" class="middle"><tspan>Processing</tspan></text>
+    <text x="909.77441" y="745" class="middle"><tspan>load</tspan></text>
+    <text x="769.86328" y="792" class="middle"><tspan>DOMContentLoaded</tspan></text>
+    <text x="239.97607" y="792.12683" class="middle"><tspan>unload</tspan></text>
+    <text x="490" y="512.12122"><tspan>(linkNegotiationStart)</tspan></text>
+    <text x="490.49219" y="491.88022" class="highlight"><tspan>startTime</tspan></text>
+    <text x="490" y="532"><tspan>(linkNegotiationEnd)</tspan></text>
+    <text x="490" y="552.60315" class="highlight"><tspan>redirectStart</tspan></text>
+    <text x="490" y="593.08502"><tspan>fetchStart</tspan></text>
+    <text x="490" y="572.84412" class="highlight"><tspan>redirectEnd</tspan></text>
+    <text x="490" y="613.32599"><tspan>domainLookupStart</tspan></text>
+    <text x="490" y="633.56696"><tspan>domainLookupEnd</tspan></text>
+    <text x="490" y="653.56866"><tspan>connectStart</tspan></text>
+    <text x="490" y="674.04889"><tspan>(secureConnectionStart)</tspan></text>
+    <text x="490" y="694.28986"><tspan>connectEnd</tspan></text>
+    <text x="440.20801" y="812" class="end"><tspan>requestStart</tspan></text>
+    <text x="440.20801" y="838.98895" class="end"><tspan>responseStart</tspan></text>
+    <text x="440.20801" y="865.85504" class="end"><tspan>responseEnd</tspan></text>
+    <text x="858.44238" y="952" class="end"><tspan>domComplete</tspan></text>
+    <text x="852.79004" y="612" class="end"><tspan>loadEventEnd</tspan></text>
+    <text x="852.79004" y="644.65131" class="end"><tspan>loadEventStart</tspan></text>
+    <text x="439.83203" y="892.48181" class="end"><tspan>domLoading</tspan></text>
+    <text x="439.83203" y="919.10858" class="end"><tspan>domInteractive</tspan></text>
+    <text x="439.83203" y="945.73541" class="end"><tspan>domContentLoadedEventStart</tspan></text>
+    <text x="439.83203" y="972" class="end"><tspan>domContentLoadedEventEnd</tspan></text>
+    <path d="M 480,40 150,40 90,250" transform="translate(0,452)"></path>
+    <text x="144.81705" y="846" class="end highlight"><tspan>unloadEventStart</tspan></text>
+    <text x="143.46094" y="872" class="end highlight"><tspan>unloadEventEnd</tspan></text>
+    <path d="m 480,512 -310,0 -70,190"></path>
+    <path d="m 480,532 -280,0 -30,170"></path>
+    <path d="m 480,552 -270,0 -30,150"></path>
+    <path d="m 480,572 -200,0 -20,130"></path>
+    <path d="m 480,592 -180,0 -30,110"></path>
+    <path d="m 480,612 -110,0 -30,90"></path>
+    <path d="m 480,632 -70,0 -20,70"></path>
+    <path d="m 480,652 -50,0 -30,50"></path>
+    <path d="m 480,672 -40,0 -20,30"></path>
+    <path d="m 480,692 -10,0 -10,10"></path>
+    <path d="m 450,812 10,0 10,-30"></path>
+    <path d="m 450,832 50,0 60,-50"></path>
+    <path d="m 450,862 100,0 100,-80"></path>
+    <path d="m 450,892 140,0 80,-110"></path>
+    <path d="m 450,922 150,0 80,-120"></path>
+    <path d="m 450,942 190,0 50,-130"></path>
+    <path d="m 450,972 220,0 180,-160"></path>
+    <path d="m 870,952 50,0 -60,-160"></path>
+    <path d="m 860,642 10,0 10,60"></path>
+    <path d="m 860,612 40,0 40,90"></path>
+    <path d="m 150,842 30,0 20,-30"></path>
+    <path d="m 150,872 80,0 50,-60"></path>
+  </g>
+</svg>
+</figure>
+
+<ol>
+  <li>If the navigation is aborted for any of the following reasons, abort
+    these steps.
+    <ol style="list-style-type:lower-alpha;">
+      <li>The navigation is aborted due to the
+        <a href="http://www.w3.org/TR/html5/browsers.html#sandboxed-navigation-browsing-context-flag">sandboxed
+        navigation browsing context flag</a> or the
+        <a href="http://www.w3.org/TR/html5/browsers.html#sandboxed-top-level-navigation-browsing-context-flag">sandboxed
+        top-level navigation browsing context flag</a>, or a preexist attempt
+        to navigate the <a href="http://www.w3.org/TR/html5/browsers.html#browsing-context">browsing context</a>.</li>
+      <li>The navigation is caused by <a href="http://www.w3.org/TR/html5/browsers.html#navigate-fragid-step" title="fragment identifiers navigation">fragment
+        identifiers</a> within the page.</li>
+      <li>The new resource is to be handled by some sort of inline
+      content.</li>
+      <li>The new resource is to be handled using a mechanism that does not
+        affect the browsing context.</li>
+      <li>The user <a href="http://www.w3.org/TR/html5/browsers.html#refused-to-allow-the-document-to-be-unloaded">refuses
+        to allow the document to be unloaded</a>.</li>
+    </ol>
+  </li>
+  <li id="step-create-object">Create a new <a href="https://labs.w3.org/spec-generator/?type=respec&url=http://w3c.github.io/navigation-timing/?specStatus=WD;shortName=navigation-timing#idl-def-PerformanceNavigationTiming" class="idlType"><code>PerformanceNavigationTiming</code></a> object.
+  </li>
+  <li>Set <a href="https://labs.w3.org/spec-generator/?type=respec&url=http://w3c.github.io/navigation-timing/?specStatus=WD;shortName=navigation-timing#widl-PerformanceNavigationTiming-name">name</a> to the <code>DOMString</code> "<code>document</code>".</li>
+  <li>Set <a href="https://labs.w3.org/spec-generator/?type=respec&url=http://w3c.github.io/navigation-timing/?specStatus=WD;shortName=navigation-timing#widl-PerformanceNavigationTiming-entryType">entryType</a> to the <code>DOMString</code> "<code>navigation</code>".</li>
+  <li>Set <a href="https://labs.w3.org/spec-generator/?type=respec&url=http://w3c.github.io/navigation-timing/?specStatus=WD;shortName=navigation-timing#widl-PerformanceNavigationTiming-startTime">startTime</a> to a <a href="http://www.w3.org/TR/hr-time/#domhighrestimestamp">DOMHighResTimeStamp</a> with a time value of zero, and <a href="https://labs.w3.org/spec-generator/?type=respec&url=http://w3c.github.io/navigation-timing/?specStatus=WD;shortName=navigation-timing#widl-PerformanceNavigationTiming-nextHopProtocol">nextHopProtocol</a> to the empty <code>DOMString</code>.</li>
+  <li> Record the current navigation type in <a href="https://labs.w3.org/spec-generator/?type=respec&url=http://w3c.github.io/navigation-timing/?specStatus=WD;shortName=navigation-timing#widl-PerformanceNavigationTiming-type">type</a>
+    if it has not been set:
+    <ol style="list-style-type:lower-alpha;">
+    <li>If the navigation was started by clicking on a link, or entering the URL in the user
+        agent's address bar, or form submission, or initializing through a script operation other than the
+        <a href="http://www.w3.org/TR/html5/browsers.html#dom-location-reload">location.reload()</a> method,
+        let the navigation type be the <code>DOMString</code> "<a href="https://labs.w3.org/spec-generator/?type=respec&url=http://w3c.github.io/navigation-timing/?specStatus=WD;shortName=navigation-timing#idl-def-NavigationType.navigate">navigate</a>".</li>
+    <li>If the navigation was started either as a result of a
+        <a href="http://www.w3.org/TR/html5/document-metadata.html#attr-meta-http-equiv-refresh" title="Refresh pragma directive">meta refresh</a>,
+        or the <a href="http://www.w3.org/TR/html5/browsers.html#dom-location-reload">location.reload()</a>
+        method, or other equivalent actions, let the navigation type
+        be the <code>DOMString</code> "<a href="https://labs.w3.org/spec-generator/?type=respec&url=http://w3c.github.io/navigation-timing/?specStatus=WD;shortName=navigation-timing#idl-def-NavigationType.reload">reload</a>".</li>
+    <li>If the navigation was started as a result of
+        <a href="http://www.w3.org/TR/html5/browsers.html#traverse-the-history">history traversal</a>,
+        let the navigation type be the <code>DOMString</code> "<a href="https://labs.w3.org/spec-generator/?type=respec&url=http://w3c.github.io/navigation-timing/?specStatus=WD;shortName=navigation-timing#idl-def-NavigationType.back_forward">back_forward</a>".</li>
+    </ol>
+  </li>
+  <li>If the current document and the previous document are from different
+    <a href="http://tools.ietf.org/html/rfc6454" title="origin">origins</a>,
+    set both <a href="https://labs.w3.org/spec-generator/?type=respec&url=http://w3c.github.io/navigation-timing/?specStatus=WD;shortName=navigation-timing#widl-PerformanceNavigationTiming-unloadEventEnd">unloadEventStart</a> and
+    <a href="https://labs.w3.org/spec-generator/?type=respec&url=http://w3c.github.io/navigation-timing/?specStatus=WD;shortName=navigation-timing#widl-PerformanceNavigationTiming-unloadEventEnd">unloadEventEnd</a> to 0 then go to step
+    <a href="https://labs.w3.org/spec-generator/?type=respec&url=http://w3c.github.io/navigation-timing/?specStatus=WD;shortName=navigation-timing#step-linknegotiation-start">9</a>. Otherwise, record <a href="https://labs.w3.org/spec-generator/?type=respec&url=http://w3c.github.io/navigation-timing/?specStatus=WD;shortName=navigation-timing#widl-PerformanceNavigationTiming-unloadEventEnd">unloadEventStart</a>
+    as the time immediately before the unload event.</li>
+  <li>Immediately after the unload event is completed,
+    record the current time as <a href="https://labs.w3.org/spec-generator/?type=respec&url=http://w3c.github.io/navigation-timing/?specStatus=WD;shortName=navigation-timing#widl-PerformanceNavigationTiming-unloadEventEnd">unloadEventEnd</a>.</li>
+  <li id="step-linknegotiation-start">If the navigation requires the network interface to be powered on or cycled, record the time immediately before doing that as <a href="https://labs.w3.org/spec-generator/?type=respec&url=http://w3c.github.io/navigation-timing/?specStatus=WD;shortName=navigation-timing#widl-PerformanceNavigationTiming-linkNegotiationStart">linkNegotiationStart</a>, and record the time immediately after the network interface becomes available as <a href="https://labs.w3.org/spec-generator/?type=respec&url=http://w3c.github.io/navigation-timing/?specStatus=WD;shortName=navigation-timing#widl-PerformanceNavigationTiming-linkNegotiationEnd">linkNegotiationEnd</a>. If the network interface was immediately available, let <a href="https://labs.w3.org/spec-generator/?type=respec&url=http://w3c.github.io/navigation-timing/?specStatus=WD;shortName=navigation-timing#widl-PerformanceNavigationTiming-linkNegotiationStart">linkNegotiationStart</a> and <a href="https://labs.w3.org/spec-generator/?type=respec&url=http://w3c.github.io/navigation-timing/?specStatus=WD;shortName=navigation-timing#widl-PerformanceNavigationTiming-linkNegotiationEnd">linkNegotiationEnd</a> be the same value as <a href="https://labs.w3.org/spec-generator/?type=respec&url=http://w3c.github.io/navigation-timing/?specStatus=WD;shortName=navigation-timing#widl-PerformanceNavigationTiming-startTime">startTime</a>.</li>
+  <li id="step-fetch-start">If the new resource is to be fetched using HTTP GET
+    or <a href="http://www.w3.org/TR/html5/infrastructure.html#concept-http-equivalent-get" title="HTTP GET method equivalence">equivalent</a>,
+    immediately before a user agent checks with the <a href="http://www.w3.org/TR/html5/browsers.html#relevant-application-cache" title="relevant application cache">
+    relevant application caches</a>, record the current time as
+    <a href="https://labs.w3.org/spec-generator/?type=respec&url=http://w3c.github.io/navigation-timing/?specStatus=WD;shortName=navigation-timing#widl-PerformanceNavigationTiming-fetchStart">fetchStart</a>. Otherwise, immediately before a user agent starts the
+    <a href="http://www.w3.org/TR/html5/infrastructure.html#fetch" title="fetch">
+    fetching process</a>, record the current time as <a href="https://labs.w3.org/spec-generator/?type=respec&url=http://w3c.github.io/navigation-timing/?specStatus=WD;shortName=navigation-timing#widl-PerformanceNavigationTiming-fetchStart">fetchStart</a>.</li>
+  <li>Let <a href="https://labs.w3.org/spec-generator/?type=respec&url=http://w3c.github.io/navigation-timing/?specStatus=WD;shortName=navigation-timing#widl-PerformanceNavigationTiming-domainLookupStart">domainLookupStart</a>, <a href="https://labs.w3.org/spec-generator/?type=respec&url=http://w3c.github.io/navigation-timing/?specStatus=WD;shortName=navigation-timing#widl-PerformanceNavigationTiming-domainLookupEnd">domainLookupEnd</a>, <a href="https://labs.w3.org/spec-generator/?type=respec&url=http://w3c.github.io/navigation-timing/?specStatus=WD;shortName=navigation-timing#widl-PerformanceNavigationTiming-connectStart">connectStart</a> and <a href="https://labs.w3.org/spec-generator/?type=respec&url=http://w3c.github.io/navigation-timing/?specStatus=WD;shortName=navigation-timing#widl-PerformanceNavigationTiming-connectEnd">connectEnd</a> be the same value as <a href="https://labs.w3.org/spec-generator/?type=respec&url=http://w3c.github.io/navigation-timing/?specStatus=WD;shortName=navigation-timing#widl-PerformanceNavigationTiming-fetchStart">fetchStart</a>.</li>
+  <li>If the resource is fetched from the <a href="http://www.w3.org/TR/html5/browsers.html#relevant-application-cache" title="relevant application cache">relevant
+    application cache</a> or local resources, including the
+    <a href="https://tools.ietf.org/html/rfc7234">HTTP cache</a> [<cite><a class="bibref" href="https://labs.w3.org/spec-generator/?type=respec&url=http://w3c.github.io/navigation-timing/?specStatus=WD;shortName=navigation-timing#bib-RFC7234">RFC7234</a></cite>],
+    go to step <a href="https://labs.w3.org/spec-generator/?type=respec&url=http://w3c.github.io/navigation-timing/?specStatus=WD;shortName=navigation-timing#step-request-start">17</a>.</li>
+  <li>If no domain lookup is required, go to step <a href="https://labs.w3.org/spec-generator/?type=respec&url=http://w3c.github.io/navigation-timing/?specStatus=WD;shortName=navigation-timing#step-connect-start">15</a>. Otherwise, immediately before a user
+    agent starts the domain name lookup, record the time as
+    <a href="https://labs.w3.org/spec-generator/?type=respec&url=http://w3c.github.io/navigation-timing/?specStatus=WD;shortName=navigation-timing#widl-PerformanceNavigationTiming-domainLookupStart">domainLookupStart</a>. </li>
+  <li>Record the time as <a href="https://labs.w3.org/spec-generator/?type=respec&url=http://w3c.github.io/navigation-timing/?specStatus=WD;shortName=navigation-timing#widl-PerformanceNavigationTiming-domainLookupEnd">domainLookupEnd</a>
+    immediately after the domain name lookup is successfully done. A user
+    agent <em class="rfc2119" title="MAY">MAY</em> need multiple retries before that. If the domain lookup fails,
+    abort the rest of the steps. </li>
+  <li id="step-connect-start">If a persistent transport connection is used to
+    fetch the resource, let <a href="https://labs.w3.org/spec-generator/?type=respec&url=http://w3c.github.io/navigation-timing/?specStatus=WD;shortName=navigation-timing#widl-PerformanceNavigationTiming-connectStart">connectStart</a> and
+    <a href="https://labs.w3.org/spec-generator/?type=respec&url=http://w3c.github.io/navigation-timing/?specStatus=WD;shortName=navigation-timing#widl-PerformanceNavigationTiming-connectEnd">connectEnd</a> be the same value of
+    <a href="https://labs.w3.org/spec-generator/?type=respec&url=http://w3c.github.io/navigation-timing/?specStatus=WD;shortName=navigation-timing#widl-PerformanceNavigationTiming-domainLookupEnd">domainLookupEnd</a>.
+    Otherwise, record the time as <a href="https://labs.w3.org/spec-generator/?type=respec&url=http://w3c.github.io/navigation-timing/?specStatus=WD;shortName=navigation-timing#widl-PerformanceNavigationTiming-connectStart">connectStart</a> immediately before initiating
+    the connection to the server and record the time as
+    <a href="https://labs.w3.org/spec-generator/?type=respec&url=http://w3c.github.io/navigation-timing/?specStatus=WD;shortName=navigation-timing#widl-PerformanceNavigationTiming-connectEnd">connectEnd</a> immediately
+    after the connection to the server or the proxy is established. A user agent <em class="rfc2119" title="MAY">MAY</em>
+    need multiple retries before this time. Once connection is established set the value of <a href="https://labs.w3.org/spec-generator/?type=respec&url=http://w3c.github.io/navigation-timing/?specStatus=WD;shortName=navigation-timing#widl-PerformanceNavigationTiming-nextHopProtocol">nextHopProtocol</a> to the ALPN ID used by the connection. If a connection can not be established, abort the rest of the steps. </li>
+  <li>In step <a href="https://labs.w3.org/spec-generator/?type=respec&url=http://w3c.github.io/navigation-timing/?specStatus=WD;shortName=navigation-timing#step-connect-start">15</a>, a user agent <em class="rfc2119" title="SHOULD">SHOULD</em> also
+    carry out these additional steps if it supports the
+    <a href="https://labs.w3.org/spec-generator/?type=respec&url=http://w3c.github.io/navigation-timing/?specStatus=WD;shortName=navigation-timing#widl-PerformanceNavigationTiming-secureConnectionStart">secureConnectionStart</a> attribute:
+    <ol>
+    <li>If the scheme of the current document is HTTPS, the user agent <em class="rfc2119" title="MUST">MUST</em>
+        record the time as <a href="https://labs.w3.org/spec-generator/?type=respec&url=http://w3c.github.io/navigation-timing/?specStatus=WD;shortName=navigation-timing#widl-PerformanceNavigationTiming-secureConnectionStart">secureConnectionStart</a>
+        immediately before the handshake process to secure the connection.</li>
+    <li>If the scheme of the current document is not HTTPS, the user agent <em class="rfc2119" title="MUST">MUST</em>
+        set the value of <a href="https://labs.w3.org/spec-generator/?type=respec&url=http://w3c.github.io/navigation-timing/?specStatus=WD;shortName=navigation-timing#widl-PerformanceNavigationTiming-secureConnectionStart">secureConnectionStart</a> to 0.</li>
+    </ol></li>
+  <li id="step-request-start">Immediately before a user agent starts sending
+    request for the document, record the current time as <a href="https://labs.w3.org/spec-generator/?type=respec&url=http://w3c.github.io/navigation-timing/?specStatus=WD;shortName=navigation-timing#widl-PerformanceNavigationTiming-requestStart">requestStart</a>.</li>
+  <li id="step-response-start">Record the time as <a href="https://labs.w3.org/spec-generator/?type=respec&url=http://w3c.github.io/navigation-timing/?specStatus=WD;shortName=navigation-timing#widl-PerformanceNavigationTiming-responseStart">
+    responseStart</a> immediately after the user agent receives the first byte
+    of the response.</li>
+  <li id="step-response-end">Record the time as <a href="https://labs.w3.org/spec-generator/?type=respec&url=http://w3c.github.io/navigation-timing/?specStatus=WD;shortName=navigation-timing#widl-PerformanceNavigationTiming-responseEnd">responseEnd</a> immediately after receiving the
+    last byte of the response.
+    <ol>
+    <li>Return to step <a href="https://labs.w3.org/spec-generator/?type=respec&url=http://w3c.github.io/navigation-timing/?specStatus=WD;shortName=navigation-timing#step-connect-start">15</a> if the user agent fails to send the request or receive the entire response, and needs to
+    reopen the connection.
+
+    <div class="note"><div class="note-title" aria-level="4" role="heading" id="h-note5"><span>Note</span></div><div class="">
+    <p>When <a href="https://tools.ietf.org/html/rfc7230#section-6.3">persistent
+    connection</a> [<cite><a class="bibref" href="https://labs.w3.org/spec-generator/?type=respec&url=http://w3c.github.io/navigation-timing/?specStatus=WD;shortName=navigation-timing#bib-RFC7230">RFC7230</a></cite>] is enabled, a user agent <em class="rfc2119" title="MAY">MAY</em> first try to re-use an open
+    connect to send the request while the connection can be <a href="https://tools.ietf.org/html/rfc7230#section-6.5">asynchronously
+    closed</a>. In such case, connectStart, connectEnd and requestStart <em class="rfc2119" title="SHOULD">SHOULD</em> represent
+    timing information collected over the re-open connection.</p>
+    </div></div></li>
+    <li>Set the value of <a href="https://labs.w3.org/spec-generator/?type=respec&url=http://w3c.github.io/navigation-timing/?specStatus=WD;shortName=navigation-timing#widl-PerformanceNavigationTiming-transferSize">transferSize</a>, <a href="https://labs.w3.org/spec-generator/?type=respec&url=http://w3c.github.io/navigation-timing/?specStatus=WD;shortName=navigation-timing#widl-PerformanceNavigationTiming-encodedBodySize">encodedBodySize</a>, <a href="https://labs.w3.org/spec-generator/?type=respec&url=http://w3c.github.io/navigation-timing/?specStatus=WD;shortName=navigation-timing#widl-PerformanceNavigationTiming-decodedBodySize">decodedBodySize</a> to corresponding values.</li>
+    </ol>
+  </li>
+  <li>If the fetched resource results in an HTTP redirect or
+    <a href="http://www.w3.org/TR/html5/infrastructure.html#concept-http-equivalent-codes" title="HTTP response codes equivalence">equivalent</a>,
+    then
+    <ol style="list-style-type:lower-alpha;">
+      <li>if the current document and the document that is redirected to are not from the
+        same <a href="http://tools.ietf.org/html/rfc6454">origin</a>,
+        set <a href="https://labs.w3.org/spec-generator/?type=respec&url=http://w3c.github.io/navigation-timing/?specStatus=WD;shortName=navigation-timing#widl-PerformanceNavigationTiming-redirectStart">redirectStart</a>,
+        <a href="https://labs.w3.org/spec-generator/?type=respec&url=http://w3c.github.io/navigation-timing/?specStatus=WD;shortName=navigation-timing#widl-PerformanceNavigationTiming-redirectEnd">redirectEnd</a>,
+        <a href="https://labs.w3.org/spec-generator/?type=respec&url=http://w3c.github.io/navigation-timing/?specStatus=WD;shortName=navigation-timing#widl-PerformanceNavigationTiming-unloadEventStart">unloadEventStart</a>,
+        <a href="https://labs.w3.org/spec-generator/?type=respec&url=http://w3c.github.io/navigation-timing/?specStatus=WD;shortName=navigation-timing#widl-PerformanceNavigationTiming-unloadEventEnd">unloadEventEnd</a> and
+        <a href="https://labs.w3.org/spec-generator/?type=respec&url=http://w3c.github.io/navigation-timing/?specStatus=WD;shortName=navigation-timing#widl-PerformanceNavigationTiming-redirectCount">redirectCount</a> to 0. Then,
+        return to step <a href="https://labs.w3.org/spec-generator/?type=respec&url=http://w3c.github.io/navigation-timing/?specStatus=WD;shortName=navigation-timing#step-linknegotiation-start">9</a> with the new resource.</li>
+      <li>if there is previous redirect involving documents that are not from the
+        same <a href="http://tools.ietf.org/html/rfc6454">origin</a>,
+        set <a href="https://labs.w3.org/spec-generator/?type=respec&url=http://w3c.github.io/navigation-timing/?specStatus=WD;shortName=navigation-timing#widl-PerformanceNavigationTiming-redirectStart">redirectStart</a>,
+        <a href="https://labs.w3.org/spec-generator/?type=respec&url=http://w3c.github.io/navigation-timing/?specStatus=WD;shortName=navigation-timing#widl-PerformanceNavigationTiming-redirectEnd">redirectEnd</a>,
+        <a href="https://labs.w3.org/spec-generator/?type=respec&url=http://w3c.github.io/navigation-timing/?specStatus=WD;shortName=navigation-timing#widl-PerformanceNavigationTiming-unloadEventStart">unloadEventStart</a>,
+        <a href="https://labs.w3.org/spec-generator/?type=respec&url=http://w3c.github.io/navigation-timing/?specStatus=WD;shortName=navigation-timing#widl-PerformanceNavigationTiming-unloadEventEnd">unloadEventStart</a> and
+        <a href="https://labs.w3.org/spec-generator/?type=respec&url=http://w3c.github.io/navigation-timing/?specStatus=WD;shortName=navigation-timing#widl-PerformanceNavigationTiming-redirectCount">redirectCount</a> to 0. Then,
+        return to step <a href="https://labs.w3.org/spec-generator/?type=respec&url=http://w3c.github.io/navigation-timing/?specStatus=WD;shortName=navigation-timing#step-linknegotiation-start">9</a> with the new resource.</li>
+      <li>Increment <a href="https://labs.w3.org/spec-generator/?type=respec&url=http://w3c.github.io/navigation-timing/?specStatus=WD;shortName=navigation-timing#widl-PerformanceNavigationTiming-redirectCount">redirectCount</a> by 1.</li>
+      <li>If the value of <a href="https://labs.w3.org/spec-generator/?type=respec&url=http://w3c.github.io/navigation-timing/?specStatus=WD;shortName=navigation-timing#widl-PerformanceNavigationTiming-redirectStart">redirectStart</a> is 0,
+        let it be the value of <a href="https://labs.w3.org/spec-generator/?type=respec&url=http://w3c.github.io/navigation-timing/?specStatus=WD;shortName=navigation-timing#widl-PerformanceNavigationTiming-fetchStart">fetchStart</a>.</li>
+      <li>Let <a href="https://labs.w3.org/spec-generator/?type=respec&url=http://w3c.github.io/navigation-timing/?specStatus=WD;shortName=navigation-timing#widl-PerformanceNavigationTiming-redirectEnd">redirectEnd</a> be the value of
+        <a href="https://labs.w3.org/spec-generator/?type=respec&url=http://w3c.github.io/navigation-timing/?specStatus=WD;shortName=navigation-timing#widl-PerformanceNavigationTiming-responseEnd">responseEnd</a>.</li>
+      <li>Set all the attributes in window.performance.timing to 0 except
+        <a href="https://labs.w3.org/spec-generator/?type=respec&url=http://w3c.github.io/navigation-timing/?specStatus=WD;shortName=navigation-timing#widl-PerformanceNavigationTiming-startTime">startTime</a>,
+        <a href="https://labs.w3.org/spec-generator/?type=respec&url=http://w3c.github.io/navigation-timing/?specStatus=WD;shortName=navigation-timing#widl-PerformanceNavigationTiming-redirectStart">redirectStart</a>,
+        <a href="https://labs.w3.org/spec-generator/?type=respec&url=http://w3c.github.io/navigation-timing/?specStatus=WD;shortName=navigation-timing#widl-PerformanceNavigationTiming-redirectEnd">redirectEnd</a>,
+        <a href="https://labs.w3.org/spec-generator/?type=respec&url=http://w3c.github.io/navigation-timing/?specStatus=WD;shortName=navigation-timing#widl-PerformanceNavigationTiming-unloadEventStart">unloadEventStart</a> and
+        <a href="https://labs.w3.org/spec-generator/?type=respec&url=http://w3c.github.io/navigation-timing/?specStatus=WD;shortName=navigation-timing#widl-PerformanceNavigationTiming-unloadEventEnd">unloadEventEnd</a>.</li>
+      <li>Return to step <a href="https://labs.w3.org/spec-generator/?type=respec&url=http://w3c.github.io/navigation-timing/?specStatus=WD;shortName=navigation-timing#step-linknegotiation-start">9</a> with the new resource.</li>
+    </ol>
+  </li>
+  <li>Record the time as <a href="https://labs.w3.org/spec-generator/?type=respec&url=http://w3c.github.io/navigation-timing/?specStatus=WD;shortName=navigation-timing#widl-PerformanceNavigationTiming-domLoading">domLoading</a> immediately
+    before the user agent sets the <a href="http://www.w3.org/TR/html5/dom.html#current-document-readiness">current
+    document readiness</a> to "loading".</li>
+  <li>Record the time as <a href="https://labs.w3.org/spec-generator/?type=respec&url=http://w3c.github.io/navigation-timing/?specStatus=WD;shortName=navigation-timing#widl-PerformanceNavigationTiming-domInteractive">domInteractive</a>
+    immediately before the user agent sets the <a href="http://www.w3.org/TR/html5/dom.html#current-document-readiness">current
+    document readiness</a> to "interactive".</li>
+  <li>Record the time as <a href="https://labs.w3.org/spec-generator/?type=respec&url=http://w3c.github.io/navigation-timing/?specStatus=WD;shortName=navigation-timing#widl-PerformanceNavigationTiming-domContentLoadedEventStart">domContentLoadedEventStart</a> immediately before the
+    user agent fires the <a href="http://www.w3.org/TR/html5/syntax.html#the-end">DOMContentLoaded event</a> at the document.</li>
+  <li>Record the time as <a href="https://labs.w3.org/spec-generator/?type=respec&url=http://w3c.github.io/navigation-timing/?specStatus=WD;shortName=navigation-timing#widl-PerformanceNavigationTiming-domContentLoadedEventEnd">domContentLoadedEventEnd</a> immediately after
+    the <a href="http://www.w3.org/TR/html5/syntax.html#the-end">
+    DOMContentLoaded event</a> completes.</li>
+  <li>Record the time as <a href="https://labs.w3.org/spec-generator/?type=respec&url=http://w3c.github.io/navigation-timing/?specStatus=WD;shortName=navigation-timing#widl-PerformanceNavigationTiming-domComplete">domComplete</a>
+    immediately before the user agent sets the <a href="http://www.w3.org/TR/html5/dom.html#current-document-readiness">current
+    document readiness</a> to "complete".</li>
+  <li>Record the time as <a href="https://labs.w3.org/spec-generator/?type=respec&url=http://w3c.github.io/navigation-timing/?specStatus=WD;shortName=navigation-timing#widl-PerformanceNavigationTiming-loadEventStart">loadEventStart</a>
+    immediately before the user agent fires the load event.</li>
+  <li>Record the time as <a href="https://labs.w3.org/spec-generator/?type=respec&url=http://w3c.github.io/navigation-timing/?specStatus=WD;shortName=navigation-timing#widl-PerformanceNavigationTiming-loadEventEnd">loadEventEnd</a>
+    immediately after the user agent completes the load event.</li>
+  <li>Record the time as <a href="https://labs.w3.org/spec-generator/?type=respec&url=http://w3c.github.io/navigation-timing/?specStatus=WD;shortName=navigation-timing#widl-PerformanceNavigationTiming-prerenderSwitch">prerenderSwitch</a>
+    immediately after the user agent changes the <a href="http://www.w3.org/TR/page-visibility/#dom-document-visibilitystate">visibilityState</a>
+    from <code>prerender</code> to <code>visible</code>. Otherwise, set this attribute to 0.</li>
+  <li>
+    Set the <a href="https://labs.w3.org/spec-generator/?type=respec&url=http://w3c.github.io/navigation-timing/?specStatus=WD;shortName=navigation-timing#widl-PerformanceNavigationTiming-duration">duration</a> to a <a href="http://www.w3.org/TR/hr-time/#domhighrestimestamp">DOMHighResTimeStamp</a>
+	equal to the difference between <a href="https://labs.w3.org/spec-generator/?type=respec&url=http://w3c.github.io/navigation-timing/?specStatus=WD;shortName=navigation-timing#widl-PerformanceNavigationTiming-loadEventEnd">loadEventEnd</a> and <a href="https://labs.w3.org/spec-generator/?type=respec&url=http://w3c.github.io/navigation-timing/?specStatus=WD;shortName=navigation-timing#widl-PerformanceNavigationTiming-startTime">startTime</a>, respectively.
+  </li>
+</ol>
+
+<p>Some user agents maintain the DOM structure of the document in memory
+during navigation operations such as forward and backward. In those cases,
+the <a href="https://labs.w3.org/spec-generator/?type=respec&url=http://w3c.github.io/navigation-timing/?specStatus=WD;shortName=navigation-timing#idl-def-PerformanceNavigationTiming" class="idlType"><code>PerformanceNavigationTiming</code></a> object <em class="rfc2119" title="MUST NOT">MUST NOT</em>
+be altered during the navigation. Also note that the while the graph above suggests that link negotiation happens before handling a redirect or checking the local caches, in some situations, it <em class="rfc2119" title="MAY">MAY</em> happen after those steps. For example, if the current navigation results in a redirect which is present in the local cache, but the target of the redirect is not present in the local cache, the user agent <em class="rfc2119" title="MAY">MAY</em> turn on the network interface after processing the redirect and just before it starts to fetch the redirect target from the network.</p>
+</section>
+
+<section id="vendor-prefixes" typeof="bibo:Chapter" resource="#vendor-prefixes" property="bibo:hasPart">
+<h3 id="h-vendor-prefixes" resource="#h-vendor-prefixes"><span property="xhv:role" resource="xhv:heading"><span class="secno">5.2 </span>Vendor Prefixes</span></h3>
+<p>Vendor-specific proprietary user agent extensions are discouraged. If such extensions are needed,
+e.g., for experimental purposes, vendors <em class="rfc2119" title="MUST">MUST</em> use the following extension mechanisms:</p>
+
+<ul>
+<li>If the extension to be added is an navigation type, the new type <em class="rfc2119" title="MUST">MUST</em>
+  <ul>
+  <li>return a <code>DOMString</code> in the following naming convention: [vendorprefix]_[type], where [vendorprefix] is a name
+  that identifies the vendor.</li>
+  </ul>
+</li>
+<li>If the extension is a new timing attribute, it <em class="rfc2119" title="MUST">MUST</em>
+  <ul>
+  <li>follow the naming convention: [vendorprefix]TimeAttribute, where [vendorprefix] identifies
+  the vendor name and TimeAttribute identifies the name of the timing attribute.</li>
+  <li>return its time value in a <a href="http://www.w3.org/TR/hr-time/#domhighrestimestamp">DOMHighResTimeStamp</a>.</li>
+  </ul>
+</li>
+</ul>
+</section>
+</section>
+<section id="privacy" class="informative" typeof="bibo:Chapter" resource="#privacy" property="bibo:hasPart">
+<!--OddPage--><h2 id="h-privacy" resource="#h-privacy"><span property="xhv:role" resource="xhv:heading"><span class="secno">6. </span>Privacy</span></h2><p><em>This section is non-normative.</em></p>
+
+<section id="info_disclosure" typeof="bibo:Chapter" resource="#info_disclosure" property="bibo:hasPart">
+<h3 id="h-info_disclosure" resource="#h-info_disclosure"><span property="xhv:role" resource="xhv:heading"><span class="secno">6.1 </span>Information disclosure</span></h3>
+
+<p>There is the potential for disclosing an end-user's browsing and activity history by using
+carefully crafted timing attacks. For instance, the unloading time reveals how long the previous
+page takes to execute its unload handler, which could be used to infer the user's login status.
+These attacks have been mitigated by enforcing the same
+<a href="http://tools.ietf.org/html/rfc6454">origin</a> policy when
+timing information involving the previous navigation is accessed.</p>
+
+<p>The <a href="http://www.w3.org/TR/html5/browsers.html#relaxing-the-same-origin-restriction">
+relaxed same origin policy</a> doesn't provide sufficient protection against unauthorized visits
+across documents. In shared hosting, an untrusted third party is able to host an HTTP server at the same
+IP address but on a different port.</p>
+</section>
+
+<section id="cross-directory" typeof="bibo:Chapter" resource="#cross-directory" property="bibo:hasPart">
+<h3 id="h-cross-directory" resource="#h-cross-directory"><span property="xhv:role" resource="xhv:heading"><span class="secno">6.2 </span>Cross-directory access</span></h3>
+
+<p>Different pages sharing one host name, for example contents from different authors hosted
+on sites with user generated content are considered from the same origin because there is no
+feature to restrict the access by pathname. Navigating between these pages allows a latter page
+to access timing information of the previous one, such as timing regarding redirection and unload event.</p>
+</section>
+</section>
+
+<section id="security" class="informative" typeof="bibo:Chapter" resource="#security" property="bibo:hasPart">
+<!--OddPage--><h2 id="h-security" resource="#h-security"><span property="xhv:role" resource="xhv:heading"><span class="secno">7. </span>Security</span></h2><p><em>This section is non-normative.</em></p>
+
+<section id="authentication" typeof="bibo:Chapter" resource="#authentication" property="bibo:hasPart">
+<h3 id="h-authentication" resource="#h-authentication"><span property="xhv:role" resource="xhv:heading"><span class="secno">7.1 </span>Detecting proxy servers</span></h3>
+<p>In case a proxy is deployed between the user agent and the web server, the time interval
+between the <a href="https://labs.w3.org/spec-generator/?type=respec&url=http://w3c.github.io/navigation-timing/?specStatus=WD;shortName=navigation-timing#widl-PerformanceNavigationTiming-connectStart">connectStart</a> and the
+<a href="https://labs.w3.org/spec-generator/?type=respec&url=http://w3c.github.io/navigation-timing/?specStatus=WD;shortName=navigation-timing#widl-PerformanceNavigationTiming-connectEnd">connectEnd</a> attributes indicates the delay between the user agent
+and the proxy instead of the web server. With that, web server can potentially infer the
+existence of the proxy. For SOCKS proxy, this time interval includes the proxy authentication
+time and time the proxy takes to connect to the web server, which obfuscate the proxy detection.
+In case of an HTTP proxy, the user agent might not have any knowledge about the proxy server at
+all so it's not always feasible to mitigate this attack.</p>
+</section>
+</section>
+<section id="acknowledgements" class="appendix" typeof="bibo:Chapter" resource="#acknowledgements" property="bibo:hasPart">
+<!--OddPage--><h2 id="h-acknowledgements" resource="#h-acknowledgements"><span property="xhv:role" resource="xhv:heading"><span class="secno">A. </span>Acknowledgments</span></h2>
+
+<p>We would like to offer my sincere thanks to James Simonsen, Tony Gentilcore, Zhiheng Wang, Karen Anderson and Jason Weber for all their contributions to this work.</p>
+</section>
+
+
+<section id="references" class="appendix" typeof="bibo:Chapter" resource="#references" property="bibo:hasPart"><!--OddPage--><h2 id="h-references" resource="#h-references"><span property="xhv:role" resource="xhv:heading"><span class="secno">B. </span>References</span></h2><section id="normative-references" typeof="bibo:Chapter" resource="#normative-references" property="bibo:hasPart"><h3 id="h-normative-references" resource="#h-normative-references"><span property="xhv:role" resource="xhv:heading"><span class="secno">B.1 </span>Normative references</span></h3><dl class="bibliography" resource=""><dt id="bib-HR-Time">[HR-Time]</dt><dd>Jatinder Mann. <a href="http://www.w3.org/TR/hr-time/" property="dc:requires"><cite>High Resolution Time</cite></a>. 17 December 2012. W3C Recommendation. URL: <a href="http://www.w3.org/TR/hr-time/" property="dc:requires">http://www.w3.org/TR/hr-time/</a>
+</dd><dt id="bib-HTML5">[HTML5]</dt><dd>Ian Hickson; Robin Berjon; Steve Faulkner; Travis Leithead; Erika Doyle Navara; Edward O'Connor; Silvia Pfeiffer. <a href="http://www.w3.org/TR/html5/" property="dc:requires"><cite>HTML5</cite></a>. 28 October 2014. W3C Recommendation. URL: <a href="http://www.w3.org/TR/html5/" property="dc:requires">http://www.w3.org/TR/html5/</a>
+</dd><dt id="bib-Page-Visibility">[Page-Visibility]</dt><dd>Jatinder Mann; Arvind Jain. <a href="http://www.w3.org/TR/page-visibility/" property="dc:requires"><cite>Page Visibility (Second Edition)</cite></a>. 29 October 2013. W3C Recommendation. URL: <a href="http://www.w3.org/TR/page-visibility/" property="dc:requires">http://www.w3.org/TR/page-visibility/</a>
+</dd><dt id="bib-Performance-Timeline">[Performance-Timeline]</dt><dd>Jatinder Mann; Zhiheng Wang. <a href="http://www.w3.org/TR/performance-timeline/" property="dc:requires"><cite>Performance Timeline</cite></a>. 12 December 2013. W3C Recommendation. URL: <a href="http://www.w3.org/TR/performance-timeline/" property="dc:requires">http://www.w3.org/TR/performance-timeline/</a>
+</dd><dt id="bib-RFC2119">[RFC2119]</dt><dd>S. Bradner. <a href="https://tools.ietf.org/html/rfc2119" property="dc:requires"><cite>Key words for use in RFCs to Indicate Requirement Levels</cite></a>. March 1997. Best Current Practice. URL: <a href="https://tools.ietf.org/html/rfc2119" property="dc:requires">https://tools.ietf.org/html/rfc2119</a>
+</dd><dt id="bib-RFC6454">[RFC6454]</dt><dd>A. Barth. <a href="https://tools.ietf.org/html/rfc6454" property="dc:requires"><cite>The Web Origin Concept</cite></a>. December 2011. Proposed Standard. URL: <a href="https://tools.ietf.org/html/rfc6454" property="dc:requires">https://tools.ietf.org/html/rfc6454</a>
+</dd><dt id="bib-RFC7230">[RFC7230]</dt><dd>R. Fielding, Ed.; J. Reschke, Ed.. <a href="https://tools.ietf.org/html/rfc7230" property="dc:requires"><cite>Hypertext Transfer Protocol (HTTP/1.1): Message Syntax and Routing</cite></a>. June 2014. Proposed Standard. URL: <a href="https://tools.ietf.org/html/rfc7230" property="dc:requires">https://tools.ietf.org/html/rfc7230</a>
+</dd><dt id="bib-RFC7231">[RFC7231]</dt><dd>R. Fielding, Ed.; J. Reschke, Ed.. <a href="https://tools.ietf.org/html/rfc7231" property="dc:requires"><cite>Hypertext Transfer Protocol (HTTP/1.1): Semantics and Content</cite></a>. June 2014. Proposed Standard. URL: <a href="https://tools.ietf.org/html/rfc7231" property="dc:requires">https://tools.ietf.org/html/rfc7231</a>
+</dd><dt id="bib-RFC7301">[RFC7301]</dt><dd>S. Friedl; A. Popov; A. Langley; E. Stephan. <a href="https://tools.ietf.org/html/rfc7301" property="dc:requires"><cite>Transport Layer Security (TLS) Application-Layer Protocol Negotiation Extension</cite></a>. July 2014. Proposed Standard. URL: <a href="https://tools.ietf.org/html/rfc7301" property="dc:requires">https://tools.ietf.org/html/rfc7301</a>
+</dd><dt id="bib-WebIDL">[WebIDL]</dt><dd>Cameron McCormack. <a href="http://www.w3.org/TR/WebIDL/" property="dc:requires"><cite>Web IDL</cite></a>. 19 April 2012. W3C Candidate Recommendation. URL: <a href="http://www.w3.org/TR/WebIDL/" property="dc:requires">http://www.w3.org/TR/WebIDL/</a>
+</dd></dl></section><section id="informative-references" typeof="bibo:Chapter" resource="#informative-references" property="bibo:hasPart"><h3 id="h-informative-references" resource="#h-informative-references"><span property="xhv:role" resource="xhv:heading"><span class="secno">B.2 </span>Informative references</span></h3><dl class="bibliography" resource=""><dt id="bib-ECMA-262">[ECMA-262]</dt><dd><a href="http://www.ecma-international.org/publications/standards/Ecma-262.htm" property="dc:references"><cite>ECMAScript Language Specification, Edition 5.1</cite></a>. June 2011. URL: <a href="http://www.ecma-international.org/publications/standards/Ecma-262.htm" property="dc:references">http://www.ecma-international.org/publications/standards/Ecma-262.htm</a>
+</dd><dt id="bib-JSMEASURE">[JSMEASURE]</dt><dd>Ramakrishnan Rajamony; Mootaz Elnozahy. <a href="http://citeseerx.ist.psu.edu/viewdoc/download?doi=10.1.1.69.7329&rep=rep1&type=pdf" property="dc:references"><cite>Measuring Client-Perceived Response Times on the WWW</cite></a>. March 2001. The Proceedings of the 3rd USENIX Symposium on Internet Technologies and Systems (USITS). URL: <a href="http://citeseerx.ist.psu.edu/viewdoc/download?doi=10.1.1.69.7329&rep=rep1&type=pdf" property="dc:references">http://citeseerx.ist.psu.edu/viewdoc/download?doi=10.1.1.69.7329&amp;rep=rep1&amp;type=pdf</a>
+</dd><dt id="bib-Navigation-Timing">[Navigation-Timing]</dt><dd>Zhiheng Wang. <a href="http://www.w3.org/TR/navigation-timing/" property="dc:references"><cite>Navigation Timing</cite></a>. 17 December 2012. W3C Recommendation. URL: <a href="http://www.w3.org/TR/navigation-timing/" property="dc:references">http://www.w3.org/TR/navigation-timing/</a>
+</dd><dt id="bib-RFC2817">[RFC2817]</dt><dd>R. Khare; S. Lawrence. <a href="https://tools.ietf.org/html/rfc2817" property="dc:references"><cite>Upgrading to TLS Within HTTP/1.1</cite></a>. May 2000. Proposed Standard. URL: <a href="https://tools.ietf.org/html/rfc2817" property="dc:references">https://tools.ietf.org/html/rfc2817</a>
+</dd><dt id="bib-RFC7234">[RFC7234]</dt><dd>R. Fielding, Ed.; M. Nottingham, Ed.; J. Reschke, Ed.. <a href="https://tools.ietf.org/html/rfc7234" property="dc:references"><cite>Hypertext Transfer Protocol (HTTP/1.1): Caching</cite></a>. June 2014. Proposed Standard. URL: <a href="https://tools.ietf.org/html/rfc7234" property="dc:references">https://tools.ietf.org/html/rfc7234</a>
+</dd><dt id="bib-URL">[URL]</dt><dd>Anne van Kesteren; Sam Ruby. <a href="http://www.w3.org/TR/url-1/" property="dc:references"><cite>URL</cite></a>. 9 December 2014. W3C Working Draft. URL: <a href="http://www.w3.org/TR/url-1/" property="dc:references">http://www.w3.org/TR/url-1/</a>
+</dd><dt id="bib-prerender">[prerender]</dt><dd><a href="http://microformats.org/wiki/rel-prerender" property="dc:references"><cite>Link type "prerender"</cite></a>. URL: <a href="http://microformats.org/wiki/rel-prerender" property="dc:references">http://microformats.org/wiki/rel-prerender</a>
+</dd></dl></section></section>
+</body></html>

@@ -1,0 +1,722 @@
+<!DOCTYPE html>
+<!-- saved from url=(0123)https://labs.w3.org/spec-generator/?type=respec&url=http://w3c.github.io/frame-timing/?specStatus=WD;shortName=frame-timing -->
+<html lang="en" dir="ltr" typeof="bibo:Document w3p:WD" prefix="bibo: http://purl.org/ontology/bibo/ w3p: http://www.w3.org/2001/02pd/rec54#"><head><meta http-equiv="Content-Type" content="text/html; charset=UTF-8"><meta lang="" property="dc:language" content="en">
+    <title>Frame Timing</title>
+    <meta charset="utf-8">
+    
+    
+  <style>/*****************************************************************
+ * ReSpec 3 CSS
+ * Robin Berjon - http://berjon.com/
+ *****************************************************************/
+
+/* --- INLINES --- */
+em.rfc2119 { 
+    text-transform:     lowercase;
+    font-variant:       small-caps;
+    font-style:         normal;
+    color:              #900;
+}
+
+h1 acronym, h2 acronym, h3 acronym, h4 acronym, h5 acronym, h6 acronym, a acronym,
+h1 abbr, h2 abbr, h3 abbr, h4 abbr, h5 abbr, h6 abbr, a abbr {
+    border: none;
+}
+
+dfn {
+    font-weight:    bold;
+}
+
+a.internalDFN {
+    color:  inherit;
+    border-bottom:  1px solid #99c;
+    text-decoration:    none;
+}
+
+a.externalDFN {
+    color:  inherit;
+    border-bottom:  1px dotted #ccc;
+    text-decoration:    none;
+}
+
+a.bibref {
+    text-decoration:    none;
+}
+
+cite .bibref {
+    font-style: normal;
+}
+
+code {
+    color:  #C83500;
+}
+
+/* --- TOC --- */
+.toc a, .tof a {
+    text-decoration:    none;
+}
+
+a .secno, a .figno {
+    color:  #000;
+}
+
+ul.tof, ol.tof {
+    list-style: none outside none;
+}
+
+.caption {
+    margin-top: 0.5em;
+    font-style:   italic;
+}
+
+/* --- TABLE --- */
+table.simple {
+    border-spacing: 0;
+    border-collapse:    collapse;
+    border-bottom:  3px solid #005a9c;
+}
+
+.simple th {
+    background: #005a9c;
+    color:  #fff;
+    padding:    3px 5px;
+    text-align: left;
+}
+
+.simple th[scope="row"] {
+    background: inherit;
+    color:  inherit;
+    border-top: 1px solid #ddd;
+}
+
+.simple td {
+    padding:    3px 10px;
+    border-top: 1px solid #ddd;
+}
+
+.simple tr:nth-child(even) {
+    background: #f0f6ff;
+}
+
+/* --- DL --- */
+.section dd > p:first-child {
+    margin-top: 0;
+}
+
+.section dd > p:last-child {
+    margin-bottom: 0;
+}
+
+.section dd {
+    margin-bottom:  1em;
+}
+
+.section dl.attrs dd, .section dl.eldef dd {
+    margin-bottom:  0;
+}
+
+@media print {
+    .removeOnSave {
+        display: none;
+    }
+}
+</style><style>/* --- WEB IDL --- */
+pre.idl {
+    border-top: 1px solid #90b8de;
+    border-bottom: 1px solid #90b8de;
+    padding:    1em;
+    line-height:    120%;
+}
+
+pre.idl::before {
+    content:    "WebIDL";
+    display:    block;
+    width:      150px;
+    background: #90b8de;
+    color:  #fff;
+    font-family:    initial;
+    padding:    3px;
+    font-weight:    bold;
+    margin: -1em 0 1em -1em;
+}
+
+.idlType {
+    color:  #ff4500;
+    font-weight:    bold;
+    text-decoration:    none;
+}
+
+/*.idlModule*/
+/*.idlModuleID*/
+/*.idlInterface*/
+.idlInterfaceID, .idlDictionaryID, .idlCallbackID, .idlEnumID {
+    font-weight:    bold;
+    color:  #005a9c;
+}
+a.idlEnumItem {
+    color:  #000;
+    border-bottom:  1px dotted #ccc;
+    text-decoration: none;
+}
+
+.idlSuperclass {
+    font-style: italic;
+    color:  #005a9c;
+}
+
+/*.idlAttribute*/
+.idlAttrType, .idlFieldType, .idlMemberType {
+    color:  #005a9c;
+}
+.idlAttrName, .idlFieldName, .idlMemberName {
+    color:  #ff4500;
+}
+.idlAttrName a, .idlFieldName a, .idlMemberName a {
+    color:  #ff4500;
+    border-bottom:  1px dotted #ff4500;
+    text-decoration: none;
+}
+
+/*.idlMethod*/
+.idlMethType, .idlCallbackType {
+    color:  #005a9c;
+}
+.idlMethName {
+    color:  #ff4500;
+}
+.idlMethName a {
+    color:  #ff4500;
+    border-bottom:  1px dotted #ff4500;
+    text-decoration: none;
+}
+
+/*.idlCtor*/
+.idlCtorName {
+    color:  #ff4500;
+}
+.idlCtorName a {
+    color:  #ff4500;
+    border-bottom:  1px dotted #ff4500;
+    text-decoration: none;
+}
+
+/*.idlParam*/
+.idlParamType {
+    color:  #005a9c;
+}
+.idlParamName, .idlDefaultValue {
+    font-style: italic;
+}
+
+.extAttr {
+    color:  #666;
+}
+
+/*.idlSectionComment*/
+.idlSectionComment {
+    color: gray;
+}
+
+/*.idlConst*/
+.idlConstType {
+    color:  #005a9c;
+}
+.idlConstName {
+    color:  #ff4500;
+}
+.idlConstName a {
+    color:  #ff4500;
+    border-bottom:  1px dotted #ff4500;
+    text-decoration: none;
+}
+
+/*.idlException*/
+.idlExceptionID {
+    font-weight:    bold;
+    color:  #c00;
+}
+
+.idlTypedefID, .idlTypedefType {
+    color:  #005a9c;
+}
+
+.idlRaises, .idlRaises a.idlType, .idlRaises a.idlType code, .excName a, .excName a code {
+    color:  #c00;
+    font-weight:    normal;
+}
+
+.excName a {
+    font-family:    monospace;
+}
+
+.idlRaises a.idlType, .excName a.idlType {
+    border-bottom:  1px dotted #c00;
+}
+
+.excGetSetTrue, .excGetSetFalse, .prmNullTrue, .prmNullFalse, .prmOptTrue, .prmOptFalse {
+    width:  45px;
+    text-align: center;
+}
+.excGetSetTrue, .prmNullTrue, .prmOptTrue { color:  #0c0; }
+.excGetSetFalse, .prmNullFalse, .prmOptFalse { color:  #c00; }
+
+.idlImplements a {
+    font-weight:    bold;
+}
+
+dl.attributes, dl.methods, dl.constants, dl.constructors, dl.fields, dl.dictionary-members {
+    margin-left:    2em;
+}
+
+.attributes dt, .methods dt, .constants dt, .constructors dt, .fields dt, .dictionary-members dt {
+    font-weight:    normal;
+}
+
+.attributes dt code, .methods dt code, .constants dt code, .constructors dt code, .fields dt code, .dictionary-members dt code {
+    font-weight:    bold;
+    color:  #000;
+    font-family:    monospace;
+}
+
+.attributes dt code, .fields dt code, .dictionary-members dt code {
+    background:  #ffffd2;
+}
+
+.attributes dt .idlAttrType code, .fields dt .idlFieldType code, .dictionary-members dt .idlMemberType code {
+    color:  #005a9c;
+    background:  transparent;
+    font-family:    inherit;
+    font-weight:    normal;
+    font-style: italic;
+}
+
+.methods dt code {
+    background:  #d9e6f8;
+}
+
+.constants dt code {
+    background:  #ddffd2;
+}
+
+.constructors dt code {
+    background:  #cfc;
+}
+
+.attributes dd, .methods dd, .constants dd, .constructors dd, .fields dd, .dictionary-members dd {
+    margin-bottom:  1em;
+}
+
+table.parameters, table.exceptions {
+    border-spacing: 0;
+    border-collapse:    collapse;
+    margin: 0.5em 0;
+    width:  100%;
+}
+table.parameters { border-bottom:  1px solid #90b8de; }
+table.exceptions { border-bottom:  1px solid #deb890; }
+
+.parameters th, .exceptions th {
+    color:  #fff;
+    padding:    3px 5px;
+    text-align: left;
+    font-family:    initial;
+    font-weight:    normal;
+    text-shadow:    #666 1px 1px 0;
+}
+.parameters th { background: #90b8de; }
+.exceptions th { background: #deb890; }
+
+.parameters td, .exceptions td {
+    padding:    3px 10px;
+    border-top: 1px solid #ddd;
+    vertical-align: top;
+}
+
+.parameters tr:first-child td, .exceptions tr:first-child td {
+    border-top: none;
+}
+
+.parameters td.prmName, .exceptions td.excName, .exceptions td.excCodeName {
+    width:  100px;
+}
+
+.parameters td.prmType {
+    width:  120px;
+}
+
+table.exceptions table {
+    border-spacing: 0;
+    border-collapse:    collapse;
+    width:  100%;
+}
+</style><link rel="stylesheet" href="https://www.w3.org/StyleSheets/TR/W3C-WD"><!--[if lt IE 9]><script src='https://www.w3.org/2008/site/js/html5shiv.js'></script><![endif]--><meta name="d41d8cd98f00b204e9800998ecf8427e_lib_detect" id="d41d8cd98f00b204e9800998ecf8427e_lib_detect"><script type="text/javascript" src="chrome-extension://cgaocdmhkmfnkdkbnckgmpopcbpaaejo/library/libraries.js"></script><script type="text/javascript" src="chrome-extension://cgaocdmhkmfnkdkbnckgmpopcbpaaejo/content_scripts/lib_detect.js"></script></head>
+  <body style="" class="h-entry" role="document" id="respecDocument"><div class="head" role="contentinfo" id="respecHeader">
+  <p>
+      
+        
+            <a href="http://www.w3.org/"><img width="72" height="48" src="//www.w3.org/Icons/w3c_home" alt="W3C"></a>
+        
+      
+  </p>
+  <h1 class="title p-name" id="title" property="dcterms:title">Frame Timing</h1>
+  
+  <h2 id="w3c-working-draft-05-february-2015"><abbr title="World Wide Web Consortium">W3C</abbr> Working Draft <time property="dcterms:issued" class="dt-published" datetime="2015-02-05">05 February 2015</time></h2>
+  <dl>
+    
+      <dt>This version:</dt>
+      <dd><a class="u-url" href="http://www.w3.org/TR/2015/WD-frame-timing-20150205/">http://www.w3.org/TR/2015/WD-frame-timing-20150205/</a></dd>
+      <dt>Latest published version:</dt>
+      <dd><a href="http://www.w3.org/TR/frame-timing/">http://www.w3.org/TR/frame-timing/</a></dd>
+    
+    
+      <dt>Latest editor's draft:</dt>
+      <dd><a href="https://w3c.github.io/frame-timing/">https://w3c.github.io/frame-timing/</a></dd>
+    
+    
+    
+    
+    
+    
+      <dt>Previous version:</dt>
+      <dd><a rel="dcterms:replaces" href="http://www.w3.org/TR/2015/WD-frame-timing-20150120/">http://www.w3.org/TR/2015/WD-frame-timing-20150120/</a></dd>
+    
+    
+    <dt>Editors:</dt>
+    <dd class="p-author h-card vcard" property="bibo:editor" resource="_:editor0" data-editor-id="73819"><span property="rdf:first" typeof="foaf:Person"><meta property="foaf:name" content="Michael Blain"><a class="u-url url p-name fn" property="foaf:homepage" href="http://github.org/mpb">Michael Blain</a>, <a property="foaf:workplaceHomepage" class="p-org org h-org h-card" href="http://google.com/">Google</a>, <span class="ed_mailto"><a class="u-email email" property="foaf:mbox" href="mailto:mpb@google.com">mpb@google.com</a></span></span>
+<span property="rdf:rest" resource="_:editor1"></span>
+</dd>
+<dd class="p-author h-card vcard" resource="_:editor1" data-editor-id="56102"><span property="rdf:first" typeof="foaf:Person"><meta property="foaf:name" content="Ilya Grigorik"><a class="u-url url p-name fn" property="foaf:homepage" href="https://www.igvita.com/">Ilya Grigorik</a>, <a property="foaf:workplaceHomepage" class="p-org org h-org h-card" href="https://google.com/">Google</a>, <span class="ed_mailto"><a class="u-email email" property="foaf:mbox" href="mailto:igrigorik@gmail.com">igrigorik@gmail.com</a></span></span>
+<span property="rdf:rest" resource="rdf:nil"></span>
+</dd>
+
+    
+    
+      
+        
+          <dt>Repository:</dt>
+          
+             
+                
+                  <dd>
+                    <a href="https://github.com/w3c/frame-timing/">
+                      We are on Github.
+                    </a>
+                  </dd>
+                
+             
+                
+                  <dd>
+                    <a href="https://github.com/w3c/frame-timing/issues">
+                      File a bug.
+                    </a>
+                  </dd>
+                
+             
+                
+                  <dd>
+                    <a href="https://github.com/w3c/frame-timing/commits/gh-pages/index.html">
+                      Commit history.
+                    </a>
+                  </dd>
+                
+             
+          
+        
+      
+    
+  </dl>
+  
+  
+  
+  
+    
+      <p class="copyright">
+        <a href="http://www.w3.org/Consortium/Legal/ipr-notice#Copyright">Copyright</a> ©
+        2015
+        
+        <a href="http://www.w3.org/"><abbr title="World Wide Web Consortium">W3C</abbr></a><sup>®</sup>
+        (<a href="http://www.csail.mit.edu/"><abbr title="Massachusetts Institute of Technology">MIT</abbr></a>,
+        <a href="http://www.ercim.eu/"><abbr title="European Research Consortium for Informatics and Mathematics">ERCIM</abbr></a>,
+        <a href="http://www.keio.ac.jp/">Keio</a>, <a href="http://ev.buaa.edu.cn/">Beihang</a>), 
+        
+        All Rights Reserved.
+        
+        <abbr title="World Wide Web Consortium">W3C</abbr> <a href="http://www.w3.org/Consortium/Legal/ipr-notice#Legal_Disclaimer">liability</a>,
+        <a href="http://www.w3.org/Consortium/Legal/ipr-notice#W3C_Trademarks">trademark</a> and
+        
+          <a href="http://www.w3.org/Consortium/Legal/copyright-documents">document use</a>
+        
+        rules apply.
+      </p>
+    
+  
+  <hr>
+</div>
+    <section id="abstract" class="introductory" property="dc:abstract"><h2 id="h-abstract" resource="#h-abstract"><span property="xhv:role" resource="xhv:heading">Abstract</span></h2>
+      <p>
+        This specification defines an interface to help web developers measure the performance of their applications by giving them access to frame performance data to facilitate smoothness (i.e. Frames per Second and Time to Frame) measurements.
+      </p>
+    </section><section id="sotd" class="introductory"><h2 id="h-sotd" resource="#h-sotd"><span property="xhv:role" resource="xhv:heading">Status of This Document</span></h2>
+  
+    
+      
+        <p>
+          <em>This section describes the status of this document at the time of its publication.
+          Other documents may supersede this document. A list of current <abbr title="World Wide Web Consortium">W3C</abbr> publications and the
+          latest revision of this technical report can be found in the <a href="http://www.w3.org/TR/"><abbr title="World Wide Web Consortium">W3C</abbr> technical reports index</a> at
+          http://www.w3.org/TR/.</em>
+        </p>
+        
+        
+      <p>
+        This is a <strong>work in progress</strong> and may change without any notices.
+      </p>
+    
+        
+        <p>
+          This document was published by the <a href="http://www.w3.org/2010/webperf/">Web Performance Working Group</a> as a Working Draft.
+          
+            This document is intended to become a <abbr title="World Wide Web Consortium">W3C</abbr> Recommendation.
+          
+          
+            If you wish to make comments regarding this document, please send them to 
+            <a href="mailto:public-web-perf@w3.org?subject=%5BFrame%20Timing%5D">public-web-perf@w3.org</a> 
+            (<a href="mailto:public-web-perf-request@w3.org?subject=subscribe">subscribe</a>,
+            <a href="http://lists.w3.org/Archives/Public/public-web-perf/">archives</a>)
+              with <code>[Frame Timing]</code> at the start of your email's subject.
+          
+          
+          
+          
+          
+            
+            All comments are welcome.
+            
+          
+        </p>
+        
+        
+        
+          <p>
+            Publication as a Working Draft does not imply endorsement by the <abbr title="World Wide Web Consortium">W3C</abbr>
+            Membership. This is a draft document and may be updated, replaced or obsoleted by other
+            documents at any time. It is inappropriate to cite this document as other than work in
+            progress.
+          </p>
+        
+        
+        
+        <p>
+          
+            This document was produced by a group operating under the 
+            <a id="sotd_patent" property="w3p:patentRules" href="http://www.w3.org/Consortium/Patent-Policy-20040205/">5 February 2004 <abbr title="World Wide Web Consortium">W3C</abbr> Patent
+            Policy</a>.
+          
+          
+          
+            
+              <abbr title="World Wide Web Consortium">W3C</abbr> maintains a <a href="http://www.w3.org/2004/01/pp-impl/45211/status" rel="disclosure">public list of any patent
+              disclosures</a> 
+            
+            made in connection with the deliverables of the group; that page also includes
+            instructions for disclosing a patent. An individual who has actual knowledge of a patent
+            which the individual believes contains
+            <a href="http://www.w3.org/Consortium/Patent-Policy-20040205/#def-essential">Essential
+            Claim(s)</a> must disclose the information in accordance with
+            <a href="http://www.w3.org/Consortium/Patent-Policy-20040205/#sec-Disclosure">section
+            6 of the <abbr title="World Wide Web Consortium">W3C</abbr> Patent Policy</a>.
+          
+          
+        </p>
+        
+          <p>This document is governed by the <a id="w3c_process_revision" href="http://www.w3.org/2014/Process-20140801/">1 August 2014 <abbr title="World Wide Web Consortium">W3C</abbr> Process Document</a>.
+          </p>
+        
+        
+      
+    
+  
+</section><section id="toc"><h2 class="introductory" id="h-toc" resource="#h-toc"><span property="xhv:role" resource="xhv:heading">Table of Contents</span></h2><ul class="toc" role="directory" id="respecContents"><li class="tocline"><a href="https://labs.w3.org/spec-generator/?type=respec&url=http://w3c.github.io/frame-timing/?specStatus=WD;shortName=frame-timing#introduction" class="tocxref"><span class="secno">1. </span>Introduction</a></li><li class="tocline"><a href="https://labs.w3.org/spec-generator/?type=respec&url=http://w3c.github.io/frame-timing/?specStatus=WD;shortName=frame-timing#conformance" class="tocxref"><span class="secno">2. </span>Conformance</a></li><li class="tocline"><a href="https://labs.w3.org/spec-generator/?type=respec&url=http://w3c.github.io/frame-timing/?specStatus=WD;shortName=frame-timing#terminology" class="tocxref"><span class="secno">3. </span>Terminology</a></li><li class="tocline"><a href="https://labs.w3.org/spec-generator/?type=respec&url=http://w3c.github.io/frame-timing/?specStatus=WD;shortName=frame-timing#frame-timing" class="tocxref"><span class="secno">4. </span>Frame Timing</a><ul class="toc"><li class="tocline"><a href="https://labs.w3.org/spec-generator/?type=respec&url=http://w3c.github.io/frame-timing/?specStatus=WD;shortName=frame-timing#introduction-1" class="tocxref"><span class="secno">4.1 </span>Introduction</a></li><li class="tocline"><a href="https://labs.w3.org/spec-generator/?type=respec&url=http://w3c.github.io/frame-timing/?specStatus=WD;shortName=frame-timing#extensions-performance-interface" class="tocxref"><span class="secno">4.2 </span>Extensions to the <code>Performance</code> Interface</a><ul class="toc"><li class="tocline"><a href="https://labs.w3.org/spec-generator/?type=respec&url=http://w3c.github.io/frame-timing/?specStatus=WD;shortName=frame-timing#attributes" class="tocxref"><span class="secno">4.2.1 </span>Attributes</a></li><li class="tocline"><a href="https://labs.w3.org/spec-generator/?type=respec&url=http://w3c.github.io/frame-timing/?specStatus=WD;shortName=frame-timing#methods" class="tocxref"><span class="secno">4.2.2 </span>Methods</a></li></ul></li><li class="tocline"><a href="https://labs.w3.org/spec-generator/?type=respec&url=http://w3c.github.io/frame-timing/?specStatus=WD;shortName=frame-timing#performancerendertiming" class="tocxref"><span class="secno">4.3 </span>The <code>PerformanceRenderTiming</code> Interface</a><ul class="toc"><li class="tocline"><a href="https://labs.w3.org/spec-generator/?type=respec&url=http://w3c.github.io/frame-timing/?specStatus=WD;shortName=frame-timing#attributes-1" class="tocxref"><span class="secno">4.3.1 </span>Attributes</a></li><li class="tocline"><a href="https://labs.w3.org/spec-generator/?type=respec&url=http://w3c.github.io/frame-timing/?specStatus=WD;shortName=frame-timing#serializer" class="tocxref"><span class="secno">4.3.2 </span>Serializer</a></li></ul></li><li class="tocline"><a href="https://labs.w3.org/spec-generator/?type=respec&url=http://w3c.github.io/frame-timing/?specStatus=WD;shortName=frame-timing#performancecompositetiming" class="tocxref"><span class="secno">4.4 </span>The <code>PerformanceCompositeTiming</code> Interface</a><ul class="toc"><li class="tocline"><a href="https://labs.w3.org/spec-generator/?type=respec&url=http://w3c.github.io/frame-timing/?specStatus=WD;shortName=frame-timing#attributes-2" class="tocxref"><span class="secno">4.4.1 </span>Attributes</a></li><li class="tocline"><a href="https://labs.w3.org/spec-generator/?type=respec&url=http://w3c.github.io/frame-timing/?specStatus=WD;shortName=frame-timing#serializer-1" class="tocxref"><span class="secno">4.4.2 </span>Serializer</a></li></ul></li></ul></li><li class="tocline"><a href="https://labs.w3.org/spec-generator/?type=respec&url=http://w3c.github.io/frame-timing/?specStatus=WD;shortName=frame-timing#monotonic-clock" class="tocxref"><span class="secno">5. </span>Monotonic Clock</a></li><li class="tocline"><a href="https://labs.w3.org/spec-generator/?type=respec&url=http://w3c.github.io/frame-timing/?specStatus=WD;shortName=frame-timing#privacy-and-security" class="tocxref"><span class="secno">6. </span>Privacy and Security</a></li><li class="tocline"><a href="https://labs.w3.org/spec-generator/?type=respec&url=http://w3c.github.io/frame-timing/?specStatus=WD;shortName=frame-timing#acknowledgements" class="tocxref"><span class="secno">A. </span>Acknowledgements</a></li><li class="tocline"><a href="https://labs.w3.org/spec-generator/?type=respec&url=http://w3c.github.io/frame-timing/?specStatus=WD;shortName=frame-timing#references" class="tocxref"><span class="secno">B. </span>References</a><ul class="toc"><li class="tocline"><a href="https://labs.w3.org/spec-generator/?type=respec&url=http://w3c.github.io/frame-timing/?specStatus=WD;shortName=frame-timing#normative-references" class="tocxref"><span class="secno">B.1 </span>Normative references</a></li><li class="tocline"><a href="https://labs.w3.org/spec-generator/?type=respec&url=http://w3c.github.io/frame-timing/?specStatus=WD;shortName=frame-timing#informative-references" class="tocxref"><span class="secno">B.2 </span>Informative references</a></li></ul></li></ul></section>
+
+    
+
+    <section class="informative" id="introduction" typeof="bibo:Chapter" resource="#introduction" property="bibo:hasPart">
+      <!--OddPage--><h2 id="h-introduction" resource="#h-introduction"><span property="xhv:role" resource="xhv:heading"><span class="secno">1. </span>Introduction</span></h2><p><em>This section is non-normative.</em></p>
+      <p>
+        Web developers need the ability to assess and understand the performance characteristics of their applications. While JavaScript [<cite><a class="bibref" href="https://labs.w3.org/spec-generator/?type=respec&url=http://w3c.github.io/frame-timing/?specStatus=WD;shortName=frame-timing#bib-ECMA-262">ECMA-262</a></cite>] provides a mechanism to approximate application Frames per Second (<dfn id="dfn-fps">FPS</dfn>) and Time to Frame (<dfn id="dfn-ttf">TTF</dfn>) (by calling a nearly empty <code>requestAnimationFrame</code> [<cite><a class="bibref" href="https://labs.w3.org/spec-generator/?type=respec&url=http://w3c.github.io/frame-timing/?specStatus=WD;shortName=frame-timing#bib-Animation-Timing">Animation-Timing</a></cite>] in a loop), the precision of this method has a high variance. Some example situations where this returns misleading results are:
+        </p><ul>
+          <li>
+            CSS Animations, which can be done off of the main thread and may not impact <code>requestAnimationFrame</code>
+          </li>
+          <li>
+            Scrolling, which can also be handled mostly off of the main thread, and may not impact <code>requestAnimationFrame</code>
+          </li>
+          <li>
+            Slow page loading (such as extensive DOM manipulation), which may consume a lot of time on the rendering thread and allow the main thread to fire a <code>requestAnimationFrame</code> event even though the new content has not yet been displayed to the user.
+          </li>
+        </ul>
+      <p></p>
+      <p>
+        This document defines the <a href="https://labs.w3.org/spec-generator/?type=respec&url=http://w3c.github.io/frame-timing/?specStatus=WD;shortName=frame-timing#performancerendertiming"><code>PerformanceRenderTiming</code></a> and <a href="https://labs.w3.org/spec-generator/?type=respec&url=http://w3c.github.io/frame-timing/?specStatus=WD;shortName=frame-timing#performancecompositetiming"><code>PerformanceCompositeTiming</code></a> interfaces, and extensions to the <a href="https://labs.w3.org/spec-generator/?type=respec&url=http://w3c.github.io/frame-timing/?specStatus=WD;shortName=frame-timing#extensions-performance-interface"><code>Performance</code></a> interface, which expose frame performance data to be used for smoothness measurements.
+      </p>
+    </section>
+    <section id="conformance" typeof="bibo:Chapter" resource="#conformance" property="bibo:hasPart"><!--OddPage--><h2 id="h-conformance" resource="#h-conformance"><span property="xhv:role" resource="xhv:heading"><span class="secno">2. </span>Conformance</span></h2>
+<p>
+  As well as sections marked as non-normative, all authoring guidelines, diagrams, examples,
+  and notes in this specification are non-normative. Everything else in this specification is
+  normative.
+</p>
+<p id="respecRFC2119">The key words <em class="rfc2119" title="MAY">MAY</em>, <em class="rfc2119" title="MUST">MUST</em>, and <em class="rfc2119" title="SHOULD">SHOULD</em> are 
+  to be interpreted as described in [<cite><a class="bibref" href="https://labs.w3.org/spec-generator/?type=respec&url=http://w3c.github.io/frame-timing/?specStatus=WD;shortName=frame-timing#bib-RFC2119">RFC2119</a></cite>].
+</p>
+
+      <p>
+        Requirements phrased in the imperative as part of algorithms (such as "strip any leading space characters" or "return false and abort these steps") are to be interpreted with the meaning of the key word ("<em class="rfc2119" title="MUST">MUST</em>", "<em class="rfc2119" title="SHOULD">SHOULD</em>", "<em class="rfc2119" title="MAY">MAY</em>", etc) used in introducing the algorithm.
+      </p>
+      <p>
+        Some conformance requirements are phrased as requirements on attributes, methods or objects. Such requirements are to be interpreted as requirements on user agents.
+      </p>
+      <p>
+        Conformance requirements phrased as algorithms or specific steps may be implemented in any manner, so long as the end result is equivalent. (In particular, the algorithms defined in this specification are intended to be easy to follow, and not intended to be performant.)
+      </p>
+      <p>
+        The IDL fragments in this specification <em class="rfc2119" title="MUST">MUST</em> be interpreted as required for conforming IDL fragments, as described in the Web IDL specification. [<cite><a class="bibref" href="https://labs.w3.org/spec-generator/?type=respec&url=http://w3c.github.io/frame-timing/?specStatus=WD;shortName=frame-timing#bib-WebIDL">WebIDL</a></cite>]
+      </p>
+    </section>
+    <section id="terminology" typeof="bibo:Chapter" resource="#terminology" property="bibo:hasPart">
+      <!--OddPage--><h2 id="h-terminology" resource="#h-terminology"><span property="xhv:role" resource="xhv:heading"><span class="secno">3. </span>Terminology</span></h2>
+      <p>
+        The construction "a <code>Foo</code> object", where <code>Foo</code> is actually an interface, is sometimes used instead of the more accurate "an object implementing the interface Foo".
+      </p>
+      <p>
+        The term "JavaScript" is used to refer to ECMAScript [<cite><a class="bibref" href="https://labs.w3.org/spec-generator/?type=respec&url=http://w3c.github.io/frame-timing/?specStatus=WD;shortName=frame-timing#bib-ECMA-262">ECMA-262</a></cite>], rather than the official term ECMAScript, since the term JavaScript is more widely known.
+      </p>
+    </section>
+    <section id="frame-timing" typeof="bibo:Chapter" resource="#frame-timing" property="bibo:hasPart">
+      <!--OddPage--><h2 id="h-frame-timing" resource="#h-frame-timing"><span property="xhv:role" resource="xhv:heading"><span class="secno">4. </span>Frame Timing</span></h2>
+      <p>
+      </p>
+      <section class="informative" id="introduction-1" typeof="bibo:Chapter" resource="#introduction-1" property="bibo:hasPart">
+        <h3 id="h-introduction-1" resource="#h-introduction-1"><span property="xhv:role" resource="xhv:heading"><span class="secno">4.1 </span>Introduction</span></h3><p><em>This section is non-normative.</em></p>
+        <p>The <a href="https://labs.w3.org/spec-generator/?type=respec&url=http://w3c.github.io/frame-timing/?specStatus=WD;shortName=frame-timing#idl-def-PerformanceRenderTiming" class="idlType"><code>PerformanceRenderTiming</code></a> and <a href="https://labs.w3.org/spec-generator/?type=respec&url=http://w3c.github.io/frame-timing/?specStatus=WD;shortName=frame-timing#idl-def-PerformanceCompositeTiming" class="idlType"><code>PerformanceCompositeTiming</code></a> interfaces, and extensions to the <a href="https://labs.w3.org/spec-generator/?type=respec&url=http://w3c.github.io/frame-timing/?specStatus=WD;shortName=frame-timing#extensions-performance-interface">Performance interface</a>, enable web developers to measure the performance of their applications by giving them access to frame performance data to facilitate smoothness (i.e. <a href="https://labs.w3.org/spec-generator/?type=respec&url=http://w3c.github.io/frame-timing/?specStatus=WD;shortName=frame-timing#dfn-fps" class="internalDFN">FPS</a> and <a href="https://labs.w3.org/spec-generator/?type=respec&url=http://w3c.github.io/frame-timing/?specStatus=WD;shortName=frame-timing#dfn-ttf" class="internalDFN">TTF</a>) measurements:</p>
+
+        <ul>
+          <li><a href="https://labs.w3.org/spec-generator/?type=respec&url=http://w3c.github.io/frame-timing/?specStatus=WD;shortName=frame-timing#idl-def-PerformanceRenderTiming" class="idlType"><code>PerformanceRenderTiming</code></a> captures the work performed by the renderer to process the frame: DOM modification, JavaScript execution, CSS calculation, and similar activities.</li>
+          <li><a href="https://labs.w3.org/spec-generator/?type=respec&url=http://w3c.github.io/frame-timing/?specStatus=WD;shortName=frame-timing#idl-def-PerformanceCompositeTiming" class="idlType"><code>PerformanceCompositeTiming</code></a> captures events performed by the compositor to place rendered content onto the screen.</li>
+        </ul>
+
+        <p>The relationship between <a href="https://labs.w3.org/spec-generator/?type=respec&url=http://w3c.github.io/frame-timing/?specStatus=WD;shortName=frame-timing#idl-def-PerformanceRenderTiming" class="idlType"><code>PerformanceRenderTiming</code></a> and <a href="https://labs.w3.org/spec-generator/?type=respec&url=http://w3c.github.io/frame-timing/?specStatus=WD;shortName=frame-timing#idl-def-PerformanceCompositeTiming" class="idlType"><code>PerformanceCompositeTiming</code></a> events will vary based on the workload, and architecture and configuration of the user agent. For example, the user agent may report many <a href="https://labs.w3.org/spec-generator/?type=respec&url=http://w3c.github.io/frame-timing/?specStatus=WD;shortName=frame-timing#idl-def-PerformanceCompositeTiming" class="idlType"><code>PerformanceCompositeTiming</code></a> events corresponding to a single <a href="https://labs.w3.org/spec-generator/?type=respec&url=http://w3c.github.io/frame-timing/?specStatus=WD;shortName=frame-timing#idl-def-PerformanceRenderTiming" class="idlType"><code>PerformanceRenderTiming</code></a> event due to a CSS animation, composite thread scrolling, or similar activities. Other workloads may result in 1:1 mapping of <a href="https://labs.w3.org/spec-generator/?type=respec&url=http://w3c.github.io/frame-timing/?specStatus=WD;shortName=frame-timing#idl-def-PerformanceRenderTiming" class="idlType"><code>PerformanceRenderTiming</code></a> and <a href="https://labs.w3.org/spec-generator/?type=respec&url=http://w3c.github.io/frame-timing/?specStatus=WD;shortName=frame-timing#idl-def-PerformanceCompositeTiming" class="idlType"><code>PerformanceCompositeTiming</code></a> events, and the exact relationship is also subject to user agent architecture and configuration.</p>
+      </section>
+      <section id="extensions-performance-interface" typeof="bibo:Chapter" resource="#extensions-performance-interface" property="bibo:hasPart">
+        <h3 id="h-extensions-performance-interface" resource="#h-extensions-performance-interface"><span property="xhv:role" resource="xhv:heading"><span class="secno">4.2 </span>Extensions to the <code>Performance</code> Interface</span></h3>
+        <p>
+          </p><pre class="idl"><span class="idlInterface" id="idl-def-Performance">partial interface <span class="idlInterfaceID">Performance</span> {
+<span class="idlMethod">    <span class="idlMethType">void</span> <span class="idlMethName"><a href="https://labs.w3.org/spec-generator/?type=respec&url=http://w3c.github.io/frame-timing/?specStatus=WD;shortName=frame-timing#widl-Performance-clearFrameTimings-void">clearFrameTimings</a></span> ();</span>
+<span class="idlMethod">    <span class="idlMethType">void</span> <span class="idlMethName"><a href="https://labs.w3.org/spec-generator/?type=respec&url=http://w3c.github.io/frame-timing/?specStatus=WD;shortName=frame-timing#widl-Performance-setFrameTimingBufferSize-void-unsigned-long-maxSize">setFrameTimingBufferSize</a></span> (<span class="idlParam"><span class="idlParamType">unsigned long</span> <span class="idlParamName">maxSize</span></span>);</span>
+<span class="idlAttribute">                attribute <span class="idlAttrType">EventHandler</span> <span class="idlAttrName"><a href="https://labs.w3.org/spec-generator/?type=respec&url=http://w3c.github.io/frame-timing/?specStatus=WD;shortName=frame-timing#widl-Performance-onframetimingbufferfull">onframetimingbufferfull</a></span>;</span>
+};</span></pre><section id="attributes" typeof="bibo:Chapter" resource="#attributes" property="bibo:hasPart"><h4 id="h-attributes" resource="#h-attributes"><span property="xhv:role" resource="xhv:heading"><span class="secno">4.2.1 </span>Attributes</span></h4><dl class="attributes"><dt id="widl-Performance-onframetimingbufferfull"><code>onframetimingbufferfull</code> of type <span class="idlAttrType">EventHandler</span>,            </dt><dd>
+              The event handler for the <code>frametimingbufferfull</code> event. Immediately after the buffer used to store the list of <a href="https://labs.w3.org/spec-generator/?type=respec&url=http://w3c.github.io/frame-timing/?specStatus=WD;shortName=frame-timing#performancerendertiming">PerformanceRenderTiming</a> and <a href="https://labs.w3.org/spec-generator/?type=respec&url=http://w3c.github.io/frame-timing/?specStatus=WD;shortName=frame-timing#performancecompositetiming">PerformanceCompositeTiming</a>
+    resources becomes full, the User Agent <em class="rfc2119" title="MUST">MUST</em> fire a simple event named <code>frametimingbufferfull</code> that bubbles, isn't cancelable, has no default action, at the
+    <a href="http://www.w3.org/TR/navigation-timing-2/#performance">Performance</a> object [<cite><a class="bibref" href="https://labs.w3.org/spec-generator/?type=respec&url=http://w3c.github.io/frame-timing/?specStatus=WD;shortName=frame-timing#bib-Navigation-Timing-2">Navigation-Timing-2</a></cite>].
+            </dd></dl></section><section id="methods" typeof="bibo:Chapter" resource="#methods" property="bibo:hasPart"><h4 id="h-methods" resource="#h-methods"><span property="xhv:role" resource="xhv:heading"><span class="secno">4.2.2 </span>Methods</span></h4><dl class="methods"><dt id="widl-Performance-clearFrameTimings-void"><code>clearFrameTimings</code></dt><dd>
+              The method <code>clearFrameTimings</code> clears the buffer used to store the current list of <a href="https://labs.w3.org/spec-generator/?type=respec&url=http://w3c.github.io/frame-timing/?specStatus=WD;shortName=frame-timing#performancerendertiming">PerformanceRenderTiming</a> resources.
+            <div><em>No parameters.</em></div><div><em>Return type: </em><code>void</code></div></dd><dt id="widl-Performance-setFrameTimingBufferSize-void-unsigned-long-maxSize"><code>setFrameTimingBufferSize</code></dt><dd>
+              
+              The <code>setFrameTimingBufferSize</code> method, when invoked, <em class="rfc2119" title="MUST">MUST</em> set the maximum number of <a href="https://labs.w3.org/spec-generator/?type=respec&url=http://w3c.github.io/frame-timing/?specStatus=WD;shortName=frame-timing#performancerendertiming">PerformanceRenderTiming</a> resources that may be stored in the buffer to the value of the <code>maxSize</code> parameter.
+            <table class="parameters"><tbody><tr><th>Parameter</th><th>Type</th><th>Nullable</th><th>Optional</th><th>Description</th></tr><tr><td class="prmName">maxSize</td><td class="prmType"><code>unsigned long</code></td><td class="prmNullFalse"><span role="img" aria-label="False">✘</span></td><td class="prmOptFalse"><span role="img" aria-label="False">✘</span></td><td class="prmDesc">
+                  The maxSize parameter sets the maximum number of <a href="https://labs.w3.org/spec-generator/?type=respec&url=http://w3c.github.io/frame-timing/?specStatus=WD;shortName=frame-timing#performancerendertiming">PerformanceRenderTiming</a> resources that will be stored in the buffer.
+                </td></tr></tbody></table><div><em>Return type: </em><code>void</code></div></dd></dl></section>
+        <p></p>
+      </section>
+      <section id="performancerendertiming" typeof="bibo:Chapter" resource="#performancerendertiming" property="bibo:hasPart">
+        <h3 id="h-performancerendertiming" resource="#h-performancerendertiming"><span property="xhv:role" resource="xhv:heading"><span class="secno">4.3 </span>The <code>PerformanceRenderTiming</code> Interface</span></h3>
+        <p>
+          The <a href="https://labs.w3.org/spec-generator/?type=respec&url=http://w3c.github.io/frame-timing/?specStatus=WD;shortName=frame-timing#idl-def-PerformanceRenderTiming" class="idlType"><code>PerformanceRenderTiming</code></a> interface participates in the <a href="http://www.w3.org/TR/performance-timeline/#sec-performance-timeline">Performance Timeline</a> and extends the following attributes of the <a href="http://www.w3.org/TR/performance-timeline/#performanceentry">PerformanceEntry</a> interface [<cite><a class="bibref" href="https://labs.w3.org/spec-generator/?type=respec&url=http://w3c.github.io/frame-timing/?specStatus=WD;shortName=frame-timing#bib-Performance-Timeline">Performance-Timeline</a></cite>]:
+        </p>
+          <dl class="attributes">
+            <dt id="widl-PerformanceRenderTiming-name"><code>name</code></dt>
+            <dd>
+              This attribute <em class="rfc2119" title="MUST">MUST</em> return the name of the requesting document.
+            </dd>
+            <dt id="widl-PerformanceRenderTiming-entryType"><code>entryType</code></dt>
+            <dd>
+              This attribute <em class="rfc2119" title="MUST">MUST</em> return the <a href="http://www.w3.org/TR/WebIDL/#idl-DOMString"><code>DOMString</code></a> "<code>render</code>".
+            </dd>
+            <dt id="widl-PerformanceRenderTiming-startTime"><code>startTime</code></dt>
+            <dd>
+              This attribute <em class="rfc2119" title="MUST">MUST</em> return a <a href="http://www.w3.org/TR/hr-time/#domhighrestimestamp"><code>DOMHighResTimeStamp</code></a> with current frame's beginning time value, which is the time that the <code>requestAnimationFrame</code> callback (see [<cite><a class="bibref" href="https://labs.w3.org/spec-generator/?type=respec&url=http://w3c.github.io/frame-timing/?specStatus=WD;shortName=frame-timing#bib-Animation-Timing">Animation-Timing</a></cite>]) would have fired for the frame. [<cite><a class="bibref" href="https://labs.w3.org/spec-generator/?type=respec&url=http://w3c.github.io/frame-timing/?specStatus=WD;shortName=frame-timing#bib-HR-Time">HR-Time</a></cite>].<p></p>
+            </dd>
+            <dt id="widl-PerformanceRenderTiming-duration"><code>duration</code></dt>
+            <dd>
+              This attribute <em class="rfc2119" title="MUST">MUST</em> return a <a href="http://www.w3.org/TR/hr-time/#domhighrestimestamp"><code>DOMHighResTimeStamp</code></a> with the difference between the end of the frame and the <code>startTime</code> of the frame. The end of the frame is defined as what the beginning time of the next frame's <code>requestAnimationFrame</code> callback (see [<cite><a class="bibref" href="https://labs.w3.org/spec-generator/?type=respec&url=http://w3c.github.io/frame-timing/?specStatus=WD;shortName=frame-timing#bib-Animation-Timing">Animation-Timing</a></cite>]) would have been, had one been scheduled in the current frame. If a <code>requestAnimationFrame</code> is already requested, its beginning time <em class="rfc2119" title="SHOULD">SHOULD</em> be used.
+            </dd>
+          </dl>
+          <pre class="idl"><span class="idlInterface" id="idl-def-PerformanceRenderTiming">interface <span class="idlInterfaceID">PerformanceRenderTiming</span> : <span class="idlSuperclass"><a href="http://www.w3.org/TR/performance-timeline/#performanceentry">PerformanceEntry</a></span> {
+<span class="idlAttribute">    readonly    attribute <span class="idlAttrType">unsigned long</span> <span class="idlAttrName"><a href="https://labs.w3.org/spec-generator/?type=respec&url=http://w3c.github.io/frame-timing/?specStatus=WD;shortName=frame-timing#widl-PerformanceRenderTiming-sourceFrameNumber">sourceFrameNumber</a></span>;</span>
+<span class="idlSerializer">    serializer = <span class="idlSerializerValues">{inherit, attribute}</span>;</span>
+};</span></pre><section id="attributes-1" typeof="bibo:Chapter" resource="#attributes-1" property="bibo:hasPart"><h4 id="h-attributes-1" resource="#h-attributes-1"><span property="xhv:role" resource="xhv:heading"><span class="secno">4.3.1 </span>Attributes</span></h4><dl class="attributes"><dt id="widl-PerformanceRenderTiming-sourceFrameNumber"><code>sourceFrameNumber</code> of type <span class="idlAttrType">unsigned long</span>, readonly   </dt><dd>
+              This attribute <em class="rfc2119" title="MUST">MUST</em> return the source frame number for the event. This is used to correlate <code>PerformanceRenderTiming</code> and <code>PerformanceCompositeTiming</code> events to measure time-to-frame delays.
+            </dd></dl></section><section id="serializer" typeof="bibo:Chapter" resource="#serializer" property="bibo:hasPart"><h4 id="h-serializer" resource="#h-serializer"><span property="xhv:role" resource="xhv:heading"><span class="secno">4.3.2 </span>Serializer</span></h4><div><p>Instances of this interface are serialized as a map with entries from the closest inherited interface and with entries for each of the serializable attributes.</p><p></p></div></section>
+        <p></p>
+      </section>
+      <section id="performancecompositetiming" typeof="bibo:Chapter" resource="#performancecompositetiming" property="bibo:hasPart">
+        <h3 id="h-performancecompositetiming" resource="#h-performancecompositetiming"><span property="xhv:role" resource="xhv:heading"><span class="secno">4.4 </span>The <code>PerformanceCompositeTiming</code> Interface</span></h3>
+        <p>
+          The <a href="https://labs.w3.org/spec-generator/?type=respec&url=http://w3c.github.io/frame-timing/?specStatus=WD;shortName=frame-timing#idl-def-PerformanceCompositeTiming" class="idlType"><code>PerformanceCompositeTiming</code></a> interface participates in the <a href="http://www.w3.org/TR/performance-timeline/#sec-performance-timeline">Performance Timeline</a> and extends the following attributes of the <a href="http://www.w3.org/TR/performance-timeline/#performanceentry">PerformanceEntry</a> interface [<cite><a class="bibref" href="https://labs.w3.org/spec-generator/?type=respec&url=http://w3c.github.io/frame-timing/?specStatus=WD;shortName=frame-timing#bib-Performance-Timeline">Performance-Timeline</a></cite>]:
+        </p>
+          <dl class="attributes">
+            <dt id="widl-PerformanceCompositeTiming-name"><code>name</code></dt>
+            <dd>
+              This attribute <em class="rfc2119" title="MUST">MUST</em> return the name of the requesting document.
+            </dd>
+            <dt id="widl-PerformanceCompositeTiming-entryType"><code>entryType</code></dt>
+            <dd>
+              This attribute <em class="rfc2119" title="MUST">MUST</em> return the <a href="http://www.w3.org/TR/WebIDL/#idl-DOMString"><code>DOMString</code></a> "<code>composite</code>".
+            </dd>
+            <dt id="widl-PerformanceCompositeTiming-startTime"><code>startTime</code></dt>
+            <dd>
+              This attribute <em class="rfc2119" title="MUST">MUST</em> return a <a href="http://www.w3.org/TR/hr-time/#domhighrestimestamp"><code>DOMHighResTimeStamp</code></a> with the event's time value [<cite><a class="bibref" href="https://labs.w3.org/spec-generator/?type=respec&url=http://w3c.github.io/frame-timing/?specStatus=WD;shortName=frame-timing#bib-HR-Time">HR-Time</a></cite>].
+            </dd>
+            <dt id="widl-PerformanceCompositeTiming-duration"><code>duration</code></dt>
+            <dd>
+              The <code>duration</code> attribute <em class="rfc2119" title="MUST">MUST</em> return a <a href="http://www.w3.org/TR/hr-time/#domhighrestimestamp"><code>DOMHighResTimeStamp</code></a> of value 0.
+            </dd>
+          </dl>
+          <pre class="idl"><span class="idlInterface" id="idl-def-PerformanceCompositeTiming">interface <span class="idlInterfaceID">PerformanceCompositeTiming</span> : <span class="idlSuperclass"><a href="http://www.w3.org/TR/performance-timeline/#performanceentry">PerformanceEntry</a></span> {
+<span class="idlAttribute">    readonly    attribute <span class="idlAttrType">unsigned long</span> <span class="idlAttrName"><a href="https://labs.w3.org/spec-generator/?type=respec&url=http://w3c.github.io/frame-timing/?specStatus=WD;shortName=frame-timing#widl-PerformanceCompositeTiming-sourceFrameNumber">sourceFrameNumber</a></span>;</span>
+<span class="idlSerializer">    serializer = <span class="idlSerializerValues">{inherit, attribute}</span>;</span>
+};</span></pre><section id="attributes-2" typeof="bibo:Chapter" resource="#attributes-2" property="bibo:hasPart"><h4 id="h-attributes-2" resource="#h-attributes-2"><span property="xhv:role" resource="xhv:heading"><span class="secno">4.4.1 </span>Attributes</span></h4><dl class="attributes"><dt id="widl-PerformanceCompositeTiming-sourceFrameNumber"><code>sourceFrameNumber</code> of type <span class="idlAttrType">unsigned long</span>, readonly   </dt><dd>
+              This attribute <em class="rfc2119" title="MUST">MUST</em> return the last known source frame number for the event. This is used to correlate <code>PerformanceRenderTiming</code> and <code>PerformanceCompositeTiming</code> events to measure time-to-frame delays.
+            </dd></dl></section><section id="serializer-1" typeof="bibo:Chapter" resource="#serializer-1" property="bibo:hasPart"><h4 id="h-serializer-1" resource="#h-serializer-1"><span property="xhv:role" resource="xhv:heading"><span class="secno">4.4.2 </span>Serializer</span></h4><div><p>Instances of this interface are serialized as a map with entries from the closest inherited interface and with entries for each of the serializable attributes.</p><p></p></div></section>
+      </section>
+    </section>
+    <section id="monotonic-clock" typeof="bibo:Chapter" resource="#monotonic-clock" property="bibo:hasPart">
+      <!--OddPage--><h2 id="h-monotonic-clock" resource="#h-monotonic-clock"><span property="xhv:role" resource="xhv:heading"><span class="secno">5. </span>Monotonic Clock</span></h2>
+      <p>
+        The time values stored within the interface <em class="rfc2119" title="MUST">MUST</em> monotonically increase to ensure they are not affected by adjustments to the system clock. The difference between any two chronologically recorded time values <em class="rfc2119" title="MUST">MUST</em> never be negative. The user agent <em class="rfc2119" title="MUST">MUST</em> record the system clock at the beginning of the navigation and define subsequent time values in terms of a monotonic clock measuring time elapsed from the beginning of the navigation.
+      </p>
+    </section>
+    <section class="informative" id="privacy-and-security" typeof="bibo:Chapter" resource="#privacy-and-security" property="bibo:hasPart">
+      <!--OddPage--><h2 id="h-privacy-and-security" resource="#h-privacy-and-security"><span property="xhv:role" resource="xhv:heading"><span class="secno">6. </span>Privacy and Security</span></h2><p><em>This section is non-normative.</em></p>
+      <p>
+        The interfaces defined in this specification expose potentially sensitive timing information on specific JavaScript activity of a page. However, unlike other interfaces defined in the Performance Timeline, the interfaces defined in this specification do not have any restrictions on sharing timing information through script. This is because the web platform has been designed with the invariant that any script included on a page has the same access as any other script included on that page regardless of the origin of the script.
+      </p>
+    </section>
+
+    <section class="appendix" id="acknowledgements" typeof="bibo:Chapter" resource="#acknowledgements" property="bibo:hasPart">
+      <!--OddPage--><h2 id="h-acknowledgements" resource="#h-acknowledgements"><span property="xhv:role" resource="xhv:heading"><span class="secno">A. </span>Acknowledgements</span></h2>
+      <p>
+        Thanks to Enne Walker, Rick Byers and Chris Harrelson for their helpful comments.
+      </p>
+    </section>
+  
+
+<section id="references" class="appendix" typeof="bibo:Chapter" resource="#references" property="bibo:hasPart"><!--OddPage--><h2 id="h-references" resource="#h-references"><span property="xhv:role" resource="xhv:heading"><span class="secno">B. </span>References</span></h2><section id="normative-references" typeof="bibo:Chapter" resource="#normative-references" property="bibo:hasPart"><h3 id="h-normative-references" resource="#h-normative-references"><span property="xhv:role" resource="xhv:heading"><span class="secno">B.1 </span>Normative references</span></h3><dl class="bibliography" resource=""><dt id="bib-Animation-Timing">[Animation-Timing]</dt><dd>James Robinson; Cameron McCormack. <a href="http://www.w3.org/TR/animation-timing/" property="dc:requires"><cite>Timing control for script-based animations</cite></a>. 31 October 2013. W3C Candidate Recommendation. URL: <a href="http://www.w3.org/TR/animation-timing/" property="dc:requires">http://www.w3.org/TR/animation-timing/</a>
+</dd><dt id="bib-HR-Time">[HR-Time]</dt><dd>Jatinder Mann. <a href="http://www.w3.org/TR/hr-time/" property="dc:requires"><cite>High Resolution Time</cite></a>. 17 December 2012. W3C Recommendation. URL: <a href="http://www.w3.org/TR/hr-time/" property="dc:requires">http://www.w3.org/TR/hr-time/</a>
+</dd><dt id="bib-Navigation-Timing-2">[Navigation-Timing-2]</dt><dd>Jatinder Mann; Tobin Titus; Arvind Jain. <a href="http://www.w3.org/TR/navigation-timing-2/" property="dc:requires"><cite>Navigation Timing 2</cite></a>. 20 January 2015. W3C Working Draft. URL: <a href="http://www.w3.org/TR/navigation-timing-2/" property="dc:requires">http://www.w3.org/TR/navigation-timing-2/</a>
+</dd><dt id="bib-Performance-Timeline">[Performance-Timeline]</dt><dd>Jatinder Mann; Zhiheng Wang. <a href="http://www.w3.org/TR/performance-timeline/" property="dc:requires"><cite>Performance Timeline</cite></a>. 12 December 2013. W3C Recommendation. URL: <a href="http://www.w3.org/TR/performance-timeline/" property="dc:requires">http://www.w3.org/TR/performance-timeline/</a>
+</dd><dt id="bib-RFC2119">[RFC2119]</dt><dd>S. Bradner. <a href="https://tools.ietf.org/html/rfc2119" property="dc:requires"><cite>Key words for use in RFCs to Indicate Requirement Levels</cite></a>. March 1997. Best Current Practice. URL: <a href="https://tools.ietf.org/html/rfc2119" property="dc:requires">https://tools.ietf.org/html/rfc2119</a>
+</dd><dt id="bib-WebIDL">[WebIDL]</dt><dd>Cameron McCormack. <a href="http://www.w3.org/TR/WebIDL/" property="dc:requires"><cite>Web IDL</cite></a>. 19 April 2012. W3C Candidate Recommendation. URL: <a href="http://www.w3.org/TR/WebIDL/" property="dc:requires">http://www.w3.org/TR/WebIDL/</a>
+</dd></dl></section><section id="informative-references" typeof="bibo:Chapter" resource="#informative-references" property="bibo:hasPart"><h3 id="h-informative-references" resource="#h-informative-references"><span property="xhv:role" resource="xhv:heading"><span class="secno">B.2 </span>Informative references</span></h3><dl class="bibliography" resource=""><dt id="bib-ECMA-262">[ECMA-262]</dt><dd><a href="http://www.ecma-international.org/publications/standards/Ecma-262.htm" property="dc:references"><cite>ECMAScript Language Specification, Edition 5.1</cite></a>. June 2011. URL: <a href="http://www.ecma-international.org/publications/standards/Ecma-262.htm" property="dc:references">http://www.ecma-international.org/publications/standards/Ecma-262.htm</a>
+</dd></dl></section></section>
+</body></html>
