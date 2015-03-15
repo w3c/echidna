@@ -3,7 +3,14 @@
 // Switch the environment into testing mode
 process.env.NODE_ENV = 'dev';
 
-var expect = require('chai').use(require('chai-as-promised')).expect;
+var chai = require('chai');
+var chaiImmutable = require('chai-immutable');
+var expect = chai.expect;
+var chaiAsPromised = require('chai-as-promised');
+
+chai.use(chaiImmutable);
+chai.use(chaiAsPromised);
+
 var Promise = require('promise');
 var Fs = require('fs');
 var Immutable = require('immutable');
@@ -82,8 +89,7 @@ describe('DocumentDownloader', function () {
     });
 
     it('should promise a List of size 2', function () {
-      return expect(content).to.eventually.be.an.instanceOf(List)
-        .of.property('size', 2);
+      return expect(content).to.eventually.be.an.instanceOf(List).of.size(2);
     });
 
     it('should fetch multiple URLs', function () {
@@ -274,16 +280,15 @@ describe('DocumentDownloader', function () {
         'img/image2.jpg'
       ].join('\n');
 
-      var filenames = [
+      var filenames = List.of(
         'index.html',
         'css/screen.css',
         'css/print.css',
         'img/image1.jpg',
         'img/image2.jpg'
-      ];
+      );
 
-      expect(DocumentDownloader.getFilenames(manifest).toArray())
-        .to.eql(filenames);
+      expect(DocumentDownloader.getFilenames(manifest)).to.equal(filenames);
     });
   });
 
@@ -302,17 +307,15 @@ describe('DocumentDownloader', function () {
     });
 
     it('should filter out .htaccess files', function () {
-      expect(Immutable.is(
-        DocumentDownloader.sanitize(List.of('allowed_file', '.htaccess')),
-        List.of('allowed_file')
-      )).to.be.true;
+      expect(DocumentDownloader.sanitize(List.of('allowed_file', '.htaccess')))
+        .to.equal(List.of('allowed_file'));
     });
 
     it('should filter out PHP files', function () {
-      expect(Immutable.is(
-        DocumentDownloader.sanitize(List.of('allowed_file', 'not_allowed.php')),
-        List.of('allowed_file'))
-      ).to.be.true;
+      expect(DocumentDownloader.sanitize(List.of(
+        'allowed_file',
+        'not_allowed.php'
+      ))).to.equal(List.of('allowed_file'));
     });
   });
 });
@@ -345,7 +348,7 @@ describe('SpecberusWrapper', function () {
 
     it('should return an error property that is an empty list', function () {
       return expect(content).that.eventually.has.property('errors')
-        .that.has.property('size', 0);
+        .that.is.empty;
     });
 
     it('should promise an object with a metadata property', function () {
@@ -360,8 +363,6 @@ describe('SpecberusWrapper', function () {
     it('should promise the proper metadata.title', function () {
       return content.then(function (result) {
         expect(result.metadata.get('title')).to.equal(myDraft.title);
-      }, function (err) {
-        console.log('error: ' + err);
       });
     });
 
@@ -369,8 +370,6 @@ describe('SpecberusWrapper', function () {
       return content.then(function (result) {
         expect(result.metadata.get('thisVersion'))
           .to.equal(myDraft.thisVersion);
-      }, function (err) {
-        console.log('error: ' + err);
       });
     });
 
@@ -378,8 +377,6 @@ describe('SpecberusWrapper', function () {
       return content.then(function (result) {
         expect(result.metadata.get('latestVersion'))
           .to.equal(myDraft.latestVersion);
-      }, function (err) {
-        console.log('error: ' + err);
       });
     });
 
@@ -388,16 +385,12 @@ describe('SpecberusWrapper', function () {
         expect(result.metadata.get('docDate')).to.be.an.instanceOf(Date);
         expect(result.metadata.get('docDate').toISOString())
           .to.equal(myDraft.docDate.toISOString());
-      }, function (err) {
-        console.log('error: ' + err);
       });
     });
 
     it('should promise the proper metadata.process', function () {
       return content.then(function (result) {
         expect(result.metadata.get('process')).to.equal(myDraft.processURI);
-      }, function (err) {
-        console.log('error: ' + err);
       });
     });
 
@@ -405,8 +398,6 @@ describe('SpecberusWrapper', function () {
       return content.then(function (result) {
         expect(result.metadata.get('editorsDraft'))
           .to.equal(myDraft.editorsDraft);
-      }, function (err) {
-        console.log('error: ' + err);
       });
     });
 
@@ -414,8 +405,6 @@ describe('SpecberusWrapper', function () {
       return content.then(function (result) {
         expect(result.metadata.get('editorIDs'))
           .to.deep.equal(myDraft.editorIDs);
-      }, function (err) {
-        console.log('error: ' + err);
       });
     });
 
@@ -423,8 +412,6 @@ describe('SpecberusWrapper', function () {
       return content.then(function (result) {
         expect(result.metadata.get('deliverers'))
           .to.deep.equal(myDraft.deliverers);
-      }, function (err) {
-        console.log('error: ' + err);
       });
     });
   });
@@ -436,7 +423,7 @@ describe('SpecberusWrapper', function () {
 
     it('should return an error property that has 2 errors', function () {
       return expect(content).that.eventually.has.property('errors')
-        .that.has.property('size', 2);
+        .that.has.size(2);
     });
   });
 
@@ -447,7 +434,7 @@ describe('SpecberusWrapper', function () {
 
     it('should return an error property that has no errors', function () {
       return expect(content).that.eventually.has.property('errors')
-        .that.has.property('size', 0);
+        .that.is.empty;
     });
   });
 });
@@ -472,7 +459,7 @@ describe('TokenChecker', function () {
 
     it('should promise an object with a token property', function () {
       return expect(check).to.eventually.have.property('token')
-        .that.is.equals(token);
+        .that.equals(token);
     });
 
     it('should promise an object with a source property', function () {
@@ -481,7 +468,7 @@ describe('TokenChecker', function () {
 
     it('should promise an object with an authorized property', function () {
       return expect(check).to.eventually.have.property('authorized')
-        .that.is.equals(true);
+        .that.is.true;
     });
   });
 });
@@ -501,12 +488,12 @@ describe('Publisher', function () {
     });
 
     it('should return no errors if publication is successful', function () {
-      return expect(promise).to.eventually.have.property('size', 0);
+      return expect(promise).to.eventually.be.empty;
     });
 
     it('should return errors when the publication has failed', function () {
       var errPromise = new Publisher(new BadRequestService()).publish(metadata);
-      return expect(errPromise).to.eventually.have.property('size', 1);
+      return expect(errPromise).to.eventually.have.size(1);
     });
 
     it('should reject if not yet implemented', function () {
