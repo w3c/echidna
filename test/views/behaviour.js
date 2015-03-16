@@ -8,8 +8,8 @@
 'use strict';
 
 var JOBS = [
- 'retrieve-resources', 'specberus', 'token-checker', 'third-party-checker',
- 'publish', 'tr-install', 'update-tr-shortlink'
+  'retrieve-resources', 'specberus', 'token-checker',
+  'third-party-checker', 'publish', 'tr-install', 'update-tr-shortlink'
 ];
 
 var log;
@@ -17,6 +17,7 @@ var inspector;
 var allSpecs = [];
 var allJobs = {};
 var allMessages = {};
+var allIDs = {};
 
 function logMessage(message) {
   log = log || $('pre#console');
@@ -52,19 +53,27 @@ function activateActions() {
   });
 
   $('td.status').click(function () {
-    var job = allJobs[$(this).attr('data-spec-id')];
+    retrieveStatus($(this).attr('data-spec-id'));
+    /* var job = allJobs[$(this).attr('data-spec-id')];
     var message = allMessages[$(this).attr('data-spec-id')];
     dumpObject(job);
-    logMessage(message);
+    logMessage(message); */
   });
 
   refresh();
 }
 
+function retrieveStatus(id) {
+  $.get(endpoint() + '/status/?id=' + allIDs[id], function (data) {
+    logMessage('Retrieved status of job "' + id + '".');
+    dumpObject(data);
+  });
+}
+
 function refresh() {
   $.get(endpoint() + '/status/', function (data) {
     updateJobs(data);
-    window.setTimeout(refresh, $('input#rate')[0].value * 1000);
+    // window.setTimeout(refresh, $('input#rate')[0].value * 1000);
 
     if ($('input#scroll')[0].checked) log[0].scrollTop = log[0].scrollHeight;
   });
@@ -114,15 +123,18 @@ function publishOneSpec(id) {
   var spec = findSpec(id);
   var params = {};
 
-  logMessage('Sumitting spec &ldquo;' + id + '&rdquo; for publication&hellip;');
+  logMessage('Submitting spec &ldquo;' + id +
+    '&rdquo; for publication&hellip;');
   params.url = location.href + 'drafts/' + spec.id;
   params.decision = 'foo';
   params.token = '34';
-  $.post(endpoint() + '/request', params, handlePublicationResult);
-}
 
-function handlePublicationResult(data) {
-  logMessage('Response from server:<br />          ' + data);
+  $.post(endpoint() + '/request', params, function (data) {
+    logMessage('Response from server:<br />          ' + data);
+    if (data && 'string' == typeof data) {
+      allIDs[id] = data;
+    }
+  });
 }
 
 function publishAllSpecs(delay) {
@@ -131,7 +143,7 @@ function publishAllSpecs(delay) {
   }
   else {
     logMessage(
-      'Sumitting all ' + allSpecs.length + ' specs for publication&hellip;'
+      'Submitting all ' + allSpecs.length + ' specs for publication&hellip;'
     );
 
     for (var i in allSpecs) {

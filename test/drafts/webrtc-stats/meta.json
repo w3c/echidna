@@ -1,0 +1,14 @@
+{
+"process": "1 August 2014",
+"processURI": "http://www.w3.org/2014/Process-20140801/",
+"editorsDraft": "http://w3c.github.io/navigation-timing/",
+"title":     "Identifiers for WebRTC's Statistics API",
+"shortname": "webrtc-stats",
+"status":    "WD",
+"editorIDs": [24610, 67103],
+"previousVersion":"http://www.w3.org/TR/2014/WD-webrtc-stats-20141021/",
+"groupName": "Web Real-Time Communications Working Group",
+"groupHomepage": "http://www.w3.org/2011/04/webrtc/",
+"groupID": "47318",
+"list": "public-web-perf"
+}
