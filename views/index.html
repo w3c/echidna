@@ -17,8 +17,8 @@
     <style type="text/css">
 
       body {
-        margin:                53px 4rem 2rem 212px;
-        padding:               1rem 0 0 2rem;
+        margin:                126px 1rem 1rem 0;
+        padding:               1rem 0 0 1rem;
       }
 
       div#gutter-top {
@@ -36,15 +36,15 @@
       }
 
       div#gutter-left {
-        position:              fixed;
-        left:                  0;
+        position:              absolute;
+        left:                  1rem;
         top:                   53px;
-        width:                 212px;
-        height:                212px;
+        width:                 106px;
+        height:                106px;
         opacity:               0;
         background-image:      url('images/w3c-labs-logo.svg');
         background-repeat:     no-repeat;
-        background-size:       212px;
+        background-size:       106px;
         background-position-x: 0;
         background-position-y: 0;
         transition:            all 1s ease-in-out;
@@ -84,6 +84,23 @@
 
       h3.left {
         float:                 left;
+      }
+
+      @media only screen and (min-width: 600px) {
+
+        body {
+          margin:                53px 4rem 2rem 212px;
+          padding:               1rem 0 0 2rem;
+        }
+
+        div#gutter-left {
+          position:              fixed;
+          left:                  0;
+          width:                 212px;
+          height:                212px;
+          background-size:       212px;
+        }
+
       }
 
     </style>
@@ -163,7 +180,7 @@
 
         window.setTimeout(function() {
           $('div#gutter-left')
-            .css('top', '106px')
+            .css('top', '79.5px')
             .css('opacity', 1);
           }, 500
         );
