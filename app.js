@@ -39,6 +39,7 @@ app.use(compression());
 app.use(bodyParser.urlencoded({ extended: false }));
 app.use(corsHandler);
 app.use(express.static('views'));
+app.use(express.static('assets'));
 
 if (process.env.NODE_ENV === 'production') {
   app.set('views', __dirname + '/dist/views');
