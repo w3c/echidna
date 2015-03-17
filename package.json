@@ -52,6 +52,7 @@
     "promise": "6.x.x",
     "request": "2.x.x",
     "specberus": "1.x.x",
+    "mkdirp": "0.5.x",
     "third-party-resources-checker": "dontcallmedom/third-party-resources-checker"
   },
   "devDependencies": {
