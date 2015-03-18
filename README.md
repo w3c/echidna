@@ -9,6 +9,8 @@ Echidna is the central piece of software taking care of the new publication work
 
 ## Installation
 
+**STOP!: if you are an a spec Editor, you don't need to install Echidna!** Please see the Wiki for how to use Echidna as a spec editor. 
+
 To run Echidna, you need to install [Node.js](http://nodejs.org/) first.
 This will install [npm](https://www.npmjs.org/) at the same time, which is required as well.
 
