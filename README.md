@@ -9,7 +9,7 @@ Echidna is the central piece of software taking care of the new publication work
 
 ## Using Echidna as an editor
 
-**If you are an a spec editor, you do not need to install Echidna or to run it locally.**
+**If you are a spec editor, you do not need to install Echidna, nor to run it locally.**
 
 Please [see the wiki](https://github.com/w3c/echidna/wiki) for how to use Echidna as a spec editor.
 
@@ -51,7 +51,7 @@ You may use the optional defined below:
 
 Note that they are only supported by npm 2 and above. Alternatively, you can use the configuration file `config.js`.
 
-Once the server is started, you can throw publication requests at it through a `curl`/`POST` request to its enpoint, <http://localhost:3000/api/>, or using the web-based testbed (described below).
+Once the server is started, you can throw publication requests at it through a `curl`/`POST` request to its enpoint, [`http://localhost:3000/api`](http://localhost:3000/api), or using the web-based testbed (described below).
 
 ### Testing Echidna
 
@@ -77,7 +77,7 @@ You can launch this test server separately by using:
 npm run testserver
 ```
 
-When the test server is running, the testbed with all drafts will be available in <http://localhost:3001/>.
+When the test server is running, the testbed with all drafts will be available in [`http://localhost:3001`](http://localhost:3001).
 
 ## Feedback and contributions
 
