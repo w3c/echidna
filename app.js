@@ -12,6 +12,7 @@ var Uuid = require('node-uuid');
 
 var History = require('./lib/history');
 var Orchestrator = require('./lib/orchestrator');
+var SpecberusWrapper = require('../functions.js').SpecberusWrapper;
 
 // Configuration file
 require('./config.js');
