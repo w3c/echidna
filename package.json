@@ -58,7 +58,7 @@
   "devDependencies": {
     "chai": "2.x.x",
     "chai-as-promised": "4.x.x",
-    "chai-immutable": "0.2.x",
+    "chai-immutable": "0.3.x",
     "coveralls": "2.x.x",
     "grunt": "0.4.x",
     "grunt-concurrent": "1.x.x",
