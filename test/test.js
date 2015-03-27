@@ -51,12 +51,13 @@ describe('DocumentDownloader', function () {
       expect(content).to.be.an.instanceOf(Promise);
     });
 
-    it('should promise a string', function () {
-      return expect(content).to.eventually.be.a('string');
+    it('should promise a Buffer', function () {
+      return expect(content).to.eventually.be.an.instanceOf(Buffer);
     });
 
     it('should download a file', function () {
-      return expect(content).to.eventually.contain('Echidna testbed');
+      return expect(content.then(function (s) { return s.toString('utf8'); }))
+        .to.eventually.contain('Echidna testbed');
     });
 
     it('should reject if the resource does not exist', function () {
@@ -94,8 +95,8 @@ describe('DocumentDownloader', function () {
 
     it('should fetch multiple URLs', function () {
       return content.then(function (content) {
-        expect(content.get(0)).to.contain('looking for');
-        expect(content.get(1)).to.contain('alive');
+        expect(content.get(0).toString('utf8')).to.contain('looking for');
+        expect(content.get(1).toString('utf8')).to.contain('alive');
       });
     });
   });
@@ -156,6 +157,28 @@ describe('DocumentDownloader', function () {
         expect(readFileSyncUtf8('/tmp/multiple_foo2'))
           .to.equal('multiple_bar2');
       });
+    });
+  });
+
+  describe('fetch(url) then install(dest, content)', function () {
+    it('should install binaries as-is', function () {
+      var srcPath = '/drafts/navigation-timing-2/timing-overview.png';
+      var destPath = '/tmp/testimage.png';
+
+      return DocumentDownloader.fetch(server.location() + srcPath)
+        .then(function (content) {
+          return DocumentDownloader.install(destPath, content)
+        })
+        .then(function () {
+          var file1 = Fs.readFileSync('test' + srcPath);
+          var file2 = Fs.readFileSync(destPath);
+
+          return expect(file1).to.deep.equal(file2);
+        })
+        .catch(function (e) {
+          e.showDiff = false;
+          throw e;
+        });
     });
   });
 
