@@ -321,11 +321,11 @@ describe('DocumentDownloader', function () {
     });
 
     it('should return an immutable list', function () {
-      expect(DocumentDownloader.sanitize(List())).to.be.an.instanceOf(List);
+      expect(DocumentDownloader.sanitize(new List())).to.be.an.instanceOf(List);
     });
 
     it('should return a list of string', function () {
-      expect(DocumentDownloader.sanitize(List('test')).first())
+      expect(DocumentDownloader.sanitize(List.of('test')).first())
         .to.be.a('string');
     });
 
@@ -497,7 +497,7 @@ describe('TokenChecker', function () {
 });
 
 describe('Publisher', function () {
-  var metadata = Map({});
+  var metadata = new Map({});
 
   describe('publish(metadata)', function () {
     var promise = new Publisher(new CreatedService()).publish(metadata);
