@@ -5,7 +5,7 @@
 
 # Echidna
 
-Echidna is the central piece of software taking care of the new publication workflow at [W3C](http://www.w3.org/). The plan is for Echidna and related sub-projects (see below) to automatise the publication of new specs under [`http://www.w3.org/TR/`](http://www.w3.org/TR/).
+Echidna is the central piece of software taking care of the new publication workflow at [W3C](http://www.w3.org/). The plan is for Echidna and related sub-projects (see below) to automate the publication of new specs under <http://www.w3.org/TR/>.
 
 ## Using Echidna as an editor
 
@@ -51,7 +51,7 @@ You may use the optional defined below:
 
 Note that they are only supported by npm 2 and above. Alternatively, you can use the configuration file `config.js`.
 
-Once the server is started, you can throw publication requests at it through a `curl`/`POST` request to its enpoint, [`http://localhost:3000/api`](http://localhost:3000/api), or using the web-based testbed (described below).
+Once the server is started, you can throw publication requests at it through a `curl`/`POST` request to its enpoint, <http://localhost:3000/api>, or using the web-based testbed (described below).
 
 ### Testing Echidna
 
@@ -77,7 +77,7 @@ You can launch this test server separately by using:
 npm run testserver
 ```
 
-When the test server is running, the testbed with all drafts will be available in [`http://localhost:3001`](http://localhost:3001).
+When the test server is running, the testbed with all drafts will be available in <http://localhost:3001>.
 
 ## Feedback and contributions
 
