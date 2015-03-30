@@ -73,7 +73,7 @@ app.get('/api/status', function (req, res) {
     Fs.exists(file, function (exists) {
       if (exists) res.status(200).sendFile(file);
       else if (requests && requests[id]) {
-        res.status(200).send(JSON.stringify(requests[id], null, 2) + '\n');
+        res.status(200).json(requests[id]);
       }
       else res.status(404).send('No job found with ID “' + id + '”.');
     });
