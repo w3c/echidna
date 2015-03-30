@@ -96,6 +96,8 @@ app.post('/api/request', function (req, res) {
     requests[id] = {
       id: id,
       url: url,
+      version: meta.version,
+      'version-specberus': SpecberusWrapper.version,
       decision: decision,
       jobs: {},
       history: new History(),
