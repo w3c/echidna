@@ -2,6 +2,7 @@
 
 console.log('Launching…');
 
+var exec = require('child_process').exec;
 var meta = require('./package.json');
 var express = require('express');
 var compression = require('compression');
@@ -23,6 +24,8 @@ var STATUS_STARTED = 'started';
 var app = express();
 var requests = {};
 var port = process.argv[4] || global.DEFAULT_PORT;
+var argTempLocation = process.argv[2] || global.DEFAULT_TEMP_LOCATION;
+var argHttpLocation  = process.argv[3] || global.DEFAULT_HTTP_LOCATION;
 var argResultLocation = process.argv[5] || global.DEFAULT_RESULT_LOCATION;
 
 app.use(compression());
@@ -71,6 +74,21 @@ app.get('/api/status', function (req, res) {
   else res.status(400).send('Missing required parameter “ID”.');
 });
 
+function Job() {
+  if (typeof this !== 'object') {
+    throw new TypeError('Job must be constructed via new');
+  }
+
+  this.status = '';
+  this.errors = [];
+}
+
+function dumpJobResult(dest, result) {
+  Fs.writeFile(dest, JSON.stringify(result, null, 2) + '\n', function (err) {
+    if (err) return console.error(err);
+  });
+}
+
 app.post('/api/request', function (req, res) {
   var url = req.body ? req.body.url : null;
   var decision = req.body ? req.body.decision : null;
@@ -89,20 +107,68 @@ app.post('/api/request', function (req, res) {
       version: meta.version,
       'version-specberus': SpecberusWrapper.version,
       decision: decision,
-      jobs: {},
+      jobs: {
+        'retrieve-resources': new Job(),
+        'specberus': new Job(),
+        'token-checker': new Job(),
+        'third-party-checker': new Job(),
+        'publish': new Job(),
+        'tr-install': new Job(),
+        'update-tr-shortlink': new Job()
+      },
       history: new History(),
       status: STATUS_STARTED
     };
 
-    new Orchestrator().run(requests[id], token).then(function () {
-      console.log(
-        'Spec at ' + url + ' (decision: ' + decision + ') has FINISHED.'
-      );
-    }, function () {
-      console.log(
-        'Spec at ' + url + ' (decision: ' + decision + ') has FAILED.'
-      );
+    var tempLocation = argTempLocation + path.sep + id + path.sep;
+    var httpLocation = argHttpLocation + '/' + id + '/Overview.html';
+    var resultLocation = argResultLocation + path.sep + id + '.json';
+
+    var orchestrator = new Orchestrator(
+      url,
+      token,
+      tempLocation,
+      httpLocation,
+      resultLocation
+    );
+
+    orchestrator.iterate(
+      function (state) {
+        return orchestrator.next(state).then(function (state) {
+          return state;
+        });
+      },
+      function (state) {
+        return state.status !== STATUS_STARTED;
+      },
+      function (state) {
+        console.log(state);
+      },
+      requests[id]
+    ).then(function (state) {
+      if (state.status === 'error') {
+        var cmd = global.SENDMAIL + ' ERROR ' + global.MAILING_LIST + ' ' +
+          state.url + ' \'' + JSON.stringify(state, null, 2) + '\'';
+
+        exec(cmd, function (err, stdout, stderr) {
+          if (err) console.error(stderr);
+        });
+
+        dumpJobResult(resultLocation, state);
+
+        console.log(
+          'Spec at ' + url + ' (decision: ' + decision + ') has FAILED.'
+        );
+
+        throw new Error('Orchestrator has failed.');
+      }
+      else {
+        console.log(
+          'Spec at ' + url + ' (decision: ' + decision + ') has FINISHED.'
+        );
+      }
     });
+
     res.status(202).send(id);
   }
 });
