@@ -136,9 +136,7 @@ app.post('/api/request', function (req, res) {
       function (state) {
         return orchestrator.next(state);
       },
-      function (state) {
-        return state.status !== STATUS_STARTED;
-      },
+      Orchestrator.hasFinished,
       function (state) {
         console.log(state);
       },
