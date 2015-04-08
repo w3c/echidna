@@ -132,7 +132,7 @@ app.post('/api/request', function (req, res) {
       resultLocation
     );
 
-    orchestrator.iterate(
+    Orchestrator.iterate(
       orchestrator.next,
       Orchestrator.hasFinished,
       function (state) {
