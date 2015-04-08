@@ -133,12 +133,11 @@ app.post('/api/request', function (req, res) {
     );
 
     orchestrator.iterate(
-      function (state) {
-        return orchestrator.next(state);
-      },
+      orchestrator.next,
       Orchestrator.hasFinished,
       function (state) {
         console.log(state);
+        console.log('----------');
       },
       requests[id]
     ).then(function (state) {
