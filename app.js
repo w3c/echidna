@@ -134,9 +134,7 @@ app.post('/api/request', function (req, res) {
 
     orchestrator.iterate(
       function (state) {
-        return orchestrator.next(state).then(function (state) {
-          return state;
-        });
+        return orchestrator.next(state);
       },
       function (state) {
         return state.status !== STATUS_STARTED;
@@ -146,28 +144,17 @@ app.post('/api/request', function (req, res) {
       },
       requests[id]
     ).then(function (state) {
+      var cmd = global.SENDMAIL + ' ' + state.status.toUpperCase() + ' ' +
+        global.MAILING_LIST + state.url;
+
       if (state.status === 'error') {
-        var cmd = global.SENDMAIL + ' ERROR ' + global.MAILING_LIST + ' ' +
-          state.url + ' \'' + JSON.stringify(state, null, 2) + '\'';
-
-        exec(cmd, function (err, stdout, stderr) {
-          if (err) console.error(stderr);
-        });
-
-        dumpJobResult(resultLocation, state);
-
-        console.log(
-          'Spec at ' + url + ' (decision: ' + decision + ') has FAILED.'
-        );
-
-        throw new Error('Orchestrator has failed.');
+        cmd += ' \'' + JSON.stringify(state, null, 2) + '\'';
       }
-      else {
-        console.log(
-          'Spec at ' + url + ' (decision: ' + decision + ') has FINISHED.'
-        );
-      }
-    });
+
+      console.log('[' + state.status.toUpperCase() + '] ' + state.url);
+      exec(cmd, function (err, _, stderr) { if (err) console.error(stderr); });
+      dumpJobResult(resultLocation, state);
+    }).done();
 
     res.status(202).send(id);
   }
