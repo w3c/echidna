@@ -133,7 +133,9 @@ app.post('/api/request', function (req, res) {
     );
 
     Orchestrator.iterate(
-      orchestrator.next,
+      function (state) {
+        return orchestrator.next(state);
+      },
       Orchestrator.hasFinished,
       function (state) {
         console.log(state);
