@@ -202,10 +202,12 @@ function orchestrate(spec, token) {
         spec.jobs['token-checker'].status = 'pending';
         var shortlink = report.metadata.get('latestVersion');
         return TokenChecker.check(shortlink, token).then(function (authReport) {
-          var matchSource = spec.url.substring(
-            0,
-            authReport.source.length
-          ) === authReport.source;
+          var simpleSource1 = authReport.source.replace(/^https:/i, 'http:');
+          var simpleSource2 = authReport.source.replace(/^http:/i, 'https:');
+          var matchSource = (
+            spec.url.indexOf(simpleSource1) === 0 ||
+            spec.url.indexOf(simpleSource2) === 0
+          );
           if (authReport.authorized && matchSource) {
             spec.jobs['token-checker'].status = 'ok';
             spec.history = spec.history.add('You are authorized to publish');
