@@ -9,6 +9,7 @@ var compression = require('compression');
 var bodyParser = require('body-parser');
 var path = require('path');
 var Fs = require('fs');
+var Map = require('immutable').Map;
 var Uuid = require('node-uuid');
 
 var History = require('./lib/history');
@@ -99,7 +100,7 @@ app.post('/api/request', function (req, res) {
       version: meta.version,
       'version-specberus': SpecberusWrapper.version,
       decision: decision,
-      jobs: {
+      jobs: new Map({
         'retrieve-resources': new Job(),
         'specberus': new Job(),
         'token-checker': new Job(),
@@ -107,7 +108,7 @@ app.post('/api/request', function (req, res) {
         'publish': new Job(),
         'tr-install': new Job(),
         'update-tr-shortlink': new Job()
-      },
+      }),
       history: new History(),
       status: STATUS_STARTED
     };
