@@ -12,6 +12,7 @@ var Fs = require('fs');
 var Uuid = require('node-uuid');
 
 var History = require('./lib/history');
+var Job = require('./lib/job');
 var Orchestrator = require('./lib/orchestrator');
 var SpecberusWrapper = require('./functions.js').SpecberusWrapper;
 
@@ -74,15 +75,6 @@ app.get('/api/status', function (req, res) {
   else res.status(400).send('Missing required parameter “ID”.');
 });
 
-function Job() {
-  if (typeof this !== 'object') {
-    throw new TypeError('Job must be constructed via new');
-  }
-
-  this.status = '';
-  this.errors = [];
-}
-
 function dumpJobResult(dest, result) {
   Fs.writeFile(dest, JSON.stringify(result, null, 2) + '\n', function (err) {
     if (err) return console.error(err);
@@ -138,7 +130,7 @@ app.post('/api/request', function (req, res) {
       },
       Orchestrator.hasFinished,
       function (state) {
-        console.log(state);
+        console.log(JSON.parse(JSON.stringify(state.jobs)));
         console.log('----------');
       },
       requests[id]
