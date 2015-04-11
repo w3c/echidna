@@ -22,5 +22,5 @@ global.ALLOWED_CLIENTS = [
   // W3C:
   /https?:\/\/(www\.)?w3c?\.org/i,
   // GitHub:
-  /https?:\/\/github\.com/i
+  /https?:\/\/.*\.github\.io/i
 ];
