@@ -12,9 +12,9 @@ var Fs = require('fs');
 var Map = require('immutable').Map;
 var Uuid = require('node-uuid');
 
-var History = require('./lib/history');
 var Job = require('./lib/job');
 var Orchestrator = require('./lib/orchestrator');
+var RequestState = require('./lib/request-state');
 var SpecberusWrapper = require('./functions.js').SpecberusWrapper;
 
 // Configuration file
@@ -100,17 +100,18 @@ app.post('/api/request', function (req, res) {
       version: meta.version,
       'version-specberus': SpecberusWrapper.version,
       decision: decision,
-      jobs: new Map({
-        'retrieve-resources': new Job(),
-        'specberus': new Job(),
-        'token-checker': new Job(),
-        'third-party-checker': new Job(),
-        'publish': new Job(),
-        'tr-install': new Job(),
-        'update-tr-shortlink': new Job()
-      }),
-      history: new History(),
-      status: STATUS_STARTED
+      state: new RequestState(
+        STATUS_STARTED,
+        new Map({
+          'retrieve-resources': new Job(),
+          'specberus': new Job(),
+          'token-checker': new Job(),
+          'third-party-checker': new Job(),
+          'publish': new Job(),
+          'tr-install': new Job(),
+          'update-tr-shortlink': new Job()
+        })
+      )
     };
 
     var tempLocation = argTempLocation + path.sep + id + path.sep;
@@ -131,19 +132,19 @@ app.post('/api/request', function (req, res) {
       },
       Orchestrator.hasFinished,
       function (state) {
-        console.log(JSON.parse(JSON.stringify(state.jobs)));
+        console.log(JSON.parse(JSON.stringify(state.get('jobs'))));
         console.log('----------');
       },
-      requests[id]
+      requests[id].state
     ).then(function (state) {
-      var cmd = global.SENDMAIL + ' ' + state.status.toUpperCase() + ' ' +
-        global.MAILING_LIST + state.url;
+      var cmd = global.SENDMAIL + ' ' + state.get('status').toUpperCase() +
+        ' ' + global.MAILING_LIST + url;
 
-      if (state.status === 'error') {
+      if (state.get('status') === 'error') {
         cmd += ' \'' + JSON.stringify(state, null, 2) + '\'';
       }
 
-      console.log('[' + state.status.toUpperCase() + '] ' + state.url);
+      console.log('[' + state.get('status').toUpperCase() + '] ' + url);
       exec(cmd, function (err, _, stderr) { if (err) console.error(stderr); });
       dumpJobResult(resultLocation, state);
     }).done();
