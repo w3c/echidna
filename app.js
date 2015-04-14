@@ -132,7 +132,7 @@ app.post('/api/request', function (req, res) {
       },
       Orchestrator.hasFinished,
       function (state) {
-        console.log(JSON.parse(JSON.stringify(state.get('jobs'))));
+        console.log(JSON.parse(JSON.stringify(state)));
         console.log('----------');
       },
       requests[id].state
