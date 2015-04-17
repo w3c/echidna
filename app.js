@@ -20,9 +20,6 @@ var SpecberusWrapper = require('./functions.js').SpecberusWrapper;
 // Configuration file
 require('./config.js');
 
-// Pseudo-constants:
-var STATUS_STARTED = 'started';
-
 var app = express();
 var requests = {};
 var port = process.argv[4] || global.DEFAULT_PORT;
@@ -101,7 +98,7 @@ app.post('/api/request', function (req, res) {
       'version-specberus': SpecberusWrapper.version,
       decision: decision,
       state: new RequestState(
-        STATUS_STARTED,
+        '',
         new Map({
           'retrieve-resources': new Job(),
           'specberus': new Job(),
