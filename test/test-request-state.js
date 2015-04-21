@@ -81,4 +81,18 @@ describe('RequestState', function () {
       expect(state).to.equal(r);
     });
   });
+
+  describe('setJobErrors(jobName, errors)', function () {
+    var r = new RequestState().set('jobs', new Map({ 'dummy': new Job() }));
+
+    it('should update the status of a specific job', function () {
+      var state = r.setJobErrors('dummy', List.of('error'));
+      expect(state.get('jobs').get('dummy').get('errors')).to.have.size(1);
+    });
+
+    it('should handle inexisting jobs', function () {
+      var state = r.setJobErrors('inexisting');
+      expect(state).to.equal(r);
+    });
+  });
 });
