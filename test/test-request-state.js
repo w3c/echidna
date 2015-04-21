@@ -3,8 +3,11 @@
 var chai = require('chai');
 var chaiImmutable = require('chai-immutable');
 var expect = chai.expect;
-var List = require('immutable').List;
+var Immutable = require('immutable');
+var List = Immutable.List;
+var Map = Immutable.Map;
 
+var Job = require('../lib/job');
 var RequestState = require('../lib/request-state');
 
 chai.use(chaiImmutable);
@@ -35,6 +38,33 @@ describe('RequestState', function () {
     it('should handle inexisting keys', function () {
       var state = new RequestState();
       expect(state.set('foo', 'bar')).to.equal(state);
+    });
+  });
+
+  describe('addToHistory(fact)', function () {
+    it('should return a new State with one more fact', function () {
+      var state = new RequestState().addToHistory('Some random fact');
+      // TODO Improve test when History is refactored
+      expect(state.get('history').facts).to.have.size(1);
+    });
+  });
+
+  // TODO Rename hasJobStarted() or change behavior as it is currently misleading
+  describe('hasJobStarted(jobName)', function () {
+    var r = new RequestState();
+
+    it('should be true when the job has not started', function () {
+      var state = r.set('jobs', new Map({ 'dummy': new Job('') }));
+      expect(state.hasJobStarted('dummy')).to.be.true;
+    });
+
+    it('should be false when the job has started', function () {
+      var state = r.set('jobs', new Map({ 'dummy': new Job('ok') }));
+      expect(state.hasJobStarted('dummy')).to.be.false;
+    });
+
+    it('should handle inexisting jobs', function () {
+      expect(r.hasJobStarted('inexisting')).to.be.false;
     });
   });
 });
