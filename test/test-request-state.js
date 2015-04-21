@@ -31,5 +31,10 @@ describe('RequestState', function () {
       var state = new RequestState().set('status', 'yawning');
       expect(state.get('status')).to.equal('yawning');
     });
+
+    it('should handle inexisting keys', function () {
+      var state = new RequestState();
+      expect(state.set('foo', 'bar')).to.equal(state);
+    });
   });
 });
