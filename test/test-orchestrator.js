@@ -31,13 +31,19 @@ describe('Orchestrator', function () {
   });
 
   describe('iterate(iteration, condition, handler, t)', function () {
-    // Iteratively increment a value until it reaches 5
-    var result = Orchestrator.iterate(
-      function (n) { return List.of(Promise.resolve(n + 1)); },
-      function (n) { return n >= 5; },
-      function (n) { },
-      0
-    );
+    function incrementUntil(f, n) {
+      return Orchestrator.iterate(
+        function (i) { return List.of(f(i)); },
+        function (i) { return i >= n; },
+        function (i) { },
+        0
+      );
+    }
+
+    // Iteratively increment a value until it reaches 42
+    var result = incrementUntil(function (i) {
+      return Promise.resolve(i + 1);
+    }, 42);
 
     it('should return a promise', function () {
       expect(result).to.be.an.instanceOf(Promise);
@@ -48,7 +54,19 @@ describe('Orchestrator', function () {
     });
 
     it('should properly compute the example value', function () {
-      return expect(result).to.eventually.equal(5);
+      return expect(result).to.eventually.equal(42);
+    });
+
+    it('should properly iterate over an asynchronous computation', function () {
+      function incrementDelay(n) {
+        return new Promise(function (resolve) {
+          setTimeout(function () { resolve(n + 1); }, 25);
+        });
+      }
+
+      // Iteratively increment a value until it 5 with a delay between each increment
+      var resultDelay = incrementUntil(incrementDelay, 4);
+      return expect(resultDelay).to.eventually.equal(4);
     });
   });
 });
