@@ -1,12 +1,15 @@
 'use strict';
 
 var chai = require('chai');
+var chaiAsPromised = require('chai-as-promised');
 var expect = chai.expect;
 var List = require('immutable').List;
 var Promise = require('promise');
 
 var Orchestrator = require('../lib/orchestrator');
 var RequestState = require('../lib/request-state');
+
+chai.use(chaiAsPromised);
 
 describe('Orchestrator', function () {
   describe('hasFinished(state)', function () {
