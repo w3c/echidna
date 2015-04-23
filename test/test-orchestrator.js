@@ -7,6 +7,7 @@ var List = require('immutable').List;
 var Map = require('immutable').Map;
 var Promise = require('promise');
 
+var Job = require('../lib/job');
 var Orchestrator = require('../lib/orchestrator');
 var RequestState = require('../lib/request-state');
 
@@ -75,7 +76,7 @@ describe('Orchestrator', function () {
     var resultOk = new Orchestrator().runStep(new Map({
       name: 'dummy',
       promise: Promise.resolve(new Map({ 'status': 'ok' }))
-    }))(new RequestState());
+    }))(new RequestState().set('jobs', new Map({ 'dummy': new Job() })));
 
     it('should return a function', function () {
       expect(new Orchestrator().runStep()).to.be.a('function');
@@ -95,6 +96,18 @@ describe('Orchestrator', function () {
       return Promise.all(resultOk.map(function (promise) {
         return expect(promise).to.be.eventually.an.instanceOf(RequestState);
       }).toArray());
+    });
+
+    it('should set the first returned state as pending job', function () {
+      return resultOk.get(0).then(function (state) {
+        return expect(state.jobs.get('dummy').status).to.equal('pending');
+      });
+    });
+
+    it('should set the second returned state as successful job', function () {
+      return resultOk.get(1).then(function (state) {
+        return expect(state.jobs.get('dummy').status).to.equal('ok');
+      });
     });
   });
 });
