@@ -2,6 +2,7 @@
 
 var chai = require('chai');
 var chaiAsPromised = require('chai-as-promised');
+var chaiImmutable = require('chai-immutable');
 var expect = chai.expect;
 var List = require('immutable').List;
 var Map = require('immutable').Map;
@@ -12,6 +13,7 @@ var Orchestrator = require('../lib/orchestrator');
 var RequestState = require('../lib/request-state');
 
 chai.use(chaiAsPromised);
+chai.use(chaiImmutable);
 
 describe('Orchestrator', function () {
   describe('hasFinished(state)', function () {
@@ -79,12 +81,15 @@ describe('Orchestrator', function () {
 
     var resultOk = new Orchestrator().runStep(new Map({
       name: 'dummy',
-      promise: Promise.resolve(new Map({ 'status': 'ok' }))
+      promise: Promise.resolve(new Map({ status: 'ok' }))
     }))(dummyRequest);
 
     var resultFailure = new Orchestrator().runStep(new Map({
       name: 'dummy',
-      promise: Promise.resolve(new Map({ 'status': 'failure' }))
+      promise: Promise.resolve(new Map({
+        status: 'failure',
+        errors: List.of('an error')
+      }))
     }))(dummyRequest);
 
     it('should return a function', function () {
@@ -128,6 +133,12 @@ describe('Orchestrator', function () {
     it('should set the second returned state as failed job', function () {
       return resultFailure.get(1).then(function (state) {
         return expect(state.jobs.get('dummy').status).to.equal('failure');
+      });
+    });
+
+    it('should return a state with errors when a job fails', function () {
+      return resultFailure.get(1).then(function (state) {
+        return expect(state.jobs.get('dummy').errors).to.have.size(1);
       });
     });
 
