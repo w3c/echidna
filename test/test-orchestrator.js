@@ -92,6 +92,14 @@ describe('Orchestrator', function () {
       }))
     }))(dummyRequest);
 
+    var resultError = new Orchestrator().runStep(new Map({
+      name: 'dummy',
+      promise: Promise.resolve(new Map({
+        status: 'error',
+        errors: List.of('another error')
+      }))
+    }))(dummyRequest);
+
     it('should return a function', function () {
       expect(new Orchestrator().runStep()).to.be.a('function');
     });
@@ -145,6 +153,23 @@ describe('Orchestrator', function () {
     it('should return a failed state when a job fails', function () {
       return expect(resultFailure.get(1))
         .to.eventually.have.property('status', 'failure');
+    });
+
+    it('should set the second returned state as errored job', function () {
+      return resultError.get(1).then(function (state) {
+        return expect(state.jobs.get('dummy').status).to.equal('error');
+      });
+    });
+
+    it('should return a state with errors when a job errors', function () {
+      return resultError.get(1).then(function (state) {
+        return expect(state.jobs.get('dummy').errors).to.have.size(1);
+      });
+    });
+
+    it('should return an errored state when a job errors', function () {
+      return expect(resultError.get(1))
+        .to.eventually.have.property('status', 'error');
     });
   });
 });
