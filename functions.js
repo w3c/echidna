@@ -7,7 +7,7 @@ var Map = require('immutable').Map;
 var Specberus = require('specberus/lib/validator').Specberus;
 require('./config.js');
 
-var SpecberusWrapper = function () {};
+var SpecberusWrapper = {};
 
 SpecberusWrapper.validate = function (url) {
   return new Promise(function (resolve, reject) {
@@ -60,7 +60,7 @@ SpecberusWrapper.version = new Specberus().version;
 
 exports.SpecberusWrapper = SpecberusWrapper;
 
-var TokenChecker = function () {};
+var TokenChecker = {};
 
 TokenChecker.check = function (url, token) {
   return new Promise(function (resolve, reject) {
