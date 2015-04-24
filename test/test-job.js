@@ -14,6 +14,10 @@ describe('Job', function () {
     it('should be immutable (aka frozen)', function () {
       expect(Object.isFrozen(new Job())).to.be.true;
     });
+
+    it('should always be called with new', function () {
+      expect(function () { Job(); }).to.throw(TypeError);
+    });
   });
 
   describe('get(k)', function () {
@@ -35,7 +39,11 @@ describe('Job', function () {
     it('should successfully update a list of errors', function () {
       var job = new Job().set('errors', new List('error'));
       expect(job.get('errors')).to.equal(new List('error'));
-    })
+    });
+
+    it('should not accept non-string statuses', function () {
+      expect(function () { new Job().set('status', 42); }).to.throw(TypeError);
+    });
 
     it('should not accept Arrays of errors', function () {
       expect(function () {
