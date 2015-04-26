@@ -49,7 +49,7 @@
     "immutable": "3.x.x",
     "moment": "2.x.x",
     "node-uuid": "1.x.x",
-    "promise": "6.x.x",
+    "promise": "7.x.x",
     "request": "2.x.x",
     "specberus": "1.x.x",
     "mkdirp": "0.5.x",
