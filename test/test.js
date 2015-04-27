@@ -371,7 +371,7 @@ describe('SpecberusWrapper', function () {
 
     it('should return an error property that is an empty list', function () {
       return expect(content).that.eventually.has.property('errors')
-        .that.is.empty;
+        .that.has.size(1);
     });
 
     it('should promise an object with a metadata property', function () {
@@ -446,7 +446,7 @@ describe('SpecberusWrapper', function () {
 
     it('should return an error property that has 2 errors', function () {
       return expect(content).that.eventually.has.property('errors')
-        .that.has.size(2);
+        .that.has.size(3);
     });
   });
 
@@ -457,7 +457,7 @@ describe('SpecberusWrapper', function () {
 
     it('should return an error property that has no errors', function () {
       return expect(content).that.eventually.has.property('errors')
-        .that.is.empty;
+        .that.has.size(1);
     });
   });
 });

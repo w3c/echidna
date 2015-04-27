@@ -6,3 +6,4 @@ Gruntfile.js
 config.js
 test/views
 test/test.js
+test/test-*.js
