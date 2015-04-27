@@ -53,7 +53,7 @@
     "request": "2.x.x",
     "specberus": "1.x.x",
     "mkdirp": "0.5.x",
-    "third-party-resources-checker": "dontcallmedom/third-party-resources-checker"
+    "third-party-resources-checker": "w3c/third-party-resources-checker"
   },
   "devDependencies": {
     "chai": "2.x.x",
