@@ -66,11 +66,16 @@ var TokenChecker = {};
 
 TokenChecker.check = function (url, token) {
   return new Promise(function (resolve, reject) {
-    Request.get({
+    var options = {
       uri: global.TOKEN_ENDPOINT,
-      auth: { user: global.USERNAME, pass: global.PASSWORD },
       qs: { spec: url, token: token }
-    }, function (err, res, body) {
+    };
+
+    if (global.USERNAME && global.PASSWORD) {
+      options.auth = { user: global.USERNAME, pass: global.PASSWORD };
+    }
+
+    Request.get(options, function (err, res, body) {
       if (err) reject(new Error(
         'There was an error while checking the token: ',
         err
