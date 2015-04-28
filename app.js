@@ -141,6 +141,9 @@ app.post('/api/request', function (req, res) {
       if (state.get('status') === 'error') {
         cmd += ' \'' + JSON.stringify(state, null, 2) + '\'';
       }
+      else {
+        cmd += ' \'Echidna ' + meta.version + '; Specberus ' + SpecberusWrapper.version + '\'';
+      }
 
       console.log('[' + state.get('status').toUpperCase() + '] ' + url);
       exec(cmd, function (err, _, stderr) { if (err) console.error(stderr); });
