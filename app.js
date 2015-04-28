@@ -1,3 +1,4 @@
+
 'use strict';
 
 console.log('Launching…');
@@ -135,7 +136,7 @@ app.post('/api/request', function (req, res) {
       requests[id].state
     ).then(function (state) {
       var cmd = global.SENDMAIL + ' ' + state.get('status').toUpperCase() +
-        ' ' + global.MAILING_LIST + url;
+        ' ' + global.MAILING_LIST + ' ' + url;
 
       if (state.get('status') === 'error') {
         cmd += ' \'' + JSON.stringify(state, null, 2) + '\'';
@@ -183,3 +184,4 @@ console.log(
   ' and listening on port ' + port +
   '. The server time is ' + new Date().toLocaleTimeString() + '.'
 );
+
