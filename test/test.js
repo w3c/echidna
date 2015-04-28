@@ -315,30 +315,25 @@ describe('DocumentDownloader', function () {
     });
   });
 
-  describe('sanitize(list)', function () {
+  describe('isAllowed(filename)', function () {
     it('should be a function', function () {
-      expect(DocumentDownloader.sanitize).to.be.a('function');
+      expect(DocumentDownloader.isAllowed).to.be.a('function');
     });
 
-    it('should return an immutable list', function () {
-      expect(DocumentDownloader.sanitize(new List())).to.be.an.instanceOf(List);
+    it('should return a boolean', function () {
+      expect(DocumentDownloader.isAllowed('')).to.be.a('boolean');
     });
 
-    it('should return a list of string', function () {
-      expect(DocumentDownloader.sanitize(List.of('test')).first())
-        .to.be.a('string');
+    it('should filter not filter out HTML files', function () {
+      expect(DocumentDownloader.isAllowed('index.html')).to.be.true;
     });
 
     it('should filter out .htaccess files', function () {
-      expect(DocumentDownloader.sanitize(List.of('allowed_file', '.htaccess')))
-        .to.equal(List.of('allowed_file'));
+      expect(DocumentDownloader.isAllowed('.htaccess')).to.be.false;
     });
 
     it('should filter out PHP files', function () {
-      expect(DocumentDownloader.sanitize(List.of(
-        'allowed_file',
-        'not_allowed.php'
-      ))).to.equal(List.of('allowed_file'));
+      expect(DocumentDownloader.isAllowed('not_allowed.php')).to.be.false;
     });
   });
 });
