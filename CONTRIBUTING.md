@@ -1,3 +1,4 @@
+
 # Contribute to Echidna
 
 This is the contribution reference of Echidna. Great to have you here. Here are a few ways you can help make this project better!
@@ -11,6 +12,11 @@ Discuss the publication workflow and related tools [on the mailing list](http://
 ## Report a bug or suggest a feature idea
 
 Start by looking through the [existing bugs](https://github.com/w3c/echidna/issues) to see if this was already discussed earlier. You might even find your solution there.
+
+**NB:** as of today, Echidna and Specberus are developed, tested and deployed using [Node.js](http://nodejs.org/) `v0.12.0`
+and [npm](https://www.npmjs.org/) `2.5.1`.
+When reporting bugs, please make sure you can reproduce them with this recommended setup.
+Also, remember to update npm dependencies often.
 
 If you do not find anything, you can help report bugs by [filing them here](https://github.com/w3c/echidna/issues/new). Please use the following template when doing so:
 
@@ -71,3 +77,4 @@ Documentation can be found on [the wiki](https://github.com/w3c/echidna/wiki). Y
 All contributors to this project agree to follow the [W3C Code of Ethics and Professional Conduct](http://www.w3.org/Consortium/cepc/).
 
 If you want to take action, you can contact W3C Staff as explained in [W3C Procedures](http://www.w3.org/Consortium/pwe/#Procedures).
+
