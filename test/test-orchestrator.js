@@ -70,6 +70,7 @@ describe('Orchestrator', function () {
 
       // Iteratively increment a value until it 5 with a delay between each increment
       var resultDelay = incrementUntil(incrementDelay, 4);
+
       return expect(resultDelay).to.eventually.equal(4);
     });
   });

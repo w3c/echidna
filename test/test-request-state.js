@@ -34,6 +34,7 @@ describe('RequestState', function () {
   describe('set(k, v)', function () {
     it('should successfully update a status', function () {
       var newState = state.set('status', 'yawning');
+
       expect(newState.get('status')).to.equal('yawning');
     });
 
@@ -45,6 +46,7 @@ describe('RequestState', function () {
   describe('addToHistory(fact)', function () {
     it('should return a new State with one more fact', function () {
       var newState = state.addToHistory('Some random fact');
+
       // TODO Improve test when History is refactored
       expect(newState.get('history').facts).to.have.size(1);
     });
@@ -58,6 +60,7 @@ describe('RequestState', function () {
 
     it('should be false when the job has started', function () {
       var newState = state.set('jobs', new Map({ 'dummy': new Job('ok') }));
+
       expect(newState.hasJobStarted('dummy')).to.be.false;
     });
 
@@ -69,6 +72,7 @@ describe('RequestState', function () {
   describe('setJobStatus(jobName, status)', function () {
     it('should update the status of a specific job', function () {
       var newState = state.setJobStatus('dummy', 'foo');
+
       expect(newState.get('jobs').get('dummy').get('status')).to.equal('foo');
     });
 
@@ -80,6 +84,7 @@ describe('RequestState', function () {
   describe('setJobErrors(jobName, errors)', function () {
     it('should update the status of a specific job', function () {
       var newState = state.setJobErrors('dummy', List.of('error'));
+
       expect(newState.get('jobs').get('dummy').get('errors')).to.have.size(1);
     });
 

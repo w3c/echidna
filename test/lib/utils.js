@@ -9,6 +9,7 @@ function endsWith(subjectString, searchString) {
   var s = subjectString.toString();
   var position = s.length - searchString.length;
   var lastIndex = s.indexOf(searchString, position);
+
   return lastIndex !== -1 && lastIndex === position;
 }
 
@@ -30,6 +31,7 @@ var months = [
 var today = (function () {
   // We strip off the time
   var t = new Date();
+
   return new Date(t.getFullYear(), t.getMonth(), t.getDate());
 })();
 

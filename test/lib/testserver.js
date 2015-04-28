@@ -104,6 +104,7 @@ TestServer.location = function () {
 // This will return metadata associate with a draft
 TestServer.getMetadata = function (name) {
   var data = getMetadata(name);
+
   if (data.location === undefined) {
     data.location = this.location() + '/drafts/' + name + '/';
   }

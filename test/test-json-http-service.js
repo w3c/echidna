@@ -22,7 +22,7 @@ describe('JsonHttpService', function () {
         function () { new JsonHttpService('', '', 42); }
       ].forEach(function (f) {
         expect(f).to.throw(TypeError);
-      })
-    })
+      });
+    });
   });
 });

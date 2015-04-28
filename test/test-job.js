@@ -33,11 +33,13 @@ describe('Job', function () {
   describe('set(k, v)', function () {
     it('should successfully update a status', function () {
       var job = new Job().set('status', 'eating-nutella');
+
       expect(job.get('status')).to.equal('eating-nutella');
     });
 
     it('should successfully update a list of errors', function () {
       var job = new Job().set('errors', new List('error'));
+
       expect(job.get('errors')).to.equal(new List('error'));
     });
 

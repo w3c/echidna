@@ -43,6 +43,7 @@ function htmlTemplate(serverPath, fileSystemPath) {
 
   return function (req, res, next) {
     var path = url.parse(req.url).path;
+
     if (path.indexOf(serverPath) !== 0) return next();
     if (endsWith(path, '/')) path += 'index.html';
     if (!endsWith(path, '.html')) return next();
@@ -52,11 +53,12 @@ function htmlTemplate(serverPath, fileSystemPath) {
     var metadata = null;
 
     try {
-      // load the file
+      // Load the file
       content = fs.readFileSync(filepath, { options: 'utf-8' });
-      // load the metadata associated with the file (if any)
+      // Load the metadata associated with the file (if any)
       var dirpath = filepath.substring(0, filepath.lastIndexOf('/'));
       var name = dirpath.substring(dirpath.lastIndexOf('/') + 1);
+
       metadata = getMetadata(name);
     }
     catch (e) {

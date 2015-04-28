@@ -7,6 +7,7 @@ var tokenChecker = express();
 
 function getShortName(latestVersion) {
   var str = latestVersion.substring(0, latestVersion.lastIndexOf('/'));
+
   return str.substring(str.lastIndexOf('/') + 1);
 }
 
