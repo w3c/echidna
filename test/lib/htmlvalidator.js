@@ -3,6 +3,7 @@
 
 var express = require('express');
 var validator = express();
+
 module.exports = validator;
 
 validator.get('/check', function (req, res) {
@@ -15,5 +16,6 @@ validator.get('/check', function (req, res) {
       type: 'text/html'
     }
   };
+
   return res.json(result);
 });

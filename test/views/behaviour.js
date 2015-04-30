@@ -49,12 +49,14 @@ function activateActions() {
 
   $('td.metadata').click(function () {
     var spec = findSpec($(this).attr('data-spec-id'));
+
     dumpObject(spec);
   });
 
   $('td.status').click(function () {
     retrieveStatus($(this).attr('data-spec-id'));
-    /* var job = allJobs[$(this).attr('data-spec-id')];
+    /* FIXME
+    var job = allJobs[$(this).attr('data-spec-id')];
     var message = allMessages[$(this).attr('data-spec-id')];
     dumpObject(job);
     logMessage(message); */
@@ -73,7 +75,7 @@ function retrieveStatus(id) {
 function refresh() {
   $.get(endpoint() + '/status/', function (data) {
     updateJobs(data);
-    // window.setTimeout(refresh, $('input#rate')[0].value * 1000);
+    // FIXME window.setTimeout(refresh, $('input#rate')[0].value * 1000);
 
     if ($('input#scroll')[0].checked) log[0].scrollTop = log[0].scrollHeight;
   });

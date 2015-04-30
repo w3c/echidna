@@ -3,6 +3,7 @@
 
 var express = require('express');
 var validator = express();
+
 module.exports = validator;
 
 validator.get('/css-validator/validator', function (req, res) {
@@ -24,13 +25,13 @@ validator.get('/css-validator/validator', function (req, res) {
     source: uri,
     line: 0,
     message: 'Property -moz-border-radius is an unknown vendor extension',
-    type:  'vendor-extension',
+    type: 'vendor-extension',
     level: 0
   }, {
     source: uri,
     line: 0,
     message: 'Property -webkit-border-radius is an unknown vendor extension',
-    type:  'vendor-extension',
+    type: 'vendor-extension',
     level: 0
   }];
   var json = {

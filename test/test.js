@@ -16,6 +16,7 @@ var Fs = require('fs');
 var Immutable = require('immutable');
 var List = Immutable.List;
 var Map = Immutable.Map;
+
 require('../config.js');
 
 var server = require('./lib/testserver');
@@ -70,6 +71,7 @@ describe('DocumentDownloader', function () {
 
     it('should reject if the server is not reachable', function () {
       var notReachable = DocumentDownloader.fetch('http://youdbetternotexist/');
+
       return expect(notReachable)
         .to.eventually.be.rejectedWith(/network error/);
     });
@@ -167,7 +169,7 @@ describe('DocumentDownloader', function () {
 
       return DocumentDownloader.fetch(server.location() + srcPath)
         .then(function (content) {
-          return DocumentDownloader.install(destPath, content)
+          return DocumentDownloader.install(destPath, content);
         })
         .then(function () {
           var file1 = Fs.readFileSync('test' + srcPath);
@@ -223,6 +225,7 @@ describe('DocumentDownloader', function () {
         server.location() + '/et/si/tu/n/existais/pas',
         '/tmp/whatever'
       );
+
       return expect(notFound).to.eventually.be.rejectedWith(/code 404/);
     });
 
@@ -511,6 +514,7 @@ describe('Publisher', function () {
 
     it('should return errors when the publication has failed', function () {
       var errPromise = new Publisher(new BadRequestService()).publish(metadata);
+
       return expect(errPromise).to.eventually.have.size(1);
     });
 

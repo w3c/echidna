@@ -5,6 +5,7 @@ var Promise = require('promise');
 var List = require('immutable').List;
 var Map = require('immutable').Map;
 var Specberus = require('specberus/lib/validator').Specberus;
+
 require('./config.js');
 
 var SpecberusWrapper = {};
@@ -48,6 +49,7 @@ SpecberusWrapper.validate = function (url) {
 
     if (process.env.NODE_ENV === 'dev') {
       var host = 'http://localhost:' + ((process.env.PORT || 3000) + 1);
+
       options.cssValidator = host + '/css-validator/validator';
       options.htmlValidator = host + '/check';
     }

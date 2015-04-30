@@ -24,7 +24,7 @@ var app = express();
 var requests = {};
 var port = process.argv[4] || global.DEFAULT_PORT;
 var argTempLocation = process.argv[2] || global.DEFAULT_TEMP_LOCATION;
-var argHttpLocation  = process.argv[3] || global.DEFAULT_HTTP_LOCATION;
+var argHttpLocation = process.argv[3] || global.DEFAULT_HTTP_LOCATION;
 var argResultLocation = process.argv[5] || global.DEFAULT_RESULT_LOCATION;
 
 app.use(compression());
