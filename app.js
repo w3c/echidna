@@ -135,10 +135,14 @@ app.post('/api/request', function (req, res) {
       requests[id].state
     ).then(function (state) {
       var cmd = global.SENDMAIL + ' ' + state.get('status').toUpperCase() +
-        ' ' + global.MAILING_LIST + url;
+        ' ' + global.MAILING_LIST + ' ' + url;
 
       if (state.get('status') === 'error') {
         cmd += ' \'' + JSON.stringify(state, null, 2) + '\'';
+      }
+      else {
+        cmd += ' \'Echidna ' + meta.version +
+          '; Specberus ' + SpecberusWrapper.version + '\'';
       }
 
       console.log('[' + state.get('status').toUpperCase() + '] ' + url);
