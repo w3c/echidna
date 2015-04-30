@@ -1,4 +1,3 @@
-
 'use strict';
 
 console.log('Launching…');
@@ -188,4 +187,3 @@ console.log(
   ' and listening on port ' + port +
   '. The server time is ' + new Date().toLocaleTimeString() + '.'
 );
-

@@ -20,11 +20,6 @@ Please [see the wiki](https://github.com/w3c/echidna/wiki) for how to use Echidn
 To run Echidna, you need to install [Node.js](http://nodejs.org/) first.
 This will install [npm](https://www.npmjs.org/) at the same time, which is required as well.
 
-**NB:** as of today, Echidna and Specberus are developed, tested and deployed using [Node.js](http://nodejs.org/) `v0.12.0`
-and [npm](https://www.npmjs.org/) `2.5.1`.
-When reporting bugs, please make sure you can reproduce them with this recommended setup.
-Also, remember to update npm dependencies often.
-
 Then run the following commands with your favorite terminal:
 
 ```bash

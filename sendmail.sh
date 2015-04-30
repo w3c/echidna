@@ -1,4 +1,3 @@
-
 #!/bin/bash
 
 STATUS=$1

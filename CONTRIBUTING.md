@@ -1,4 +1,3 @@
-
 # Contribute to Echidna
 
 This is the contribution reference of Echidna. Great to have you here. Here are a few ways you can help make this project better!
@@ -77,4 +76,3 @@ Documentation can be found on [the wiki](https://github.com/w3c/echidna/wiki). Y
 All contributors to this project agree to follow the [W3C Code of Ethics and Professional Conduct](http://www.w3.org/Consortium/cepc/).
 
 If you want to take action, you can contact W3C Staff as explained in [W3C Procedures](http://www.w3.org/Consortium/pwe/#Procedures).
-
