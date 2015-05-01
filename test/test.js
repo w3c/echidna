@@ -369,7 +369,7 @@ describe('SpecberusWrapper', function () {
 
     it('should return an error property that is an empty list', function () {
       return expect(content).that.eventually.has.property('errors')
-        .that.has.size(1);
+        .that.is.empty;
     });
 
     it('should promise an object with a metadata property', function () {
