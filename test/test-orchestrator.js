@@ -32,6 +32,10 @@ describe('Orchestrator', function () {
     it('should be false when the passing state is pending', function () {
       expect(Orchestrator.hasFinished(new RequestState('started'))).to.be.false;
     });
+
+    it('should be false when the passing state is not set', function () {
+      expect(Orchestrator.hasFinished(new RequestState(''))).to.be.false;
+    });
   });
 
   describe('iterate(iteration, condition, handler, t)', function () {
