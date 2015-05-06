@@ -1,6 +1,5 @@
 'use strict';
 
-var Request = require('request');
 var Promise = require('promise');
 var List = require('immutable').List;
 var Map = require('immutable').Map;
@@ -61,28 +60,3 @@ SpecberusWrapper.validate = function (url) {
 SpecberusWrapper.version = new Specberus().version;
 
 exports.SpecberusWrapper = SpecberusWrapper;
-
-var TokenChecker = {};
-
-TokenChecker.check = function (url, token) {
-  return new Promise(function (resolve, reject) {
-    var options = {
-      uri: global.TOKEN_ENDPOINT,
-      qs: { spec: url, token: token }
-    };
-
-    if (global.USERNAME && global.PASSWORD) {
-      options.auth = { user: global.USERNAME, pass: global.PASSWORD };
-    }
-
-    Request.get(options, function (err, res, body) {
-      if (err) reject(new Error(
-        'There was an error while checking the token: ',
-        err
-      ));
-      else resolve(JSON.parse(body));
-    });
-  });
-};
-
-exports.TokenChecker = TokenChecker;
