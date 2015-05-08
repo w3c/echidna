@@ -13,7 +13,7 @@ global.PASSWORD = '';
 global.W3C_PUBSYSTEM_URL = 'http://localhost:3001/publish';
 global.TR_INSTALL_CMD = 'mkdir -p $dest && cp -R $source $dest';
 global.UPDATE_TR_SHORTLINK_CMD = '#';
-global.SENDMAIL = 'sendmail.sh';
+global.SENDMAIL = './sendmail.sh';
 global.MAILING_LIST = 'foobar@w3.org';
 global.ALLOWED_CLIENTS = [
   // Same host (for tests):
