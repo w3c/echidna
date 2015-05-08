@@ -15,7 +15,7 @@ var Uuid = require('node-uuid');
 var Job = require('./lib/job');
 var Orchestrator = require('./lib/orchestrator');
 var RequestState = require('./lib/request-state');
-var SpecberusWrapper = require('./functions.js').SpecberusWrapper;
+var SpecberusWrapper = require('./lib/specberus-wrapper');
 
 // Configuration file
 require('./config.js');
