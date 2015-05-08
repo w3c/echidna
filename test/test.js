@@ -34,7 +34,7 @@ global.PASSWORD = 'secret';
 var DocumentDownloader = require('../lib/document-downloader');
 var Publisher = require('../lib/publisher');
 var SpecberusWrapper = require('../lib/specberus-wrapper');
-var TokenChecker = require('../lib/token-checker').TokenChecker;
+var TokenChecker = require('../lib/token-checker');
 
 function readFileSyncUtf8(file) {
   return Fs.readFileSync(file, { encoding: 'utf8' });
