@@ -1,7 +1,7 @@
 {
   "excludeFiles": [
-    "coverage/**", "node_modules/**", "**/bower_components/**",
-    "**/*.min.js", "Gruntfile.js", "config.js"
+    "coverage/**", "node_modules/**",
+    "**/*.min.js", "config.js"
   ],
   "fileExtensions": [".js"],
   "disallowDanglingUnderscores": true,
