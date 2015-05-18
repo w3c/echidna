@@ -30,7 +30,7 @@ var argResultLocation = process.argv[5] || global.DEFAULT_RESULT_LOCATION;
 app.use(compression());
 app.use(bodyParser.urlencoded({ extended: false }));
 app.use(corsHandler);
-app.use(express.static('assets'));
+app.use(express.static('assets/'));
 
 // Index Page
 app.get('/', function (request, response) {
