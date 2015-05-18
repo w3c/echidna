@@ -1,5 +1,2 @@
 instrumentation:
   include-all-sources: true
-  excludes:
-    - "**/bower_components/**"
-    - "Gruntfile.js"
