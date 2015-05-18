@@ -27,6 +27,7 @@ app.use(tokenChecker);
 // Setup the templating before using express static
 app.use(htmlTemplate('/drafts', draftsSystemPath));
 app.use('/drafts', express.static(draftsSystemPath));
+app.use(express.static('assets/'));
 app.use(express.static('test/views/'));
 
 app.get('/data/specs.json', function (req, res) {
