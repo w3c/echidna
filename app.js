@@ -30,17 +30,7 @@ var argResultLocation = process.argv[5] || global.DEFAULT_RESULT_LOCATION;
 app.use(compression());
 app.use(bodyParser.urlencoded({ extended: false }));
 app.use(corsHandler);
-app.use(express.static('views'));
 app.use(express.static('assets'));
-
-if (process.env.NODE_ENV === 'production') {
-  app.set('views', __dirname + '/dist/views');
-  app.use(express.static(__dirname + '/dist/assets'));
-}
-else {
-  app.set('views', __dirname + '/views');
-  app.use(express.static(__dirname + '/assets'));
-}
 
 // Index Page
 app.get('/', function (request, response) {
