@@ -1,21 +1,17 @@
 <!DOCTYPE html>
-
 <html lang="en-GB">
-
   <head>
-    <meta charset="utf-8" />
+    <meta charset="utf-8">
     <title>W3C's Echidna</title>
-    <meta name="application-name" content="Echidna" />
-    <meta name="description" content="Orchestrator of W3C's new publication system" />
-    <meta name="keywords" content="w3c,echidna,publication,workflow" />
-    <meta name="author" content="W3C" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <link rel="stylesheet" type="text/css" media="handheld, all" href="//www.w3.org/2008/site/css/minimum" />
-    <link rel="stylesheet" type="text/css" media="print" href="//www.w3.org/2008/site/css/print" />
-    <link rel="shortcut icon" type="image/x-icon" href="images/favicon.ico" />
-
-    <style type="text/css">
-
+    <meta name="application-name" content="Echidna">
+    <meta name="description" content="Orchestrator of W3C's new publication system">
+    <meta name="keywords" content="w3c,echidna,publication,workflow">
+    <meta name="author" content="W3C">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" media="handheld, all" href="//www.w3.org/2008/site/css/minimum">
+    <link rel="stylesheet" media="print" href="//www.w3.org/2008/site/css/print">
+    <link rel="shortcut icon" type="image/x-icon" href="images/favicon.ico">
+    <style>
       body {
         margin:                126px 1rem 1rem 0;
         padding:               1rem 0 0 1rem;
@@ -92,7 +88,6 @@
       }
 
       @media only screen and (min-width: 600px) {
-
         body {
           margin:                53px 4rem 2rem 212px;
           padding:               1rem 0 0 2rem;
@@ -105,17 +100,11 @@
           height:                212px;
           background-size:       212px;
         }
-
       }
-
     </style>
-
   </head>
-
   <body>
-
     <div id="gutter-left"></div>
-
     <div id="gutter-top"></div>
 
     <header>
@@ -123,11 +112,10 @@
     </header>
 
     <article>
-
       <h2>What?</h2>
 
       <p>This is the endpoint of the <abbr title="World Wide Web Consortium">W3C</abbr>'s new automated publication system (<em>beta</em>).
-        <br />Please refer to the following resources for more information:</p>
+        <br>Please refer to the following resources for more information:</p>
 
       <ul class="bullet">
         <li>For an overview, help to start using the system, and <abbr title="Frequently Asked Questions">FAQ</abbr>, see
@@ -137,11 +125,9 @@
         <li><abbr title="Internet Relay Chat">IRC</abbr>: channel <a href="irc://irc.w3.org:6667/pub"><code>#pub</code></a> on
           <a href="http://www.w3.org/wiki/IRC"><abbr title="World Wide Web Consortium">W3C</abbr>'s public server</a>.</li>
       </ul>
-
     </article>
 
     <article>
-
       <h2>Changelog</h2>
 
       <p>What's new since the previous public release of the tools:</p>
@@ -152,27 +138,23 @@
       <h3 id="header-specberus" class="left">Specberus</h3>
       <p class="links"><a href="https://github.com/w3c/specberus">GitHub</a> &#8226;
         <a href="https://labs.w3.org/pubrules/">live site</a></p>
-
     </article>
 
     <footer>
-        <p>Copyright &copy; 2014&ndash;2015 <a href="http://www.w3.org/"><abbr title="World Wide Web Consortium">W3C</abbr></a></p>
+      <p>Copyright &copy; 2014&ndash;2015 <a href="http://www.w3.org/"><abbr title="World Wide Web Consortium">W3C</abbr></a></p>
     </footer>
 
-    <script type="text/javascript" src="js/jquery-2.1.4.min.js"></script>
-
-    <script type="text/javascript">
-
-      $(document).ready(function() {
-
-        $.get('api/version', function(data) {
+    <script src="js/jquery-2.1.4.min.js"></script>
+    <script>
+      $(document).ready(function () {
+        $.get('api/version', function (data) {
           $('head title').text($('head title').text() + ' ' + data);
           $('h1').text($('h1').text() + ' ' + data);
           $('h3#header-echidna').html($('h3#header-echidna').text() +
             ' <a href="https://github.com/w3c/echidna/releases/tag/v' + data + '">' + data + '</a>');
         });
 
-        $.get('api/version-specberus', function(data) {
+        $.get('api/version-specberus', function (data) {
           $('h3#header-specberus').html($('h3#header-specberus').text() +
             ' <a href="https://github.com/w3c/specberus/releases/tag/v' + data + '">' + data + '</a>');
         });
@@ -183,12 +165,7 @@
             .css('opacity', 1);
           }, 500
         );
-
       });
-
     </script>
-
   </body>
-
 </html>
-
