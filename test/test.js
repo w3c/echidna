@@ -33,8 +33,8 @@ global.PASSWORD = 'secret';
 
 var DocumentDownloader = require('../lib/document-downloader');
 var Publisher = require('../lib/publisher');
-var SpecberusWrapper = require('../functions.js').SpecberusWrapper;
-var TokenChecker = require('../functions.js').TokenChecker;
+var SpecberusWrapper = require('../lib/specberus-wrapper');
+var TokenChecker = require('../lib/token-checker');
 
 function readFileSyncUtf8(file) {
   return Fs.readFileSync(file, { encoding: 'utf8' });
@@ -468,28 +468,15 @@ describe('TokenChecker', function () {
 
     var myDraft = server.getMetadata('navigation-timing-2');
     var token = '98345098A98F345F';
-    var check = TokenChecker.check(myDraft.latestVersion, token);
+    var source = 'TEST';
+    var check = TokenChecker.check(myDraft.latestVersion, token, source);
 
     it('should return a promise', function () {
       expect(check).to.be.an.instanceOf(Promise);
     });
 
-    it('should promise an object', function () {
-      return expect(check).to.eventually.be.an.instanceOf(Object);
-    });
-
-    it('should promise an object with a token property', function () {
-      return expect(check).to.eventually.have.property('token')
-        .that.equals(token);
-    });
-
-    it('should promise an object with a source property', function () {
-      return expect(check).to.eventually.have.property('source');
-    });
-
-    it('should promise an object with an authorized property', function () {
-      return expect(check).to.eventually.have.property('authorized')
-        .that.is.true;
+    it('should promise a list', function () {
+      return expect(check).to.eventually.be.an.instanceOf(List);
     });
   });
 });

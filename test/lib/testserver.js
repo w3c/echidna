@@ -12,6 +12,7 @@ var getMetadata = require('./utils').getMetadata;
 var draftsSystemPath = require('./utils').draftsSystemPath;
 var request = require('request');
 
+var PublishService = require('./fake-http-services').CreatedService;
 var port = (process.env.PORT || 3000) + 1;
 
 var TestServer = function () {};
@@ -70,6 +71,12 @@ app.get('/generate', function (req, res) {
 
   request(url, function (err, response, body) {
     res.send(body.replace('<title>', '<title>Spec-generated '));
+  });
+});
+
+app.post('/publish', function (_, res) {
+  new PublishService().post().then(function (out) {
+    return res.status(out.response.statusCode).json(out.body);
   });
 });
 

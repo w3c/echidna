@@ -15,7 +15,7 @@ var Uuid = require('node-uuid');
 var Job = require('./lib/job');
 var Orchestrator = require('./lib/orchestrator');
 var RequestState = require('./lib/request-state');
-var SpecberusWrapper = require('./functions.js').SpecberusWrapper;
+var SpecberusWrapper = require('./lib/specberus-wrapper');
 
 // Configuration file
 require('./config.js');
@@ -103,14 +103,13 @@ app.post('/api/request', function (req, res) {
 
     var tempLocation = argTempLocation + path.sep + id + path.sep;
     var httpLocation = argHttpLocation + '/' + id + '/Overview.html';
-    var resultLocation = argResultLocation + path.sep + id + '.json';
 
     var orchestrator = new Orchestrator(
       url,
       token,
       tempLocation,
       httpLocation,
-      resultLocation
+      argResultLocation
     );
 
     Orchestrator.iterate(
@@ -137,7 +136,7 @@ app.post('/api/request', function (req, res) {
 
       console.log('[' + state.get('status').toUpperCase() + '] ' + url);
       exec(cmd, function (err, _, stderr) { if (err) console.error(stderr); });
-      dumpJobResult(resultLocation, state);
+      dumpJobResult(argResultLocation + path.sep + id + '.json', state);
     }).done();
 
     res.status(202).send(id);
