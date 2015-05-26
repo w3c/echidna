@@ -338,6 +338,10 @@ describe('DocumentDownloader', function () {
     it('should filter out PHP files', function () {
       expect(DocumentDownloader.isAllowed('not_allowed.php')).to.be.false;
     });
+
+    it('should filter out paths trying to go to parents', function () {
+      expect(DocumentDownloader.isAllowed('../../../etc/passwd')).to.be.false;
+    });
   });
 });
 
