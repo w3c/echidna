@@ -333,7 +333,7 @@ Team contact communicates token for spec to editor, who keeps it safe
 
 # How to publish&nbsp;&nbsp;&nbsp;&nbsp;▸▸▹▹
 
-.smaller[.center[![d](https://raw.githubusercontent.com/w3c/echidna/tripu/miscellanea/doc/token-request-form.png)]]
+.smaller[.center[![d](https://raw.githubusercontent.com/w3c/echidna/master/doc/token-request-form.png)]]
 
 .footer[![Logo](https://raw.githubusercontent.com/w3c/echidna/master/doc/w3c-labs-logo-small.png)New publication workflow]
 
