@@ -124,13 +124,14 @@ app.post('/api/request', function (req, res) {
       requests[id].state
     ).then(function (state) {
       var cmd = global.SENDMAIL + ' ' + state.get('status').toUpperCase() +
-        ' ' + global.MAILING_LIST + ' ' + url;
+        ' ' + global.MAILING_LIST;
 
-      if (state.get('status') === 'error') {
-        cmd += ' \'' + JSON.stringify(state, null, 2) + '\'';
+      if (state.get('status') === Orchestrator.STATUS_ERROR) {
+        cmd += ' ' + url + ' \'' + JSON.stringify(state, null, 2) + '\'';
       }
       else {
-        cmd += ' \'Echidna ' + meta.version +
+        cmd += ' ' + state.get('metadata').get('thisVersion') +
+          ' \'Echidna ' + meta.version +
           '; Specberus ' + SpecberusWrapper.version + '\'';
       }
 
