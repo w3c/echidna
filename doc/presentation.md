@@ -70,8 +70,8 @@
 
   .nb {
     font-size:        67%;
-	text-align        right;
-	vertical-align:   bottom;
+    text-align        right;
+    vertical-align:   bottom;
     color:            #0000c0;
   }
 
@@ -127,7 +127,7 @@ to **see the presentation in interactive slides**.<br><br><br><br>]
 1. **Editor** pings team contact
 2. **Team contact** downloads files; maybe uploads to intermediate location
 3. Team contact pings webmaster
-4. **Webmaster** finds issues in spec (most likely); reports to team contact
+4. **Webmaster** finds issues in spec (probably); reports to team contact
 5. Team contact fixes problems, or passes the ball back to the editor
 6. *Iterate between steps 1 and 5 until things look OK*
 7. Webmaster publishes in a semi-automatic way; informs other parties
@@ -249,7 +249,7 @@ eg, ReSpec, Bikeshed, Anolis
 
 &#10003; Integration with other systems: CVS, DB, Symfony endpoint (W3C API)
 
-&#10003; Integration with spec-generation tools: ReSpec
+&#10003; Integration with spec-generation tools: ReSpec (experimental)
 
 &#10003; Adoption within the workflow of some WGs already
 
@@ -289,6 +289,7 @@ eg, ReSpec, Bikeshed, Anolis
 * Traceability
 * Special cases
 * Temporary rules
+* Transitions
 * Moratoria
 * Exceptions
 * Exceptions
@@ -305,7 +306,7 @@ eg, ReSpec, Bikeshed, Anolis
   * They will need your help less often
   * If the source of the spec is already at a publicly-accessible URL,  
 you won't need to download files and copy them elsewhere
-  
+
 **As an editor:**
   * You won't have to chase your team contact
   * Publish much more often
@@ -331,9 +332,17 @@ Team contact communicates token for spec to editor, who keeps it safe
 
 ---
 
+background-image: url(https://raw.githubusercontent.com/w3c/echidna/master/doc/token-request-form.png)
+
+.footer[![Logo](https://raw.githubusercontent.com/w3c/echidna/master/doc/w3c-labs-logo-small.png)New publication workflow]
+
+---
+
 # How to publish&nbsp;&nbsp;&nbsp;&nbsp;▸▸▹▹
 
-.smaller[.center[![d](https://raw.githubusercontent.com/w3c/echidna/master/doc/token-request-form.png)]]
+Check your spec with [Specberus](https://labs.w3.org/pubrules/)
+
+(&hellip;unless you are very confident)
 
 .footer[![Logo](https://raw.githubusercontent.com/w3c/echidna/master/doc/w3c-labs-logo-small.png)New publication workflow]
 
@@ -366,13 +375,27 @@ The method `request` returns an ID for the newly created *publication job*
 
 The result will be sent to [`public-tr-notifications@w3.org`](https://lists.w3.org/Archives/Public/public-tr-notifications/) after a few seconds
 
+(Examples of notification messages:
+[success](https://lists.w3.org/Archives/Public/public-tr-notifications/2015May/0020.html),
+[error](https://lists.w3.org/Archives/Public/public-tr-notifications/2015May/0016.html))
+
 If you're impatient, use method `status` with required parameter `id`,  
 passing along the ID of the publication job:
 
 ```bash
 $ curl 'https://labs.w3.org/echidna/api/status?id=b2415b5794de'
 
-{.......}
+{
+  "id": "08aaa215",
+  "url": "https://w3c.github.io/gamepad/ECHIDNA",
+  "jobs": {
+    "retrieve-resources": {
+      "status": "ok",
+      "errors": []
+    },
+    "specberus": {
+      "status": "failure",
+⋮
 ```
 
 The method `status` returns a JSON object detailing the state of the publication
@@ -395,25 +418,6 @@ appendix-B.html
 img/diagram.png
 img/chart.jpeg
 data/output.log
-```
-
-.footer[![Logo](https://raw.githubusercontent.com/w3c/echidna/master/doc/w3c-labs-logo-small.png)New publication workflow]
-
----
-
-# Doing it ReSpec'fully
-
-* ReSpec is the only spec-generation tool supported at the moment
-* Either use your own instance of ReSpec,  
-or pass it through Spec Generator on labs:  
-[`https://labs.w3.org/spec-generator/`](https://labs.w3.org/spec-generator/)
-
-Example of manifest:  
-[`https://github.com/w3c/manifest/blob/gh-pages/ECHIDNA`](https://github.com/w3c/manifest/blob/gh-pages/ECHIDNA)
-
-```bash
-index.html?specStatus=WD;shortName=appmanifest respec
-images/manifest-src-directive.svg
 ```
 
 .footer[![Logo](https://raw.githubusercontent.com/w3c/echidna/master/doc/w3c-labs-logo-small.png)New publication workflow]
@@ -444,8 +448,29 @@ script:
 after_success:
   - curl "https://labs.w3.org/echidna/api/request" \
     --data "url=$URL" \
-	--data "token=$TOKEN" \
-	--data "decision=$DECISION"
+    --data "token=$TOKEN" \
+    --data "decision=$DECISION"
+```
+
+.footer[![Logo](https://raw.githubusercontent.com/w3c/echidna/master/doc/w3c-labs-logo-small.png)New publication workflow]
+
+---
+
+# Doing it ReSpec'fully
+
+* Echidna doesn't care which spec-generation tool you use (if any)
+* Use any instance of the tool of your choice
+* However, there is experimental integration with ReSpec  
+via Spec Generator on labs:  
+[`https://labs.w3.org/spec-generator/`](https://labs.w3.org/spec-generator/)
+* Simply append a space and the keyword to first line of manifest
+
+Example:  
+[`https://github.com/w3c/manifest/blob/gh-pages/ECHIDNA`](https://github.com/w3c/manifest/blob/gh-pages/ECHIDNA)
+
+```bash
+index.html?specStatus=WD;shortName=appmanifest respec
+images/manifest-src-directive.svg
 ```
 
 .footer[![Logo](https://raw.githubusercontent.com/w3c/echidna/master/doc/w3c-labs-logo-small.png)New publication workflow]
@@ -459,7 +484,7 @@ after_success:
 * Future user-contributed clients, cattering to different needs
 * Better error messages
 * More types of specs
-* More spec-generation tools
+* Support for special cases, eg joint publication
 
 .footer[![Logo](https://raw.githubusercontent.com/w3c/echidna/master/doc/w3c-labs-logo-small.png)New publication workflow]
 
@@ -467,7 +492,7 @@ after_success:
 
 class: center, middle
 
-# Questions? Comments?
+# ‽
 
 .footer[![Logo](https://raw.githubusercontent.com/w3c/echidna/master/doc/w3c-labs-logo-small.png)New publication workflow]
 
@@ -503,8 +528,10 @@ template: appendix
 
 * Main page and API endpoint: [`https://labs.w3.org/echidna/`](https://labs.w3.org/echidna/)
 * [Wiki of the project on GitHub](https://github.com/w3c/echidna/wiki)
-* Public mailing list (comments, ideas, bug reporting):  
-  [`public-pubrules-comments@w3.org`](mailto:public-pubrules-comments@w3.org)
+* Public mailing lists (comments, ideas, bug reporting):
+  * [`spec-prod@w3.org`](https://lists.w3.org/Archives/Public/spec-prod/)
+  * [`public-pubrules-comments@w3.org`](https://lists.w3.org/Archives/Public/public-pubrules-comments/)
+  * [`public-tr-notifications@w3.org`](https://lists.w3.org/Archives/Public/public-tr-notifications/)
 * IRC: channel [#pub](irc://irc.w3.org:6667/pub) on [W3C's public server](http://www.w3.org/wiki/IRC)
 
 .footer[![Logo](https://raw.githubusercontent.com/w3c/echidna/master/doc/w3c-labs-logo-small.png)New publication workflow]
@@ -533,7 +560,7 @@ class: center, middle
 
 ***New-pub-wf* brought to you by:**  
 Robin, Dom, Philippe, Ted,  
-Jérémie, Denis, Guillaume, Antonio,  
+Jérémie, Denis, Guillaume, Gerald, Antonio,  
 rest of Systeam,  
 other W3C staff,  
 Marcos  
