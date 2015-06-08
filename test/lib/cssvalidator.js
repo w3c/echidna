@@ -4,6 +4,10 @@
 var express = require('express');
 var validator = express();
 
+/**
+ * @exports test/lib/validator
+ */
+
 module.exports = validator;
 
 validator.get('/css-validator/validator', function (req, res) {

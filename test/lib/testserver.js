@@ -15,6 +15,10 @@ var request = require('request');
 var PublishService = require('./fake-http-services').CreatedService;
 var port = (process.env.PORT || 3000) + 1;
 
+/**
+ * @exports test/lib/TestServer
+ */
+
 var TestServer = function () {};
 
 app.use(morgan('dev', {

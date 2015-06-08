@@ -1,3 +1,7 @@
+/**
+ * @module
+ */
+
 'use strict';
 
 console.log('Launching…');

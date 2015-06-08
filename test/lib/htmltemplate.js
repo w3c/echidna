@@ -6,6 +6,10 @@ var substitutions = require('./utils').substitutions;
 var getMetadata = require('./utils').getMetadata;
 var endsWith = require('./utils').endsWith;
 
+/**
+ * @exports test/lib/htmlTemplate
+ */
+
 function htmlTemplate(serverPath, fileSystemPath) {
   // Will apply all the substitutions in the parameter s
   // including the substitutions contained in metadata
