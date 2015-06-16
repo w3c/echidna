@@ -127,7 +127,7 @@ app.post('/api/request', function (req, res) {
         ' ' + global.MAILING_LIST;
 
       if (state.get('status') === Orchestrator.STATUS_ERROR) {
-        cmd += ' ' + url + ' \'' + JSON.stringify(state, null, 2) + '\'';
+        cmd += ' ' + url + ' \'' + JSON.stringify(requests[id], null, 2) + '\'';
       }
       else {
         cmd += ' ' + state.get('metadata').get('thisVersion') +
