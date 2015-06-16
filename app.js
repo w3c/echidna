@@ -121,7 +121,7 @@ app.post('/api/request', function (req, res) {
         console.log(JSON.parse(JSON.stringify(state)));
         console.log('----------');
       },
-      requests[id].result
+      requests[id].results
     ).then(function (state) {
       var cmd = global.SENDMAIL + ' ' + state.get('status').toUpperCase() +
         ' ' + global.MAILING_LIST;
