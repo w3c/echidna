@@ -87,7 +87,7 @@ app.post('/api/request', function (req, res) {
       version: meta.version,
       'version-specberus': SpecberusWrapper.version,
       decision: decision,
-      state: new RequestState(
+      results: new RequestState(
         '',
         new Map({
           'retrieve-resources': new Job(),
@@ -121,7 +121,7 @@ app.post('/api/request', function (req, res) {
         console.log(JSON.parse(JSON.stringify(state)));
         console.log('----------');
       },
-      requests[id].state
+      requests[id].result
     ).then(function (state) {
       var cmd = global.SENDMAIL + ' ' + state.get('status').toUpperCase() +
         ' ' + global.MAILING_LIST;
