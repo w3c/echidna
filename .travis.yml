@@ -6,6 +6,7 @@ before_script:
   - cp config.js.example config.js
 after_script:
   - npm run coveralls
+  - npm run nsp
 notifications:
   email: false
   irc:
