@@ -117,7 +117,8 @@ app.post('/api/request', function (req, res) {
         return orchestrator.next(state);
       },
       Orchestrator.hasFinished,
-      function () {
+      function (state) {
+        requests[id].results = state;
         console.log(JSON.parse(JSON.stringify(requests[id])));
         console.log('----------');
       },
