@@ -64,15 +64,17 @@
     "jscs": "^1.13.1",
     "jshint": "^2.7.0",
     "mocha": "^2.2.4",
-    "morgan": "^1.5.2"
+    "morgan": "^1.5.2",
+    "nsp": "^1.0"
   },
   "scripts": {
     "check-style": "jscs .",
     "coverage": "istanbul cover _mocha",
     "coveralls": "npm run coverage && cat ./coverage/lcov.info | coveralls",
     "lint": "jshint .",
+    "nsp": "nsp package",
     "start": "node app.js",
-    "test": "npm run check-style && npm run lint && mocha",
+    "test": "npm run nsp && npm run check-style && npm run lint && mocha",
     "testserver": "node test/lib/testserver"
   },
   "engines": {
