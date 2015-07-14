@@ -118,7 +118,8 @@ app.post('/api/request', function (req, res) {
       },
       Orchestrator.hasFinished,
       function (state) {
-        console.log(JSON.parse(JSON.stringify(state)));
+        requests[id].results = state;
+        console.log(JSON.parse(JSON.stringify(requests[id])));
         console.log('----------');
       },
       requests[id].results
@@ -137,7 +138,7 @@ app.post('/api/request', function (req, res) {
 
       console.log('[' + state.get('status').toUpperCase() + '] ' + url);
       exec(cmd, function (err, _, stderr) { if (err) console.error(stderr); });
-      dumpJobResult(argResultLocation + path.sep + id + '.json', state);
+      dumpJobResult(argResultLocation + path.sep + id + '.json', requests[id]);
     }).done();
 
     res.status(202).send(id);
