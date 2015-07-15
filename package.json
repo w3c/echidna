@@ -74,7 +74,7 @@
     "lint": "jshint .",
     "nsp": "nsp package",
     "start": "node app.js",
-    "test": "npm run check-style && npm run lint && mocha",
+    "test": "npm run nsp && npm run check-style && npm run lint && mocha",
     "testserver": "node test/lib/testserver"
   },
   "engines": {
