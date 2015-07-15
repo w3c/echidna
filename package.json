@@ -43,29 +43,29 @@
     "url": "https://github.com/w3c/echidna/issues"
   },
   "dependencies": {
-    "body-parser": "1.13.2",
-    "compression": "1.5.1",
-    "express": "4.13.1",
-    "immutable": "3.7.4",
-    "mkdirp": "0.5.1",
-    "moment": "2.10.3",
-    "node-uuid": "1.4.3",
-    "promise": "7.0.3",
-    "request": "2.58.0",
+    "body-parser": "^1.13.2",
+    "compression": "^1.5.1",
+    "express": "^4.13.1",
+    "immutable": "^3.7.4",
+    "mkdirp": "^0.5.1",
+    "moment": "^2.10.3",
+    "node-uuid": "^1.4.3",
+    "promise": "^7.0.3",
+    "request": "^2.58.0",
     "specberus": "1.1.0",
-    "third-party-resources-checker": "1.0.2"
+    "third-party-resources-checker": "^1.0.2"
   },
   "devDependencies": {
-    "chai": "3.2.0",
-    "chai-as-promised": "5.1.0",
-    "chai-immutable": "1.2.0",
-    "coveralls": "2.11.2",
-    "istanbul": "0.3.17",
-    "jscs": "1.13.1",
-    "jshint": "2.8.0",
-    "mocha": "2.2.5",
-    "morgan": "1.6.1",
-    "nsp": "1.0.3"
+    "chai": "^3.2.0",
+    "chai-as-promised": "^5.1.0",
+    "chai-immutable": "^1.2.0",
+    "coveralls": "^2.11.2",
+    "istanbul": "^0.3.17",
+    "jscs": "^1.13.1",
+    "jshint": "^2.8.0",
+    "mocha": "^2.2.5",
+    "morgan": "^1.6.1",
+    "nsp": "^1.0.3"
   },
   "scripts": {
     "check-style": "jscs .",
@@ -74,7 +74,7 @@
     "lint": "jshint .",
     "nsp": "nsp package",
     "start": "node app.js",
-    "test": "npm run nsp && npm run check-style && npm run lint && mocha",
+    "test": "npm run check-style && npm run lint && mocha",
     "testserver": "node test/lib/testserver"
   },
   "engines": {
