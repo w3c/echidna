@@ -17,7 +17,7 @@ describe('RequestState', function () {
 
   describe('object', function () {
     it('should be immutable (aka frozen)', function () {
-      expect(Object.isFrozen(state)).to.be.true;
+      expect(state).to.be.frozen;
     });
   });
 

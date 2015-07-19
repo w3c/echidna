@@ -8,7 +8,7 @@ var JsonHttpService = require('../lib/json-http-service');
 describe('JsonHttpService', function () {
   describe('object', function () {
     it('should be immutable (aka frozen)', function () {
-      expect(Object.isFrozen(new JsonHttpService('', '', ''))).to.be.true;
+      expect(new JsonHttpService('', '', '')).to.be.frozen;
     });
 
     it('should always be called with new', function () {
