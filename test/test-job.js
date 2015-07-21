@@ -12,7 +12,7 @@ chai.use(chaiImmutable);
 describe('Job', function () {
   describe('object', function () {
     it('should be immutable (aka frozen)', function () {
-      expect(Object.isFrozen(new Job())).to.be.true;
+      expect(new Job()).to.be.frozen;
     });
 
     it('should always be called with new', function () {

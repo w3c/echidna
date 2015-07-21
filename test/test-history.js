@@ -8,7 +8,7 @@ var History = require('../lib/history');
 describe('History', function () {
   describe('object', function () {
     it('should be immutable (aka frozen)', function () {
-      expect(Object.isFrozen(new History())).to.be.true;
+      expect(new History()).to.be.frozen;
     });
 
     it('should always be called with new', function () {
