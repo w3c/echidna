@@ -127,7 +127,8 @@ app.post('/api/request', function (req, res) {
       var cmd = global.SENDMAIL + ' ' + state.get('status').toUpperCase() +
         ' ' + global.MAILING_LIST;
 
-      if (state.get('status') === Orchestrator.STATUS_ERROR) {
+      if (state.get('status') === Orchestrator.STATUS_ERROR ||
+          state.get('status') === Orchestrator.STATUS_FAILURE) {
         cmd += ' ' + url + ' \'' + JSON.stringify(requests[id], null, 2) + '\'';
       }
       else {
