@@ -17,7 +17,7 @@ if [ "SUCCESS" == "$STATUS" ]; then
     BODY="On `date -u`, $URI has been published by the W3C automated publication system ($RESULT).
 
 If you believe there's an error, please contact webreq@w3.org."
-elif [ "ERROR" == "$STATUS" ]; then
+elif [ "ERROR" == "$STATUS" -o "FAILURE" == "$STATUS" ]; then
     SUBJECT="[W3C Publication] Failed: $URI"
     BODY="On `date -u`, the request to publish $URI failed. See details below.
 
