@@ -26,3 +26,6 @@ node_modules
 
 # Configuration
 config.js
+
+# JSDoc output
+doc/api/
