@@ -2,9 +2,17 @@
 
 var fs = require('fs');
 
+/**
+ * @exports test/lib/utils/draftsSystemPath
+ */
+
 var draftsSystemPath = __dirname + '/../drafts';
 
-// V8 doesn't support String.endsWith
+/**
+ * V8 doesn't support String.endsWith
+ * @exports test/lib/utils/draftsSystemPath
+ */
+
 function endsWith(subjectString, searchString) {
   var s = subjectString.toString();
   var position = s.length - searchString.length;
@@ -37,7 +45,11 @@ var today = (function () {
 
 var tomorrow = new Date(today.getTime() + 24 * 60 * 60 * 1000);
 
-// The global substitutions
+/**
+ * The global substitutions
+ * @exports test/lib/utils/substitutions
+ */
+
 var substitutions = {
   'DATE': fullDate(today),
   'DATE+1': fullDate(tomorrow),
@@ -73,9 +85,13 @@ function augmentMetadata(name) {
   }
 }
 
-// Look for /meta.json based on filepath
-// and store if any using name found in filepath (subdirectory name)
-// Return the loaded metadata
+/**
+ * Look for /meta.json based on filepath
+ * and store if any using name found in filepath (subdirectory name)
+ * Return the loaded metadata
+ * @exports test/lib/utils/getMetadata
+ */
+
 function getMetadata(name) {
   if (metadata[name] === undefined) {
     try {

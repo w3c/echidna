@@ -4,7 +4,7 @@ var Promise = require('promise');
 
 /**
  * A fake HTTP POSTable service that always returns a 201 Created
- * @class
+ * @exports test/lib/CreatedService
  */
 var CreatedService = function () {};
 
@@ -14,8 +14,9 @@ CreatedService.prototype.post = function () {
 
 /**
  * A fake HTTP POSTable service that always returns a 501 Not Implemented
- * @class
+ * @exports test/lib/NotImplementedService
  */
+
 var NotImplementedService = function () {};
 
 NotImplementedService.prototype.post = function () {
@@ -27,8 +28,9 @@ NotImplementedService.prototype.post = function () {
 
 /**
  * A fake HTTP POSTable service that always returns a 400 Bad Request
- * @class
+ * @exports test/lib/BadRequestService
  */
+
 var BadRequestService = function () {};
 
 BadRequestService.prototype.post = function () {
@@ -40,8 +42,9 @@ BadRequestService.prototype.post = function () {
 
 /**
  * A fake HTTP POSTable service that always returns a 500 Internal Server Error
- * @class
+ * @exports test/lib/ServerErrorService
  */
+
 var ServerErrorService = function () {};
 
 ServerErrorService.prototype.post = function () {

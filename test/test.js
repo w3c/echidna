@@ -1,3 +1,7 @@
+/**
+ * @module
+ */
+
 'use strict';
 
 // Switch the environment into testing mode
