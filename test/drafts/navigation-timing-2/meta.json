@@ -1,7 +1,7 @@
 {
 "process": "1 August 2014",
 "processURI": "http://www.w3.org/2014/Process-20140801/",
-"editorsDraft": "http://w3c.github.io/navigation-timing/",
+"editorsDraft": "https://w3c.github.io/navigation-timing/",
 "title":     "Navigation Timing 2",
 "shortname": "navigation-timing-2",
 "status":    "WD",
