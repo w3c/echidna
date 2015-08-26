@@ -52,7 +52,7 @@
     "node-uuid": "^1.4.3",
     "promise": "^7.0.3",
     "request": "^2.58.0",
-    "specberus": "1.1.6",
+    "specberus": "^1.2.0",
     "third-party-resources-checker": "^1.0.2"
   },
   "devDependencies": {
