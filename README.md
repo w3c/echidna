@@ -2,6 +2,7 @@
 [![Coverage Status](https://coveralls.io/repos/w3c/echidna/badge.svg)](https://coveralls.io/r/w3c/echidna)
 [![Dependency Status](https://david-dm.org/w3c/echidna.svg)](https://david-dm.org/w3c/echidna)
 [![devDependency Status](https://david-dm.org/w3c/echidna/dev-status.svg)](https://david-dm.org/w3c/echidna#info=devDependencies)
+[![Inline docs](http://inch-ci.org/github/w3c/echidna.svg?branch=master)](http://inch-ci.org/github/w3c/echidna)
 
 # Echidna
 
