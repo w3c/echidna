@@ -20,6 +20,7 @@ var Job = require('./lib/job');
 var Orchestrator = require('./lib/orchestrator');
 var RequestState = require('./lib/request-state');
 var SpecberusWrapper = require('./lib/specberus-wrapper');
+var Stats = require('./lib/stats');
 
 // Configuration file
 require('./config.js');
@@ -45,6 +46,14 @@ app.get('/', function (request, response) {
 
 app.get('/api/version', function (req, res) {
   res.send(meta.version);
+});
+
+app.get('/api/stats', function (req, res) {
+  var format = (req && req.query && req.query.format) ? req.query.format : null;
+  var stats = new Stats(format);
+  stats.run(function(data) {
+    res.send(data);
+  });
 });
 
 app.get('/api/version-specberus', function (req, res) {
@@ -169,6 +178,8 @@ function corsHandler(req, res, next) {
   }
   next();
 }
+
+Stats.resultDir = argResultLocation;
 
 app.listen(process.env.PORT || port).on('error', function (err) {
   if (err) {
