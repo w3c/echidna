@@ -51,7 +51,8 @@ app.get('/api/version', function (req, res) {
 app.get('/api/stats', function (req, res) {
   var format = (req && req.query && req.query.format) ? req.query.format : null;
   var stats = new Stats(format);
-  stats.run(function(data) {
+
+  stats.run(function (data) {
     res.send(data);
   });
 });
