@@ -1,7 +1,8 @@
 'use strict';
 
 global.DEFAULT_TEMP_LOCATION = '/var/www/';
-global.DEFAULT_HTTP_LOCATION = 'http://spec-server/';
+// DEFAULT_HTTP_LOCATION without trailing slash
+global.DEFAULT_HTTP_LOCATION = 'http://spec-server';
 global.DEFAULT_LOG_LOCATION = '.';
 global.DEFAULT_RESULT_LOCATION = '/var/www/';
 global.DEFAULT_PORT = 3000;
