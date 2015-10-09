@@ -195,19 +195,22 @@
             data + '">' + data + '</a>');
         });
 
-        $('#echidna-stats-placeholder a').click(function(event) {
+        $('#echidna-stats-placeholder a').click(function (event) {
           event.preventDefault();
-          $('#echidna-stats-placeholder').html('<p><em>Crunching some numbers; please wait&hellip;</em></p>');
+          $('#echidna-stats-placeholder')
+            .html('<p><em>Crunching some numbers; please wait&hellip;</em></p>');
           $.get('api/stats?format=div', function (data) {
             $('#echidna-stats-placeholder').replaceWith(data);
           });
         });
 
-        window.setTimeout(function() {
-          $('div#gutter-left')
-            .css('top', '79.5px')
-            .css('opacity', 1);
-          }, 500
+        window.setTimeout(
+          function () {
+            $('div#gutter-left')
+              .css('top', '79.5px')
+              .css('opacity', 1);
+          },
+          500
         );
       });
     </script>
