@@ -18,8 +18,8 @@ Please [see the wiki](https://github.com/w3c/echidna/wiki) for how to use Echidn
 
 ### Installation
 
-To run Echidna, you need to install [Node.js](http://nodejs.org/) first.
-This will install [npm](https://www.npmjs.org/) at the same time, which is required as well.
+To run Echidna, you need to install [Node.js](https://nodejs.org/en/) first.
+This will install [npm](https://www.npmjs.com/) at the same time, which is required as well.
 
 Then run the following commands with your favorite terminal:
 
@@ -50,7 +50,7 @@ You may use the optional defined below:
 (Default `3000`.)
 4. `RESULT_PATH`: local path where Echidna will dump the results of publication requests in JSON format.
 
-Note that they are only supported by npm 2 and above. Alternatively, you can use the configuration file `config.js`.
+Alternatively, you can use the configuration file `config.js`.
 
 Once the server is started, you can throw publication requests at it through a `curl`/`POST` request to its enpoint, <http://localhost:3000/api>, or using the web-based testbed (described below).
 
