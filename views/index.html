@@ -151,19 +151,23 @@
           $('head title').text($('head title').text() + ' ' + data);
           $('h1').text($('h1').text() + ' ' + data);
           $('h3#header-echidna').html($('h3#header-echidna').text() +
-            ' <a href="https://github.com/w3c/echidna/releases/tag/v' + data + '">' + data + '</a>');
+            ' <a href="https://github.com/w3c/echidna/releases/tag/v' +
+            data + '">' + data + '</a>');
         });
 
         $.get('api/version-specberus', function (data) {
           $('h3#header-specberus').html($('h3#header-specberus').text() +
-            ' <a href="https://github.com/w3c/specberus/releases/tag/v' + data + '">' + data + '</a>');
+            ' <a href="https://github.com/w3c/specberus/releases/tag/v' +
+            data + '">' + data + '</a>');
         });
 
-        window.setTimeout(function() {
-          $('div#gutter-left')
-            .css('top', '79.5px')
-            .css('opacity', 1);
-          }, 500
+        window.setTimeout(
+          function () {
+            $('div#gutter-left')
+              .css('top', '79.5px')
+              .css('opacity', 1);
+          },
+          500
         );
       });
     </script>
