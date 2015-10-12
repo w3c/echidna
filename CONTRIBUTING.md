@@ -12,10 +12,7 @@ Discuss the publication workflow and related tools [on the mailing list](http://
 
 Start by looking through the [existing bugs](https://github.com/w3c/echidna/issues) to see if this was already discussed earlier. You might even find your solution there.
 
-**NB:** as of today, Echidna and Specberus are developed, tested and deployed using [Node.js](http://nodejs.org/) `v0.12.0`
-and [npm](https://www.npmjs.org/) `2.5.1`.
-When reporting bugs, please make sure you can reproduce them with this recommended setup.
-Also, remember to update npm dependencies often.
+Remember to update [Node.js](https://nodejs.org/en/) and [npm](https://www.npmjs.com/) often, and the npm dependencies of the project too.
 
 If you do not find anything, you can help report bugs by [filing them here](https://github.com/w3c/echidna/issues/new). Please use the following template when doing so:
 
