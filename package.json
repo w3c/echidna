@@ -62,10 +62,10 @@
     "chai-as-promised": "^5.1.0",
     "chai-immutable": "^1.2.0",
     "coveralls": "^2.11.2",
-    "istanbul": "^0.3.17",
+    "istanbul": "^0.4.1",
     "jscs": "^2.1.1",
     "jsdoc": "^3.3.2",
-    "jshint": "^2.8.0",
+    "jshint": "^2.9.1-rc1",
     "mocha": "^2.2.5",
     "morgan": "^1.6.1",
     "nsp": "^2.0.1"
@@ -78,7 +78,7 @@
     "lint": "jshint .",
     "nsp": "nsp check",
     "start": "node app.js",
-    "test": "npm run check-style && npm run lint && mocha",
+    "test": "npm run check-style && npm run lint && mocha -c -G",
     "testserver": "node test/lib/testserver"
   },
   "engines": {
