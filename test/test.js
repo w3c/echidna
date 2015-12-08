@@ -284,6 +284,19 @@ describe('DocumentDownloader', function () {
     });
   });
 
+  it('should read a tarball and install its content', function () {
+    return DocumentDownloader.fetchAndInstall(
+      server.location() + '/drafts/frame-timing.tar',
+      '/tmp/testechidnaTarball'
+    ).then(function () {
+      expect(readFileSyncUtf8('/tmp/testechidnaTarball/Overview.html'))
+        .to.contain('Frame Timing');
+
+      Fs.unlinkSync('/tmp/testechidnaTarball/Overview.html');
+      Fs.rmdirSync('/tmp/testechidnaTarball');
+    });
+  });
+
   describe('getFilenames(manifestContent)', function () {
     it('should be a function', function () {
       expect(DocumentDownloader.getFilenames).to.be.a('function');
