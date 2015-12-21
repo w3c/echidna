@@ -37,7 +37,7 @@ app.use(bodyParser.urlencoded({ extended: false }));
 app.use(corsHandler);
 app.use(express.static('assets/'));
 
-// for parsing multipart/form-data
+// For parsing multipart/form-data
 var upload = multer();
 
 // Index Page
@@ -83,6 +83,7 @@ app.post('/api/request', upload.single('tar'), function (req, res) {
   var decision = req.body ? req.body.decision : null;
   var token = req.body ? req.body.token : null;
   var id = Uuid.v4();
+
   if (!(url || tar) || !decision || !token) {
     res.status(500).send(
       'Missing required parameters “url”/"tar", “decision” and/or “token”.'
