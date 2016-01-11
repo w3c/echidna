@@ -11,6 +11,7 @@ var meta = require('./package.json');
 var express = require('express');
 var compression = require('compression');
 var bodyParser = require('body-parser');
+var multer = require('multer');
 var path = require('path');
 var Fs = require('fs');
 var Map = require('immutable').Map;
@@ -35,6 +36,9 @@ app.use(compression());
 app.use(bodyParser.urlencoded({ extended: false }));
 app.use(corsHandler);
 app.use(express.static('assets/'));
+
+// For parsing multipart/form-data
+var upload = multer();
 
 // Index Page
 app.get('/', function (request, response) {
@@ -73,18 +77,22 @@ function dumpJobResult(dest, result) {
   });
 }
 
-app.post('/api/request', function (req, res) {
+app.post('/api/request', upload.single('tar'), function (req, res) {
   var url = req.body ? req.body.url : null;
+  var tar = (!url && req.file) ? req.file : null;
   var decision = req.body ? req.body.decision : null;
   var token = req.body ? req.body.token : null;
   var id = Uuid.v4();
 
-  if (!url || !decision || !token) {
+  if (!(url || tar) || !decision || !token) {
     res.status(500).send(
-      'Missing required parameters “url”, “decision” and/or “token”.'
+      'Missing required parameters “url”/"tar", “decision” and/or “token”.'
     );
   }
   else {
+    var tempLocation = argTempLocation + path.sep + id + path.sep;
+    var httpLocation = argHttpLocation + '/' + id + '/Overview.html';
+
     requests[id] = {
       id: id,
       url: url,
@@ -105,11 +113,9 @@ app.post('/api/request', function (req, res) {
       )
     };
 
-    var tempLocation = argTempLocation + path.sep + id + path.sep;
-    var httpLocation = argHttpLocation + '/' + id + '/Overview.html';
-
     var orchestrator = new Orchestrator(
       url,
+      tar,
       token,
       tempLocation,
       httpLocation,

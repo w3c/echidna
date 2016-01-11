@@ -50,6 +50,7 @@
     "immutable": "3.7",
     "mkdirp": "0.5",
     "moment": "2.10",
+    "multer": "1.1",
     "node-uuid": "1.4",
     "promise": "7.0",
     "request": "2.67",
