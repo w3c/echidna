@@ -41,6 +41,7 @@ var Publisher = require('../lib/publisher');
 var SpecberusWrapper = require('../lib/specberus-wrapper');
 var TokenChecker = require('../lib/token-checker');
 var UserChecker = require('../lib/user-checker');
+var Tinkerer = require('../lib/tinkerer');
 
 function readFileSyncUtf8(file) {
   return Fs.readFileSync(file, { encoding: 'utf8' });
@@ -622,6 +623,23 @@ describe('UserChecker', function () {
   });
 
   after(trackProgress);
+});
+
+describe('Tinkerer', function () {
+  describe('tinker(tempLocation)', function () {
+    it('should be a function', function () {
+      expect(Tinkerer.tinker).to.be.a('function');
+    });
+    var promise = Tinkerer.tinker('/tmp/this/file/does/not/exist');
+
+    it('should return a promise', function () {
+      expect(promise).to.be.an.instanceOf(Promise);
+    });
+    it('should reject when given a wrong filesystem path', function () {
+      return expect(promise).to.eventually.be.rejectedWith();
+    });
+    // @TODO: test success of tinkering.
+  });
 });
 
 describe('Publisher', function () {

@@ -1,4 +1,4 @@
-/**
+</**
  * @module
  */
 
@@ -110,7 +110,7 @@ var processRequest = function (req, res, isTar) {
     requests[id]['version'] = meta.version;
     requests[id]['version-specberus'] = SpecberusWrapper.version;
     requests[id]['decision'] = decision;
-    var jobList = ['retrieve-resources', 'metadata', 'specberus', 'third-party-checker', 'publish', 'tr-install', 'update-tr-shortlink'];
+    var jobList = ['retrieve-resources', 'metadata', 'specberus', 'third-party-checker', 'tinker', 'publish', 'tr-install', 'update-tr-shortlink'];
 
     if (isTar)
       jobList.splice(2, 0, 'user-checker');

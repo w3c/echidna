@@ -1,6 +1,6 @@
 {
   "esversion": 6,
-  "bitwise": true,
+  "bitwise": false,
   "eqeqeq": true,
   "forin": true,
   "freeze": true,
