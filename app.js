@@ -22,6 +22,10 @@ var Orchestrator = require('./lib/orchestrator');
 var RequestState = require('./lib/request-state');
 var SpecberusWrapper = require('./lib/specberus-wrapper');
 
+var passport = require('passport');
+var LdapAuth = require('ldapauth-fork');
+var BasicStrategy = require('passport-http').BasicStrategy;
+
 // Configuration file
 require('./config.js');
 
@@ -155,6 +159,34 @@ app.post('/api/request', upload.single('tar'), function (req, res) {
     res.status(202).send(id);
   }
 });
+
+passport.use(new BasicStrategy(
+  function (username, password, done) {
+    var opts = {
+      url: global.LDAP_URL,
+      bindDn: global.LDAP_BIND_DN.replace(/{{username}}/, username),
+      bindCredentials: password,
+      searchBase: global.LDAP_SEARCH_BASE,
+      searchFilter: '(uid={{username}})',
+      searchAttributes: ['memberOf'],
+      cache: false
+    };
+
+    var ldap = new LdapAuth(opts);
+
+    ldap.authenticate(username, password, function (err, user) {
+      if (err) {
+        console.log('LDAP auth error: %s', err);
+      }
+      done(err, user);
+    });
+  }
+));
+app.post('/api/request/tar',
+         passport.authenticate('basic', { session: false }),
+         function (req, res) {
+           res.send({ status: 'ok' });
+         });
 
 /**
 * Add CORS headers to responses if the client is explicitly allowed.
