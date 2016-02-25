@@ -41,9 +41,6 @@ app.use(bodyParser.urlencoded({ extended: false }));
 app.use(corsHandler);
 app.use(express.static('assets/'));
 
-// For parsing multipart/form-data
-var upload = multer();
-
 // Index Page
 app.get('/', function (request, response) {
   response.sendFile(__dirname + '/views/index.html');
@@ -81,41 +78,43 @@ function dumpJobResult(dest, result) {
   });
 }
 
-app.post('/api/request', upload.single('tar'), function (req, res) {
-  var url = req.body ? req.body.url : null;
-  var tar = (!url && req.file) ? req.file : null;
-  var decision = req.body ? req.body.decision : null;
-  var token = req.body ? req.body.token : null;
+var processRequest = function(req, res, isTar) {
   var id = Uuid.v4();
+  var decision = req.body ? req.body.decision : null;
+  var url = (!isTar && req.body) ? req.body.url : null;
+  var token = (!isTar && req.body) ? req.body.token : null;
+  var tar = (isTar) ? req.file : null
 
-  if (!(url || tar) || !decision || !token) {
+  if (!((url && token) || tar) || !decision) {
     res.status(500).send(
-      'Missing required parameters “url”/"tar", “decision” and/or “token”.'
+      'Missing required parameters "url + token + decision" or "tar + decision".'
     );
   }
   else {
     var tempLocation = argTempLocation + path.sep + id + path.sep;
     var httpLocation = argHttpLocation + '/' + id + '/Overview.html';
 
-    requests[id] = {
-      id: id,
-      url: url,
-      version: meta.version,
-      'version-specberus': SpecberusWrapper.version,
-      decision: decision,
-      results: new RequestState(
-        '',
-        new Map({
-          'retrieve-resources': new Job(),
-          'specberus': new Job(),
-          'token-checker': new Job(),
-          'third-party-checker': new Job(),
-          'publish': new Job(),
-          'tr-install': new Job(),
-          'update-tr-shortlink': new Job()
-        })
-      )
-    };
+    requests[id] = {};
+    requests[id]['id'] = id;
+    if (isTar) requests[id]['tar'] = tar.originalname;
+    else requests[id]['url'] = url;
+    requests[id]['version'] = meta.version;
+    requests[id]['version-specberus'] = SpecberusWrapper.version;
+    requests[id]['decision'] = decision;
+    var jobList;
+    if (isTar) {
+      jobList = ['retrieve-resources', 'specberus', 'third-party-checker', 'publish', 'tr-install', 'update-tr-shortlink'];
+    } else {
+      jobList = ['retrieve-resources', 'specberus', 'token-checker', 'third-party-checker', 'publish', 'tr-install', 'update-tr-shortlink'];
+    }
+
+    requests[id]['results'] = new RequestState(
+                  '',
+                  new Map(jobList.reduce(function(o, v) {
+                    o[v] = new Job();
+                    return o;
+                  }, {}))
+                );
 
     var orchestrator = new Orchestrator(
       url,
@@ -158,6 +157,10 @@ app.post('/api/request', upload.single('tar'), function (req, res) {
 
     res.status(202).send(id);
   }
+}
+
+app.post('/api/request', function(req, res) {
+  processRequest(req, res, false);
 });
 
 passport.use(new BasicStrategy(
@@ -184,9 +187,11 @@ passport.use(new BasicStrategy(
 ));
 app.post('/api/request/tar',
          passport.authenticate('basic', { session: false }),
+         multer().single('tar'),
          function (req, res) {
-           res.send({ status: 'ok' });
-         });
+           processRequest(req, res, true);
+         }
+);
 
 /**
 * Add CORS headers to responses if the client is explicitly allowed.
