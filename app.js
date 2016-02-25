@@ -189,7 +189,9 @@ app.post('/api/request/tar',
          passport.authenticate('basic', { session: false }),
          multer().single('tar'),
          function (req, res) {
-           processRequest(req, res, true);
+           // TODO: Check that req.user is in the deliverers of the spec
+           res.status(500).send({ status: 'feature locked until we can easily identify the deliverers of the spec' });
+           // processRequest(req, res, true);
          }
 );
 
