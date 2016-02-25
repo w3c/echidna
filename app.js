@@ -78,16 +78,17 @@ function dumpJobResult(dest, result) {
   });
 }
 
-var processRequest = function(req, res, isTar) {
+var processRequest = function (req, res, isTar) {
   var id = Uuid.v4();
   var decision = req.body ? req.body.decision : null;
   var url = (!isTar && req.body) ? req.body.url : null;
   var token = (!isTar && req.body) ? req.body.token : null;
-  var tar = (isTar) ? req.file : null
+  var tar = (isTar) ? req.file : null;
 
   if (!((url && token) || tar) || !decision) {
     res.status(500).send(
-      'Missing required parameters "url + token + decision" or "tar + decision".'
+      'Missing required parameters "url + token + decision"' +
+      ' or "tar + decision".'
     );
   }
   else {
@@ -102,15 +103,20 @@ var processRequest = function(req, res, isTar) {
     requests[id]['version-specberus'] = SpecberusWrapper.version;
     requests[id]['decision'] = decision;
     var jobList;
+
     if (isTar) {
-      jobList = ['retrieve-resources', 'specberus', 'third-party-checker', 'publish', 'tr-install', 'update-tr-shortlink'];
-    } else {
-      jobList = ['retrieve-resources', 'specberus', 'token-checker', 'third-party-checker', 'publish', 'tr-install', 'update-tr-shortlink'];
+      jobList = ['retrieve-resources', 'specberus', 'third-party-checker',
+                 'publish', 'tr-install', 'update-tr-shortlink'];
+    }
+    else {
+      jobList = ['retrieve-resources', 'specberus', 'token-checker',
+                 'third-party-checker', 'publish', 'tr-install',
+                 'update-tr-shortlink'];
     }
 
     requests[id]['results'] = new RequestState(
                   '',
-                  new Map(jobList.reduce(function(o, v) {
+                  new Map(jobList.reduce(function (o, v) {
                     o[v] = new Job();
                     return o;
                   }, {}))
@@ -157,9 +163,9 @@ var processRequest = function(req, res, isTar) {
 
     res.status(202).send(id);
   }
-}
+};
 
-app.post('/api/request', function(req, res) {
+app.post('/api/request', function (req, res) {
   processRequest(req, res, false);
 });
 
@@ -190,8 +196,10 @@ app.post('/api/request/tar',
          multer().single('tar'),
          function (req, res) {
            // TODO: Check that req.user is in the deliverers of the spec
-           res.status(500).send({ status: 'feature locked until we can easily identify the deliverers of the spec' });
-           // processRequest(req, res, true);
+           res.status(500)
+              .send({ status: 'feature locked until we can easily identify' +
+                              ' the deliverers of the spec' });
+           // TODO: processRequest(req, res, true);
          }
 );
 
