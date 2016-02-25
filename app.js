@@ -196,7 +196,7 @@ app.post('/api/request/tar',
          multer().single('tar'),
          function (req, res) {
            // TODO: Check that req.user is in the deliverers of the spec
-           res.status(500)
+           res.status(501)
               .send({ status: 'feature locked until we can easily identify' +
                               ' the deliverers of the spec' });
            // TODO: processRequest(req, res, true);
