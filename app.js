@@ -165,10 +165,6 @@ var processRequest = function (req, res, isTar) {
   }
 };
 
-app.post('/api/request', function (req, res) {
-  processRequest(req, res, false);
-});
-
 passport.use(new BasicStrategy(
   function (username, password, done) {
     var opts = {
@@ -191,7 +187,21 @@ passport.use(new BasicStrategy(
     });
   }
 ));
-app.post('/api/request/tar',
+
+app.post('/api/request', function (req, res, next) {
+  if (req.is('application/x-www-form-urlencoded')) {
+    processRequest(req, res, false);
+  }
+  else if (req.is('multipart/form-data')) {
+    next();
+  }
+  else {
+    res.status(501)
+       .send({ status: 'Form Content-Type not supported' });
+  }
+});
+
+app.post('/api/request',
          passport.authenticate('basic', { session: false }),
          multer().single('tar'),
          function (req, res) {
