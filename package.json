@@ -1,6 +1,6 @@
 {
   "name": "echidna",
-  "version": "1.7.0",
+  "version": "1.7.1",
   "description": "Echidna — W3C's orchestrator for the new publication workflow",
   "author": "W3C",
   "contributors": [
@@ -54,7 +54,7 @@
     "node-uuid": "1.4",
     "promise": "7.1",
     "request": "2.69",
-    "specberus": "1.4.0",
+    "specberus": "1.4.1",
     "tar-stream": "1.3",
     "third-party-resources-checker": "1.0"
   },
