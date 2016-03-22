@@ -22,6 +22,10 @@ var Orchestrator = require('./lib/orchestrator');
 var RequestState = require('./lib/request-state');
 var SpecberusWrapper = require('./lib/specberus-wrapper');
 
+var passport = require('passport');
+var LdapAuth = require('ldapauth-fork');
+var BasicStrategy = require('passport-http').BasicStrategy;
+
 // Configuration file
 require('./config.js');
 
@@ -36,9 +40,6 @@ app.use(compression());
 app.use(bodyParser.urlencoded({ extended: false }));
 app.use(corsHandler);
 app.use(express.static('assets/'));
-
-// For parsing multipart/form-data
-var upload = multer();
 
 // Index Page
 app.get('/', function (request, response) {
@@ -77,41 +78,49 @@ function dumpJobResult(dest, result) {
   });
 }
 
-app.post('/api/request', upload.single('tar'), function (req, res) {
-  var url = req.body ? req.body.url : null;
-  var tar = (!url && req.file) ? req.file : null;
-  var decision = req.body ? req.body.decision : null;
-  var token = req.body ? req.body.token : null;
+var processRequest = function (req, res, isTar) {
   var id = Uuid.v4();
+  var decision = req.body ? req.body.decision : null;
+  var url = (!isTar && req.body) ? req.body.url : null;
+  var token = (!isTar && req.body) ? req.body.token : null;
+  var tar = (isTar) ? req.file : null;
 
-  if (!(url || tar) || !decision || !token) {
+  if (!((url && token) || tar) || !decision) {
     res.status(500).send(
-      'Missing required parameters “url”/"tar", “decision” and/or “token”.'
+      'Missing required parameters "url + token + decision"' +
+      ' or "tar + decision".'
     );
   }
   else {
     var tempLocation = argTempLocation + path.sep + id + path.sep;
     var httpLocation = argHttpLocation + '/' + id + '/Overview.html';
 
-    requests[id] = {
-      id: id,
-      url: url,
-      version: meta.version,
-      'version-specberus': SpecberusWrapper.version,
-      decision: decision,
-      results: new RequestState(
-        '',
-        new Map({
-          'retrieve-resources': new Job(),
-          'specberus': new Job(),
-          'token-checker': new Job(),
-          'third-party-checker': new Job(),
-          'publish': new Job(),
-          'tr-install': new Job(),
-          'update-tr-shortlink': new Job()
-        })
-      )
-    };
+    requests[id] = {};
+    requests[id]['id'] = id;
+    if (isTar) requests[id]['tar'] = tar.originalname;
+    else requests[id]['url'] = url;
+    requests[id]['version'] = meta.version;
+    requests[id]['version-specberus'] = SpecberusWrapper.version;
+    requests[id]['decision'] = decision;
+    var jobList;
+
+    if (isTar) {
+      jobList = ['retrieve-resources', 'specberus', 'third-party-checker',
+                 'publish', 'tr-install', 'update-tr-shortlink'];
+    }
+    else {
+      jobList = ['retrieve-resources', 'specberus', 'token-checker',
+                 'third-party-checker', 'publish', 'tr-install',
+                 'update-tr-shortlink'];
+    }
+
+    requests[id]['results'] = new RequestState(
+                  '',
+                  new Map(jobList.reduce(function (o, v) {
+                    o[v] = new Job();
+                    return o;
+                  }, {}))
+                );
 
     var orchestrator = new Orchestrator(
       url,
@@ -154,7 +163,55 @@ app.post('/api/request', upload.single('tar'), function (req, res) {
 
     res.status(202).send(id);
   }
+};
+
+passport.use(new BasicStrategy(
+  function (username, password, done) {
+    var opts = {
+      url: global.LDAP_URL,
+      bindDn: global.LDAP_BIND_DN.replace(/{{username}}/, username),
+      bindCredentials: password,
+      searchBase: global.LDAP_SEARCH_BASE,
+      searchFilter: '(uid={{username}})',
+      searchAttributes: ['memberOf'],
+      cache: false
+    };
+
+    var ldap = new LdapAuth(opts);
+
+    ldap.authenticate(username, password, function (err, user) {
+      if (err) {
+        console.log('LDAP auth error: %s', err);
+      }
+      done(err, user);
+    });
+  }
+));
+
+app.post('/api/request', function (req, res, next) {
+  if (req.is('application/x-www-form-urlencoded')) {
+    processRequest(req, res, false);
+  }
+  else if (req.is('multipart/form-data')) {
+    next();
+  }
+  else {
+    res.status(501)
+       .send({ status: 'Form Content-Type not supported' });
+  }
 });
+
+app.post('/api/request',
+         passport.authenticate('basic', { session: false }),
+         multer().single('tar'),
+         function (req, res) {
+           // TODO: Check that req.user is in the deliverers of the spec
+           res.status(501)
+              .send({ status: 'feature locked until we can easily identify' +
+                              ' the deliverers of the spec' });
+           // TODO: processRequest(req, res, true);
+         }
+);
 
 /**
 * Add CORS headers to responses if the client is explicitly allowed.
