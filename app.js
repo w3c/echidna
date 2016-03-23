@@ -84,6 +84,7 @@ var processRequest = function (req, res, isTar) {
   var url = (!isTar && req.body) ? req.body.url : null;
   var token = (!isTar && req.body) ? req.body.token : null;
   var tar = (isTar) ? req.file : null;
+  var user = req.user ? req.user : null;
 
   if (!((url && token) || tar) || !decision) {
     res.status(500).send(
@@ -105,7 +106,7 @@ var processRequest = function (req, res, isTar) {
     var jobList;
 
     if (isTar) {
-      jobList = ['retrieve-resources', 'metadata', 'specberus',
+      jobList = ['retrieve-resources', 'metadata', 'user-checker', 'specberus',
                  'third-party-checker', 'publish', 'tr-install',
                  'update-tr-shortlink'];
     }
@@ -127,6 +128,7 @@ var processRequest = function (req, res, isTar) {
       url,
       tar,
       token,
+      user,
       tempLocation,
       httpLocation,
       argResultLocation
@@ -206,10 +208,6 @@ app.post('/api/request',
          passport.authenticate('basic', { session: false }),
          multer().single('tar'),
          function (req, res) {
-           // TODO: Check that req.user is in the deliverers of the spec
-          //  res.status(501)
-          //     .send({ status: 'feature locked until we can easily identify' +
-          //                     ' the deliverers of the spec' });
            processRequest(req, res, true);
          }
 );
