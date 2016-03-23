@@ -110,7 +110,7 @@ var processRequest = function (req, res, isTar) {
                  'update-tr-shortlink'];
     }
     else {
-      jobList = ['retrieve-resources', 'specberus', 'token-checker',
+      jobList = ['retrieve-resources', 'metadata', 'specberus', 'token-checker',
                  'third-party-checker', 'publish', 'tr-install',
                  'update-tr-shortlink'];
     }
