@@ -369,7 +369,7 @@ describe('SpecberusWrapper', function () {
     });
 
     var myDraft = server.getMetadata('navigation-timing-2');
-    var content = SpecberusWrapper.validate(myDraft.location);
+    var content = SpecberusWrapper.validate(myDraft.location, myDraft.status);
 
     it('should return a promise', function () {
       expect(content).to.be.an.instanceOf(Promise);
@@ -453,21 +453,15 @@ describe('SpecberusWrapper', function () {
           .to.deep.equal(myDraft.editorIDs);
       });
     });
-
-    it('should promise the proper metadata.deliverers', function () {
-      return content.then(function (result) {
-        expect(result.metadata.get('deliverers'))
-          .to.deep.equal(myDraft.deliverers);
-      });
-    });
   });
 
   describe('validate(url-with-css-errors)', function () {
     var content = SpecberusWrapper.validate(
-      server.getMetadata('nav-csserror').location
+      server.getMetadata('nav-csserror').location,
+      server.getMetadata('nav-csserror').status
     );
 
-    it('should return an error property that has 2 errors', function () {
+    it('should return an error property that has 3 errors', function () {
       return expect(content).that.eventually.has.property('errors')
         .that.has.size(3);
     });
@@ -475,10 +469,11 @@ describe('SpecberusWrapper', function () {
 
   describe('validate(url-with-css-warnings)', function () {
     var content = SpecberusWrapper.validate(
-      server.getMetadata('nav-csswarning').location
+      server.getMetadata('nav-csswarning').location,
+      server.getMetadata('nav-csserror').status
     );
 
-    it('should return an error property that has no errors', function () {
+    it('should return an error property that has 1 error', function () {
       return expect(content).that.eventually.has.property('errors')
         .that.has.size(1);
     });
