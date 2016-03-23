@@ -105,8 +105,9 @@ var processRequest = function (req, res, isTar) {
     var jobList;
 
     if (isTar) {
-      jobList = ['retrieve-resources', 'specberus', 'third-party-checker',
-                 'publish', 'tr-install', 'update-tr-shortlink'];
+      jobList = ['retrieve-resources', 'metadata', 'specberus',
+                 'third-party-checker', 'publish', 'tr-install',
+                 'update-tr-shortlink'];
     }
     else {
       jobList = ['retrieve-resources', 'specberus', 'token-checker',
@@ -206,10 +207,10 @@ app.post('/api/request',
          multer().single('tar'),
          function (req, res) {
            // TODO: Check that req.user is in the deliverers of the spec
-           res.status(501)
-              .send({ status: 'feature locked until we can easily identify' +
-                              ' the deliverers of the spec' });
-           // TODO: processRequest(req, res, true);
+          //  res.status(501)
+          //     .send({ status: 'feature locked until we can easily identify' +
+          //                     ' the deliverers of the spec' });
+           processRequest(req, res, true);
          }
 );
 
