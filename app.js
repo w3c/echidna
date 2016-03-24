@@ -84,6 +84,7 @@ var processRequest = function (req, res, isTar) {
   var url = (!isTar && req.body) ? req.body.url : null;
   var token = (!isTar && req.body) ? req.body.token : null;
   var tar = (isTar) ? req.file : null;
+  var user = req.user ? req.user : null;
 
   if (!((url && token) || tar) || !decision) {
     res.status(500).send(
@@ -105,11 +106,12 @@ var processRequest = function (req, res, isTar) {
     var jobList;
 
     if (isTar) {
-      jobList = ['retrieve-resources', 'specberus', 'third-party-checker',
-                 'publish', 'tr-install', 'update-tr-shortlink'];
+      jobList = ['retrieve-resources', 'metadata', 'user-checker', 'specberus',
+                 'third-party-checker', 'publish', 'tr-install',
+                 'update-tr-shortlink'];
     }
     else {
-      jobList = ['retrieve-resources', 'specberus', 'token-checker',
+      jobList = ['retrieve-resources', 'metadata', 'specberus', 'token-checker',
                  'third-party-checker', 'publish', 'tr-install',
                  'update-tr-shortlink'];
     }
@@ -126,6 +128,7 @@ var processRequest = function (req, res, isTar) {
       url,
       tar,
       token,
+      user,
       tempLocation,
       httpLocation,
       argResultLocation
@@ -183,7 +186,7 @@ passport.use(new BasicStrategy(
       if (err) {
         console.log('LDAP auth error: %s', err);
       }
-      done(err, user);
+      done(null, user);
     });
   }
 ));
@@ -205,11 +208,7 @@ app.post('/api/request',
          passport.authenticate('basic', { session: false }),
          multer().single('tar'),
          function (req, res) {
-           // TODO: Check that req.user is in the deliverers of the spec
-           res.status(501)
-              .send({ status: 'feature locked until we can easily identify' +
-                              ' the deliverers of the spec' });
-           // TODO: processRequest(req, res, true);
+           processRequest(req, res, true);
          }
 );
 

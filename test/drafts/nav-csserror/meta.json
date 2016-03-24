@@ -9,6 +9,6 @@
 "previousVersion":"http://www.w3.org/TR/2015/WD-navigation-timing-2-20150120/",
 "groupName": "Web Performance Working Group",
 "groupHomepage": "http://www.w3.org/2010/webperf/",
-"groupID": "45211",
+"groupID": 45211,
 "list": "public-web-perf"
 }

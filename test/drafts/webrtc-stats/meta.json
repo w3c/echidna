@@ -9,6 +9,6 @@
 "previousVersion":"http://www.w3.org/TR/2014/WD-webrtc-stats-20141021/",
 "groupName": "Web Real-Time Communications Working Group",
 "groupHomepage": "http://www.w3.org/2011/04/webrtc/",
-"groupID": "47318",
+"groupID": 47318,
 "list": "public-web-perf"
 }
