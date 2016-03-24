@@ -39,6 +39,7 @@ var DocumentDownloader = require('../lib/document-downloader');
 var Publisher = require('../lib/publisher');
 var SpecberusWrapper = require('../lib/specberus-wrapper');
 var TokenChecker = require('../lib/token-checker');
+var UserChecker = require('../lib/user-checker');
 
 function readFileSyncUtf8(file) {
   return Fs.readFileSync(file, { encoding: 'utf8' });
@@ -478,6 +479,47 @@ describe('SpecberusWrapper', function () {
         .that.has.size(1);
     });
   });
+
+  describe('extractMetadata(url)', function () {
+    it('should be a function', function () {
+      expect(SpecberusWrapper.extractMetadata).to.be.a('function');
+    });
+
+    var myDraft = server.getMetadata('navigation-timing-2');
+    var content = SpecberusWrapper.extractMetadata(myDraft.location,
+                                                   myDraft.status);
+
+    it('should return a promise', function () {
+      expect(content).to.be.an.instanceOf(Promise);
+    });
+
+    it('should promise an object', function () {
+      return expect(content).to.eventually.be.an.instanceOf(Object);
+    });
+
+    it('should promise an object with an profile property', function () {
+      return expect(content).to.eventually.have.property('profile');
+    });
+
+    it('should return an object with a delivererIDs property that is an array',
+      function () {
+        return expect(content).that.eventually.has.property('delivererIDs')
+          .that.is.an.instanceOf(Array);
+      });
+
+    it('should promise the proper profile property', function () {
+      return content.then(function (result) {
+        expect(result.profile).to.equal(myDraft.status);
+      });
+    });
+
+    it('should promise the proper delivererIDs', function () {
+      return content.then(function (result) {
+        expect(result.delivererIDs.length).to.equal(1);
+        expect(result.delivererIDs[0]).to.equal(myDraft.groupID);
+      });
+    });
+  });
 });
 
 describe('TokenChecker', function () {
@@ -497,6 +539,57 @@ describe('TokenChecker', function () {
 
     it('should promise a list', function () {
       return expect(check).to.eventually.be.an.instanceOf(List);
+    });
+  });
+});
+
+describe('UserChecker', function () {
+  describe('check(user, delivererIDs)', function () {
+    it('should be a function', function () {
+      expect(UserChecker.check).to.be.a('function');
+    });
+
+    var myDraft = server.getMetadata('navigation-timing-2');
+    var user = {
+      memberOf: [
+        'cn=123,ou=groups,dc=w3,dc=org',
+        'cn=456,ou=groups,dc=w3,dc=org',
+        'cn=' + myDraft.groupID + ',ou=groups,dc=w3,dc=org'
+      ]
+    };
+    var delivererIDs = [myDraft.groupID];
+    var content = UserChecker.check(user, delivererIDs);
+
+    it('should return a promise', function () {
+      expect(content).to.be.an.instanceOf(Promise);
+    });
+
+    it('should promise a list', function () {
+      return expect(content).to.eventually.be.an.instanceOf(List);
+    });
+
+    it('should promise an empty list', function () {
+      return content.then(function (result) {
+        expect(result.isEmpty()).to.be.true;
+      });
+    });
+  });
+
+  describe('check(user, delivererIDs) deny', function () {
+    var myDraft = server.getMetadata('navigation-timing-2');
+    var user = {
+      memberOf: [
+        'cn=123,ou=groups,dc=w3,dc=org',
+        'cn=456,ou=groups,dc=w3,dc=org'
+      ]
+    };
+    var delivererIDs = [myDraft.groupID];
+    var content = UserChecker.check(user, delivererIDs);
+
+    it('should promise an non-empty list', function () {
+      return content.then(function (result) {
+        expect(result.isEmpty()).to.be.false;
+      });
     });
   });
 });
