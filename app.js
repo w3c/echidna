@@ -186,7 +186,7 @@ passport.use(new BasicStrategy(
       if (err) {
         console.log('LDAP auth error: %s', err);
       }
-      done(err, user);
+      done(null, user);
     });
   }
 ));
