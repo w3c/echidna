@@ -57,7 +57,7 @@
     "ldapauth-fork": "2.5",
     "promise": "7.1",
     "request": "2.69",
-    "specberus": "1.5.1",
+    "specberus": "1.5.2",
     "tar-stream": "1.3",
     "third-party-resources-checker": "1.0"
   },
