@@ -10,5 +10,6 @@
 "groupName": "Web Performance Working Group",
 "groupHomepage": "http://www.w3.org/2010/webperf/",
 "groupID": 45211,
-"list": "public-web-perf"
+"list": "public-web-perf",
+"rectrack": true
 }

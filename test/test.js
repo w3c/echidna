@@ -370,7 +370,9 @@ describe('SpecberusWrapper', function () {
     });
 
     var myDraft = server.getMetadata('navigation-timing-2');
-    var content = SpecberusWrapper.validate(myDraft.location, myDraft.status);
+    var content = SpecberusWrapper.validate(myDraft.location,
+                                            myDraft.status,
+                                            myDraft.rectrack);
 
     it('should return a promise', function () {
       expect(content).to.be.an.instanceOf(Promise);
@@ -459,7 +461,8 @@ describe('SpecberusWrapper', function () {
   describe('validate(url-with-css-errors)', function () {
     var content = SpecberusWrapper.validate(
       server.getMetadata('nav-csserror').location,
-      server.getMetadata('nav-csserror').status
+      server.getMetadata('nav-csserror').status,
+      server.getMetadata('nav-csserror').rectrack
     );
 
     it('should return an error property that has 3 errors', function () {
@@ -471,7 +474,8 @@ describe('SpecberusWrapper', function () {
   describe('validate(url-with-css-warnings)', function () {
     var content = SpecberusWrapper.validate(
       server.getMetadata('nav-csswarning').location,
-      server.getMetadata('nav-csserror').status
+      server.getMetadata('nav-csswarning').status,
+      server.getMetadata('nav-csswarning').rectrack
     );
 
     it('should return an error property that has 1 error', function () {
@@ -507,6 +511,10 @@ describe('SpecberusWrapper', function () {
           .that.is.an.instanceOf(Array);
       });
 
+    it('should promise an object with a rectrack property', function () {
+      return expect(content).to.eventually.have.property('rectrack');
+    });
+
     it('should promise the proper profile property', function () {
       return content.then(function (result) {
         expect(result.profile).to.equal(myDraft.status);
@@ -517,6 +525,24 @@ describe('SpecberusWrapper', function () {
       return content.then(function (result) {
         expect(result.delivererIDs.length).to.equal(1);
         expect(result.delivererIDs[0]).to.equal(myDraft.groupID);
+      });
+    });
+
+    it('should promise the proper rectrack property', function () {
+      return content.then(function (result) {
+        expect(result.rectrack).to.equal(myDraft.rectrack);
+      });
+    });
+  });
+
+  describe('extractMetadata(url) for non-rectrack doc', function () {
+    var myDraft = server.getMetadata('charmod-norm');
+    var content = SpecberusWrapper.extractMetadata(myDraft.location,
+                                                   myDraft.status);
+
+    it('should promise the proper rectrack property', function () {
+      return content.then(function (result) {
+        expect(result.rectrack).to.equal(myDraft.rectrack);
       });
     });
   });

@@ -1,0 +1,14 @@
+{
+"process": "7 April 2016",
+"processURI": "http://www.w3.org/2015/Process-20150901/",
+"title":     "Character Model for the World Wide Web: String Matching and Searching",
+"shortname": "charmod-norm",
+"status":    "WD",
+"editorIDs": [33573],
+"previousVersion":"http://www.w3.org/TR/2015/WD-charmod-norm-20151119/",
+"groupName": "Internationalization Working Group",
+"groupHomepage": "http://www.w3.org/International/core/",
+"groupID": 32113,
+"list": "www-international",
+"rectrack": false
+}

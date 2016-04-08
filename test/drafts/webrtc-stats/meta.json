@@ -10,5 +10,6 @@
 "groupName": "Web Real-Time Communications Working Group",
 "groupHomepage": "http://www.w3.org/2011/04/webrtc/",
 "groupID": 47318,
-"list": "public-web-perf"
+"list": "public-web-perf",
+"rectrack": true
 }
