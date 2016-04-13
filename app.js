@@ -151,7 +151,7 @@ var processRequest = function (req, res, isTar) {
 
       if (state.get('status') === Orchestrator.STATUS_ERROR ||
           state.get('status') === Orchestrator.STATUS_FAILURE) {
-        cmd += ' ' + url + ' \'' +
+        cmd += ' ' + (url || tar.originalname) + ' \'' +
                JSON.stringify(requests[id], null, 2).replace(/'/g, '\\\'') +
                '\'';
       }
