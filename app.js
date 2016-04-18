@@ -206,12 +206,13 @@ app.post('/api/request', function (req, res, next) {
   }
 });
 
-app.post('/api/request',
-         passport.authenticate('basic', { session: false }),
-         multer().single('tar'),
-         function (req, res) {
-           processRequest(req, res, true);
-         }
+app.post(
+  '/api/request',
+  passport.authenticate('basic', { session: false }),
+  multer().single('tar'),
+  function (req, res) {
+    processRequest(req, res, true);
+  }
 );
 
 /**
