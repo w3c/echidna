@@ -47,7 +47,7 @@
     "compression": "1.6",
     "express": "4.13",
     "file-type": "3.8",
-    "immutable": "3.8.0",
+    "immutable": "3.8.1",
     "mkdirp": "0.5",
     "moment": "2.13.0",
     "multer": "1.1",
