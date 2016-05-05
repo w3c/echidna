@@ -72,7 +72,7 @@
     "jshint": "2.9",
     "mocha": "2.4",
     "morgan": "1.7",
-    "nsp": "2.3.2"
+    "nsp": "2.4.0"
   },
   "scripts": {
     "check-style": "jscs .",
