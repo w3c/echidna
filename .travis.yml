@@ -1,6 +1,8 @@
 language: node_js
 node_js:
-  - "4.1"
+  - "4"
+  - "5"
+  - "6"
 before_script:
   - cp config.js.example config.js
 script:
