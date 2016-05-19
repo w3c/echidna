@@ -25,6 +25,6 @@ $RESULT"
 fi
 
 if [ "$NODE_ENV" == "production" -a ! -z "$SUBJECT" -a ! -z "$BODY" ]; then
-    mail -aFrom:webreq@w3.org -s "$SUBJECT" $DEST <<< "$BODY"
+    mail -aFrom:webreq@w3.org -a "Content-Type: text/plain; charset=UTF-8" -s "$SUBJECT" $DEST <<< "$BODY"
 fi
 
