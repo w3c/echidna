@@ -408,54 +408,6 @@ describe('SpecberusWrapper', function () {
       return expect(content).to.eventually.have.property('metadata')
           .that.is.an.instanceOf(Map);
     });
-
-    it('should promise the proper metadata.title', function () {
-      return content.then(function (result) {
-        expect(result.metadata.get('title')).to.equal(myDraft.title);
-      });
-    });
-
-    it('should promise the proper metadata.thisVersion', function () {
-      return content.then(function (result) {
-        expect(result.metadata.get('thisVersion'))
-          .to.equal(myDraft.thisVersion);
-      });
-    });
-
-    it('should promise the proper metadata.latestVersion', function () {
-      return content.then(function (result) {
-        expect(result.metadata.get('latestVersion'))
-          .to.equal(myDraft.latestVersion);
-      });
-    });
-
-    it('should promise the proper metadata.docDate', function () {
-      return content.then(function (result) {
-        expect(result.metadata.get('docDate')).to.be.an.instanceOf(Date);
-        expect(result.metadata.get('docDate').toISOString())
-          .to.equal(myDraft.docDate.toISOString());
-      });
-    });
-
-    it('should promise the proper metadata.process', function () {
-      return content.then(function (result) {
-        expect(result.metadata.get('process')).to.equal(myDraft.processURI);
-      });
-    });
-
-    it('should promise the proper metadata.editorsDraft', function () {
-      return content.then(function (result) {
-        expect(result.metadata.get('editorsDraft'))
-          .to.equal(myDraft.editorsDraft);
-      });
-    });
-
-    it('should promise the proper metadata.editorIDs', function () {
-      return content.then(function (result) {
-        expect(result.metadata.get('editorIDs'))
-          .to.deep.equal(myDraft.editorIDs);
-      });
-    });
   });
 
   describe('validate(url-with-css-errors)', function () {
@@ -501,7 +453,7 @@ describe('SpecberusWrapper', function () {
       return expect(content).to.eventually.be.an.instanceOf(Object);
     });
 
-    it('should promise an object with an profile property', function () {
+    it('should promise an object with a profile property', function () {
       return expect(content).to.eventually.have.property('profile');
     });
 
@@ -531,6 +483,53 @@ describe('SpecberusWrapper', function () {
     it('should promise the proper rectrack property', function () {
       return content.then(function (result) {
         expect(result.rectrack).to.equal(myDraft.rectrack);
+      });
+    });
+
+    it('should promise the proper metadata.title', function () {
+      return content.then(function (result) {
+        expect(result.title).to.equal(myDraft.title);
+      });
+    });
+
+    it('should promise the proper metadata.thisVersion', function () {
+      return content.then(function (result) {
+        expect(result.thisVersion).to.equal(myDraft.thisVersion);
+      });
+    });
+
+    it('should promise the proper metadata.latestVersion', function () {
+      return content.then(function (result) {
+        expect(result.latestVersion).to.equal(myDraft.latestVersion);
+      });
+    });
+
+    it('should promise the proper metadata.docDate', function () {
+      return content.then(function (result) {
+        const expected = myDraft.docDate.getFullYear() + '-' +
+            (myDraft.docDate.getMonth() + 1) + '-' +
+            myDraft.docDate.getDate();
+
+        expect(result.docDate).to.be.a('string');
+        expect(result.docDate).to.equal(expected);
+      });
+    });
+
+    it('should promise the proper metadata.process', function () {
+      return content.then(function (result) {
+        expect(result.process).to.equal(myDraft.processURI);
+      });
+    });
+
+    it('should promise the proper metadata.editorsDraft', function () {
+      return content.then(function (result) {
+        expect(result.editorsDraft).to.equal(myDraft.editorsDraft);
+      });
+    });
+
+    it('should promise the proper metadata.editorIDs', function () {
+      return content.then(function (result) {
+        expect(result.editorIDs).to.deep.equal(myDraft.editorIDs);
       });
     });
   });
