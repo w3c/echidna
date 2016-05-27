@@ -48,13 +48,13 @@
     "express": "4.14.0",
     "file-type": "3.8",
     "immutable": "3.8.1",
+    "ldapauth-fork": "2.5",
     "mkdirp": "0.5",
     "moment": "2.14.1",
     "multer": "1.1",
     "node-uuid": "1.4",
     "passport": "0.3",
     "passport-http": "0.3",
-    "ldapauth-fork": "2.5",
     "promise": "7.1",
     "request": "2.73.0",
     "specberus": "2.1.8",
@@ -69,7 +69,7 @@
     "istanbul": "0.4.4",
     "jscs": "3.0.7",
     "jsdoc": "3.4",
-    "jshint": "2.9",
+    "jshint": "2.9.2",
     "mocha": "2.5.3",
     "morgan": "1.7",
     "nsp": "2.6.1"
@@ -82,7 +82,7 @@
     "lint": "jshint .",
     "nsp": "nsp check",
     "start": "node app.js",
-    "test": "npm run check-style && npm run lint && mocha -c -G",
+    "test": "npm run check-style && npm run lint && mocha",
     "testserver": "node test/lib/testserver"
   },
   "engines": {
