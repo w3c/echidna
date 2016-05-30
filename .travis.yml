@@ -6,7 +6,7 @@ node_js:
 before_script:
   - cp config.js.example config.js
 script:
-  - npm test
+  - API_KEY=foo npm test
   - npm run nsp
 after_script:
   - npm run coveralls
