@@ -59,7 +59,7 @@
     "request": "2.73.0",
     "specberus": "2.1.8",
     "tar-stream": "1.5.2",
-    "third-party-resources-checker": "1.0"
+    "third-party-resources-checker": "1.0.4"
   },
   "devDependencies": {
     "chai": "3.5",
