@@ -67,7 +67,7 @@
     "chai-immutable": "1.6.0",
     "coveralls": "2.11",
     "istanbul": "0.4",
-    "jscs": "3.0.5",
+    "jscs": "3.0.6",
     "jsdoc": "3.4",
     "jshint": "2.9",
     "mocha": "2.5.3",
