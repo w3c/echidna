@@ -49,7 +49,7 @@
     "file-type": "3.8",
     "immutable": "3.8.1",
     "mkdirp": "0.5",
-    "moment": "2.13.0",
+    "moment": "2.14.1",
     "multer": "1.1",
     "node-uuid": "1.4",
     "passport": "0.3",
