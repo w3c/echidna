@@ -72,12 +72,12 @@ function augmentMetadata(name) {
   if (data.docData === undefined) data.docDate = today;
 
   if (data.thisVersion === undefined) {
-    data.thisVersion = 'http://www.w3.org/TR/' + substitutions.YYYY + '/' +
+    data.thisVersion = 'https://www.w3.org/TR/' + substitutions.YYYY + '/' +
     data.status + '-' + data.shortname + '-' + substitutions.DATE + '/';
   }
 
   if (data.latestVersion === undefined) {
-    data.latestVersion = 'http://www.w3.org/TR/' + data.shortname + '/';
+    data.latestVersion = 'https://www.w3.org/TR/' + data.shortname + '/';
   }
 
   if (data.deliverers === undefined) {
