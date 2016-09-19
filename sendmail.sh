@@ -3,7 +3,7 @@
 STATUS=$1
 DEST=$2
 URI=$3
-RESULT=$4
+RESULT=${4/&/\\\&}
 
 if [ $# -lt 3 ]; then
     echo "`basename $0` [SUCCESS|ERROR] DESTINATION URI RESULT"
@@ -27,4 +27,3 @@ fi
 if [ "$NODE_ENV" == "production" -a ! -z "$SUBJECT" -a ! -z "$BODY" ]; then
     mail -aFrom:webreq@w3.org -a "Content-Type: text/plain; charset=UTF-8" -s "$SUBJECT" $DEST <<< "$BODY"
 fi
-
