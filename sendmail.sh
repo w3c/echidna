@@ -2,7 +2,7 @@
 
 STATUS=$1
 DEST=$2
-URI=$3
+URI=${3/&/\\\&}
 RESULT=${4/&/\\\&}
 
 if [ $# -lt 3 ]; then
