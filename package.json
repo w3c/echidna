@@ -52,7 +52,7 @@
     "mkdirp": "0.5",
     "moment": "2.17.1",
     "multer": "1.3.0",
-    "node-uuid": "1.4",
+    "node-uuid": "1.4.7",
     "passport": "0.3",
     "passport-http": "0.3",
     "promise": "7.1",
