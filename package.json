@@ -50,7 +50,7 @@
     "immutable": "3.8.1",
     "ldapauth-fork": "2.5",
     "mkdirp": "0.5",
-    "moment": "2.15.2",
+    "moment": "2.16.0",
     "multer": "1.2.0",
     "node-uuid": "1.4",
     "passport": "0.3",
