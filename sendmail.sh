@@ -14,7 +14,9 @@ fi
 
 if [ "SUCCESS" == "$STATUS" ]; then
     SUBJECT="[W3C Publication] Success: $URI"
-    BODY="On `date -u`, $URI has been published by the W3C automated publication system ($RESULT).
+    BODY="On `date -u`, $URI has been published by the W3C automated publication system.
+
+$RESULT
 
 If you believe there's an error, please contact webreq@w3.org."
 elif [ "ERROR" == "$STATUS" -o "FAILURE" == "$STATUS" ]; then
