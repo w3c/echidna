@@ -157,8 +157,10 @@ var processRequest = function (req, res, isTar) {
       }
       else {
         cmd += ' ' + state.get('metadata').get('thisVersion') +
-          ' \'Echidna ' + meta.version +
-          '; Specberus ' + SpecberusWrapper.version + '\'';
+          ' \'Echidna: ' + meta.version +
+          '\nSpecberus: ' + SpecberusWrapper.version +
+          '\nid: ' + SpecberusWrapper.version +
+          '\nDecision: ' + decision + '\'';
       }
 
       console.log('[' + state.get('status').toUpperCase() + '] ' + url);
