@@ -43,7 +43,7 @@
     "url": "https://github.com/w3c/echidna/issues"
   },
   "dependencies": {
-    "body-parser": "1.16.0",
+    "body-parser": "1.16.1",
     "compression": "1.6",
     "express": "4.14.1",
     "file-type": "4.1.0",
@@ -57,7 +57,7 @@
     "passport-http": "0.3",
     "promise": "7.1",
     "request": "2.79.0",
-    "specberus": "3.1.2",
+    "specberus": "3.2.0",
     "tar-stream": "1.5.2",
     "third-party-resources-checker": "1.0.5"
   },
@@ -71,7 +71,7 @@
     "jsdoc": "3.4.3",
     "jshint": "2.9.4",
     "mocha": "3.2.0",
-    "morgan": "1.8.0",
+    "morgan": "1.8.1",
     "nsp": "2.6.2"
   },
   "scripts": {
