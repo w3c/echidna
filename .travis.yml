@@ -16,3 +16,5 @@ notifications:
     channels:
       - "irc.w3.org#pub"
     skip_join: true
+    template:
+      - "%{branch} by %{author} (%{build_url}): %{message}"
