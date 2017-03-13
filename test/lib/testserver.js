@@ -103,7 +103,6 @@ TestServer.start = function () {
   if (server.address() === null) {
     throw new Error('Cannot find a free port for the test server ' + port);
   }
-  // FIXME Do not override a pseudo-constant!
   global.SPEC_GENERATOR = this.location() + '/generate';
 };
 
