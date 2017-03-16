@@ -81,8 +81,8 @@
     "jsdoc": "jsdoc -a all -d doc/api/ -e utf8 -r app.js lib/ test/",
     "lint": "jshint .",
     "nsp": "nsp check",
-    "start": "node app.js",
-    "test": "npm run check-style && npm run lint && mocha",
+    "start": "node --harmony app.js",
+    "test": "npm run check-style && npm run lint && mocha --harmony",
     "testserver": "node test/lib/testserver"
   },
   "engines": {
