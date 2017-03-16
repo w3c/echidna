@@ -81,12 +81,12 @@
     "jsdoc": "jsdoc -a all -d doc/api/ -e utf8 -r app.js lib/ test/",
     "lint": "jshint .",
     "nsp": "nsp check",
-    "start": "node --harmony app.js",
-    "test": "npm run check-style && npm run lint && mocha --harmony",
+    "start": "node app.js",
+    "test": "npm run check-style && npm run lint && mocha",
     "testserver": "node test/lib/testserver"
   },
   "engines": {
-    "node": "4 || 5 || 6",
+    "node": "6 || 8",
     "npm": ">=3"
   }
 }
