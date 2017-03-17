@@ -32,7 +32,6 @@
   "maximumLineLength": 160,
   "requireBlocksOnNewline": 1,
   "requireCamelCaseOrUpperCaseIdentifiers": true,
-  "requireCapitalizedComments": true,
   "requireCapitalizedConstructors": true,
   "requireCommaBeforeLineBreak": true,
   "requireCurlyBraces": ["for", "while", "do", "try", "catch"],
