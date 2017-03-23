@@ -85,6 +85,7 @@ var processRequest = function (req, res, isTar) {
   var token = (!isTar && req.body) ? req.body.token : null;
   var tar = (isTar) ? req.file : null;
   var user = req.user ? req.user : null;
+  var dryRun = Boolean(req.body && req.body['dry-run'] && /^(true|t|yes|y|1|on)$/i.test(req.body['dry-run']));
 
   if (!((url && token) || tar) || !decision) {
     res.status(500).send(
@@ -103,18 +104,15 @@ var processRequest = function (req, res, isTar) {
     requests[id]['version'] = meta.version;
     requests[id]['version-specberus'] = SpecberusWrapper.version;
     requests[id]['decision'] = decision;
-    var jobList;
+    var jobList = ['retrieve-resources', 'metadata', 'specberus', 'third-party-checker', 'publish', 'tr-install', 'update-tr-shortlink'];
 
-    if (isTar) {
-      jobList = ['retrieve-resources', 'metadata', 'user-checker', 'specberus',
-                 'third-party-checker', 'publish', 'tr-install',
-                 'update-tr-shortlink'];
-    }
-    else {
-      jobList = ['retrieve-resources', 'metadata', 'specberus', 'token-checker',
-                 'third-party-checker', 'publish', 'tr-install',
-                 'update-tr-shortlink'];
-    }
+    if (isTar)
+      jobList.splice(2, 0, 'user-checker');
+    else
+      jobList.splice(3, 0, 'token-checker');
+
+    if (dryRun)
+      jobList.splice(jobList.indexOf('publish'));
 
     requests[id]['results'] = new RequestState(
                   '',
