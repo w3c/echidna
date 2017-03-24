@@ -85,6 +85,7 @@ var processRequest = function (req, res, isTar) {
   var token = (!isTar && req.body) ? req.body.token : null;
   var tar = (isTar) ? req.file : null;
   var user = req.user ? req.user : null;
+  var dryRun = Boolean(req.body && req.body['dry-run'] && /^true$/i.test(req.body['dry-run']));
 
   if (!((url && token) || tar) || !decision) {
     res.status(500).send(
@@ -103,18 +104,15 @@ var processRequest = function (req, res, isTar) {
     requests[id]['version'] = meta.version;
     requests[id]['version-specberus'] = SpecberusWrapper.version;
     requests[id]['decision'] = decision;
-    var jobList;
+    var jobList = ['retrieve-resources', 'metadata', 'specberus', 'third-party-checker', 'publish', 'tr-install', 'update-tr-shortlink'];
 
-    if (isTar) {
-      jobList = ['retrieve-resources', 'metadata', 'user-checker', 'specberus',
-                 'third-party-checker', 'publish', 'tr-install',
-                 'update-tr-shortlink'];
-    }
-    else {
-      jobList = ['retrieve-resources', 'metadata', 'specberus', 'token-checker',
-                 'third-party-checker', 'publish', 'tr-install',
-                 'update-tr-shortlink'];
-    }
+    if (isTar)
+      jobList.splice(2, 0, 'user-checker');
+    else
+      jobList.splice(3, 0, 'token-checker');
+
+    if (dryRun)
+      jobList.splice(jobList.indexOf('publish'));
 
     requests[id]['results'] = new RequestState(
                   '',
@@ -146,26 +144,30 @@ var processRequest = function (req, res, isTar) {
       },
       requests[id].results
     ).then(function (state) {
-      var cmd = global.SENDMAIL + ' ' + state.get('status').toUpperCase() +
-        ' ' + global.MAILING_LIST;
-
-      if (state.get('status') === Orchestrator.STATUS_ERROR ||
-          state.get('status') === Orchestrator.STATUS_FAILURE) {
-        cmd += ' ' + (url || tar.originalname) + ' \'' +
-               JSON.stringify(requests[id], null, 2).replace(/'/g, '\\\'') +
-               '\'';
-      }
-      else {
-        cmd += ' ' + state.get('metadata').get('thisVersion') +
-          ' \'Echidna:   ' + meta.version +
-          '\nSpecberus: ' + SpecberusWrapper.version +
-          '\nJob ID:    ' + id +
-          '\nDecision:  ' + decision + '\'';
-      }
-
       console.log('[' + state.get('status').toUpperCase() + '] ' + url);
-      exec(cmd, function (err, _, stderr) { if (err) console.error(stderr); });
       dumpJobResult(argResultLocation + path.sep + id + '.json', requests[id]);
+      if (dryRun)
+        console.log('Dry-run: omitting e-mail notification');
+      else {
+        var cmd = global.SENDMAIL + ' ' + state.get('status').toUpperCase() +
+          ' ' + global.MAILING_LIST;
+
+        if (state.get('status') === Orchestrator.STATUS_ERROR ||
+            state.get('status') === Orchestrator.STATUS_FAILURE) {
+          cmd += ' ' + (url || tar.originalname) + ' \'' +
+                 JSON.stringify(requests[id], null, 2).replace(/'/g, '\\\'') +
+                 '\'';
+        }
+        else {
+          cmd += ' ' + state.get('metadata').get('thisVersion') +
+            ' \'Echidna:   ' + meta.version +
+            '\nSpecberus: ' + SpecberusWrapper.version +
+            '\nJob ID:    ' + id +
+            '\nDecision:  ' + decision + '\'';
+        }
+
+        exec(cmd, function (err, _, stderr) { if (err) console.error(stderr); });
+      }
     }).done();
 
     res.status(202).send(id);
