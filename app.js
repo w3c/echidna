@@ -85,7 +85,7 @@ var processRequest = function (req, res, isTar) {
   var token = (!isTar && req.body) ? req.body.token : null;
   var tar = (isTar) ? req.file : null;
   var user = req.user ? req.user : null;
-  var dryRun = Boolean(req.body && req.body['dry-run'] && /^(true|t|yes|y|1|on)$/i.test(req.body['dry-run']));
+  var dryRun = Boolean(req.body && req.body['dry-run'] && /^true$/i.test(req.body['dry-run']));
 
   if (!((url && token) || tar) || !decision) {
     res.status(500).send(
