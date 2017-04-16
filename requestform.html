@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8"/>
+	<title>W3C Echidna Auto-Publication Form</title>
+  <style type="text/css">
+    body {
+      font-family: Tahoma, sans-serif;
+      font-size: 1em;
+      width: 45em;
+      margin: auto;
+      color: purple;
+    }
+
+    input[type="submit"] {
+      color: white;
+      background: purple;
+    }
+
+  </style>
+</head>
+<body>
+  <h1>W3C Echidna Auto-Publication Form</h1>
+
+  <form action="https://labs.w3.org/echidna/api/request" method="POST">
+    <label for="url">Document URL:</label>
+    <input type="text" name="url">
+    <br>
+
+    <label for="decision">Decision URL:</label>
+    <input type="text" name="decision">
+    <br>
+
+    <label for="token">Publication token:</label>
+    <input type="text" name="token">
+    <br>
+
+    <input type="submit" value="Request Publication">
+  </form>
+
+  <p><b>Note:</b> If you need a publication token, please ask your W3C team contact to <a href="https://www.w3.org/Web/publications/register">request a token for this specification</a>.</p>
+</body>
+</html>
