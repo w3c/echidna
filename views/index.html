@@ -87,6 +87,33 @@
         float:                 left;
       }
 
+      #echidna-stats {
+        padding:               0.5em 1em;
+        background-color:      #f8f8f8;
+      }
+
+      #echidna-stats ul {
+        margin-left:           2em;
+      }
+
+      #echidna-stats span.ok {
+        padding:               0 0.2em;
+        background-color:      #e0ffe0;
+      }
+
+      #echidna-stats span.failed {
+        padding:               0 0.2em;
+        background-color:      #ffe0e0;
+      }
+
+      #echidna-stats span.unknown {
+        color:                 #808080;
+      }
+
+      #echidna-stats .url {
+        font-family:           monospace;
+      }
+
       @media only screen and (min-width: 600px) {
         body {
           margin:                53px 4rem 2rem 212px;
@@ -140,6 +167,13 @@
         <a href="https://labs.w3.org/pubrules/">live site</a></p>
     </article>
 
+    <article>
+      <h2>Stats</h2>
+      <div id="echidna-stats-placeholder">
+        <p><a href="#">Retrieve</a></p>
+      </div>
+    </article>
+
     <footer>
       <p>Copyright &copy; 2014&ndash;2015 <a href="http://www.w3.org/"><abbr title="World Wide Web Consortium">W3C</abbr></a></p>
     </footer>
@@ -159,6 +193,15 @@
           $('h3#header-specberus').html($('h3#header-specberus').text() +
             ' <a href="https://github.com/w3c/specberus/releases/tag/v' +
             data + '">' + data + '</a>');
+        });
+
+        $('#echidna-stats-placeholder a').click(function (event) {
+          event.preventDefault();
+          $('#echidna-stats-placeholder')
+            .html('<p><em>Crunching some numbers; please wait&hellip;</em></p>');
+          $.get('api/stats?format=div', function (data) {
+            $('#echidna-stats-placeholder').replaceWith(data);
+          });
         });
 
         window.setTimeout(
