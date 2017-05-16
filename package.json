@@ -58,7 +58,7 @@
     "promise": "7.1",
     "request": "2.81.0",
     "specberus": "3.2.6",
-    "tar-stream": "1.5.2",
+    "tar-stream": "1.5.4",
     "third-party-resources-checker": "1.0.5"
   },
   "devDependencies": {
@@ -70,7 +70,7 @@
     "jscs": "3.0.7",
     "jsdoc": "3.4.3",
     "jshint": "2.9.4",
-    "mocha": "3.3.0",
+    "mocha": "3.4.1",
     "morgan": "1.8.1",
     "nsp": "2.6.3"
   },
