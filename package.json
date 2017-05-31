@@ -45,7 +45,7 @@
   "dependencies": {
     "body-parser": "1.17.2",
     "compression": "1.6",
-    "express": "4.15.2",
+    "express": "4.15.3",
     "file-type": "5.0.0",
     "immutable": "3.8.1",
     "ldapauth-fork": "4.0.0",
@@ -62,7 +62,7 @@
     "third-party-resources-checker": "1.0.5"
   },
   "devDependencies": {
-    "chai": "3.5",
+    "chai": "4.0.0",
     "chai-as-promised": "6.0.0",
     "chai-immutable": "1.6.0",
     "coveralls": "2.13.1",
