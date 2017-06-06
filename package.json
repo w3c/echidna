@@ -45,7 +45,7 @@
   "dependencies": {
     "body-parser": "1.17.2",
     "compression": "1.6",
-    "express": "4.15.2",
+    "express": "4.15.3",
     "file-type": "5.0.0",
     "immutable": "3.8.1",
     "ldapauth-fork": "4.0.0",
@@ -62,7 +62,7 @@
     "third-party-resources-checker": "1.0.5"
   },
   "devDependencies": {
-    "chai": "3.5",
+    "chai": "3.5.0",
     "chai-as-promised": "6.0.0",
     "chai-immutable": "1.6.0",
     "coveralls": "2.13.1",
@@ -81,12 +81,12 @@
     "jsdoc": "jsdoc -a all -d doc/api/ -e utf8 -r app.js lib/ test/",
     "lint": "jshint .",
     "nsp": "nsp check",
-    "start": "node --harmony app.js",
-    "test": "npm run check-style && npm run lint && mocha --harmony",
+    "start": "node app.js",
+    "test": "npm run check-style && npm run lint && mocha",
     "testserver": "node test/lib/testserver"
   },
   "engines": {
-    "node": "4 || 5 || 6",
+    "node": "6 || 8",
     "npm": ">=3"
   }
 }
