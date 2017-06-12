@@ -63,7 +63,7 @@
   },
   "devDependencies": {
     "chai": "3.5.0",
-    "chai-as-promised": "6.0.0",
+    "chai-as-promised": "7.0.0",
     "chai-immutable": "1.6.0",
     "coveralls": "2.13.1",
     "istanbul": "0.4.5",
