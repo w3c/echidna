@@ -55,7 +55,7 @@
     "node-uuid": "1.4.8",
     "passport": "0.3",
     "passport-http": "0.3",
-    "promise": "7.2.0",
+    "promise": "7.3.0",
     "request": "2.81.0",
     "specberus": "3.2.6",
     "tar-stream": "1.5.4",
