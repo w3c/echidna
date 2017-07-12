@@ -62,7 +62,7 @@
     "third-party-resources-checker": "1.0.5"
   },
   "devDependencies": {
-    "chai": "3.5.0",
+    "chai": "4.1.0",
     "chai-as-promised": "7.1.1",
     "chai-immutable": "1.6.0",
     "coveralls": "2.13.1",
