@@ -6,15 +6,18 @@
   "freeze": true,
   "funcscope": true,
   "globalstrict": true,
+  "globals": {
+    "$": false,
+    "document": false,
+    "window": false
+  },
+  "loopfunc": true,
   "noarg": true,
   "nocomma": true,
+  "node": true,
   "nonbsp": true,
   "nonew": true,
   "sub": true,
   "undef": true,
-  "unused": true,
-
-  "loopfunc": true,
-
-  "node": true
+  "unused": true
 }

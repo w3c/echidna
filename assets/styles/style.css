@@ -1,0 +1,33 @@
+
+/**
+ * Style for the Echidna UI.
+ *
+ * @author Antonio <antonio@w3.org>
+ */
+
+.navbar-brand {
+    padding-top: 5px;
+}
+
+.navbar img {
+    height:      40px;
+}
+
+sup {
+    color:       red;
+    font-weight: bold;
+}
+
+input:not([type="submit"]):not([type="checkbox"]) {
+    font-family: monospace;
+}
+
+.info {
+    font-size:   smaller;
+    float:       right;
+}
+
+#infoText {
+    display:     none;
+}
+

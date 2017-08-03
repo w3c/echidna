@@ -46,6 +46,11 @@ app.get('/', function (request, response) {
   response.sendFile(__dirname + '/views/index.html');
 });
 
+// New UI
+app.get('/ui', function (request, response) {
+  response.sendFile(__dirname + '/views/web-interface.html');
+});
+
 // API methods
 
 app.get('/api/version', function (req, res) {
