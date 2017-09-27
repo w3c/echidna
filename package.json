@@ -71,7 +71,7 @@
     "jsdoc": "3.5.5",
     "jshint": "2.9.5",
     "mocha": "3.5.3",
-    "morgan": "1.8.2",
+    "morgan": "1.9.0",
     "nsp": "2.8.0"
   },
   "scripts": {
