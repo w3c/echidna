@@ -57,7 +57,7 @@
     "passport-http": "0.3",
     "promise": "8.0.1",
     "request": "2.83.0",
-    "specberus": "3.4.1",
+    "specberus": "3.4.2",
     "tar-stream": "1.5.4",
     "third-party-resources-checker": "1.0.5"
   },
