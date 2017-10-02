@@ -47,7 +47,7 @@
     "compression": "1.7.1",
     "express": "5.0.0-alpha.6",
     "file-type": "6.2.0",
-    "immutable": "3.8.1",
+    "immutable": "4.0.0-rc.4",
     "ldapauth-fork": "4.0.2",
     "mkdirp": "0.5",
     "moment": "2.18.1",
