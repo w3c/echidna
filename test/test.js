@@ -20,6 +20,7 @@ var Fs = require('fs');
 var Immutable = require('immutable');
 var List = Immutable.List;
 var Map = Immutable.Map;
+var pendingTests = 5;
 
 require('../config.js');
 
@@ -44,6 +45,11 @@ var UserChecker = require('../lib/user-checker');
 function readFileSyncUtf8(file) {
   return Fs.readFileSync(file, { encoding: 'utf8' });
 }
+
+const trackProgress = () => {
+  if (0 === --pendingTests)
+    server.close();
+};
 
 describe('DocumentDownloader', function () {
   describe('fetch(url)', function () {
@@ -361,6 +367,8 @@ describe('DocumentDownloader', function () {
       expect(DocumentDownloader.isAllowed('../../../etc/passwd')).to.be.false;
     });
   });
+
+  after(trackProgress);
 });
 
 describe('SpecberusWrapper', function () {
@@ -536,6 +544,8 @@ describe('SpecberusWrapper', function () {
       });
     });
   });
+
+  after(trackProgress);
 });
 
 describe('TokenChecker', function () {
@@ -557,6 +567,8 @@ describe('TokenChecker', function () {
       return expect(check).to.eventually.be.an.instanceOf(List);
     });
   });
+
+  after(trackProgress);
 });
 
 describe('UserChecker', function () {
@@ -608,6 +620,8 @@ describe('UserChecker', function () {
       });
     });
   });
+
+  after(trackProgress);
 });
 
 describe('Publisher', function () {
@@ -652,4 +666,6 @@ describe('Publisher', function () {
         .to.eventually.be.rejectedWith(/code 500/);
     });
   });
+
+  after(trackProgress);
 });

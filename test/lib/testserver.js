@@ -122,6 +122,8 @@ TestServer.getMetadata = function (name) {
   return data;
 };
 
+TestServer.close = () => server.close();
+
 TestServer.start();
 
 module.exports = TestServer;
