@@ -416,9 +416,9 @@ describe('SpecberusWrapper', function () {
       server.getMetadata('nav-csserror').rectrack
     );
 
-    it('should return an error property that has 3 errors', function () {
+    it('should return an error property that has 4 errors', function () {
       return expect(content).that.eventually.has.property('errors')
-        .that.has.size(3);
+        .that.has.size(4);
     });
   });
 
@@ -429,9 +429,9 @@ describe('SpecberusWrapper', function () {
       server.getMetadata('nav-csswarning').rectrack
     );
 
-    it('should return an error property that has 1 error', function () {
+    it('should return an error property that has 2 error', function () {
       return expect(content).that.eventually.has.property('errors')
-        .that.has.size(1);
+        .that.has.size(2);
     });
   });
 
