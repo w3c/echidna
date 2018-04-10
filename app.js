@@ -40,6 +40,7 @@ app.use(compression());
 app.use(bodyParser.urlencoded({ extended: false }));
 app.use(corsHandler);
 app.use(express.static('assets/'));
+app.set('json spaces', 2);
 
 // Index Page
 app.get('/', function (request, response) {
