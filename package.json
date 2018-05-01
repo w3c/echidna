@@ -65,7 +65,7 @@
     "chai": "4.1.2",
     "chai-as-promised": "7.1.1",
     "chai-immutable": "1.6.0",
-    "coveralls": "3.0.0",
+    "coveralls": "3.0.1",
     "istanbul": "0.4.5",
     "jscs": "3.0.7",
     "jsdoc": "3.5.5",
