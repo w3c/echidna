@@ -86,7 +86,7 @@
     "testserver": "node test/lib/testserver"
   },
   "engines": {
-    "node": "6 || 8 || 10",
-    "npm": ">=3"
+    "node": "8 || 10",
+    "npm": "5"
   }
 }
