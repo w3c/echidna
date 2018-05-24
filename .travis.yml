@@ -18,3 +18,9 @@ notifications:
     skip_join: true
     template:
       - "%{branch} by %{author} (%{build_url}): %{message}"
+addons:
+  apt:
+    sources:
+      - ubuntu-toolchain-r-test
+    packages:
+      - libstdc++-4.9-dev
