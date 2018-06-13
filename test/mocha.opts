@@ -1,4 +1,4 @@
 --colors
 --growl
 --reporter spec
---timeout 10000
+--timeout 11000
