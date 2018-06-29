@@ -31,7 +31,6 @@
   "disallowTrailingWhitespace": true,
   "maximumLineLength": 160,
   "requireBlocksOnNewline": 1,
-  "requireCamelCaseOrUpperCaseIdentifiers": true,
   "requireCapitalizedComments": true,
   "requireCapitalizedConstructors": true,
   "requireCommaBeforeLineBreak": true,
