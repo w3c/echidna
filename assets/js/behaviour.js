@@ -4,6 +4,8 @@
  * @author Antonio <antonio@w3.org>
  */
 
+/* eslint-env jquery */
+
 'use strict';
 
 $(document).ready(function () {
@@ -22,10 +24,6 @@ $(document).ready(function () {
             $('#queueText').text(JSON.stringify(result, null, 2));
             $('#lastUpdate > span').text(new Date()
               .toLocaleTimeString());
-          }
-          else if (400 === xhr.status || 404 === xhr.status) {
-            // No job found with that ID, or parameter is missing:
-            console.log(data);
           }
           else {
             // Some other kind of error:

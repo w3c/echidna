@@ -66,28 +66,30 @@
     "chai": "4.1.2",
     "chai-as-promised": "7.1.1",
     "chai-immutable": "2.0.0-rc.2",
-    "coveralls": "3.0.1",
+    "coveralls": "3.0.2",
+    "eslint": "5.2.0",
+    "eslint-plugin-node": "7.0.1",
     "istanbul": "0.4.5",
-    "jscs": "3.0.7",
     "jsdoc": "3.5.5",
     "jshint": "2.9.5",
+    "minami": "1.2.3",
     "mocha": "5.2.0",
-    "morgan": "1.9.0",
-    "nsp": "3.2.1"
+    "morgan": "1.9.0"
   },
   "scripts": {
-    "check-style": "jscs .",
+    "audit": "npm audit | grep -oP 'https://nodesecurity.io/advisories/(\\d+)' | diff known-vulns.txt -",
+    "lint": "eslint app.js assets/js/ lib/ test/",
+    "hint": "jshint app.js assets/js/ lib/ test/",
+    "testserver": "node test/lib/testserver",
+    "test": "mocha",
+    "jsdoc": "jsdoc --configure jsdoc.json -r app.js assets/js/ lib/ test/",
     "coverage": "istanbul cover _mocha",
     "coveralls": "npm run coverage && cat ./coverage/lcov.info | coveralls",
-    "jsdoc": "jsdoc -a all -d doc/api/ -e utf8 -r app.js lib/ test/",
-    "lint": "jshint .",
-    "nsp": "nsp check",
-    "start": "node app.js",
-    "test": "npm run check-style && npm run lint && mocha",
-    "testserver": "node test/lib/testserver"
+    "build": "npm run audit && npm run lint && npm run hint && npm run test && npm run jsdoc",
+    "start": "node app"
   },
   "engines": {
     "node": "8 || 10",
-    "npm": "5"
+    "npm": ">=6"
   }
 }

@@ -37,7 +37,7 @@ function htmlTemplate(serverPath, fileSystemPath) {
       else if (metadata[name] !== undefined) {
         replacement += metadata[name];
       }
-      else console.log('htmltemplate.js: %s not a valid substitution', name);
+      else throw new Error('htmltemplate.js: %s not a valid substitution', name);
 
       return str.substring(oldstart, start) + replacement + replace(end + 2);
     }
