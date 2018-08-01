@@ -47,7 +47,7 @@ describe('Orchestrator', function () {
       return Orchestrator.iterate(
         function (i) { return List.of(f(i)); },
         function (i) { return i >= n; },
-        function (i) { },
+        function () { },
         0
       );
     }
