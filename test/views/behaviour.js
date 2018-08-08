@@ -5,6 +5,8 @@
  * @author Antonio <antonio@w3.org>
  */
 
+/* eslint-env jquery */
+
 'use strict';
 
 var JOBS = [
@@ -171,7 +173,6 @@ $(document).ready(function () {
   $.getJSON('data/specs.json', function (data) {
     var tableBody = $('table#specList > tbody');
     var row;
-    var cell;
 
     $.each(data.specs, function (foo, spec) {
       allSpecs.push(spec);

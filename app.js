@@ -2,6 +2,8 @@
  * @module
  */
 
+/* eslint-disable no-console */
+
 'use strict';
 
 console.log('Launching…');
@@ -67,12 +69,13 @@ app.get('/api/status', function (req, res) {
   var file = argResultLocation + path.sep + id + '.json';
 
   if (id) {
-    Fs.exists(file, function (exists) {
-      if (exists) res.status(200).sendFile(file);
-      else if (requests && requests[id]) {
-        res.status(200).json(requests[id]);
-      }
-      else res.status(404).send('No job found with ID “' + id + '”.');
+    Fs.access(file, Fs.constants.F_OK, function (error) {
+      if (!error)
+        res.status(200).sendFile(file);
+      else if (requests && requests[id])
+          res.status(200).json(requests[id]);
+      else
+        res.status(404).send('No job found with ID “' + id + '”.');
     });
   }
   else res.status(400).send('Missing required parameter “ID”.');

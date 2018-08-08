@@ -2,11 +2,12 @@ language: node_js
 node_js:
   - "8"
   - "10"
+before_install:
+  - npm i -g npm@latest
 before_script:
   - cp config.js.example config.js
 script:
-  - API_KEY=${API_KEY:-foo} npm test
-  - npm run nsp
+  - API_KEY=${API_KEY:-foo} npm run build
 after_script:
   - npm run coveralls
 notifications:
