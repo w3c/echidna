@@ -74,7 +74,7 @@
     "jshint": "2.9.6",
     "minami": "1.2.3",
     "mocha": "5.2.0",
-    "morgan": "1.9.0"
+    "morgan": "1.9.1"
   },
   "scripts": {
     "audit": "npm audit | grep -oP 'https://nodesecurity.io/advisories/(\\d+)' | diff known-vulns.txt -",
