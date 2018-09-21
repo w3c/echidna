@@ -92,6 +92,7 @@ var processRequest = function (req, res, isTar) {
   var tar = (isTar) ? req.file : null;
   var user = req.user ? req.user : null;
   var dryRun = Boolean(req.body && req.body['dry-run'] && /^true$/i.test(req.body['dry-run']));
+  var ccEmail = req.body ? req.body.cc : null;
 
   if (!((url && token) || tar) || !decision) {
     res.status(500).send(
@@ -160,8 +161,9 @@ var processRequest = function (req, res, isTar) {
         mailer.sendMessage(
           id,
           state,
-          requests[id], // JSON.stringify(requests[id], null, 2).replace(/'/g, '\\\''),
-          url || tar.originalname
+          requests[id],
+          url || tar.originalname,
+          ccEmail
         );
       }
     }).done();
