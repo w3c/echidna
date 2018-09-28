@@ -152,8 +152,6 @@ var processRequest = function (req, res, isTar) {
       Orchestrator.hasFinished,
       function (state) {
         requests[id].results = state;
-        // console.log(JSON.parse(JSON.stringify(requests[id])));
-        // console.log('----------');
       },
       requests[id].results
     ).then(function (state) {
@@ -162,8 +160,6 @@ var processRequest = function (req, res, isTar) {
       if (dryRun)
         console.log('Dry-run: omitting e-mail notification');
       else {
-        console.log(JSON.parse(JSON.stringify(requests[id], null, 2)));
-        console.log(JSON.parse(JSON.stringify(state, null, 2)));
         mailer.sendMessage(
           id,
           state,
