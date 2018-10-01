@@ -1,0 +1,14 @@
+✔️ Echidna just published “@TITLE”
+  (@SHORTNAME), a @TYPE:
+
+  👍 @URL
+
+More details are available here@ATTACHMENT:
+
+  https://labs.w3.org/echidna/api/status?id=@ID
+
+~ @TIMESTAMP
+
+--
+Echidna @ECHIDNA (Specberus @SPECBERUS)
+Copyright © 2014–2018 W3C — https://www.w3.org/
