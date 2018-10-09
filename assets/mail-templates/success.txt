@@ -1,7 +1,7 @@
 ✔️ Echidna just published “@TITLE”
   (@SHORTNAME), a @TYPE:
 
-  👍 @URL
+  👍 @DESTINATION
 
 More details are available here@ATTACHMENT:
 
@@ -9,6 +9,6 @@ More details are available here@ATTACHMENT:
 
 ~ @TIMESTAMP
 
---
+-- 
 Echidna @ECHIDNA (Specberus @SPECBERUS)
 Copyright © 2014–2018 W3C — https://www.w3.org/
