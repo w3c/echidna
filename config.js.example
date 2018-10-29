@@ -14,8 +14,10 @@ global.PASSWORD = '';
 global.W3C_PUBSYSTEM_URL = 'http://localhost:3001/publish';
 global.TR_INSTALL_CMD = 'mkdir -p /var/www/$dest && cp -R $source /var/www/$dest';
 global.UPDATE_TR_SHORTLINK_CMD = '#';
-global.SENDMAIL = './sendmail.sh';
-global.MAILING_LIST = 'foobar@w3.org';
+global.MAIL_SENDER = 'Echidna <sysbot+echidna@w3.org>';
+global.MAIL_REPLYTO = 'webreq@w3.org';
+global.MAILING_LIST = 'public-tr-notifications@w3.org';
+global.ATTACH_JSON = false;
 global.ALLOWED_CLIENTS = [
   // Same host (for tests):
   /https?:\/\/localhost(:\d{1,4})?/i,

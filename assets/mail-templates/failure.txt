@@ -1,0 +1,17 @@
+✗ Echidna failed to publish @SOURCE
+  for the following reasons:
+
+@ERRORS
+More details are available here@ATTACHMENT:
+
+  https://labs.w3.org/echidna/api/status?id=@ID
+
+If you think you found a bug, please fill in and submit this issue:
+
+  https://github.com/w3c/echidna/issues/new?title=Bug:%20%5BWHAT%5D&body=%5BEXPLANATION%5D%0A%0AFound%20while%20trying%20to%20publish%20@ENCODEDSOURCE%20(see%20the%20%5Bpublication%20job%5D(https%3A%2F%2Flabs.w3.org%2Fechidna%2Fapi%2Fstatus%3Fid%3D@ID)).&labels=from-template
+
+~ @TIMESTAMP
+
+-- 
+Echidna @ECHIDNA (Specberus @SPECBERUS)
+Copyright © 2014–2018 W3C — https://www.w3.org/

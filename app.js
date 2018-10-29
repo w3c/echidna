@@ -8,7 +8,6 @@
 
 console.log('Launching…');
 
-var exec = require('child_process').exec;
 var meta = require('./package.json');
 var express = require('express');
 var compression = require('compression');
@@ -23,6 +22,7 @@ var Job = require('./lib/job');
 var Orchestrator = require('./lib/orchestrator');
 var RequestState = require('./lib/request-state');
 var SpecberusWrapper = require('./lib/specberus-wrapper');
+var mailer = require('./lib/mailer');
 
 var passport = require('passport');
 var LdapAuth = require('ldapauth-fork');
@@ -96,6 +96,7 @@ var processRequest = function (req, res, isTar) {
   var tar = (isTar) ? req.file : null;
   var user = req.user ? req.user : null;
   var dryRun = Boolean(req.body && req.body['dry-run'] && /^true$/i.test(req.body['dry-run']));
+  var ccEmail = req.body ? req.body.cc : null;
 
   if (!((url && token) || tar) || !decision) {
     res.status(500).send(
@@ -151,8 +152,6 @@ var processRequest = function (req, res, isTar) {
       Orchestrator.hasFinished,
       function (state) {
         requests[id].results = state;
-        console.log(JSON.parse(JSON.stringify(requests[id])));
-        console.log('----------');
       },
       requests[id].results
     ).then(function (state) {
@@ -161,24 +160,13 @@ var processRequest = function (req, res, isTar) {
       if (dryRun)
         console.log('Dry-run: omitting e-mail notification');
       else {
-        var cmd = global.SENDMAIL + ' ' + state.get('status').toUpperCase() +
-          ' ' + global.MAILING_LIST;
-
-        if (state.get('status') === Orchestrator.STATUS_ERROR ||
-            state.get('status') === Orchestrator.STATUS_FAILURE) {
-          cmd += ' ' + (url || tar.originalname) + ' \'' +
-                 JSON.stringify(requests[id], null, 2).replace(/'/g, '\\\'') +
-                 '\'';
-        }
-        else {
-          cmd += ' ' + state.get('metadata').get('thisVersion') +
-            ' \'Echidna:   ' + meta.version +
-            '\nSpecberus: ' + SpecberusWrapper.version +
-            '\nJob ID:    ' + id +
-            '\nDecision:  ' + decision + '\'';
-        }
-
-        exec(cmd, function (err, _, stderr) { if (err) console.error(stderr); });
+        mailer.sendMessage(
+          id,
+          state,
+          requests[id],
+          url || tar.originalname,
+          ccEmail
+        );
       }
     }).done();
 
