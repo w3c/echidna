@@ -60,7 +60,7 @@
     "promise": "8.0.2",
     "request": "2.87.0",
     "specberus": "3.9.2",
-    "tar-stream": "1.6.1",
+    "tar-stream": "1.6.2",
     "third-party-resources-checker": "1.0.6"
   },
   "devDependencies": {
