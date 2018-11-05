@@ -1,7 +1,6 @@
 'use strict';
 
 var fs = require('fs');
-var url = require('url');
 var substitutions = require('./utils').substitutions;
 var getMetadata = require('./utils').getMetadata;
 var endsWith = require('./utils').endsWith;
@@ -46,7 +45,7 @@ function htmlTemplate(serverPath, fileSystemPath) {
   }
 
   return function (req, res, next) {
-    var path = url.parse(req.url).path;
+    var path = req.url;
 
     if (path.indexOf(serverPath) !== 0) return next();
     if (endsWith(path, '/')) path += 'index.html';
