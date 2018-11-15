@@ -16,7 +16,7 @@ var multer = require('multer');
 var path = require('path');
 var Fs = require('fs');
 var Map = require('immutable').Map;
-var Uuid = require('node-uuid');
+var Uuid = require('uuid');
 
 var Job = require('./lib/job');
 var Orchestrator = require('./lib/orchestrator');
