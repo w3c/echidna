@@ -46,7 +46,7 @@
     "body-parser": "1.18.3",
     "compression": "1.7.3",
     "express": "4.16.3",
-    "file-type": "10.4.0",
+    "file-type": "10.5.0",
     "immutable": "3.8.2",
     "ldapauth-fork": "4.0.2",
     "mkdirp": "0.5",
