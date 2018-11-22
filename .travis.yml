@@ -7,7 +7,7 @@ before_install:
 before_script:
   - cp config.js.example config.js
 script:
-  - API_KEY=${API_KEY:-foo} npm run build
+  - W3C_API_KEY=${W3C_API_KEY:-foo} npm run build
 after_script:
   - npm run coveralls
 notifications:
