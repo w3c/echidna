@@ -78,7 +78,7 @@
     "morgan": "1.9.1"
   },
   "scripts": {
-    "audit": "npm audit | grep -oP 'https://nodesecurity.io/advisories/(\\d+)' | diff known-vulns.txt -",
+    "audit": "npm audit | grep -oE 'https?\\:\\/\\/(www\\.)?(nodesecurity\\.io|npmjs\\.com)\\/advisories\\/[[:digit:]]+' | rev | cut -d '/' -f 1 | rev | diff known-vulns.txt -",
     "lint": "eslint app.js assets/js/ lib/ test/",
     "hint": "jshint app.js assets/js/ lib/ test/",
     "testserver": "node test/lib/testserver",
