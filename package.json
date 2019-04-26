@@ -43,7 +43,7 @@
     "url": "https://github.com/w3c/echidna/issues"
   },
   "dependencies": {
-    "body-parser": "1.18.3",
+    "body-parser": "1.19.0",
     "compression": "1.7.4",
     "express": "4.16.3",
     "file-type": "10.9.0",
