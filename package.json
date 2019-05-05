@@ -71,7 +71,7 @@
     "eslint": "5.15.3",
     "eslint-plugin-node": "8.0.0",
     "istanbul": "0.4.5",
-    "jsdoc": "3.5.5",
+    "jsdoc": "3.6.0",
     "jshint": "2.10.2",
     "minami": "1.2.3",
     "mocha": "6.0.2",
