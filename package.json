@@ -3,36 +3,9 @@
   "version": "1.14.9",
   "description": "Echidna — W3C's orchestrator for the new publication workflow",
   "author": "W3C",
-  "contributors": [
-    {
-      "name": "Denis Ah-Kang",
-      "email": "denis@w3.org"
-    },
-    {
-      "name": "Jérémie Astori",
-      "email": "jeremie@w3.org"
-    },
-    {
-      "name": "Antonio Olmo Titos",
-      "email": "antonio@w3.org"
-    },
-    {
-      "name": "Dominique Hazaël-Massieux",
-      "email": "dom@w3.org"
-    },
-    {
-      "name": "Robin Berjon",
-      "email": "robin@w3.org"
-    },
-    {
-      "name": "Philippe Le Hegaret",
-      "email": "plh@w3.org"
-    }
-  ],
   "keywords": [
     "w3c",
     "publication",
-    "workflow"
   ],
   "license": "MIT",
   "repository": {
@@ -90,7 +63,7 @@
     "start": "node app"
   },
   "engines": {
-    "node": "8 || 10",
+    "node": "10 || 12",
     "npm": ">=6"
   }
 }
