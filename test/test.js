@@ -420,7 +420,7 @@ describe('SpecberusWrapper', function () {
 
     it('should return an error property that has 4 errors', function () {
       return expect(content).that.eventually.has.property('errors')
-        .that.has.size(4);
+        .that.has.size(6);
     });
   });
 
@@ -434,7 +434,7 @@ describe('SpecberusWrapper', function () {
 
     it('should return an error property that has 2 error', function () {
       return expect(content).that.eventually.has.property('errors')
-        .that.has.size(2);
+        .that.has.size(4);
     });
   });
 
@@ -448,7 +448,7 @@ describe('SpecberusWrapper', function () {
 
     it('should return an error property that has 2 error', function () {
       return expect(content).that.eventually.has.property('errors')
-        .that.has.size(2);
+        .that.has.size(4);
     });
   });
 
@@ -462,7 +462,7 @@ describe('SpecberusWrapper', function () {
 
     it('should return an error property that has 2 error', function () {
       return expect(content).that.eventually.has.property('errors')
-        .that.has.size(1);
+        .that.has.size(3);
     });
   });
 
