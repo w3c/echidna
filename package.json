@@ -31,23 +31,23 @@
     "passport-http": "0.3",
     "promise": "8.0.3",
     "request": "2.88.0",
-    "specberus": "4.1.6",
+    "specberus": "4.2.0",
     "tar-stream": "2.0.1",
     "third-party-resources-checker": "1.0.6",
-    "uuid": "3.3.2"
+    "uuid": "3.3.3"
   },
   "devDependencies": {
     "chai": "4.1.2",
     "chai-as-promised": "7.1.1",
-    "chai-immutable": "2.0.0",
-    "coveralls": "3.0.3",
-    "eslint": "5.15.3",
-    "eslint-plugin-node": "8.0.0",
+    "chai-immutable": "2.1.0",
+    "coveralls": "3.0.9",
+    "eslint": "6.8.0",
+    "eslint-plugin-node": "11.0.0",
     "istanbul": "0.4.5",
-    "jsdoc": "3.5.5",
-    "jshint": "2.10.2",
+    "jsdoc": "3.6.3",
+    "jshint": "2.10.3",
     "minami": "1.2.3",
-    "mocha": "6.0.2",
+    "mocha": "7.0.1",
     "morgan": "1.9.1"
   },
   "scripts": {
@@ -59,7 +59,7 @@
     "jsdoc": "jsdoc --configure jsdoc.json -r app.js assets/js/ lib/ test/",
     "coverage": "istanbul cover _mocha",
     "coveralls": "npm run coverage && cat ./coverage/lcov.info | coveralls",
-    "build": "npm run audit && npm run lint && npm run hint && npm run test && npm run jsdoc",
+    "build": "npm run lint && npm run hint && npm run test && npm run jsdoc",
     "start": "node app"
   },
   "engines": {
