@@ -34,7 +34,8 @@
     "specberus": "4.3.0",
     "tar-stream": "2.0.1",
     "third-party-resources-checker": "1.0.6",
-    "uuid": "3.3.3"
+    "uuid": "3.3.3",
+    "snyk": "^1.334.0"
   },
   "devDependencies": {
     "chai": "4.1.2",
@@ -60,10 +61,13 @@
     "coverage": "istanbul cover _mocha",
     "coveralls": "npm run coverage && cat ./coverage/lcov.info | coveralls",
     "build": "npm run lint && npm run hint && npm run test && npm run jsdoc",
-    "start": "node app"
+    "start": "node app",
+    "snyk-protect": "snyk protect",
+    "prepublish": "npm run snyk-protect"
   },
   "engines": {
     "node": "10 || 12",
     "npm": ">=6"
-  }
+  },
+  "snyk": true
 }
