@@ -46,7 +46,7 @@
     "eslint-plugin-node": "11.1.0",
     "istanbul": "0.4.5",
     "jsdoc": "3.6.3",
-    "jshint": "2.10.3",
+    "jshint": "2.11.1",
     "minami": "1.2.3",
     "mocha": "7.0.1",
     "morgan": "1.10.0"
