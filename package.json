@@ -45,10 +45,10 @@
     "eslint": "6.8.0",
     "eslint-plugin-node": "11.1.0",
     "istanbul": "0.4.5",
-    "jsdoc": "3.6.3",
+    "jsdoc": "3.6.4",
     "jshint": "2.11.1",
     "minami": "1.2.3",
-    "mocha": "7.0.1",
+    "mocha": "7.1.1",
     "morgan": "1.10.0"
   },
   "scripts": {
