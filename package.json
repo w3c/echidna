@@ -34,7 +34,7 @@
     "specberus": "4.3.0",
     "tar-stream": "2.1.2",
     "third-party-resources-checker": "1.0.6",
-    "uuid": "3.3.3",
+    "uuid": "8.1.0",
     "snyk": "^1.334.0"
   },
   "devDependencies": {
