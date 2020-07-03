@@ -420,7 +420,7 @@ describe('SpecberusWrapper', function () {
 
     it('should return an error property that has 4 errors', function () {
       return expect(content).that.eventually.has.property('errors')
-        .that.has.size(6);
+        .that.has.size(4);
     });
   });
 
