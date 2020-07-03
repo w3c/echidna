@@ -165,7 +165,7 @@ TestServer.getMetadata = function (name) {
 TestServer.close = () => {
   server.close();
   ldapServer.close();
-}
+};
 
 TestServer.start();
 
