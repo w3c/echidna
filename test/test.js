@@ -22,7 +22,7 @@ var List = Immutable.List;
 var Map = Immutable.Map;
 var pendingTests = 5;
 
-require('../config.js');
+require('../config-dev.js');
 
 var server = require('./lib/testserver');
 var FakeHttpServices = require('./lib/fake-http-services');

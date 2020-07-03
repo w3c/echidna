@@ -14,7 +14,7 @@ var request = require('request');
 var ldap = require('ldapjs');
 
 var PublishService = require('./fake-http-services').CreatedService;
-var port = (process.env.PORT || 3000) + 1;
+var port = (parseInt(process.env.PORT) || 3000) + 1;
 var ldapPort = 1389;
 require('../../config-dev.js');
 
@@ -89,51 +89,8 @@ app.post('/publish', function (_, res) {
 });
 
 var server;
-
-TestServer.start = function () {
-  var limitPort = port + 30;
-
-  do {
-    server = app.listen(port).on('error', function (err) {
-      // Only when there's an error because the port is already in use,
-      // we simply continue trying.
-      if ('EADDRINUSE' !== err.code) {
-        throw new Error('Error while trying to launch the test server: ' + err);
-      }
-    });
-    port += 1;
-  } while (server.address() === null && port < limitPort);
-
-  if (server.address() === null) {
-    throw new Error('Cannot find a free port for the test server ' + port);
-  }
-
-  console.log("Token checker ready at " + this.location() + " /authorize");
-  console.log("Spec generator ready at " + this.location() + " /generate");
-  console.log("Publication backend ready at " + this.location() + " /publish");
-};
-
-TestServer.location = function () {
-  if (server && server.address()) {
-    return 'http://localhost:' + server.address().port;
-  }
-};
-
-// This will return metadata associate with a draft
-TestServer.getMetadata = function (name) {
-  var data = getMetadata(name);
-
-  if (data.location === undefined) {
-    data.location = this.location() + '/drafts/' + name + '/';
-  }
-  return data;
-};
-
-TestServer.close = () => server.close();
-
-TestServer.start();
-
 var ldapServer = ldap.createServer();
+
 ldapServer.bind('uid=foo,ou=user,dc=example,dc=org', function(req, res, next) {
   if (req.credentials !== global.LDAP_PASSWORD) {
     return next(new ldap.InvalidCredentialsError());
@@ -162,8 +119,54 @@ ldapServer.search(global.LDAP_SEARCH_BASE, function(req, res, next) {
   return next();
 });
 
-ldapServer.listen(ldapPort, 'localhost', function() {
-  console.log("LDAP server listening at " + ldapServer.url);
-});
+TestServer.start = function () {
+  var limitPort = port + 30;
+
+  do {
+    server = app.listen(port).on('error', function (err) {
+      // Only when there's an error because the port is already in use,
+      // we simply continue trying.
+      if ('EADDRINUSE' !== err.code) {
+        throw new Error('Error while trying to launch the test server: ' + err);
+      }
+    });
+    port += 1;
+  } while (server.address() === null && port < limitPort);
+
+  if (server.address() === null) {
+    throw new Error('Cannot find a free port for the test server ' + port);
+  }
+
+  ldapServer.listen(ldapPort, 'localhost', function() {
+    console.log("LDAP server listening at " + ldapServer.url);
+  });
+
+  console.log("Token checker ready at " + this.location() + " /authorize");
+  console.log("Spec generator ready at " + this.location() + " /generate");
+  console.log("Publication backend ready at " + this.location() + " /publish");
+};
+
+TestServer.location = function () {
+  if (server && server.address()) {
+    return 'http://localhost:' + server.address().port;
+  }
+};
+
+// This will return metadata associate with a draft
+TestServer.getMetadata = function (name) {
+  var data = getMetadata(name);
+
+  if (data.location === undefined) {
+    data.location = this.location() + '/drafts/' + name + '/';
+  }
+  return data;
+};
+
+TestServer.close = () => {
+  server.close();
+  ldapServer.close();
+}
+
+TestServer.start();
 
 module.exports = TestServer;
