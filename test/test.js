@@ -22,7 +22,7 @@ var List = Immutable.List;
 var Map = Immutable.Map;
 var pendingTests = 5;
 
-require('../config.js');
+require('../config-dev.js');
 
 var server = require('./lib/testserver');
 var FakeHttpServices = require('./lib/fake-http-services');
@@ -420,7 +420,7 @@ describe('SpecberusWrapper', function () {
 
     it('should return an error property that has 4 errors', function () {
       return expect(content).that.eventually.has.property('errors')
-        .that.has.size(6);
+        .that.has.size(4);
     });
   });
 

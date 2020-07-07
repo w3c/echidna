@@ -29,7 +29,9 @@ var LdapAuth = require('ldapauth-fork');
 var BasicStrategy = require('passport-http').BasicStrategy;
 
 // Configuration file
-require('./config.js');
+let config = process.env.CONFIG || "config.js";
+require("./" + config);
+console.log("Loading config: " + config);
 
 var app = express();
 var requests = {};
