@@ -55,7 +55,7 @@
     "lint": "eslint app.js assets/js/ lib/ test/",
     "hint": "jshint app.js assets/js/ lib/ test/",
     "testserver": "node test/lib/testserver",
-    "test": "mocha",
+    "test": "mocha --timeout 8000",
     "jsdoc": "jsdoc --configure jsdoc.json -r app.js assets/js/ lib/ test/",
     "coverage": "istanbul cover _mocha",
     "coveralls": "npm run coverage && cat ./coverage/lcov.info | coveralls",
