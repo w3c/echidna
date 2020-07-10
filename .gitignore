@@ -31,4 +31,10 @@ package-lock.json
 config.js
 
 # JSDoc output
-doc/api/
+# doc/api/
+
+# mac files
+.DS_Store
+
+# test output
+test/staging/

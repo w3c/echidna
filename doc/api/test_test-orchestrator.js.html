@@ -1,0 +1,235 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <title>JSDoc: Source: test/test-orchestrator.js</title>
+
+    <script src="scripts/prettify/prettify.js"> </script>
+    <script src="scripts/prettify/lang-css.js"> </script>
+    <!--[if lt IE 9]>
+      <script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script>
+    <![endif]-->
+    <link type="text/css" rel="stylesheet" href="styles/prettify-tomorrow.css">
+    <link type="text/css" rel="stylesheet" href="styles/jsdoc-default.css">
+</head>
+
+<body>
+
+<div id="main">
+
+    <h1 class="page-title">Source: test/test-orchestrator.js</h1>
+
+    
+
+
+
+    
+    <section>
+        <article>
+            <pre class="prettyprint source linenums"><code>/**
+ * @module
+ */
+
+'use strict';
+
+var chai = require('chai');
+var chaiAsPromised = require('chai-as-promised');
+var chaiImmutable = require('chai-immutable');
+var expect = chai.expect;
+var List = require('immutable').List;
+var Map = require('immutable').Map;
+var Promise = require('promise');
+
+var Job = require('../lib/job');
+var Orchestrator = require('../lib/orchestrator');
+var RequestState = require('../lib/request-state');
+
+chai.use(chaiAsPromised);
+chai.use(chaiImmutable);
+
+describe('Orchestrator', function () {
+  describe('hasFinished(state)', function () {
+    it('should be true when the passing state is successful', function () {
+      expect(Orchestrator.hasFinished(new RequestState('success'))).to.be.true;
+    });
+
+    it('should be true when the passing state has failed', function () {
+      expect(Orchestrator.hasFinished(new RequestState('error'))).to.be.true;
+    });
+
+    it('should be true when the passing state has crashed', function () {
+      expect(Orchestrator.hasFinished(new RequestState('failure'))).to.be.true;
+    });
+
+    it('should be false when the passing state is pending', function () {
+      expect(Orchestrator.hasFinished(new RequestState('started'))).to.be.false;
+    });
+
+    it('should be false when the passing state is not set', function () {
+      expect(Orchestrator.hasFinished(new RequestState(''))).to.be.false;
+    });
+  });
+
+  describe('iterate(iteration, condition, handler, t)', function () {
+    function incrementUntil(f, n) {
+      return Orchestrator.iterate(
+        function (i) { return List.of(f(i)); },
+        function (i) { return i >= n; },
+        function () { },
+        0
+      );
+    }
+
+    // Iteratively increment a value until it reaches 42
+    var result = incrementUntil(function (i) {
+      return Promise.resolve(i + 1);
+    }, 42);
+
+    it('should return a promise', function () {
+      expect(result).to.be.an.instanceOf(Promise);
+    });
+
+    it('should promise an output of same type than input', function () {
+      return expect(result).to.eventually.be.a('number');
+    });
+
+    it('should properly compute the example value', function () {
+      return expect(result).to.eventually.equal(42);
+    });
+
+    it('should properly iterate over an asynchronous computation', function () {
+      function incrementDelay(n) {
+        return new Promise(function (resolve) {
+          setTimeout(function () { resolve(n + 1); }, 25);
+        });
+      }
+
+      // Iteratively increment a value until it 5 with a delay between each increment
+      var resultDelay = incrementUntil(incrementDelay, 4);
+
+      return expect(resultDelay).to.eventually.equal(4);
+    });
+  });
+
+  describe('runStep(step)', function () {
+    var dummyRequest = new RequestState().set('jobs', new Map({
+      'dummy': new Job()
+    }));
+
+    var resultOk = new Orchestrator().runStep(new Map({
+      name: 'dummy',
+      promise: Promise.resolve(new Map({ status: 'ok' }))
+    }))(dummyRequest);
+
+    var resultFailure = new Orchestrator().runStep(new Map({
+      name: 'dummy',
+      promise: Promise.resolve(new Map({
+        status: 'failure',
+        errors: List.of('an error')
+      }))
+    }))(dummyRequest);
+
+    var resultError = new Orchestrator().runStep(new Map({
+      name: 'dummy',
+      promise: Promise.resolve(new Map({
+        status: 'error',
+        errors: List.of('another error')
+      }))
+    }))(dummyRequest);
+
+    it('should return a function', function () {
+      expect(new Orchestrator().runStep()).to.be.a('function');
+    });
+
+    it('should return a list with 2 elements', function () {
+      expect(resultOk).to.be.an.instanceOf(List).and.to.have.size(2);
+    });
+
+    it('should return Promises', function () {
+      resultOk.forEach(function (promise) {
+        expect(promise).to.be.an.instanceOf(Promise);
+      });
+    });
+
+    it('should promise a bunch of RequestState objects', function () {
+      return Promise.all(resultOk.map(function (promise) {
+        return expect(promise).to.be.eventually.an.instanceOf(RequestState);
+      }).toArray());
+    });
+
+    it('should set the first returned state as pending job', function () {
+      return resultOk.get(0).then(function (state) {
+        return expect(state.jobs.get('dummy').status).to.equal('pending');
+      });
+    });
+
+    it('should set the second returned state as successful job', function () {
+      return resultOk.get(1).then(function (state) {
+        return expect(state.jobs.get('dummy').status).to.equal('ok');
+      });
+    });
+
+    it('should set the second returned state as successful job', function () {
+      return resultOk.get(1).then(function (state) {
+        return expect(state.jobs.get('dummy').status).to.equal('ok');
+      });
+    });
+
+    it('should set the second returned state as failed job', function () {
+      return resultFailure.get(1).then(function (state) {
+        return expect(state.jobs.get('dummy').status).to.equal('failure');
+      });
+    });
+
+    it('should return a state with errors when a job fails', function () {
+      return resultFailure.get(1).then(function (state) {
+        return expect(state.jobs.get('dummy').errors).to.have.size(1);
+      });
+    });
+
+    it('should return a failed state when a job fails', function () {
+      return expect(resultFailure.get(1))
+        .to.eventually.have.property('status', 'failure');
+    });
+
+    it('should set the second returned state as errored job', function () {
+      return resultError.get(1).then(function (state) {
+        return expect(state.jobs.get('dummy').status).to.equal('error');
+      });
+    });
+
+    it('should return a state with errors when a job errors', function () {
+      return resultError.get(1).then(function (state) {
+        return expect(state.jobs.get('dummy').errors).to.have.size(1);
+      });
+    });
+
+    it('should return an errored state when a job errors', function () {
+      return expect(resultError.get(1))
+        .to.eventually.have.property('status', 'error');
+    });
+  });
+});
+</code></pre>
+        </article>
+    </section>
+
+
+
+
+</div>
+
+<nav>
+    <h2><a href="index.html">Welcome to Echidna</a></h2><h3>Modules</h3><ul><li><a href="module-app.html">app</a></li><li><a href="module-lib_document-downloader.html">lib/document-downloader</a></li><li><a href="module-lib_history.html">lib/history</a></li><li><a href="module-lib_job.html">lib/job</a></li><li><a href="module-lib_json-http-service.html">lib/json-http-service</a></li><li><a href="module-lib_orchestrator.html">lib/orchestrator</a></li><li><a href="module-lib_publisher.html">lib/publisher</a></li><li><a href="module-lib_request-state.html">lib/request-state</a></li><li><a href="module-lib_specberus-wrapper.html">lib/specberus-wrapper</a></li><li><a href="module-lib_third-party-resources-checker.html">lib/third-party-resources-checker</a></li><li><a href="module-lib_token-checker.html">lib/token-checker</a></li><li><a href="module-lib_transition-checker.html">lib/transition-checker</a></li><li><a href="module-lib_user-checker.html">lib/user-checker</a></li><li><a href="module-test_lib_BadRequestService.html">test/lib/BadRequestService</a></li><li><a href="module-test_lib_CreatedService.html">test/lib/CreatedService</a></li><li><a href="module-test_lib_htmlTemplate.html">test/lib/htmlTemplate</a></li><li><a href="module-test_lib_NotImplementedService.html">test/lib/NotImplementedService</a></li><li><a href="module-test_lib_ServerErrorService.html">test/lib/ServerErrorService</a></li><li><a href="module-test_lib_TestServer.html">test/lib/TestServer</a></li><li><a href="module-test_lib_utils_draftsSystemPath.html">test/lib/utils/draftsSystemPath</a></li><li><a href="module-test_lib_utils_getMetadata.html">test/lib/utils/getMetadata</a></li><li><a href="module-test_lib_utils_substitutions.html">test/lib/utils/substitutions</a></li><li><a href="module-test_lib_validator.html">test/lib/validator</a></li><li><a href="module-test_test.html">test/test</a></li><li><a href="module-test_test-history.html">test/test-history</a></li><li><a href="module-test_test-job.html">test/test-job</a></li><li><a href="module-test_test-json-http-service.html">test/test-json-http-service</a></li><li><a href="module-test_test-orchestrator.html">test/test-orchestrator</a></li><li><a href="module-test_test-request-state.html">test/test-request-state</a></li></ul><h3>Global</h3><ul><li><a href="global.html#sendMessage">sendMessage</a></li></ul>
+</nav>
+
+<br class="clear">
+
+<footer>
+    Documentation generated by <a href="https://github.com/jsdoc/jsdoc">JSDoc 3.6.4</a> on Fri Jul 10 2020 13:39:11 GMT+0800 (China Standard Time)
+</footer>
+
+<script> prettyPrint(); </script>
+<script src="scripts/linenumber.js"> </script>
+</body>
+</html>
