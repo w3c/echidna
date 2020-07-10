@@ -1,0 +1,121 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <title>JSDoc: Source: lib/publisher.js</title>
+
+    <script src="scripts/prettify/prettify.js"> </script>
+    <script src="scripts/prettify/lang-css.js"> </script>
+    <!--[if lt IE 9]>
+      <script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script>
+    <![endif]-->
+    <link type="text/css" rel="stylesheet" href="styles/prettify-tomorrow.css">
+    <link type="text/css" rel="stylesheet" href="styles/jsdoc-default.css">
+</head>
+
+<body>
+
+<div id="main">
+
+    <h1 class="page-title">Source: lib/publisher.js</h1>
+
+    
+
+
+
+    
+    <section>
+        <article>
+            <pre class="prettyprint source linenums"><code>'use strict';
+
+var List = require('immutable').List;
+var Map = require('immutable').Map;
+var Moment = require('moment');
+var Promise = require('promise');
+
+/**
+ * Pure function that publish a set of metadata to an external service.
+ *
+ * @exports lib/publisher
+ * @param {Object} service - An object implementing a `post` function
+ */
+var Publisher = function (service) {
+  if (typeof service !== 'object' || typeof service.post !== 'function') {
+    throw new TypeError(
+      'service must be defined and implement a post function'
+    );
+  }
+
+  this.service = service;
+
+  Object.freeze(this);
+};
+
+/**
+ * Publish the set of metadata using a POSTable service.
+ *
+ * @param {Map.&lt;string, *>} metadata - The metadata of the document to publish
+ * @returns Promise.&lt;Array.&lt;String>> A list of publication errors for this set of metadata
+ */
+Publisher.prototype.publish = function (metadata) {
+  if (!(metadata instanceof Map)) throw new TypeError('metadata must be a Map');
+  return this.service.post({
+    specversion: {
+      status: metadata.get('profile'),
+      uri: metadata.get('thisVersion'),
+      latestVersionUri: metadata.get('latestVersion'),
+      previousVersionUri: metadata.get('previousVersion'),
+      date: new Moment(metadata.get('docDate'), 'YYYY-MM-DD')
+              .format('YYYY-MM-DD'),
+      title: metadata.get('title'),
+      deliverers: metadata.get('delivererIDs'),
+      editors: metadata.get('editors'),
+      rectrack: metadata.get('rectrack'),
+      informative: metadata.get('informative'),
+      editorDraft: metadata.get('editorDraft'),
+      processRules: metadata.get('processRules'),
+      implementationReport: metadata.get('implementationReport'),
+      implementationFeedbackDue: new Moment(metadata.get('implementationFeedbackDue'), 'YYYY-MM-DD')
+              .format('YYYY-MM-DD'),
+      cfe: metadata.get('cfe')
+    }
+  }).then(function (out) {
+    var response = out.response;
+    var body = out.body;
+
+    switch (response.statusCode) {
+      case 501: return Promise.reject(new Error(body.message));
+      case 400: return Promise.resolve(new List(body.errors));
+      case 201: return Promise.resolve(new List());
+      default:
+        return Promise.reject(new Error(
+          'There was an error when publishing: code ' + response.statusCode
+        ));
+    }
+  });
+};
+
+module.exports = Publisher;
+</code></pre>
+        </article>
+    </section>
+
+
+
+
+</div>
+
+<nav>
+    <h2><a href="index.html">Welcome to Echidna</a></h2><h3>Modules</h3><ul><li><a href="module-app.html">app</a></li><li><a href="module-lib_document-downloader.html">lib/document-downloader</a></li><li><a href="module-lib_history.html">lib/history</a></li><li><a href="module-lib_job.html">lib/job</a></li><li><a href="module-lib_json-http-service.html">lib/json-http-service</a></li><li><a href="module-lib_orchestrator.html">lib/orchestrator</a></li><li><a href="module-lib_publisher.html">lib/publisher</a></li><li><a href="module-lib_request-state.html">lib/request-state</a></li><li><a href="module-lib_specberus-wrapper.html">lib/specberus-wrapper</a></li><li><a href="module-lib_third-party-resources-checker.html">lib/third-party-resources-checker</a></li><li><a href="module-lib_token-checker.html">lib/token-checker</a></li><li><a href="module-lib_transition-checker.html">lib/transition-checker</a></li><li><a href="module-lib_user-checker.html">lib/user-checker</a></li><li><a href="module-test_lib_BadRequestService.html">test/lib/BadRequestService</a></li><li><a href="module-test_lib_CreatedService.html">test/lib/CreatedService</a></li><li><a href="module-test_lib_htmlTemplate.html">test/lib/htmlTemplate</a></li><li><a href="module-test_lib_NotImplementedService.html">test/lib/NotImplementedService</a></li><li><a href="module-test_lib_ServerErrorService.html">test/lib/ServerErrorService</a></li><li><a href="module-test_lib_TestServer.html">test/lib/TestServer</a></li><li><a href="module-test_lib_utils_draftsSystemPath.html">test/lib/utils/draftsSystemPath</a></li><li><a href="module-test_lib_utils_getMetadata.html">test/lib/utils/getMetadata</a></li><li><a href="module-test_lib_utils_substitutions.html">test/lib/utils/substitutions</a></li><li><a href="module-test_lib_validator.html">test/lib/validator</a></li><li><a href="module-test_test.html">test/test</a></li><li><a href="module-test_test-history.html">test/test-history</a></li><li><a href="module-test_test-job.html">test/test-job</a></li><li><a href="module-test_test-json-http-service.html">test/test-json-http-service</a></li><li><a href="module-test_test-orchestrator.html">test/test-orchestrator</a></li><li><a href="module-test_test-request-state.html">test/test-request-state</a></li></ul><h3>Global</h3><ul><li><a href="global.html#sendMessage">sendMessage</a></li></ul>
+</nav>
+
+<br class="clear">
+
+<footer>
+    Documentation generated by <a href="https://github.com/jsdoc/jsdoc">JSDoc 3.6.4</a> on Fri Jul 10 2020 13:39:11 GMT+0800 (China Standard Time)
+</footer>
+
+<script> prettyPrint(); </script>
+<script src="scripts/linenumber.js"> </script>
+</body>
+</html>

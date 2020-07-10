@@ -1,0 +1,216 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <title>JSDoc: Welcome to Echidna</title>
+
+    <script src="scripts/prettify/prettify.js"> </script>
+    <script src="scripts/prettify/lang-css.js"> </script>
+    <!--[if lt IE 9]>
+      <script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script>
+    <![endif]-->
+    <link type="text/css" rel="stylesheet" href="styles/prettify-tomorrow.css">
+    <link type="text/css" rel="stylesheet" href="styles/jsdoc-default.css">
+</head>
+
+<body>
+
+<div id="main">
+
+    <h1 class="page-title">Welcome to Echidna</h1>
+
+    
+
+
+
+    
+
+
+    <h3> </h3>
+
+
+
+
+
+
+
+
+
+
+    
+
+
+
+
+    <section>
+        <article><p><a href="https://travis-ci.org/w3c/echidna"><img src="https://travis-ci.org/w3c/echidna.svg?branch=master" alt="Build Status"></a><br>
+<a href="https://coveralls.io/r/w3c/echidna"><img src="https://coveralls.io/repos/w3c/echidna/badge.svg" alt="Coverage Status"></a><br>
+<a href="https://david-dm.org/w3c/echidna"><img src="https://david-dm.org/w3c/echidna.svg" alt="Dependency Status"></a><br>
+<a href="https://david-dm.org/w3c/echidna#info=devDependencies"><img src="https://david-dm.org/w3c/echidna/dev-status.svg" alt="devDependency Status"></a><br>
+<a href="http://inch-ci.org/github/w3c/echidna"><img src="http://inch-ci.org/github/w3c/echidna.svg?branch=master" alt="Inline docs"></a></p>
+<h1>Echidna</h1>
+<p><a href="https://greenkeeper.io/"><img src="https://badges.greenkeeper.io/w3c/echidna.svg" alt="Greenkeeper badge"></a></p>
+<p>Echidna is the central piece of software taking care of the new publication workflow at <a href="http://www.w3.org/">W3C</a>. The plan is for Echidna and related sub-projects (see below) to automate the publication of new specs under <a href="http:%5C/%5C/www.w3.org/TR/">http://www.w3.org/TR/</a>.</p>
+<h2>Using Echidna as an editor</h2>
+<p><strong>If you are a spec editor, you do not need to install Echidna, nor to run it locally.</strong></p>
+<p>Please <a href="https://github.com/w3c/echidna/wiki">see the wiki</a> for how to use Echidna as a spec editor.</p>
+<h2>Hacking Echidna as a developer</h2>
+<h3>Installation</h3>
+<p>To run Echidna, you need to install <a href="https://nodejs.org/en/">Node.js</a> first.<br>
+This will install <a href="https://www.npmjs.com/">npm</a> at the same time, which is required as well.</p>
+<p>Then run the following commands with your favorite terminal:</p>
+<pre class="prettyprint source lang-bash"><code>git clone https://github.com/w3c/echidna.git
+cd echidna
+cp config.js.example config.js
+npm install
+</code></pre>
+<h3>Running it locally</h3>
+<p><em>Note: local setup of the full system is not supported currently due to dependency on W3C's DB and IPP system, but having mock services that emulate these pieces is our short-term goal.</em></p>
+<p>In your terminal, run the following:</p>
+<pre class="prettyprint source lang-bash"><code>npm start [-- STAGING_PATH [HTTP_LOCATION [PORT [RESULT_PATH]]]]
+</code></pre>
+<p>You may use the optional defined below:</p>
+<ol>
+<li><code>STAGING_PATH</code>: path in the local filesystem where documents will be downloaded; <em>staged</em>.<br>
+(Default <code>/var/www/html/trstaging/</code>.)</li>
+<li><code>HTTP_LOCATION</code>: HTTP endpoint for <a href="https://github.com/w3c/specberus">Specberus</a> and the <a href="https://github.com/dontcallmedom/third-party-resources-checker">Third Party Resources Checker</a>.<br>
+(Default <code>http://localhost/trstaging/</code>.)</li>
+<li><code>PORT</code>: where Echidna will be listening for publication requests.<br>
+(Default <code>3000</code>.)</li>
+<li><code>RESULT_PATH</code>: local path where Echidna will dump the results of publication requests in JSON format.</li>
+</ol>
+<p>Alternatively, you can use the configuration file <code>config.js</code>.</p>
+<p>Once the server is started, you can throw publication requests at it through a <code>curl</code>/<code>POST</code> request to its enpoint, <a href="http:%5C/%5C/localhost:3000/api">http://localhost:3000/api</a>, or using the web-based testbed (described below).</p>
+<p>You can also use a simple web client to send and monitor those requests, at <a href="http:%5C/%5C/localhost:3000/ui">http://localhost:3000/ui</a>.</p>
+<h3>Testing Echidna</h3>
+<p>This section describes how to run Echidna's test suite to make sure that the project itself is working properly over time. Note that the test suite is not intended to test actual documents.</p>
+<h4>Running the unit test suite</h4>
+<p>You can run the test suite with the following command line:</p>
+<pre class="prettyprint source lang-bash"><code>npm test
+</code></pre>
+<h4>Using test documents</h4>
+<p>For testing purposes, we are using a local web server.<br>
+The test server simulates some of the W3C services, such as the CSS and HTML validators, or the token authorization checker.<br>
+It also serves a set of sample drafts.</p>
+<p>You can launch this test server separately by using:</p>
+<pre class="prettyprint source lang-bash"><code>npm run testserver
+</code></pre>
+<p>When the test server is running, the testbed with all drafts will be available in <a href="http:%5C/%5C/localhost:3001">http://localhost:3001</a>.</p>
+<h2>Feedback and contributions</h2>
+<p>Please refer to our <a href="https://github.com/w3c/echidna/blob/master/CONTRIBUTING.md">contribution reference</a> to learn how to contact us, give feedback, or actively contribute to this project.</p></article>
+    </section>
+
+
+
+
+
+
+
+
+
+<section>
+
+<header>
+    
+        <h2>lib/transition-checker.js</h2>
+        
+    
+</header>
+
+<article>
+    <div class="container-overview">
+    
+        
+            <div class="description"><p>Check if a CR can be transfered to REC. try <strong>markdown</strong></p></div>
+        
+
+        
+
+
+<dl class="details">
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+    <dt class="tag-source">Source:</dt>
+    <dd class="tag-source"><ul class="dummy"><li>
+        <a href="lib_transition-checker.js.html">lib/transition-checker.js</a>, <a href="lib_transition-checker.js.html#line1">line 1</a>
+    </li></ul></dd>
+    
+
+    
+
+    
+
+    
+</dl>
+
+
+        
+    
+    </div>
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+</article>
+
+</section>
+
+
+
+
+</div>
+
+<nav>
+    <h2><a href="index.html">Welcome to Echidna</a></h2><h3>Modules</h3><ul><li><a href="module-app.html">app</a></li><li><a href="module-lib_document-downloader.html">lib/document-downloader</a></li><li><a href="module-lib_history.html">lib/history</a></li><li><a href="module-lib_job.html">lib/job</a></li><li><a href="module-lib_json-http-service.html">lib/json-http-service</a></li><li><a href="module-lib_orchestrator.html">lib/orchestrator</a></li><li><a href="module-lib_publisher.html">lib/publisher</a></li><li><a href="module-lib_request-state.html">lib/request-state</a></li><li><a href="module-lib_specberus-wrapper.html">lib/specberus-wrapper</a></li><li><a href="module-lib_third-party-resources-checker.html">lib/third-party-resources-checker</a></li><li><a href="module-lib_token-checker.html">lib/token-checker</a></li><li><a href="module-lib_transition-checker.html">lib/transition-checker</a></li><li><a href="module-lib_user-checker.html">lib/user-checker</a></li><li><a href="module-test_lib_BadRequestService.html">test/lib/BadRequestService</a></li><li><a href="module-test_lib_CreatedService.html">test/lib/CreatedService</a></li><li><a href="module-test_lib_htmlTemplate.html">test/lib/htmlTemplate</a></li><li><a href="module-test_lib_NotImplementedService.html">test/lib/NotImplementedService</a></li><li><a href="module-test_lib_ServerErrorService.html">test/lib/ServerErrorService</a></li><li><a href="module-test_lib_TestServer.html">test/lib/TestServer</a></li><li><a href="module-test_lib_utils_draftsSystemPath.html">test/lib/utils/draftsSystemPath</a></li><li><a href="module-test_lib_utils_getMetadata.html">test/lib/utils/getMetadata</a></li><li><a href="module-test_lib_utils_substitutions.html">test/lib/utils/substitutions</a></li><li><a href="module-test_lib_validator.html">test/lib/validator</a></li><li><a href="module-test_test.html">test/test</a></li><li><a href="module-test_test-history.html">test/test-history</a></li><li><a href="module-test_test-job.html">test/test-job</a></li><li><a href="module-test_test-json-http-service.html">test/test-json-http-service</a></li><li><a href="module-test_test-orchestrator.html">test/test-orchestrator</a></li><li><a href="module-test_test-request-state.html">test/test-request-state</a></li></ul><h3>Global</h3><ul><li><a href="global.html#sendMessage">sendMessage</a></li></ul>
+</nav>
+
+<br class="clear">
+
+<footer>
+    Documentation generated by <a href="https://github.com/jsdoc/jsdoc">JSDoc 3.6.4</a> on Fri Jul 10 2020 13:39:11 GMT+0800 (China Standard Time)
+</footer>
+
+<script> prettyPrint(); </script>
+<script src="scripts/linenumber.js"> </script>
+</body>
+</html>
