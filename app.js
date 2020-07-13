@@ -136,11 +136,12 @@ var processRequest = function (req, res, isTar) {
     if (dryRun)
       jobList.splice(jobList.indexOf('publish'));
 
+    // create empty result placeholder in /api/status?id=xxx
     requests[id]['results'] = new RequestState(
                   '',
-                  new Map(jobList.reduce(function (o, v) {
-                    o[v] = new Job();
-                    return o;
+                  new Map(jobList.reduce(function (object, value) {
+                    object[value] = new Job();
+                    return object;
                   }, {}))
                 );
 
