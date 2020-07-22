@@ -27,7 +27,7 @@
     <section>
         <article>
             <pre class="prettyprint source linenums"><code>/**
- * @file Check if a CR can be transfered to REC. try **markdown**
+ * @file Check if a CR can be transfered to REC, relayed on issue and comments in [w3c/transitions](https://github.com/w3c/transitions)
  */
 'use strict';
 
@@ -46,9 +46,15 @@ var TransitionChecker = {};
 
 /**
  * @description Check if the document can be transfered. Accounding: 
+&lt;&lt;&lt;&lt;&lt;&lt;&lt; HEAD
+ * - Getting Issues in [w3c/transitions](https://github.com/w3c/transitions) and check the comments.
+ * - directorApproval: [request-a-transition-request](https://github.com/w3c/echidna/wiki/CR-publication-workflow#request-a-transition-request)
+ * - commApproval: [draft-announcement-to-the-members](https://github.com/w3c/echidna/wiki/CR-publication-workflow#draft-announcement-to-the-members)
+=======
  * - Getting Issues in https://github.com/w3c/transitions and check the comments.
  * - directorApproval: https://github.com/w3c/echidna/wiki/CR-publication-workflow#request-a-transition-request
  * - commApproval: https://github.com/w3c/echidna/wiki/CR-publication-workflow#draft-announcement-to-the-members
+>>>>>>> 6208a57e23719f162458dda77c66c5442875d5f8
  * @param {*} profile 
  * @param {*} latestVersion 
  * @param {*} previousVersion 
@@ -152,13 +158,14 @@ module.exports = TransitionChecker;
 </div>
 
 <nav>
-    <h2><a href="index.html">Welcome to Echidna</a></h2><h3>Modules</h3><ul><li><a href="lib_job.module_js.html">lib/job.js</a></li><li><a href="module-lib_document-downloader.html">lib/document-downloader</a></li><li><a href="module-lib_history.html">lib/history</a></li><li><a href="module-lib_json-http-service.html">lib/json-http-service</a></li><li><a href="module-lib_orchestrator.html">lib/orchestrator</a></li><li><a href="module-lib_publisher.html">lib/publisher</a></li><li><a href="module-lib_request-state.html">lib/request-state</a></li><li><a href="module-lib_specberus-wrapper.html">lib/specberus-wrapper</a></li><li><a href="module-lib_third-party-resources-checker.html">lib/third-party-resources-checker</a></li><li><a href="module-lib_token-checker.html">lib/token-checker</a></li><li><a href="module-lib_transition-checker.html">lib/transition-checker</a></li><li><a href="module-lib_user-checker.html">lib/user-checker</a></li><li><a href="module-test_lib_BadRequestService.html">test/lib/BadRequestService</a></li><li><a href="module-test_lib_CreatedService.html">test/lib/CreatedService</a></li><li><a href="module-test_lib_htmlTemplate.html">test/lib/htmlTemplate</a></li><li><a href="module-test_lib_NotImplementedService.html">test/lib/NotImplementedService</a></li><li><a href="module-test_lib_ServerErrorService.html">test/lib/ServerErrorService</a></li><li><a href="module-test_lib_TestServer.html">test/lib/TestServer</a></li><li><a href="module-test_lib_utils_draftsSystemPath.html">test/lib/utils/draftsSystemPath</a></li><li><a href="module-test_lib_utils_getMetadata.html">test/lib/utils/getMetadata</a></li><li><a href="module-test_lib_utils_substitutions.html">test/lib/utils/substitutions</a></li><li><a href="module-test_lib_validator.html">test/lib/validator</a></li><li><a href="module-test_test.html">test/test</a></li><li><a href="module-test_test-history.html">test/test-history</a></li><li><a href="module-test_test-job.html">test/test-job</a></li><li><a href="module-test_test-json-http-service.html">test/test-json-http-service</a></li><li><a href="module-test_test-orchestrator.html">test/test-orchestrator</a></li><li><a href="module-test_test-request-state.html">test/test-request-state</a></li></ul><h3>Global</h3><ul><li><a href="global.html#corsHandler">corsHandler</a></li><li><a href="global.html#processRequest">processRequest</a></li><li><a href="global.html#sendMessage">sendMessage</a></li></ul>
+    <h2><a href="index.html">Welcome to Echidna</a></h2><h3>Modules</h3><ul><li><a href="lib_job.module_js.html">lib/job.js</a></li><li><a href="module-lib_document-downloader.html">lib/document-downloader</a></li><li><a href="module-lib_history.html">lib/history</a></li><li><a href="module-lib_json-http-service.html">lib/json-http-service</a></li><li><a href="module-lib_orchestrator.html">lib/orchestrator</a></li><li><a href="module-lib_publisher.html">lib/publisher</a></li><li><a href="module-lib_request-state.html">lib/request-state</a></li><li><a href="module-lib_specberus-wrapper.html">lib/specberus-wrapper</a></li><li><a href="module-lib_third-party-resources-checker.html">lib/third-party-resources-checker</a></li><li><a href="module-lib_token-checker.html">lib/token-checker</a></li><li><a href="module-lib_transition-checker.html">lib/transition-checker</a></li><li><a href="module-lib_user-checker.html">lib/user-checker</a></li><li><a href="module-test_lib_BadRequestService.html">test/lib/BadRequestService</a></li><li><a href="module-test_lib_CreatedService.html">test/lib/CreatedService</a></li><li><a href="module-test_lib_htmlTemplate.html">test/lib/htmlTemplate</a></li><li><a href="module-test_lib_NotImplementedService.html">test/lib/NotImplementedService</a></li><li><a href="module-test_lib_ServerErrorService.html">test/lib/ServerErrorService</a></li><li><a href="module-test_lib_TestServer.html">test/lib/TestServer</a></li><li><a href="module-test_lib_utils_draftsSystemPath.html">test/lib/utils/draftsSystemPath</a></li><li><a href="module-test_lib_utils_getMetadata.html">test/lib/utils/getMetadata</a></li><li><a href="module-test_lib_utils_substitutions.html">test/lib/utils/substitutions</a></li><li><a href="module-test_lib_validator.html">test/lib/validator</a></li><li><a href="module-test_test.html">test/test</a></li><li><a href="module-test_test-history.html">test/test-history</a></li><li><a href="module-test_test-job.html">test/test-job</a></li><li><a href="module-test_test-json-http-service.html">test/test-json-http-service</a></li><li><a href="module-test_test-orchestrator.html">test/test-orchestrator</a></li><li><a href="module-test_test-request-state.html">test/test-request-state</a></li></ul><h3>Global</h3><ul><li><a href="global.html#corsHandler">corsHandler</a></li><li><a href="global.html#processRequest%253C%253C%253C%253C%253C%253C%253CHEAD">processRequest
+<<<<<<< HEAD</a></li><li><a href="global.html#sendMessage">sendMessage</a></li></ul>
 </nav>
 
 <br class="clear">
 
 <footer>
-    Documentation generated by <a href="https://github.com/jsdoc/jsdoc">JSDoc 3.6.4</a> on Tue Jul 14 2020 12:32:36 GMT+0800 (China Standard Time)
+    Documentation generated by <a href="https://github.com/jsdoc/jsdoc">JSDoc 3.6.4</a> on Wed Jul 22 2020 15:27:31 GMT+0800 (China Standard Time)
 </footer>
 
 <script> prettyPrint(); </script>

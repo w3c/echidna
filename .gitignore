@@ -30,9 +30,6 @@ package-lock.json
 # Configuration
 config.js
 
-# JSDoc output
-doc/api/
-
 # staging area for dev
 test/staging/
 
