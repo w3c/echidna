@@ -39,9 +39,12 @@ var htmlTemplate = require('./htmltemplate');
 var getMetadata = require('./utils').getMetadata;
 var draftsSystemPath = require('./utils').draftsSystemPath;
 var request = require('request');
+var ldap = require('ldapjs');
 
 var PublishService = require('./fake-http-services').CreatedService;
-var port = (process.env.PORT || 3000) + 1;
+var port = (parseInt(process.env.PORT) || 3000) + 1;
+var ldapPort = 1389;
+require('../../config-dev.js');
 
 /**
  * @exports test/lib/TestServer
@@ -62,6 +65,7 @@ app.use(htmlTemplate('/drafts', draftsSystemPath));
 app.use('/drafts', express.static(draftsSystemPath));
 app.use(express.static('assets/'));
 app.use(express.static('test/views/'));
+app.use(express.static('test/staging/'));
 
 app.get('/data/specs.json', function (req, res) {
   var specs = [];
@@ -113,6 +117,35 @@ app.post('/publish', function (_, res) {
 });
 
 var server;
+var ldapServer = ldap.createServer();
+
+ldapServer.bind('uid=foo,ou=user,dc=example,dc=org', function(req, res, next) {
+  if (req.credentials !== global.LDAP_PASSWORD) {
+    return next(new ldap.InvalidCredentialsError());
+  }
+  console.log('bind DN: ' + req.dn.toString());
+  console.log('bind PW: ' + req.credentials);
+  res.end();
+  return next();
+});
+
+ldapServer.search(global.LDAP_SEARCH_BASE, function(req, res, next) {
+  var obj = {
+    dn: "uid="+global.LDAP_USER+","+req.dn.toString(),
+    attributes: {
+      uid: global.LDAP_USER,
+      objectclass: ['top', 'person'],
+      o: 'example',
+      memberOf: global.LDAP_GROUPS
+    }
+  };
+
+  if (req.filter.matches(obj.attributes))
+  res.send(obj);
+
+  res.end();
+  return next();
+});
 
 TestServer.start = function () {
   var limitPort = port + 30;
@@ -131,7 +164,14 @@ TestServer.start = function () {
   if (server.address() === null) {
     throw new Error('Cannot find a free port for the test server ' + port);
   }
-  global.SPEC_GENERATOR = this.location() + '/generate';
+
+  ldapServer.listen(ldapPort, 'localhost', function() {
+    console.log("LDAP server listening at " + ldapServer.url);
+  });
+
+  console.log("Token checker ready at " + this.location() + " /authorize");
+  console.log("Spec generator ready at " + this.location() + " /generate");
+  console.log("Publication backend ready at " + this.location() + " /publish");
 };
 
 TestServer.location = function () {
@@ -150,7 +190,10 @@ TestServer.getMetadata = function (name) {
   return data;
 };
 
-TestServer.close = () => server.close();
+TestServer.close = () => {
+  server.close();
+  ldapServer.close();
+};
 
 TestServer.start();
 
@@ -165,13 +208,13 @@ module.exports = TestServer;
 </div>
 
 <nav>
-    <h2><a href="index.html">Welcome to Echidna</a></h2><h3>Modules</h3><ul><li><a href="module-app.html">app</a></li><li><a href="module-lib_document-downloader.html">lib/document-downloader</a></li><li><a href="module-lib_history.html">lib/history</a></li><li><a href="module-lib_job.html">lib/job</a></li><li><a href="module-lib_json-http-service.html">lib/json-http-service</a></li><li><a href="module-lib_orchestrator.html">lib/orchestrator</a></li><li><a href="module-lib_publisher.html">lib/publisher</a></li><li><a href="module-lib_request-state.html">lib/request-state</a></li><li><a href="module-lib_specberus-wrapper.html">lib/specberus-wrapper</a></li><li><a href="module-lib_third-party-resources-checker.html">lib/third-party-resources-checker</a></li><li><a href="module-lib_token-checker.html">lib/token-checker</a></li><li><a href="module-lib_transition-checker.html">lib/transition-checker</a></li><li><a href="module-lib_user-checker.html">lib/user-checker</a></li><li><a href="module-test_lib_BadRequestService.html">test/lib/BadRequestService</a></li><li><a href="module-test_lib_CreatedService.html">test/lib/CreatedService</a></li><li><a href="module-test_lib_htmlTemplate.html">test/lib/htmlTemplate</a></li><li><a href="module-test_lib_NotImplementedService.html">test/lib/NotImplementedService</a></li><li><a href="module-test_lib_ServerErrorService.html">test/lib/ServerErrorService</a></li><li><a href="module-test_lib_TestServer.html">test/lib/TestServer</a></li><li><a href="module-test_lib_utils_draftsSystemPath.html">test/lib/utils/draftsSystemPath</a></li><li><a href="module-test_lib_utils_getMetadata.html">test/lib/utils/getMetadata</a></li><li><a href="module-test_lib_utils_substitutions.html">test/lib/utils/substitutions</a></li><li><a href="module-test_lib_validator.html">test/lib/validator</a></li><li><a href="module-test_test.html">test/test</a></li><li><a href="module-test_test-history.html">test/test-history</a></li><li><a href="module-test_test-job.html">test/test-job</a></li><li><a href="module-test_test-json-http-service.html">test/test-json-http-service</a></li><li><a href="module-test_test-orchestrator.html">test/test-orchestrator</a></li><li><a href="module-test_test-request-state.html">test/test-request-state</a></li></ul><h3>Global</h3><ul><li><a href="global.html#sendMessage">sendMessage</a></li></ul>
+    <h2><a href="index.html">Welcome to Echidna</a></h2><h3>Modules</h3><ul><li><a href="lib_job.module_js.html">lib/job.js</a></li><li><a href="module-lib_document-downloader.html">lib/document-downloader</a></li><li><a href="module-lib_history.html">lib/history</a></li><li><a href="module-lib_json-http-service.html">lib/json-http-service</a></li><li><a href="module-lib_orchestrator.html">lib/orchestrator</a></li><li><a href="module-lib_publisher.html">lib/publisher</a></li><li><a href="module-lib_request-state.html">lib/request-state</a></li><li><a href="module-lib_specberus-wrapper.html">lib/specberus-wrapper</a></li><li><a href="module-lib_third-party-resources-checker.html">lib/third-party-resources-checker</a></li><li><a href="module-lib_token-checker.html">lib/token-checker</a></li><li><a href="module-lib_transition-checker.html">lib/transition-checker</a></li><li><a href="module-lib_user-checker.html">lib/user-checker</a></li><li><a href="module-test_lib_BadRequestService.html">test/lib/BadRequestService</a></li><li><a href="module-test_lib_CreatedService.html">test/lib/CreatedService</a></li><li><a href="module-test_lib_htmlTemplate.html">test/lib/htmlTemplate</a></li><li><a href="module-test_lib_NotImplementedService.html">test/lib/NotImplementedService</a></li><li><a href="module-test_lib_ServerErrorService.html">test/lib/ServerErrorService</a></li><li><a href="module-test_lib_TestServer.html">test/lib/TestServer</a></li><li><a href="module-test_lib_utils_draftsSystemPath.html">test/lib/utils/draftsSystemPath</a></li><li><a href="module-test_lib_utils_getMetadata.html">test/lib/utils/getMetadata</a></li><li><a href="module-test_lib_utils_substitutions.html">test/lib/utils/substitutions</a></li><li><a href="module-test_lib_validator.html">test/lib/validator</a></li><li><a href="module-test_test.html">test/test</a></li><li><a href="module-test_test-history.html">test/test-history</a></li><li><a href="module-test_test-job.html">test/test-job</a></li><li><a href="module-test_test-json-http-service.html">test/test-json-http-service</a></li><li><a href="module-test_test-orchestrator.html">test/test-orchestrator</a></li><li><a href="module-test_test-request-state.html">test/test-request-state</a></li></ul><h3>Global</h3><ul><li><a href="global.html#corsHandler">corsHandler</a></li><li><a href="global.html#processRequest">processRequest</a></li><li><a href="global.html#sendMessage">sendMessage</a></li></ul>
 </nav>
 
 <br class="clear">
 
 <footer>
-    Documentation generated by <a href="https://github.com/jsdoc/jsdoc">JSDoc 3.6.4</a> on Fri Jul 10 2020 13:39:11 GMT+0800 (China Standard Time)
+    Documentation generated by <a href="https://github.com/jsdoc/jsdoc">JSDoc 3.6.4</a> on Tue Jul 14 2020 12:32:36 GMT+0800 (China Standard Time)
 </footer>
 
 <script> prettyPrint(); </script>

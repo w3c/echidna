@@ -1,5 +1,6 @@
 /**
  * @module
+ * @file Configurate API endpoints and view pages.
  */
 
 /* eslint-disable no-console */
@@ -91,7 +92,7 @@ function dumpJobResult(dest, result) {
 
 /**
  * @function processRequest
- * @description **Handler of user request.** Distinguish if the request contains a tar file for a link to manifest.
+ * @description **Handler of user request.** Distinguish if the request contains a tar file or a link to manifest.
  * @param {Object} req 
  * @param {Object} res 
  * @param {Boolean} isTar whether request contains a tar file
@@ -145,6 +146,7 @@ var processRequest = function (req, res, isTar) {
                   }, {}))
                 );
 
+    // Orchestrator: jobList executed.
     var orchestrator = new Orchestrator(
       url,
       tar,
