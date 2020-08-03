@@ -11,9 +11,12 @@ var htmlTemplate = require('./htmltemplate');
 var getMetadata = require('./utils').getMetadata;
 var draftsSystemPath = require('./utils').draftsSystemPath;
 var request = require('request');
+var ldap = require('ldapjs');
 
 var PublishService = require('./fake-http-services').CreatedService;
-var port = (process.env.PORT || 3000) + 1;
+var port = (parseInt(process.env.PORT) || 3000) + 1;
+var ldapPort = 1389;
+require('../../config-dev.js');
 
 /**
  * @exports test/lib/TestServer
@@ -34,6 +37,7 @@ app.use(htmlTemplate('/drafts', draftsSystemPath));
 app.use('/drafts', express.static(draftsSystemPath));
 app.use(express.static('assets/'));
 app.use(express.static('test/views/'));
+app.use(express.static('test/staging/'));
 
 app.get('/data/specs.json', function (req, res) {
   var specs = [];
@@ -85,6 +89,35 @@ app.post('/publish', function (_, res) {
 });
 
 var server;
+var ldapServer = ldap.createServer();
+
+ldapServer.bind('uid=foo,ou=user,dc=example,dc=org', function(req, res, next) {
+  if (req.credentials !== global.LDAP_PASSWORD) {
+    return next(new ldap.InvalidCredentialsError());
+  }
+  console.log('bind DN: ' + req.dn.toString());
+  console.log('bind PW: ' + req.credentials);
+  res.end();
+  return next();
+});
+
+ldapServer.search(global.LDAP_SEARCH_BASE, function(req, res, next) {
+  var obj = {
+    dn: "uid="+global.LDAP_USER+","+req.dn.toString(),
+    attributes: {
+      uid: global.LDAP_USER,
+      objectclass: ['top', 'person'],
+      o: 'example',
+      memberOf: global.LDAP_GROUPS
+    }
+  };
+
+  if (req.filter.matches(obj.attributes))
+  res.send(obj);
+
+  res.end();
+  return next();
+});
 
 TestServer.start = function () {
   var limitPort = port + 30;
@@ -103,7 +136,14 @@ TestServer.start = function () {
   if (server.address() === null) {
     throw new Error('Cannot find a free port for the test server ' + port);
   }
-  global.SPEC_GENERATOR = this.location() + '/generate';
+
+  ldapServer.listen(ldapPort, 'localhost', function() {
+    console.log("LDAP server listening at " + ldapServer.url);
+  });
+
+  console.log("Token checker ready at " + this.location() + " /authorize");
+  console.log("Spec generator ready at " + this.location() + " /generate");
+  console.log("Publication backend ready at " + this.location() + " /publish");
 };
 
 TestServer.location = function () {
@@ -122,7 +162,10 @@ TestServer.getMetadata = function (name) {
   return data;
 };
 
-TestServer.close = () => server.close();
+TestServer.close = () => {
+  server.close();
+  ldapServer.close();
+};
 
 TestServer.start();
 

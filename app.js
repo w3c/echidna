@@ -16,7 +16,7 @@ var multer = require('multer');
 var path = require('path');
 var Fs = require('fs');
 var Map = require('immutable').Map;
-var Uuid = require('uuid');
+const { v4: uuidv4 } = require('uuid');
 
 var Job = require('./lib/job');
 var Orchestrator = require('./lib/orchestrator');
@@ -29,7 +29,9 @@ var LdapAuth = require('ldapauth-fork');
 var BasicStrategy = require('passport-http').BasicStrategy;
 
 // Configuration file
-require('./config.js');
+let config = process.env.CONFIG || "config.js";
+require("./" + config);
+console.log("Loading config: " + config);
 
 var app = express();
 var requests = {};
@@ -88,7 +90,7 @@ function dumpJobResult(dest, result) {
 }
 
 var processRequest = function (req, res, isTar) {
-  var id = Uuid.v4();
+  var id = uuidv4();
   var decision = req.body ? req.body.decision : null;
   var url = (!isTar && req.body) ? req.body.url : null;
   var token = (!isTar && req.body) ? req.body.token : null;

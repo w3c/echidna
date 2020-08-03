@@ -10,7 +10,7 @@ tokenChecker.get('/authorize', function (req, res) {
   var json = {
     token: token,
     spec: uri,
-    source: 'http://localhost:3001/drafts/',
+    source: 'http://localhost:3001/',
     authorized: true
   };
 
