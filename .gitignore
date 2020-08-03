@@ -30,7 +30,7 @@ package-lock.json
 # Configuration
 config.js
 
-# JSDoc output	
+# JSDoc output
 doc/api/
 
 # staging area for dev
