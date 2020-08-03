@@ -49,7 +49,7 @@
     "minami": "1.2.3",
     "mocha": "8.1.0",
     "morgan": "1.10.0",
-    "ldapjs": "2.0.0"
+    "ldapjs": "2.1.1"
   },
   "scripts": {
     "audit": "npm audit | grep -oE 'https?\\:\\/\\/(www\\.)?(nodesecurity\\.io|npmjs\\.com)\\/advisories\\/[[:digit:]]+' | rev | cut -d '/' -f 1 | rev | diff known-vulns.txt -",
