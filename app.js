@@ -73,7 +73,6 @@ app.get('/api/status', function (req, res) {
 
   if (id) {
     Fs.access(file, Fs.constants.F_OK, function (error) {
-      console.log('file:', file);
       if (!error)
         res.status(200).sendFile(file);
       else if (requests && requests[id])
@@ -159,10 +158,8 @@ var processRequest = function (req, res, isTar) {
       argResultLocation
     );
 
-    console.log('\n\n======app .js =======\n')
     Orchestrator.iterate(
       function (state) {
-        console.log('iterate: state ', state);
         return orchestrator.next(state);
       },
       Orchestrator.hasFinished,
