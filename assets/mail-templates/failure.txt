@@ -14,4 +14,4 @@ If you think you found a bug, please fill in and submit this issue:
 
 -- 
 Echidna @ECHIDNA (Specberus @SPECBERUS)
-Copyright © 2014–2018 W3C — https://www.w3.org/
+Copyright © 2014–2020 W3C — https://www.w3.org/

@@ -1,5 +1,6 @@
 /**
  * @module
+ * @file Configurate API endpoints and view pages.
  */
 
 /* eslint-disable no-console */
@@ -89,6 +90,13 @@ function dumpJobResult(dest, result) {
   });
 }
 
+/**
+ * @function processRequest
+ * @description **Handler of user request.** Distinguish if the request contains a tar file or a link to manifest.
+ * @param {Object} req 
+ * @param {Object} res 
+ * @param {Boolean} isTar whether request contains a tar file
+ */
 var processRequest = function (req, res, isTar) {
   var id = uuidv4();
   var decision = req.body ? req.body.decision : null;
@@ -121,6 +129,7 @@ var processRequest = function (req, res, isTar) {
     var jobList = ['retrieve-resources', 'metadata', 'specberus', 'transition-checker', 'third-party-checker', 'publish', 'tr-install', 'update-tr-shortlink'];
 
     if (isTar)
+      // Receive a tar file: need to check if the user have access to change the document. Use username, password to get information from LDAP.
       jobList.splice(2, 0, 'user-checker');
     else
       jobList.splice(3, 0, 'token-checker');
@@ -128,14 +137,16 @@ var processRequest = function (req, res, isTar) {
     if (dryRun)
       jobList.splice(jobList.indexOf('publish'));
 
+    // create empty result placeholder in /api/status?id=xxx
     requests[id]['results'] = new RequestState(
                   '',
-                  new Map(jobList.reduce(function (o, v) {
-                    o[v] = new Job();
-                    return o;
+                  new Map(jobList.reduce(function (object, value) {
+                    object[value] = new Job();
+                    return object;
                   }, {}))
                 );
 
+    // Orchestrator: jobList executed.
     var orchestrator = new Orchestrator(
       url,
       tar,

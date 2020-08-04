@@ -35,3 +35,6 @@ doc/api/
 
 # staging area for dev
 test/staging/
+
+# mac files
+.DS_Store
