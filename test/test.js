@@ -380,8 +380,7 @@ describe('SpecberusWrapper', function () {
     var myDraft = server.getMetadata('navigation-timing-2');
     var content = SpecberusWrapper.validate(myDraft.location,
                                             myDraft.status,
-                                            myDraft.rectrack,
-                                            false);
+                                            myDraft.rectrack);
 
     it('should return a promise', function () {
       expect(content).to.be.an.instanceOf(Promise);
@@ -414,8 +413,7 @@ describe('SpecberusWrapper', function () {
     var content = SpecberusWrapper.validate(
       server.getMetadata('nav-csserror').location,
       server.getMetadata('nav-csserror').status,
-      server.getMetadata('nav-csserror').rectrack,
-      false
+      server.getMetadata('nav-csserror').rectrack
     );
 
     it('should return an error property that has 4 errors', function () {
@@ -428,8 +426,7 @@ describe('SpecberusWrapper', function () {
     var content = SpecberusWrapper.validate(
       server.getMetadata('nav-csswarning').location,
       server.getMetadata('nav-csswarning').status,
-      server.getMetadata('nav-csswarning').rectrack,
-      false
+      server.getMetadata('nav-csswarning').rectrack
     );
 
     it('should return an error property that has 2 error', function () {
@@ -442,8 +439,7 @@ describe('SpecberusWrapper', function () {
     var content = SpecberusWrapper.validate(
       server.getMetadata('webrtc').location,
       server.getMetadata('webrtc').status,
-      server.getMetadata('webrtc').rectrack,
-      false
+      server.getMetadata('webrtc').rectrack
     );
 
     it('should return an error property that has 2 error', function () {
@@ -456,8 +452,7 @@ describe('SpecberusWrapper', function () {
     var content = SpecberusWrapper.validate(
       server.getMetadata('webrtc').location,
       server.getMetadata('webrtc').status,
-      server.getMetadata('webrtc').rectrack,
-      true
+      server.getMetadata('webrtc').rectrack
     );
 
     it('should return an error property that has 2 error', function () {
