@@ -1,7 +1,7 @@
 {
-"process": "1 February 2018",
-"processURI": "https://www.w3.org/2018/Process-20180201/",
-"editorsDraft": "http://w3c.github.io/navigation-timing/",
+"process": "15 September 2020",
+"processURI": "https://www.w3.org/2020/Process-20200925/",
+"editorsDraft": "https://w3c.github.io/navigation-timing/",
 "title":     "Navigation Timing 2",
 "shortname": "navigation-timing-2",
 "status":    "WD",
@@ -11,5 +11,6 @@
 "groupHomepage": "http://www.w3.org/webperf/",
 "groupID": 45211,
 "list": "public-web-perf",
-"rectrack": true
+"rectrack": true,
+"patentPolicy": "https://www.w3.org/Consortium/Patent-Policy-20170801/"
 }

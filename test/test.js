@@ -380,7 +380,8 @@ describe('SpecberusWrapper', function () {
     var myDraft = server.getMetadata('navigation-timing-2');
     var content = SpecberusWrapper.validate(myDraft.location,
                                             myDraft.status,
-                                            myDraft.rectrack);
+                                            myDraft.rectrack,
+                                            myDraft.patentPolicy);
 
     it('should return a promise', function () {
       expect(content).to.be.an.instanceOf(Promise);
@@ -413,7 +414,8 @@ describe('SpecberusWrapper', function () {
     var content = SpecberusWrapper.validate(
       server.getMetadata('nav-csserror').location,
       server.getMetadata('nav-csserror').status,
-      server.getMetadata('nav-csserror').rectrack
+      server.getMetadata('nav-csserror').rectrack,
+      server.getMetadata('nav-csserror').patentPolicy
     );
 
     it('should return an error property that has 4 errors', function () {
@@ -426,25 +428,27 @@ describe('SpecberusWrapper', function () {
     var content = SpecberusWrapper.validate(
       server.getMetadata('nav-csswarning').location,
       server.getMetadata('nav-csswarning').status,
-      server.getMetadata('nav-csswarning').rectrack
+      server.getMetadata('nav-csswarning').rectrack,
+      server.getMetadata('nav-csswarning').patentPolicy
     );
 
-    it('should return an error property that has 2 error', function () {
+    it('should return an error property that has 4 error', function () {
       return expect(content).that.eventually.has.property('errors')
         .that.has.size(4);
     });
   });
 
-  describe('validate(url-with-webrtc-wrong-review-date-non-editorial)', function () {
+  describe('validate(url-with-webrtc-crd-wrong-review-date)', function () {
     var content = SpecberusWrapper.validate(
-      server.getMetadata('webrtc').location,
-      server.getMetadata('webrtc').status,
-      server.getMetadata('webrtc').rectrack
+      server.getMetadata('webrtc-crd').location,
+      server.getMetadata('webrtc-crd').status,
+      server.getMetadata('webrtc-crd').rectrack,
+      server.getMetadata('webrtc-crd').patentPolicy
     );
 
-    it('should return an error property that has 2 error', function () {
+    it('should return an error property that has 1 error', function () {
       return expect(content).that.eventually.has.property('errors')
-        .that.has.size(3);
+        .that.has.size(1);
     });
   });
 
@@ -452,7 +456,8 @@ describe('SpecberusWrapper', function () {
     var content = SpecberusWrapper.validate(
       server.getMetadata('webrtc').location,
       server.getMetadata('webrtc').status,
-      server.getMetadata('webrtc').rectrack
+      server.getMetadata('webrtc').rectrack,
+      server.getMetadata('webrtc').patentPolicy
     );
 
     it('should return an error property that has 2 error', function () {

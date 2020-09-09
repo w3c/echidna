@@ -11,5 +11,6 @@
 "groupHomepage": "https://www.w3.org/2011/04/webrtc/",
 "groupID": 47318,
 "list": "public-webrtc",
-"rectrack": true
+"rectrack": true,
+"patentPolicy": "https://www.w3.org/Consortium/Patent-Policy-20170801/"
 }
