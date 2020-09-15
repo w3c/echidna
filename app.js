@@ -93,8 +93,8 @@ function dumpJobResult(dest, result) {
 /**
  * @function processRequest
  * @description **Handler of user request.** Distinguish if the request contains a tar file or a link to manifest.
- * @param {Object} req 
- * @param {Object} res 
+ * @param {Object} req
+ * @param {Object} res
  * @param {Boolean} isTar whether request contains a tar file
  */
 var processRequest = function (req, res, isTar) {
@@ -102,7 +102,6 @@ var processRequest = function (req, res, isTar) {
   var decision = req.body ? req.body.decision : null;
   var url = (!isTar && req.body) ? req.body.url : null;
   var token = (!isTar && req.body) ? req.body.token : null;
-  var editorial = Boolean(req.body && req.body.editorial && /^true$/i.test(req.body.editorial));
   var tar = (isTar) ? req.file : null;
   var user = req.user ? req.user : null;
   var dryRun = Boolean(req.body && req.body['dry-run'] && /^true$/i.test(req.body['dry-run']));
@@ -125,7 +124,6 @@ var processRequest = function (req, res, isTar) {
     requests[id]['version'] = meta.version;
     requests[id]['version-specberus'] = SpecberusWrapper.version;
     requests[id]['decision'] = decision;
-    requests[id]['editorial'] = editorial;
     var jobList = ['retrieve-resources', 'metadata', 'specberus', 'transition-checker', 'third-party-checker', 'publish', 'tr-install', 'update-tr-shortlink'];
 
     if (isTar)
@@ -151,7 +149,6 @@ var processRequest = function (req, res, isTar) {
       url,
       tar,
       token,
-      editorial,
       user,
       tempLocation,
       httpLocation,

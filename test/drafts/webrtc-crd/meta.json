@@ -4,7 +4,7 @@
 "editorsDraft": "https://w3c.github.io/webrtc-pc/",
 "title":     "WebRTC 1.0: Real-time Communication Between Browsers",
 "shortname": "webrtc",
-"status":    "CR",
+"status":    "CRD",
 "editorIDs": [45507,85118,25254,47326,65611,82908,79152],
 "previousVersion":"https://www.w3.org/TR/2017/CR-webrtc-20171102/",
 "groupName": "Web Real-Time Communications Working Group",

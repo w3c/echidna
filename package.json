@@ -31,7 +31,7 @@
     "passport-http": "0.3",
     "promise": "8.1.0",
     "request": "2.88.2",
-    "specberus": "4.5.1",
+    "specberus": "5.0.1",
     "tar-stream": "2.1.3",
     "third-party-resources-checker": "1.0.6",
     "uuid": "8.3.0"
@@ -55,7 +55,7 @@
     "lint": "eslint app.js assets/js/ lib/ test/",
     "hint": "jshint app.js assets/js/ lib/ test/",
     "testserver": "node test/lib/testserver",
-    "test": "mocha --timeout 8000",
+    "test": "mocha --timeout 30000",
     "jsdoc": "jsdoc --configure jsdoc.json -r app.js assets/js/ lib/ test/",
     "coverage": "istanbul cover _mocha",
     "coveralls": "npm run coverage && cat ./coverage/lcov.info | coveralls",
@@ -63,7 +63,7 @@
     "start": "node app"
   },
   "engines": {
-    "node": "10 || 12",
+    "node": "12 || 14",
     "npm": ">=6"
   }
 }
