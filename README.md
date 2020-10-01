@@ -1,12 +1,10 @@
-[![Build Status](https://travis-ci.org/w3c/echidna.svg?branch=master)](https://travis-ci.org/w3c/echidna)
+[![Build Status](https://github.com/w3c/echidna/workflows/Echidna%20tests/badge.svg)](https://github.com/w3c/echidna/actions)
 [![Coverage Status](https://coveralls.io/repos/w3c/echidna/badge.svg)](https://coveralls.io/r/w3c/echidna)
 [![Dependency Status](https://david-dm.org/w3c/echidna.svg)](https://david-dm.org/w3c/echidna)
 [![devDependency Status](https://david-dm.org/w3c/echidna/dev-status.svg)](https://david-dm.org/w3c/echidna#info=devDependencies)
 [![Inline docs](http://inch-ci.org/github/w3c/echidna.svg?branch=master)](http://inch-ci.org/github/w3c/echidna)
 
 # Echidna
-
-[![Greenkeeper badge](https://badges.greenkeeper.io/w3c/echidna.svg)](https://greenkeeper.io/)
 
 Echidna is the central piece of software taking care of the new publication workflow at [W3C](http://www.w3.org/). The plan is for Echidna and related sub-projects (see below) to automate the publication of new specs under <http://www.w3.org/TR/>.
 
