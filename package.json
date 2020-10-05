@@ -34,7 +34,7 @@
     "specberus": "5.1.0",
     "tar-stream": "2.1.4",
     "third-party-resources-checker": "1.0.6",
-    "uuid": "8.3.0"
+    "uuid": "8.3.1"
   },
   "devDependencies": {
     "chai": "4.2.0",
