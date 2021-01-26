@@ -46,6 +46,7 @@ app.use(bodyParser.urlencoded({ extended: false }));
 app.use(corsHandler);
 app.use(express.static('assets/'));
 app.set('json spaces', 2);
+app.set('trust proxy', true);
 
 // Index Page
 app.get('/', function (request, response) {
@@ -98,24 +99,25 @@ function dumpJobResult(dest, result) {
  * @param {Boolean} isTar whether request contains a tar file
  */
 var processRequest = function (req, res, isTar) {
-  var id = uuidv4();
-  var decision = req.body ? req.body.decision : null;
-  var url = (!isTar && req.body) ? req.body.url : null;
-  var token = (!isTar && req.body) ? req.body.token : null;
-  var tar = (isTar) ? req.file : null;
-  var user = req.user ? req.user : null;
-  var dryRun = Boolean(req.body && req.body['dry-run'] && /^true$/i.test(req.body['dry-run']));
-  var ccEmail = req.body ? req.body.cc : null;
+  const id = uuidv4();
+  const decision = req.body ? req.body.decision : null;
+  const url = (!isTar && req.body) ? req.body.url : null;
+  const token = (req.body) ? req.body.token : null;
+  const tar = (isTar) ? req.file : null;
+  const user = req.user;
+  const dryRun = Boolean(req.body && req.body['dry-run'] && /^true$/i.test(req.body['dry-run']));
+  const ccEmail = req.body ? req.body.cc : null;
+  const requestIp = req.ip;
 
-  if (!((url && token) || tar) || !decision) {
+  if (!((url && token) || (tar && token) || (tar && user)) || !decision) {
     res.status(500).send(
-      'Missing required parameters "url + token + decision"' +
-      ' or "tar + decision".'
+      'Missing required parameters "url + token + decision",' +
+      ' "tar + token + decision" or "tar + W3C credentials + decision".'
     );
   }
   else {
-    var tempLocation = argTempLocation + path.sep + id + path.sep;
-    var httpLocation = argHttpLocation + '/' + id + '/Overview.html';
+    const tempLocation = `${argTempLocation}/${id}/`;
+    const httpLocation = `${argHttpLocation}/${id}/Overview.html`;
 
     requests[id] = {};
     requests[id]['id'] = id;
@@ -124,13 +126,15 @@ var processRequest = function (req, res, isTar) {
     requests[id]['version'] = meta.version;
     requests[id]['version-specberus'] = SpecberusWrapper.version;
     requests[id]['decision'] = decision;
-    var jobList = ['retrieve-resources', 'metadata', 'specberus', 'transition-checker', 'third-party-checker', 'publish', 'tr-install', 'update-tr-shortlink'];
+    let jobList = ['retrieve-resources', 'metadata', 'specberus', 'transition-checker', 'third-party-checker', 'publish', 'tr-install', 'update-tr-shortlink'];
 
-    if (isTar)
-      // Receive a tar file: need to check if the user have access to change the document. Use username, password to get information from LDAP.
+    if (token) {
+      jobList.unshift('ip-checker');
+      jobList.splice(4, 0, 'token-checker');
+    } else {
+      // tar method with credentials
       jobList.splice(2, 0, 'user-checker');
-    else
-      jobList.splice(3, 0, 'token-checker');
+    }
 
     if (dryRun)
       jobList.splice(jobList.indexOf('publish'));
@@ -152,7 +156,8 @@ var processRequest = function (req, res, isTar) {
       user,
       tempLocation,
       httpLocation,
-      argResultLocation
+      argResultLocation,
+      req.ip
     );
 
     Orchestrator.iterate(
@@ -208,11 +213,15 @@ passport.use(new BasicStrategy(
 ));
 
 app.post('/api/request', function (req, res, next) {
-  if (req.is('application/x-www-form-urlencoded')) {
+  if (req.is('application/x-www-form-urlencoded')) { // URL + token method
     processRequest(req, res, false);
   }
-  else if (req.is('multipart/form-data')) {
-    next();
+  else if (req.is('multipart/form-data')) { // tar method
+    if (req.headers.authorization) { // basic authentication
+      next();
+    } else { // token
+      processRequest(req, res, true);
+    }
   }
   else {
     res.status(501)
