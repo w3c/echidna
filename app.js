@@ -216,7 +216,7 @@ app.post('/api/request', function (req, res, next) {
     processRequest(req, res, false);
   }
   else if (req.is('multipart/form-data')) { // tar method
-    next()
+    next();
   }
   else {
     res.status(501)
