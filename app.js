@@ -107,7 +107,6 @@ var processRequest = function (req, res, isTar) {
   const user = req.user;
   const dryRun = Boolean(req.body && req.body['dry-run'] && /^true$/i.test(req.body['dry-run']));
   const ccEmail = req.body ? req.body.cc : null;
-  const requestIp = req.ip;
 
   if (!((url && token) || (tar && token) || (tar && user)) || !decision) {
     res.status(500).send(
