@@ -217,11 +217,7 @@ app.post('/api/request', function (req, res, next) {
     processRequest(req, res, false);
   }
   else if (req.is('multipart/form-data')) { // tar method
-    if (req.headers.authorization) { // basic authentication
-      next();
-    } else { // token
-      processRequest(req, res, true);
-    }
+    next()
   }
   else {
     res.status(501)
@@ -231,8 +227,19 @@ app.post('/api/request', function (req, res, next) {
 
 app.post(
   '/api/request',
-  passport.authenticate('basic', { session: false }),
   multer().single('tar'),
+  function (req, res, next) {
+    if (req.headers.authorization) { // basic authentication
+      next();
+    } else {
+      processRequest(req, res, true); // token
+    }
+  }
+);
+
+app.post(
+  '/api/request',
+  passport.authenticate('basic', { session: false }),
   function (req, res) {
     processRequest(req, res, true);
   }
