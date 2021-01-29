@@ -32,7 +32,7 @@
     "promise": "8.1.0",
     "request": "2.88.2",
     "specberus": "5.5.2",
-    "tar-stream": "2.1.4",
+    "tar-stream": "2.2.0",
     "third-party-resources-checker": "1.0.6",
     "uuid": "8.3.2"
   },
