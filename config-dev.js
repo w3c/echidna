@@ -30,6 +30,7 @@ global.LDAP_URL = "ldap://localhost:1389";
 global.LDAP_SEARCH_BASE = 'ou=user,dc=example,dc=org';
 // LDAP_BIND_DN must contain the placeholder {{username}}
 global.LDAP_BIND_DN = 'uid={{username}},ou=user,dc=example,dc=org';
+global.GH_TOKEN = '';
 global.GH_DIRECTOR_TEAM_ID = '2797096';
 global.GH_COMM_TEAM_ID = '2794457';
 
