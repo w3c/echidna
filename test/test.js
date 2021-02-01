@@ -7,40 +7,41 @@
 // Switch the environment into testing mode
 process.env.NODE_ENV = 'dev';
 
-var chai = require('chai');
-var chaiImmutable = require('chai-immutable');
-var expect = chai.expect;
-var chaiAsPromised = require('chai-as-promised');
+const chai = require('chai');
+const chaiImmutable = require('chai-immutable');
+const expect = chai.expect;
+const chaiAsPromised = require('chai-as-promised');
 
 chai.use(chaiImmutable);
 chai.use(chaiAsPromised);
 
-var Promise = require('promise');
-var Fs = require('fs');
-var Immutable = require('immutable');
-var List = Immutable.List;
-var Map = Immutable.Map;
-var pendingTests = 5;
+const Promise = require('promise');
+const Fs = require('fs');
+const Immutable = require('immutable');
+const List = Immutable.List;
+const Map = Immutable.Map;
+let pendingTests = 6;
 
 require('../config-dev.js');
 
-var server = require('./lib/testserver');
-var FakeHttpServices = require('./lib/fake-http-services');
-var CreatedService = FakeHttpServices.CreatedService;
-var BadRequestService = FakeHttpServices.BadRequestService;
-var NotImplementedService = FakeHttpServices.NotImplementedService;
-var ServerErrorService = FakeHttpServices.ServerErrorService;
+const server = require('./lib/testserver');
+const FakeHttpServices = require('./lib/fake-http-services');
+const CreatedService = FakeHttpServices.CreatedService;
+const BadRequestService = FakeHttpServices.BadRequestService;
+const NotImplementedService = FakeHttpServices.NotImplementedService;
+const ServerErrorService = FakeHttpServices.ServerErrorService;
 
 // Used by the TokenChecker
 global.TOKEN_ENDPOINT = server.location() + '/authorize';
 global.USERNAME = 'toto';
 global.PASSWORD = 'secret';
 
-var DocumentDownloader = require('../lib/document-downloader');
-var Publisher = require('../lib/publisher');
-var SpecberusWrapper = require('../lib/specberus-wrapper');
-var TokenChecker = require('../lib/token-checker');
-var UserChecker = require('../lib/user-checker');
+const DocumentDownloader = require('../lib/document-downloader');
+const Publisher = require('../lib/publisher');
+const SpecberusWrapper = require('../lib/specberus-wrapper');
+const TokenChecker = require('../lib/token-checker');
+const UserChecker = require('../lib/user-checker');
+const IPChecker = require('../lib/ip-checker.js');
 
 function readFileSyncUtf8(file) {
   return Fs.readFileSync(file, { encoding: 'utf8' });
@@ -645,8 +646,31 @@ describe('UserChecker', function () {
     var delivererIDs = [myDraft.groupID];
     var content = UserChecker.check(user, delivererIDs);
 
-    it('should promise an non-empty list', function () {
+    it('should promise a non-empty list', function () {
       return content.then(function (result) {
+        expect(result.isEmpty()).to.be.false;
+      });
+    });
+  });
+
+  after(trackProgress);
+});
+
+describe('IPChecker', function () {
+  describe('check(url, token)', function () {
+    it('should be a function', function () {
+      expect(IPChecker.check).to.be.a('function');
+    });
+
+    const ip = "1.2.3.4";
+    const check = IPChecker.check(ip);
+
+    it('should return a promise', function () {
+      expect(check).to.be.an.instanceOf(Promise);
+    });
+
+    it('should promise a non-empty list', function () {
+      return check.then(function (result) {
         expect(result.isEmpty()).to.be.false;
       });
     });
