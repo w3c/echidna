@@ -120,6 +120,7 @@ var processRequest = function (req, res, isTar) {
 
     requests[id] = {};
     requests[id]['id'] = id;
+    if (req.body && req.body.annotation) requests[id]['annotation'] = req.body.annotation;
     if (isTar) requests[id]['tar'] = tar.originalname;
     else requests[id]['url'] = url;
     requests[id]['version'] = meta.version;
