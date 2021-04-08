@@ -36,5 +36,5 @@ global.GH_COMM_TEAM_ID = '2794457';
 
 global.LDAP_USER = "foo";
 global.LDAP_PASSWORD = "bar";
-global.LDAP_GROUPS = ["cn=123,ou=groups,dc=w3,dc=org", "cn=456,ou=groups,dc=w3,dc=org", "cn=32113,ou=groups,dc=w3,dc=org"];
+global.LDAP_GROUPS = ["cn=123,ou=groups,dc=w3,dc=org", "cn=456,ou=groups,dc=w3,dc=org", "cn=32113,ou=groups,dc=w3,dc=org", "cn=49309,ou=groups,dc=w3,dc=org"];
 global.SKIP_VALIDATION = true
