@@ -461,10 +461,9 @@ describe('SpecberusWrapper', function () {
       server.getMetadata('webrtc').patentPolicy
     );
 
-    it('should return an error property that has 16 error', function () {
-      content.then(data => console.log(data.errors._tail.array));
+    it('should return an error property that has 9 errors', function () {
       return expect(content).that.eventually.has.property('errors')
-        .that.has.size(16);
+        .that.has.size(9);
     });
   });
 
