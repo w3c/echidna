@@ -56,6 +56,8 @@ Once the server is started, you can throw publication requests at it through a `
 
 You can also use a simple web client to send and monitor those requests, at <http://localhost:3000/ui>.
 
+For more information, please refer to [DEVELOPMENT.md](./DEVELOPMENT.md).
+
 ### Testing Echidna
 
 This section describes how to run Echidna's test suite to make sure that the project itself is working properly over time. Note that the test suite is not intended to test actual documents.

@@ -130,9 +130,9 @@ var processRequest = function (req, res, isTar) {
 
     if (token) {
       jobList.unshift('ip-checker');
-      jobList.splice(4, 0, 'token-checker');
+      jobList.splice(3, 0, 'token-checker');
     } else {
-      // tar method with credentials
+      // submitted with credentials
       jobList.splice(2, 0, 'user-checker');
     }
 
@@ -189,6 +189,7 @@ var processRequest = function (req, res, isTar) {
   }
 };
 
+// Making sure the user and password match, and the user participate in the group delivering the document.
 passport.use(new BasicStrategy(
   function (username, password, done) {
     var opts = {

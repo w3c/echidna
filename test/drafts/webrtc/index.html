@@ -740,7 +740,6 @@
           </table>
         </div>
         <figure id="fig-non-normative-signalling-state-transitions-diagram">
-          <img alt="signalling state transition diagram" src="images/peerstates.svg" width="600">
           <figcaption>Figure <span class="figno">1</span> <span class="fig-title">
             Non-normative signalling state transitions diagram
           </span></figcaption>
@@ -2264,7 +2263,7 @@ interface <span class="idlInterfaceID"><a data-no-default="" data-link-for="" da
                 the device. It thus increases the fingerprinting surface of the
                 application. In privacy-sensitive contexts, browsers can
                 consider mitigations such as generating SDP matching only a
-                common subset of the capabilities.<img src="images/fingerprint.png" alt="(This is a fingerprinting vector.)" width="15" height="21"></p>
+                common subset of the capabilities.</p>
                 <p>When the method is called, the user agent <em class="rfc2119" title="MUST">MUST</em> run the
                 following steps:</p>
                 <ol>
@@ -2806,7 +2805,7 @@ interface <span class="idlInterfaceID"><a data-no-default="" data-link-for="" da
                 fingerprinting surface of the browser. In privacy-sensitive
                 contexts, browsers can consider mitigations such as only
                 providing this data to whitelisted origins (or not providing it
-                at all.)<img src="images/fingerprint.png" alt="(This is a fingerprinting vector.)" width="15" height="21"></p>
+                at all.)</p>
                 <div class="note"><div role="heading" class="note-title marker" id="h-note-8" aria-level="6"><span>Note</span></div><p class="">Since the use of this information is left to
                 the discretion of application developers, configuring a user
                 agent with these defaults does not per se increase a user's
@@ -3786,7 +3785,7 @@ interface <span class="idlInterfaceID"><a data-no-default="" data-link-for="" da
                   only).</p>
                   <p class="fingerprint">These IP addresses can also be used as
                   temporary or persistent cross-origin states, and thus
-                  contribute to the fingerprinting surface of the device.<img src="images/fingerprint.png" alt="(This is a fingerprinting vector.)" width="15" height="21"></p>
+                  contribute to the fingerprinting surface of the device.</p>
                   <p>Applications can avoid exposing IP addresses to the
                   communicating party, either temporarily or permanently, by
                   forcing the <a href="#dfn-ice-agent" class="internalDFN" data-link-type="dfn">ICE Agent</a> to report only relay candidates
@@ -5426,7 +5425,7 @@ interface <span class="idlInterfaceID"><a data-no-default="" data-link-for="" da
               persistent cross-origin information on the device and thus
               increases the fingerprinting surface of the application. In
               privacy-sensitive contexts, browsers can consider mitigations
-              such as reporting only a common subset of the capabilities.<img src="images/fingerprint.png" alt="(This is a fingerprinting vector.)" width="15" height="21"></p>
+              such as reporting only a common subset of the capabilities.</p>
             </dd>
             <dt><dfn data-idl="" data-dfn-for="rtcrtpsender" data-dfn-type="dfn" id="dom-rtcrtpsender-setparameters" data-title="setParameters" data-lt="setParameters|setparameters()"><code>setParameters</code></dfn></dt>
             <dd>
@@ -6446,7 +6445,7 @@ interface <span class="idlInterfaceID"><a data-no-default="" data-link-for="" da
               persistent cross-origin information on the device and thus
               increases the fingerprinting surface of the application. In
               privacy-sensitive contexts, browsers can consider mitigations
-              such as reporting only a common subset of the capabilities.<img src="images/fingerprint.png" alt="(This is a fingerprinting vector.)" width="15" height="21"></p>
+              such as reporting only a common subset of the capabilities.</p>
             </dd>
             <dt><code>getParameters</code></dt>
             <dd>
@@ -7719,7 +7718,6 @@ interface <span class="idlInterfaceID"><a data-no-default="" data-link-for="" da
         <li><code>RTCPeerConnection.close()</code>: <code>closed</code></li>
       </ul>
       <figure id="fig-non-normative-ice-transport-state-transition-diagram">
-        <img alt="ICE transport state transition diagram" src="images/icetransportstate.svg" width="600">
         <figcaption>Figure <span class="figno">2</span> <span class="fig-title">
           Non-normative ICE transport state transition diagram
         </span></figcaption>
@@ -11302,13 +11300,9 @@ var gameDataChan = peerConn.createDataChannel("data", { reliable: false, priorit
       This does not show the procedure to get access to local media or every
       callback that gets fired but instead tries to reduce it down to only show
       the key events and messages.</p>
-      <p><img alt="A message sequence chart detailing a call flow between two browsers" src="images/ladder-2party-simple.svg" style="width:100%"></p><!--
+      <!--
       <p>The following flow shows a more complete set of the callbacks and
       events that happen.</p>
-
-      <p><img alt=
-      "A more complete message sequence chart detailing a call flow between two browsers"
-      src="images/ladder-2party-full.svg" style="width:100%"></p>
       -->
     </section>
     <section id="dtmf-example">
@@ -11388,9 +11382,6 @@ var gameDataChan = peerConn.createDataChannel("data", { reliable: false, priorit
       gets fired but instead tries to reduce it down to only show the key
       events and messages.</p>
 
-      <p><img alt=
-      "A message sequence chart detailing a call flow between a browser and a centralized conferencing server"
-      src="images/ladder-mcu-simple.svg" style="width:100%"></p>
     </section>
 -->
   </section>
