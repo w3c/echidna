@@ -11,7 +11,7 @@
 
 var JOBS = [
   'retrieve-resources', 'specberus', 'token-checker',
-  'third-party-checker', 'publish', 'tr-install', 'update-tr-shortlink'
+  'publish', 'tr-install', 'update-tr-shortlink'
 ];
 
 var log;

@@ -126,7 +126,7 @@ var processRequest = function (req, res, isTar) {
     requests[id]['version'] = meta.version;
     requests[id]['version-specberus'] = SpecberusWrapper.version;
     requests[id]['decision'] = decision;
-    let jobList = ['retrieve-resources', 'metadata', 'specberus', 'transition-checker', 'third-party-checker', 'publish', 'tr-install', 'update-tr-shortlink'];
+    let jobList = ['retrieve-resources', 'metadata', 'specberus', 'transition-checker', 'publish', 'tr-install', 'update-tr-shortlink'];
 
     if (token) {
       jobList.unshift('ip-checker');
