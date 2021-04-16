@@ -4,55 +4,56 @@
 
 'use strict';
 
-var chai = require('chai');
-var chaiImmutable = require('chai-immutable');
-var expect = chai.expect;
-var List = require('immutable').List;
+const chai = require('chai');
+const chaiImmutable = require('chai-immutable');
 
-var Job = require('../lib/job');
+const {expect} = chai;
+const {List} = require('immutable');
+
+const Job = require('../lib/job');
 
 chai.use(chaiImmutable);
 
-describe('Job', function () {
-  describe('object', function () {
-    it('should be immutable (aka frozen)', function () {
+describe('Job', () => {
+  describe('object', () => {
+    it('should be immutable (aka frozen)', () => {
       expect(new Job()).to.be.frozen;
     });
 
-    it('should always be called with new', function () {
-      expect(function () { Job(); }).to.throw(TypeError);
+    it('should always be called with new', () => {
+      expect(() => { Job(); }).to.throw(TypeError);
     });
   });
 
-  describe('get(k)', function () {
-    it('should return the status of a job', function () {
+  describe('get(k)', () => {
+    it('should return the status of a job', () => {
       expect(new Job('status').get('status')).to.equal('status');
     });
 
-    it('should handle inexisting keys', function () {
+    it('should handle inexisting keys', () => {
       expect(new Job().get('say-what')).to.be.undefined;
     });
   });
 
-  describe('set(k, v)', function () {
-    it('should successfully update a status', function () {
-      var job = new Job().set('status', 'eating-nutella');
+  describe('set(k, v)', () => {
+    it('should successfully update a status', () => {
+      const job = new Job().set('status', 'eating-nutella');
 
       expect(job.get('status')).to.equal('eating-nutella');
     });
 
-    it('should successfully update a list of errors', function () {
-      var job = new Job().set('errors', new List('error'));
+    it('should successfully update a list of errors', () => {
+      const job = new Job().set('errors', new List('error'));
 
       expect(job.get('errors')).to.equal(new List('error'));
     });
 
-    it('should not accept non-string statuses', function () {
-      expect(function () { new Job().set('status', 42); }).to.throw(TypeError);
+    it('should not accept non-string statuses', () => {
+      expect(() => { new Job().set('status', 42); }).to.throw(TypeError);
     });
 
-    it('should not accept Arrays of errors', function () {
-      expect(function () {
+    it('should not accept Arrays of errors', () => {
+      expect(() => {
         new Job().set('errors', ['error']);
       }).to.throw(TypeError);
     });

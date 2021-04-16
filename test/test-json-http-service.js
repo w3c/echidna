@@ -4,27 +4,28 @@
 
 'use strict';
 
-var chai = require('chai');
-var expect = chai.expect;
+const chai = require('chai');
 
-var JsonHttpService = require('../lib/json-http-service');
+const {expect} = chai;
 
-describe('JsonHttpService', function () {
-  describe('object', function () {
-    it('should be immutable (aka frozen)', function () {
+const JsonHttpService = require('../lib/json-http-service');
+
+describe('JsonHttpService', () => {
+  describe('object', () => {
+    it('should be immutable (aka frozen)', () => {
       expect(new JsonHttpService('', '', '')).to.be.frozen;
     });
 
-    it('should always be called with new', function () {
-      expect(function () { JsonHttpService(); }).to.throw(TypeError);
+    it('should always be called with new', () => {
+      expect(() => { JsonHttpService(); }).to.throw(TypeError);
     });
 
-    it('should be given strings as arguments', function () {
+    it('should be given strings as arguments', () => {
       [
         function () { new JsonHttpService(42, '', ''); },
         function () { new JsonHttpService('', 42, ''); },
         function () { new JsonHttpService('', '', 42); }
-      ].forEach(function (f) {
+      ].forEach((f) => {
         expect(f).to.throw(TypeError);
       });
     });

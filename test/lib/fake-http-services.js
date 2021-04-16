@@ -1,12 +1,12 @@
 'use strict';
 
-var Promise = require('promise');
+const Promise = require('promise');
 
 /**
  * A fake HTTP POSTable service that always returns a 201 Created
  * @exports test/lib/CreatedService
  */
-var CreatedService = function () {};
+const CreatedService = function () {};
 
 CreatedService.prototype.post = function () {
   return new Promise.resolve({ response: { statusCode: 201 }, body: {} });
@@ -17,7 +17,7 @@ CreatedService.prototype.post = function () {
  * @exports test/lib/NotImplementedService
  */
 
-var NotImplementedService = function () {};
+const NotImplementedService = function () {};
 
 NotImplementedService.prototype.post = function () {
   return new Promise.resolve({
@@ -31,7 +31,7 @@ NotImplementedService.prototype.post = function () {
  * @exports test/lib/BadRequestService
  */
 
-var BadRequestService = function () {};
+const BadRequestService = function () {};
 
 BadRequestService.prototype.post = function () {
   return new Promise.resolve({
@@ -45,7 +45,7 @@ BadRequestService.prototype.post = function () {
  * @exports test/lib/ServerErrorService
  */
 
-var ServerErrorService = function () {};
+const ServerErrorService = function () {};
 
 ServerErrorService.prototype.post = function () {
   return new Promise.resolve({

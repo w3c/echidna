@@ -4,23 +4,24 @@
 
 'use strict';
 
-var chai = require('chai');
-var expect = chai.expect;
+const chai = require('chai');
 
-var History = require('../lib/history');
+const {expect} = chai;
 
-describe('History', function () {
-  describe('object', function () {
-    it('should be immutable (aka frozen)', function () {
+const History = require('../lib/history');
+
+describe('History', () => {
+  describe('object', () => {
+    it('should be immutable (aka frozen)', () => {
       expect(new History()).to.be.frozen;
     });
 
-    it('should always be called with new', function () {
-      expect(function () { History(); }).to.throw(TypeError);
+    it('should always be called with new', () => {
+      expect(() => { History(); }).to.throw(TypeError);
     });
 
-    it('should be given an Immutable.Stack as argument', function () {
-      expect(function () { new History(['something']); }).to.throw(TypeError);
+    it('should be given an Immutable.Stack as argument', () => {
+      expect(() => { new History(['something']); }).to.throw(TypeError);
     });
   });
 });

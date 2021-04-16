@@ -1,9 +1,9 @@
 'use strict';
 
-var fs = require('fs');
-var substitutions = require('./utils').substitutions;
-var getMetadata = require('./utils').getMetadata;
-var endsWith = require('./utils').endsWith;
+const fs = require('fs');
+const {substitutions} = require('./utils');
+const {getMetadata} = require('./utils');
+const {endsWith} = require('./utils');
 
 /**
  * @exports test/lib/htmlTemplate
@@ -15,20 +15,20 @@ function htmlTemplate(serverPath, fileSystemPath) {
   // Return the string after replacement
 
   function applyTemplate(s, metadata) {
-    var str = s.toString();
+    const str = s.toString();
 
     function replace(oldstart) {
       if (oldstart > str.length) return '';
 
-      var start = str.indexOf('{{', oldstart);
-      var end = str.indexOf('}}', oldstart);
+      const start = str.indexOf('{{', oldstart);
+      const end = str.indexOf('}}', oldstart);
 
       if (start === -1 || end === -1 || end <= start + 1) {
         return str.substring(oldstart);
       }
 
-      var name = str.substring(start + 2, end).trim();
-      var replacement = '';
+      const name = str.substring(start + 2, end).trim();
+      let replacement = '';
 
       if (substitutions[name] !== undefined) {
         replacement += substitutions[name];
@@ -45,22 +45,22 @@ function htmlTemplate(serverPath, fileSystemPath) {
   }
 
   return function (req, res, next) {
-    var path = req.url;
+    let path = req.url;
 
     if (path.indexOf(serverPath) !== 0) return next();
     if (endsWith(path, '/')) path += 'index.html';
     if (!endsWith(path, '.html')) return next();
 
-    var filepath = fileSystemPath + path.substring(serverPath.length);
-    var content = null;
-    var metadata = null;
+    const filepath = fileSystemPath + path.substring(serverPath.length);
+    let content = null;
+    let metadata = null;
 
     try {
       // Load the file
       content = fs.readFileSync(filepath, { options: 'utf-8' });
       // Load the metadata associated with the file (if any)
-      var dirpath = filepath.substring(0, filepath.lastIndexOf('/'));
-      var name = dirpath.substring(dirpath.lastIndexOf('/') + 1);
+      const dirpath = filepath.substring(0, filepath.lastIndexOf('/'));
+      const name = dirpath.substring(dirpath.lastIndexOf('/') + 1);
 
       metadata = getMetadata(name);
     }

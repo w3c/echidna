@@ -8,17 +8,17 @@
 
 'use strict';
 
-$(document).ready(function () {
-  var jobs = [];
+$(document).ready(() => {
+  const jobs = [];
 
   function getStatus() {
-    var result = [];
+    const result = [];
 
-    for (var i = 0; i < jobs.length; i++) {
+    for (let i = 0; i < jobs.length; i++) {
       $.get('api/status',
         { id: jobs[i] },
-        function (data, foo, xhr) {
-          if (200 === xhr.status) {
+        (data, foo, xhr) => {
+          if (xhr.status === 200) {
             // Status retrieved OK:
             result.push(data);
             $('#queueText').text(JSON.stringify(result, null, 2));
@@ -37,16 +37,16 @@ $(document).ready(function () {
     }
   }
 
-  $('#infoButton').click(function () {
-    $.get('api/version', function (data) {
+  $('#infoButton').click(() => {
+    $.get('api/version', (data) => {
       $('#infoButton').hide();
       $('#infoText').text(data).show();
     });
   });
 
-  $('#submitForm').submit(function (event) {
+  $('#submitForm').submit((event) => {
     event.preventDefault();
-    var submitForm = $('#submitForm');
+    const submitForm = $('#submitForm');
 
     if (submitForm && submitForm.get(0) && submitForm.get(0).checkValidity()) {
       $.post(
@@ -54,18 +54,18 @@ $(document).ready(function () {
         { url: $('#url').prop('value'),
           decision: $('#decision').prop('value'),
           token: $('#token').prop('value') },
-        function (data, foo, xhr) {
-          if (200 === xhr.status) {
+        (data, foo, xhr) => {
+          if (xhr.status === 200) {
             // Already submitted, and in progress:
             window.alert(data);
           }
-          else if (202 === xhr.status) {
+          else if (xhr.status === 202) {
             // OK:
-            window.alert('Job submitted OK.\nThe ID is “' +
-              data + '”.');
+            window.alert(`Job submitted OK.\nThe ID is “${ 
+              data  }”.`);
             jobs.push(data);
           }
-          else if (500 === xhr.status) {
+          else if (xhr.status === 500) {
             // Missing parameters:
             window.alert(data);
           }

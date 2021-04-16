@@ -1,7 +1,0 @@
-assets/js/jquery-2.2.4.min.js
-config.js
-coverage
-node_modules
-test/test-*.js
-test/test.js
-test/views

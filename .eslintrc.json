@@ -6,12 +6,13 @@
   },
   "plugins": ["node"],
   "extends": [
-    "eslint:recommended",
+    "airbnb-base",
+    "prettier",
     "plugin:node/recommended"
   ],
   "rules": {
     "node/no-unpublished-require": "off",
-    "no-eval": "error",
-    "no-implied-eval": "error"
+    // "no-eval": "error",
+    // "no-implied-eval": "error"
   }
 }

@@ -4,13 +4,13 @@ const fs = require('jsdoc/fs');
 const helper = require('jsdoc/util/templateHelper');
 const logger = require('jsdoc/util/logger');
 const path = require('jsdoc/path');
-const taffy = require('taffydb').taffy;
+const {taffy} = require('taffydb');
 const template = require('jsdoc/template');
 const util = require('util');
 
-const htmlsafe = helper.htmlsafe;
-const linkto = helper.linkto;
-const resolveAuthorLinks = helper.resolveAuthorLinks;
+const {htmlsafe} = helper;
+const {linkto} = helper;
+const {resolveAuthorLinks} = helper;
 const hasOwnProp = Object.prototype.hasOwnProperty;
 
 let data;
@@ -222,9 +222,9 @@ function generate(title, docs, filename, resolveLinks) {
     resolveLinks = resolveLinks !== false;
 
     docData = {
-        env: env,
-        title: title,
-        docs: docs
+        env,
+        title,
+        docs
     };
 
     outpath = path.join(outdir, filename);
@@ -631,12 +631,12 @@ exports.publish = (taffyData, opts, tutorials) => {
     interfaces = taffy(members.interfaces);
 
     Object.keys(helper.longnameToUrl).forEach(longname => {
-        const myClasses = helper.find(classes, {longname: longname});
-        const myExternals = helper.find(externals, {longname: longname});
-        const myInterfaces = helper.find(interfaces, {longname: longname});
-        const myMixins = helper.find(mixins, {longname: longname});
-        const myModules = helper.find(modules, {longname: longname});
-        const myNamespaces = helper.find(namespaces, {longname: longname});
+        const myClasses = helper.find(classes, {longname});
+        const myExternals = helper.find(externals, {longname});
+        const myInterfaces = helper.find(interfaces, {longname});
+        const myMixins = helper.find(mixins, {longname});
+        const myModules = helper.find(modules, {longname});
+        const myNamespaces = helper.find(namespaces, {longname});
 
         if (myModules.length) {
             generate(`Module: ${myModules[0].name}`, myModules, helper.longnameToUrl[longname]);
@@ -666,7 +666,7 @@ exports.publish = (taffyData, opts, tutorials) => {
     // TODO: move the tutorial functions to templateHelper.js
     function generateTutorial(title, tutorial, filename) {
         const tutorialData = {
-            title: title,
+            title,
             header: tutorial.title,
             content: tutorial.parse(),
             children: tutorial.children

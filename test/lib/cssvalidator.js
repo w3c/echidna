@@ -1,8 +1,10 @@
 // Simulates the CSS Validator
+
 'use strict';
 
-var express = require('express');
-var validator = express();
+const express = require('express');
+
+const validator = express();
 
 /**
  * @exports test/lib/validator
@@ -10,11 +12,11 @@ var validator = express();
 
 module.exports = validator;
 
-validator.get('/css-validator/validator', function (req, res) {
-  var uri = req.query.uri || '';
-  var profile = req.query.profile || 'css3';
-  var today = new Date();
-  var errors = [{
+validator.get('/css-validator/validator', (req, res) => {
+  const uri = req.query.uri || '';
+  const profile = req.query.profile || 'css3';
+  const today = new Date();
+  const errors = [{
     source: uri,
     context: '.ds',
     type: 'value',
@@ -25,7 +27,7 @@ validator.get('/css-validator/validator', function (req, res) {
     type: 'value',
     message: 'top is not a color value'
   }];
-  var warnings = [{
+  const warnings = [{
     source: uri,
     line: 0,
     message: 'Property -moz-border-radius is an unknown vendor extension',
@@ -38,9 +40,9 @@ validator.get('/css-validator/validator', function (req, res) {
     type: 'vendor-extension',
     level: 0
   }];
-  var json = {
+  const json = {
     cssvalidation: {
-      uri: uri,
+      uri,
       checkedby: 'http://www.w3.org/2005/07/css-validator',
       csslevel: profile,
       date: today.toISOString(),
