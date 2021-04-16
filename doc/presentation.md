@@ -504,7 +504,6 @@ template: appendix
 
 * [**Echidna**](https://github.com/w3c/echidna) (ɪˈkɪd nə) *n. new publication workflow's main component*
 * [**Specberus**](https://github.com/w3c/specberus) (ˈspɛk bər əs) *n. new automatic checker for* pubrules
-* [**Third Party Resources Checker**](https://github.com/w3c/third-party-resources-checker)
 * [**Insafe**](https://github.com/w3c/insafe)
 * [**ReSpec**](https://github.com/w3c/respec)
 * [**Spec Generator**](https://github.com/w3c/spec-generator)
@@ -514,8 +513,7 @@ Node.js dependencies:
 ```
 Echidna
 ├── Specberus
-│   └── insafe
-└── Third Party Resources Checker
+    └── insafe
 ```
 
 .footer[![Logo](https://raw.githubusercontent.com/w3c/echidna/master/doc/w3c-labs-logo-small.png)New publication workflow]

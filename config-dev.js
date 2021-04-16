@@ -6,7 +6,6 @@ global.DEFAULT_HTTP_LOCATION = 'http://localhost:3001';
 global.DEFAULT_LOG_LOCATION = '.';
 global.DEFAULT_RESULT_LOCATION = './test/staging/';
 global.DEFAULT_PORT = 3000;
-global.RESOURCES_ALLOWLIST = './allowlist.json';
 global.TOKEN_ENDPOINT = 'http://localhost:3001/authorize';
 global.SPEC_GENERATOR = 'http://localhost:3001/generate';
 global.USERNAME = '';

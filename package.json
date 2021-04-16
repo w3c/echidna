@@ -36,7 +36,6 @@
     "request": "2.88.2",
     "specberus": "5.6.1",
     "tar-stream": "2.2.0",
-    "third-party-resources-checker": "1.0.6",
     "uuid": "8.3.2"
   },
   "devDependencies": {

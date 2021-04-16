@@ -29,10 +29,10 @@ LDAP (Lightweight Directory Access Protocol) is used to identify a user(username
 # Job List
 
 ### Job List when using W3C credentials
-['retrieve-resources', 'metadata', 'user-checker', 'specberus', 'transition-checker', 'third-party-checker', 'publish', 'tr-install', 'update-tr-shortlink']
+['retrieve-resources', 'metadata', 'user-checker', 'specberus', 'transition-checker', 'publish', 'tr-install', 'update-tr-shortlink']
 
 ### Job List when using curl with a token (CI only)
-['ip-checker', 'retrieve-resources', 'metadata', 'token-checker', 'specberus', 'transition-checker', 'third-party-checker', 'publish', 'tr-install', 'update-tr-shortlink']
+['ip-checker', 'retrieve-resources', 'metadata', 'token-checker', 'specberus', 'transition-checker', 'publish', 'tr-install', 'update-tr-shortlink']
 
 ## document-downloader.js
 Service to download and install resources in the staging server. TAR file or link(pointing to Overview.html or manifest) are supported.

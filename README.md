@@ -44,7 +44,7 @@ You may use the optional defined below:
 
 1. `STAGING_PATH`: path in the local filesystem where documents will be downloaded; *staged*.
 (Default `/var/www/html/trstaging/`.)
-2. `HTTP_LOCATION`: HTTP endpoint for [Specberus](https://github.com/w3c/specberus) and the [Third Party Resources Checker](https://github.com/dontcallmedom/third-party-resources-checker).
+2. `HTTP_LOCATION`: HTTP endpoint for [Specberus](https://github.com/w3c/specberus).
 (Default `http://localhost/trstaging/`.)
 3. `PORT`: where Echidna will be listening for publication requests.
 (Default `3000`.)
