@@ -13,6 +13,39 @@
   "rules": {
     "node/no-unpublished-require": "off",
     "no-eval": "error",
-    "no-implied-eval": "error"
-  }
+    "strict": "off",
+    "no-implied-eval": "error",
+    "func-names": "warn",
+    "no-use-before-define": "warn",
+    "no-param-reassign": "warn",
+    "no-shadow": "warn",
+    "import/no-dynamic-require": "warn",
+    "global-require": "warn",
+    "consistent-return": "warn",
+    "no-loop-func": "warn",
+    "no-restricted-syntax": "warn",
+    "guard-for-in": "warn",
+    "no-plusplus": "warn",
+    "radix": "warn",
+    "vars-on-top": "warn",
+    "no-nested-ternary": "warn",
+    "default-case": "warn",
+    "array-callback-return": "warn",
+    "new-cap": "warn"
+  },
+  "overrides": [
+    {
+      "files": [
+        "test/**/*.js"
+      ],
+      "env": {
+        "mocha": true
+      },
+      "rules": {
+        "no-unused-expressions": "warn",
+        "no-restricted-globals": "warn",
+        "no-new": "warn"
+      }
+    }
+  ]
 }
