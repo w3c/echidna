@@ -1,4 +1,3 @@
-
 /**
  * Behaviour of the Echidna testbed.
  *
@@ -10,8 +9,12 @@
 'use strict';
 
 const JOBS = [
-  'retrieve-resources', 'specberus', 'token-checker',
-  'publish', 'tr-install', 'update-tr-shortlink'
+  'retrieve-resources',
+  'specberus',
+  'token-checker',
+  'publish',
+  'tr-install',
+  'update-tr-shortlink',
 ];
 
 let log;
@@ -23,7 +26,7 @@ const allIDs = {};
 
 function logMessage(message) {
   log = log || $('pre#console');
-  log.append(`${new Date().toLocaleTimeString()  }  ${  message  }\n`);
+  log.append(`${new Date().toLocaleTimeString()}  ${message}\n`);
 }
 
 function dumpObject(obj) {
@@ -36,9 +39,9 @@ function dumpObject(obj) {
 }
 
 function endpoint() {
-  return `${$('input#host')[0].value  }:${ 
-    $('input#port')[0].value 
-    }${$('input#suffix')[0].value}`;
+  return `${$('input#host')[0].value}:${$('input#port')[0].value}${
+    $('input#suffix')[0].value
+  }`;
 }
 
 function activateActions() {
@@ -46,8 +49,12 @@ function activateActions() {
     publishOneSpec($(this).attr('data-spec-id'));
   });
 
-  $('a.publishAllAtOnce').click(() => { publishAllSpecs(); });
-  $('a.publishAllWithDelay').click(() => { publishAllSpecs(true); });
+  $('a.publishAllAtOnce').click(() => {
+    publishAllSpecs();
+  });
+  $('a.publishAllWithDelay').click(() => {
+    publishAllSpecs(true);
+  });
 
   $('td.metadata').click(function () {
     const spec = findSpec($(this).attr('data-spec-id'));
@@ -68,14 +75,14 @@ function activateActions() {
 }
 
 function retrieveStatus(id) {
-  $.get(`${endpoint()  }/status/?id=${  allIDs[id]}`, (data) => {
-    logMessage(`Retrieved status of job "${  id  }".`);
+  $.get(`${endpoint()}/status/?id=${allIDs[id]}`, data => {
+    logMessage(`Retrieved status of job "${id}".`);
     dumpObject(data);
   });
 }
 
 function refresh() {
-  $.get(`${endpoint()  }/status/`, (data) => {
+  $.get(`${endpoint()}/status/`, data => {
     updateJobs(data);
     // FIXME window.setTimeout(refresh, $('input#rate')[0].value * 1000);
 
@@ -91,7 +98,7 @@ function updateJobs(data) {
 
   for (const i in allSpecs) {
     id = allSpecs[i].id;
-    spec = data.requests[`${location.href  }drafts/${  id}`];
+    spec = data.requests[`${location.href}drafts/${id}`];
     if (spec) {
       allJobs[id] = allJobs[id] || spec.jobs;
       completed = 0;
@@ -100,24 +107,20 @@ function updateJobs(data) {
         step = allJobs[id][JOBS[j]];
         if (step && step.status && step.status.toLowerCase() === 'ok') {
           completed++;
-        }
-        else {
-          allMessages[id] =
-            `“${  id  }”: ${ 
-            parseInt(100 * completed / JOBS.length) 
-            }% (stuck in ${  JOBS[j]  }).`;
+        } else {
+          allMessages[id] = `“${id}”: ${parseInt(
+            (100 * completed) / JOBS.length,
+          )}% (stuck in ${JOBS[j]}).`;
           break;
         }
       }
       if (!allMessages[id]) {
-        allMessages[id] =
-          `“${  id  }”: done! ${ 
-          completed  } steps completed.`;
+        allMessages[id] = `“${id}”: done! ${completed} steps completed.`;
       }
 
-      $(`td[data-spec-id="${  id  }"] > span`).css(
+      $(`td[data-spec-id="${id}"] > span`).css(
         'width',
-        `${128 * completed / JOBS.length  }px`
+        `${(128 * completed) / JOBS.length}px`,
       );
     }
   }
@@ -127,14 +130,13 @@ function publishOneSpec(id) {
   const spec = findSpec(id);
   const params = {};
 
-  logMessage(`Submitting spec &ldquo;${  id 
-    }&rdquo; for publication&hellip;`);
-  params.url = `${location.href  }drafts/${  spec.id}`;
+  logMessage(`Submitting spec &ldquo;${id}&rdquo; for publication&hellip;`);
+  params.url = `${location.href}drafts/${spec.id}`;
   params.decision = 'foo';
   params.token = '34';
 
-  $.post(`${endpoint()  }/request`, params, (data) => {
-    logMessage(`Response from server:<br />          ${  data}`);
+  $.post(`${endpoint()}/request`, params, data => {
+    logMessage(`Response from server:<br />          ${data}`);
     if (data && typeof data === 'string') {
       allIDs[id] = data;
     }
@@ -144,10 +146,9 @@ function publishOneSpec(id) {
 function publishAllSpecs(delay) {
   if (delay) {
     window.alert('Publishing all with random delays not implemented yet.');
-  }
-  else {
+  } else {
     logMessage(
-      `Submitting all ${  allSpecs.length  } specs for publication&hellip;`
+      `Submitting all ${allSpecs.length} specs for publication&hellip;`,
     );
 
     for (const i in allSpecs) {
@@ -170,40 +171,43 @@ function findSpec(id) {
 
 $(document).ready(() => {
   logMessage('Loading specs&hellip;');
-  $.getJSON('data/specs.json', (data) => {
+  $.getJSON('data/specs.json', data => {
     const tableBody = $('table#specList > tbody');
     let row;
 
     $.each(data.specs, (foo, spec) => {
       allSpecs.push(spec);
       row = $('<tr></tr>');
-      row.append($(
-        `<td class="action metadata" data-spec-id="${  spec.id  }"><em>${ 
-        spec.metadata.title  }</em></td>`
-      ));
-      row.append($(
-        `<td class="deliverers"><a href="${  spec.metadata.groupHomepage 
-        }">${  spec.metadata.groupName  }</a></td>`
-      ));
-      row.append($(
-        `<td><a href="drafts/${  spec.id  }"><code>${  spec.id 
-        }</code></a></td>`
-      ));
-      row.append($(
-        `<td><a class="action publishOne" data-spec-id="${  spec.id 
-        }">Publish</a></td>`
-      ));
-      row.append($(
-        `<td class="progressBar action status" data-spec-id="${  spec.id 
-        }"><span>&nbsp;</span></td>`
-      ));
+      row.append(
+        $(
+          `<td class="action metadata" data-spec-id="${spec.id}"><em>${spec.metadata.title}</em></td>`,
+        ),
+      );
+      row.append(
+        $(
+          `<td class="deliverers"><a href="${spec.metadata.groupHomepage}">${spec.metadata.groupName}</a></td>`,
+        ),
+      );
+      row.append(
+        $(`<td><a href="drafts/${spec.id}"><code>${spec.id}</code></a></td>`),
+      );
+      row.append(
+        $(
+          `<td><a class="action publishOne" data-spec-id="${spec.id}">Publish</a></td>`,
+        ),
+      );
+      row.append(
+        $(
+          `<td class="progressBar action status" data-spec-id="${spec.id}"><span>&nbsp;</span></td>`,
+        ),
+      );
       $('table#specList').append(row);
       tableBody.append(row);
     });
 
     $('p#spinner').hide();
     $('div#content').show();
-    logMessage(`${allSpecs.length  } specs loaded.`);
+    logMessage(`${allSpecs.length} specs loaded.`);
     activateActions();
   });
 });

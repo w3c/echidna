@@ -7,11 +7,11 @@
 const chai = require('chai');
 const chaiImmutable = require('chai-immutable');
 
-const {expect} = chai;
+const { expect } = chai;
 const Immutable = require('immutable');
 
-const {List} = Immutable;
-const {Map} = Immutable;
+const { List } = Immutable;
+const { Map } = Immutable;
 
 const Job = require('../lib/job');
 const RequestState = require('../lib/request-state');
@@ -19,7 +19,7 @@ const RequestState = require('../lib/request-state');
 chai.use(chaiImmutable);
 
 describe('RequestState', () => {
-  const state = new RequestState('something', new Map({ 'dummy': new Job() }));
+  const state = new RequestState('something', new Map({ dummy: new Job() }));
 
   describe('object', () => {
     it('should be immutable (aka frozen)', () => {
@@ -65,7 +65,7 @@ describe('RequestState', () => {
     });
 
     it('should be false when the job has started', () => {
-      const newState = state.set('jobs', new Map({ 'dummy': new Job('ok') }));
+      const newState = state.set('jobs', new Map({ dummy: new Job('ok') }));
 
       expect(newState.hasJobStarted('dummy')).to.be.false;
     });

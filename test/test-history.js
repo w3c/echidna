@@ -6,7 +6,7 @@
 
 const chai = require('chai');
 
-const {expect} = chai;
+const { expect } = chai;
 
 const History = require('../lib/history');
 
@@ -17,11 +17,15 @@ describe('History', () => {
     });
 
     it('should always be called with new', () => {
-      expect(() => { History(); }).to.throw(TypeError);
+      expect(() => {
+        History();
+      }).to.throw(TypeError);
     });
 
     it('should be given an Immutable.Stack as argument', () => {
-      expect(() => { new History(['something']); }).to.throw(TypeError);
+      expect(() => {
+        new History(['something']);
+      }).to.throw(TypeError);
     });
   });
 });

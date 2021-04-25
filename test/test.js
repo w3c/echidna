@@ -10,7 +10,7 @@ process.env.NODE_ENV = 'dev';
 const chai = require('chai');
 const chaiImmutable = require('chai-immutable');
 
-const {expect} = chai;
+const { expect } = chai;
 const chaiAsPromised = require('chai-as-promised');
 
 chai.use(chaiImmutable);
@@ -20,8 +20,8 @@ const Promise = require('promise');
 const Fs = require('fs');
 const Immutable = require('immutable');
 
-const {List} = Immutable;
-const {Map} = Immutable;
+const { List } = Immutable;
+const { Map } = Immutable;
 let pendingTests = 6;
 
 require('../config-dev.js');
@@ -29,13 +29,13 @@ require('../config-dev.js');
 const server = require('./lib/testserver');
 const FakeHttpServices = require('./lib/fake-http-services');
 
-const {CreatedService} = FakeHttpServices;
-const {BadRequestService} = FakeHttpServices;
-const {NotImplementedService} = FakeHttpServices;
-const {ServerErrorService} = FakeHttpServices;
+const { CreatedService } = FakeHttpServices;
+const { BadRequestService } = FakeHttpServices;
+const { NotImplementedService } = FakeHttpServices;
+const { ServerErrorService } = FakeHttpServices;
 
 // Used by the TokenChecker
-global.TOKEN_ENDPOINT = `${server.location()  }/authorize`;
+global.TOKEN_ENDPOINT = `${server.location()}/authorize`;
 global.USERNAME = 'toto';
 global.PASSWORD = 'secret';
 
@@ -51,8 +51,7 @@ function readFileSyncUtf8(file) {
 }
 
 const trackProgress = () => {
-  if (--pendingTests === 0)
-    server.close();
+  if (--pendingTests === 0) server.close();
 };
 
 describe('DocumentDownloader', () => {
@@ -67,32 +66,37 @@ describe('DocumentDownloader', () => {
       expect(content).to.be.an.instanceOf(Promise);
     });
 
-    it('should promise a Buffer', () => expect(content).to.eventually.be.an.instanceOf(Buffer));
+    it('should promise a Buffer', () =>
+      expect(content).to.eventually.be.an.instanceOf(Buffer));
 
-    it('should download a file', () => expect(content.then((s) => s.toString('utf8')))
-        .to.eventually.contain('Echidna testbed'));
+    it('should download a file', () =>
+      expect(content.then(s => s.toString('utf8'))).to.eventually.contain(
+        'Echidna testbed',
+      ));
 
     it('should reject if the resource does not exist', () => {
       const notFound = DocumentDownloader.fetch(
-        `${server.location()  }/et/si/tu/n/existais/pas`
+        `${server.location()}/et/si/tu/n/existais/pas`,
       );
 
       return expect(notFound).to.eventually.be.rejectedWith(/code 404/);
     });
 
     it('should reject if the server is not reachable', () => {
-      const notReachable = DocumentDownloader.fetch('http://youdbetternotexist/');
+      const notReachable = DocumentDownloader.fetch(
+        'http://youdbetternotexist/',
+      );
 
-      return expect(notReachable)
-        .to.eventually.be.rejectedWith(/network error/);
+      return expect(notReachable).to.eventually.be.rejectedWith(
+        /network error/,
+      );
     });
   });
 
   describe('fetchAll(urls)', () => {
-    const content = DocumentDownloader.fetchAll(List.of(
-      `${server.location()  }/robots`,
-      `${server.location()  }/elvis`
-    ));
+    const content = DocumentDownloader.fetchAll(
+      List.of(`${server.location()}/robots`, `${server.location()}/elvis`),
+    );
 
     it('should be a function', () => {
       expect(DocumentDownloader.fetchAll).to.be.a('function');
@@ -102,9 +106,11 @@ describe('DocumentDownloader', () => {
       expect(content).to.be.an.instanceOf(Promise);
     });
 
-    it('should promise a List of size 2', () => expect(content).to.eventually.be.an.instanceOf(List).of.size(2));
+    it('should promise a List of size 2', () =>
+      expect(content).to.eventually.be.an.instanceOf(List).of.size(2));
 
-    it('should fetch multiple URLs', () => content.then((content) => {
+    it('should fetch multiple URLs', () =>
+      content.then(content => {
         expect(content.get(0).toString('utf8')).to.contain('looking for');
         expect(content.get(1).toString('utf8')).to.contain('alive');
       }));
@@ -125,9 +131,11 @@ describe('DocumentDownloader', () => {
       expect(DocumentDownloader.install).to.be.a('function');
     });
 
-    it('should return a promise', () => expect(promise).to.be.an.instanceOf(Promise));
+    it('should return a promise', () =>
+      expect(promise).to.be.an.instanceOf(Promise));
 
-    it('should create the file with proper content', () => promise.then(() => {
+    it('should create the file with proper content', () =>
+      promise.then(() => {
         expect(readFileSyncUtf8('/tmp/foo')).to.equal('bar');
       }));
   });
@@ -136,10 +144,12 @@ describe('DocumentDownloader', () => {
     let promise;
 
     before(() => {
-      promise = DocumentDownloader.installAll(List.of(
-        ['/tmp/multiple_foo1', 'multiple_bar1'],
-        ['/tmp/multiple_foo2', 'multiple_bar2']
-      ));
+      promise = DocumentDownloader.installAll(
+        List.of(
+          ['/tmp/multiple_foo1', 'multiple_bar1'],
+          ['/tmp/multiple_foo2', 'multiple_bar2'],
+        ),
+      );
     });
 
     after(() => {
@@ -151,13 +161,17 @@ describe('DocumentDownloader', () => {
       expect(DocumentDownloader.installAll).to.be.a('function');
     });
 
-    it('should return a promise', () => expect(promise).to.be.an.instanceOf(Promise));
+    it('should return a promise', () =>
+      expect(promise).to.be.an.instanceOf(Promise));
 
-    it('should create multiple files with proper contents', () => promise.then(() => {
-        expect(readFileSyncUtf8('/tmp/multiple_foo1'))
-          .to.equal('multiple_bar1');
-        expect(readFileSyncUtf8('/tmp/multiple_foo2'))
-          .to.equal('multiple_bar2');
+    it('should create multiple files with proper contents', () =>
+      promise.then(() => {
+        expect(readFileSyncUtf8('/tmp/multiple_foo1')).to.equal(
+          'multiple_bar1',
+        );
+        expect(readFileSyncUtf8('/tmp/multiple_foo2')).to.equal(
+          'multiple_bar2',
+        );
       }));
   });
 
@@ -167,14 +181,14 @@ describe('DocumentDownloader', () => {
       const destPath = '/tmp/testimage.png';
 
       return DocumentDownloader.fetch(server.location() + srcPath)
-        .then((content) => DocumentDownloader.install(destPath, content))
+        .then(content => DocumentDownloader.install(destPath, content))
         .then(() => {
-          const file1 = Fs.readFileSync(`test${  srcPath}`);
+          const file1 = Fs.readFileSync(`test${srcPath}`);
           const file2 = Fs.readFileSync(destPath);
 
           return expect(file1).to.deep.equal(file2);
         })
-        .catch((e) => {
+        .catch(e => {
           e.showDiff = false;
           throw e;
         });
@@ -187,7 +201,7 @@ describe('DocumentDownloader', () => {
     before(() => {
       promise = DocumentDownloader.fetchAndInstall(
         server.location(),
-        '/tmp/testechidna'
+        '/tmp/testechidna',
       );
     });
 
@@ -204,19 +218,22 @@ describe('DocumentDownloader', () => {
       expect(promise).to.be.an.instanceOf(Promise);
     });
 
-    it('should create the folder if it does not exist', () => promise.then(() => {
+    it('should create the folder if it does not exist', () =>
+      promise.then(() => {
         expect(Fs.existsSync('/tmp/testechidna')).to.be.true;
       }));
 
-    it('should create the file with proper content', () => promise.then(() => {
-        expect(readFileSyncUtf8('/tmp/testechidna/Overview.html'))
-          .to.contain('Echidna testbed');
+    it('should create the file with proper content', () =>
+      promise.then(() => {
+        expect(readFileSyncUtf8('/tmp/testechidna/Overview.html')).to.contain(
+          'Echidna testbed',
+        );
       }));
 
     it('should reject if the resource does not exist', () => {
       const notFound = DocumentDownloader.fetchAndInstall(
-        `${server.location()  }/et/si/tu/n/existais/pas`,
-        '/tmp/whatever'
+        `${server.location()}/et/si/tu/n/existais/pas`,
+        '/tmp/whatever',
       );
 
       return expect(notFound).to.eventually.be.rejectedWith(/code 404/);
@@ -225,22 +242,25 @@ describe('DocumentDownloader', () => {
     it('should reject if the server is not reachable', () => {
       const notReachable = DocumentDownloader.fetchAndInstall(
         'https://non-rien.de/rien',
-        '/tmp/whatever'
+        '/tmp/whatever',
       );
 
-      return expect(notReachable)
-        .to.eventually.be.rejectedWith(/network error/);
+      return expect(notReachable).to.eventually.be.rejectedWith(
+        /network error/,
+      );
     });
 
-    it('should read a manifest and install its content', () => DocumentDownloader.fetchAndInstall(
-        `${server.getMetadata('navigation-timing-2').location  }W3CTRMANIFEST`,
-        '/tmp/testechidnaManifest'
+    it('should read a manifest and install its content', () =>
+      DocumentDownloader.fetchAndInstall(
+        `${server.getMetadata('navigation-timing-2').location}W3CTRMANIFEST`,
+        '/tmp/testechidnaManifest',
       ).then(() => {
-        expect(readFileSyncUtf8('/tmp/testechidnaManifest/Overview.html'))
-          .to.contain('Navigation Timing 2');
+        expect(
+          readFileSyncUtf8('/tmp/testechidnaManifest/Overview.html'),
+        ).to.contain('Navigation Timing 2');
         expect(Fs.existsSync('/tmp/testechidnaManifest/spec.css')).to.be.true;
-        expect(Fs.existsSync('/tmp/testechidnaManifest/timing-overview.png'))
-          .to.be.true;
+        expect(Fs.existsSync('/tmp/testechidnaManifest/timing-overview.png')).to
+          .be.true;
 
         Fs.unlinkSync('/tmp/testechidnaManifest/Overview.html');
         Fs.unlinkSync('/tmp/testechidnaManifest/spec.css');
@@ -248,19 +268,21 @@ describe('DocumentDownloader', () => {
         Fs.rmdirSync('/tmp/testechidnaManifest');
       }));
 
-    it('should read a manifest and install its content after spec generation',
-       () => DocumentDownloader.fetchAndInstall(
-        `${server.getMetadata('navigation-timing-2-generated').location 
-          }W3CTRMANIFEST`,
-        '/tmp/testechidnaSpecGeneration'
+    it('should read a manifest and install its content after spec generation', () =>
+      DocumentDownloader.fetchAndInstall(
+        `${
+          server.getMetadata('navigation-timing-2-generated').location
+        }W3CTRMANIFEST`,
+        '/tmp/testechidnaSpecGeneration',
       ).then(() => {
-        expect(readFileSyncUtf8('/tmp/testechidnaSpecGeneration/Overview.html'))
-          .to.contain('Spec-generated Navigation Timing 2');
-        expect(Fs.existsSync('/tmp/testechidnaSpecGeneration/spec.css'))
-          .to.be.true;
-        expect(Fs.existsSync(
-          '/tmp/testechidnaSpecGeneration/timing-overview.png'
-        )).to.be.true;
+        expect(
+          readFileSyncUtf8('/tmp/testechidnaSpecGeneration/Overview.html'),
+        ).to.contain('Spec-generated Navigation Timing 2');
+        expect(Fs.existsSync('/tmp/testechidnaSpecGeneration/spec.css')).to.be
+          .true;
+        expect(
+          Fs.existsSync('/tmp/testechidnaSpecGeneration/timing-overview.png'),
+        ).to.be.true;
 
         Fs.unlinkSync('/tmp/testechidnaSpecGeneration/Overview.html');
         Fs.unlinkSync('/tmp/testechidnaSpecGeneration/spec.css');
@@ -268,12 +290,14 @@ describe('DocumentDownloader', () => {
         Fs.rmdirSync('/tmp/testechidnaSpecGeneration');
       }));
 
-    it('should read a tarball and install its content', () => DocumentDownloader.fetchAndInstall(
-        `${server.location()  }/drafts/frame-timing.tar`,
-        '/tmp/testechidnaTarball'
+    it('should read a tarball and install its content', () =>
+      DocumentDownloader.fetchAndInstall(
+        `${server.location()}/drafts/frame-timing.tar`,
+        '/tmp/testechidnaTarball',
       ).then(() => {
-        expect(readFileSyncUtf8('/tmp/testechidnaTarball/Overview.html'))
-          .to.contain('Frame Timing');
+        expect(
+          readFileSyncUtf8('/tmp/testechidnaTarball/Overview.html'),
+        ).to.contain('Frame Timing');
 
         Fs.unlinkSync('/tmp/testechidnaTarball/Overview.html');
         Fs.rmdirSync('/tmp/testechidnaTarball');
@@ -303,7 +327,7 @@ describe('DocumentDownloader', () => {
         '',
         '# Images',
         'img/image1.jpg',
-        'img/image2.jpg'
+        'img/image2.jpg',
       ].join('\n');
 
       const filenames = List.of(
@@ -311,7 +335,7 @@ describe('DocumentDownloader', () => {
         'css/screen.css',
         'css/print.css',
         'img/image1.jpg',
-        'img/image2.jpg'
+        'img/image2.jpg',
       );
 
       expect(DocumentDownloader.getFilenames(manifest)).to.equal(filenames);
@@ -354,26 +378,35 @@ describe('SpecberusWrapper', () => {
     });
 
     const myDraft = server.getMetadata('navigation-timing-2');
-    const content = SpecberusWrapper.validate(myDraft.location,
-                                            myDraft.status,
-                                            myDraft.rectrack,
-                                            myDraft.patentPolicy);
+    const content = SpecberusWrapper.validate(
+      myDraft.location,
+      myDraft.status,
+      myDraft.rectrack,
+      myDraft.patentPolicy,
+    );
 
     it('should return a promise', () => {
       expect(content).to.be.an.instanceOf(Promise);
     });
 
-    it('should promise an object', () => expect(content).to.eventually.be.an.instanceOf(Object));
+    it('should promise an object', () =>
+      expect(content).to.eventually.be.an.instanceOf(Object));
 
-    it('should promise an object with an error property', () => expect(content).to.eventually.have.property('errors'));
+    it('should promise an object with an error property', () =>
+      expect(content).to.eventually.have.property('errors'));
 
-    it('should return an error property that is a list', () => expect(content).that.eventually.has.property('errors')
+    it('should return an error property that is a list', () =>
+      expect(content)
+        .that.eventually.has.property('errors')
         .that.is.an.instanceOf(List));
 
-    it('should promise an object with a metadata property', () => expect(content).to.eventually.have.property('metadata'));
+    it('should promise an object with a metadata property', () =>
+      expect(content).to.eventually.have.property('metadata'));
 
-    it('should return a metadata property that is a Map', () => expect(content).to.eventually.have.property('metadata')
-          .that.is.an.instanceOf(Map));
+    it('should return a metadata property that is a Map', () =>
+      expect(content)
+        .to.eventually.have.property('metadata')
+        .that.is.an.instanceOf(Map));
   });
 
   describe('validate(url-with-css-errors)', () => {
@@ -381,11 +414,11 @@ describe('SpecberusWrapper', () => {
       server.getMetadata('nav-csserror').location,
       server.getMetadata('nav-csserror').status,
       server.getMetadata('nav-csserror').rectrack,
-      server.getMetadata('nav-csserror').patentPolicy
+      server.getMetadata('nav-csserror').patentPolicy,
     );
 
-    it('should return an error property that has 4 errors', () => expect(content).that.eventually.has.property('errors')
-        .that.has.size(4));
+    it('should return an error property that has 4 errors', () =>
+      expect(content).that.eventually.has.property('errors').that.has.size(4));
   });
 
   describe('validate(url-with-css-warnings)', () => {
@@ -393,11 +426,11 @@ describe('SpecberusWrapper', () => {
       server.getMetadata('nav-csswarning').location,
       server.getMetadata('nav-csswarning').status,
       server.getMetadata('nav-csswarning').rectrack,
-      server.getMetadata('nav-csswarning').patentPolicy
+      server.getMetadata('nav-csswarning').patentPolicy,
     );
 
-    it('should return an error property that has 4 error', () => expect(content).that.eventually.has.property('errors')
-        .that.has.size(4));
+    it('should return an error property that has 4 error', () =>
+      expect(content).that.eventually.has.property('errors').that.has.size(4));
   });
 
   describe('validate(url-with-webrtc-crd-wrong-review-date)', () => {
@@ -405,11 +438,11 @@ describe('SpecberusWrapper', () => {
       server.getMetadata('webrtc-crd').location,
       server.getMetadata('webrtc-crd').status,
       server.getMetadata('webrtc-crd').rectrack,
-      server.getMetadata('webrtc-crd').patentPolicy
+      server.getMetadata('webrtc-crd').patentPolicy,
     );
 
-    it('should return an error property that has 1 error', () => expect(content).that.eventually.has.property('errors')
-        .that.has.size(1));
+    it('should return an error property that has 1 error', () =>
+      expect(content).that.eventually.has.property('errors').that.has.size(1));
   });
 
   describe('validate(url-with-webrtc-wrong-review-date-editorial)', () => {
@@ -417,11 +450,11 @@ describe('SpecberusWrapper', () => {
       server.getMetadata('webrtc').location,
       server.getMetadata('webrtc').status,
       server.getMetadata('webrtc').rectrack,
-      server.getMetadata('webrtc').patentPolicy
+      server.getMetadata('webrtc').patentPolicy,
     );
 
-    it('should return an error property that has 2 errors', () => expect(content).that.eventually.has.property('errors')
-        .that.has.size(2));
+    it('should return an error property that has 2 errors', () =>
+      expect(content).that.eventually.has.property('errors').that.has.size(2));
   });
 
   describe('extractMetadata(url)', () => {
@@ -430,76 +463,95 @@ describe('SpecberusWrapper', () => {
     });
 
     const myDraft = server.getMetadata('navigation-timing-2');
-    const content = SpecberusWrapper.extractMetadata(myDraft.location,
-                                                   myDraft.status);
+    const content = SpecberusWrapper.extractMetadata(
+      myDraft.location,
+      myDraft.status,
+    );
 
     it('should return a promise', () => {
       expect(content).to.be.an.instanceOf(Promise);
     });
 
-    it('should promise an object', () => expect(content).to.eventually.be.an.instanceOf(Object));
+    it('should promise an object', () =>
+      expect(content).to.eventually.be.an.instanceOf(Object));
 
-    it('should promise an object with a profile property', () => expect(content).to.eventually.have.property('profile'));
+    it('should promise an object with a profile property', () =>
+      expect(content).to.eventually.have.property('profile'));
 
-    it('should return an object with a delivererIDs property that is an array',
-      () => expect(content).that.eventually.has.property('delivererIDs')
-          .that.is.an.instanceOf(Array));
+    it('should return an object with a delivererIDs property that is an array', () =>
+      expect(content)
+        .that.eventually.has.property('delivererIDs')
+        .that.is.an.instanceOf(Array));
 
-    it('should promise an object with a rectrack property', () => expect(content).to.eventually.have.property('rectrack'));
+    it('should promise an object with a rectrack property', () =>
+      expect(content).to.eventually.have.property('rectrack'));
 
-    it('should promise the proper profile property', () => content.then((result) => {
+    it('should promise the proper profile property', () =>
+      content.then(result => {
         expect(result.profile).to.equal(myDraft.status);
       }));
 
-    it('should promise the proper delivererIDs', () => content.then((result) => {
+    it('should promise the proper delivererIDs', () =>
+      content.then(result => {
         expect(result.delivererIDs.length).to.equal(1);
         expect(result.delivererIDs[0]).to.equal(myDraft.groupID);
       }));
 
-    it('should promise the proper rectrack property', () => content.then((result) => {
+    it('should promise the proper rectrack property', () =>
+      content.then(result => {
         expect(result.rectrack).to.equal(myDraft.rectrack);
       }));
 
-    it('should promise the proper metadata.title', () => content.then((result) => {
+    it('should promise the proper metadata.title', () =>
+      content.then(result => {
         expect(result.title).to.equal(myDraft.title);
       }));
 
-    it('should promise the proper metadata.thisVersion', () => content.then((result) => {
+    it('should promise the proper metadata.thisVersion', () =>
+      content.then(result => {
         expect(result.thisVersion).to.equal(myDraft.thisVersion);
       }));
 
-    it('should promise the proper metadata.latestVersion', () => content.then((result) => {
+    it('should promise the proper metadata.latestVersion', () =>
+      content.then(result => {
         expect(result.latestVersion).to.equal(myDraft.latestVersion);
       }));
 
-    it('should promise the proper metadata.docDate', () => content.then((result) => {
-        const expected = `${myDraft.docDate.getFullYear()  }-${ 
-            myDraft.docDate.getMonth() + 1  }-${ 
-            myDraft.docDate.getDate()}`;
+    it('should promise the proper metadata.docDate', () =>
+      content.then(result => {
+        const expected = `${myDraft.docDate.getFullYear()}-${
+          myDraft.docDate.getMonth() + 1
+        }-${myDraft.docDate.getDate()}`;
 
         expect(result.docDate).to.be.a('string');
         expect(result.docDate).to.equal(expected);
       }));
 
-    it('should promise the proper metadata.process', () => content.then((result) => {
+    it('should promise the proper metadata.process', () =>
+      content.then(result => {
         expect(result.process).to.equal(myDraft.processURI);
       }));
 
-    it('should promise the proper metadata.editorsDraft', () => content.then((result) => {
+    it('should promise the proper metadata.editorsDraft', () =>
+      content.then(result => {
         expect(result.editorsDraft).to.equal(myDraft.editorsDraft);
       }));
 
-    it('should promise the proper metadata.editorIDs', () => content.then((result) => {
+    it('should promise the proper metadata.editorIDs', () =>
+      content.then(result => {
         expect(result.editorIDs).to.deep.equal(myDraft.editorIDs);
       }));
   });
 
   describe('extractMetadata(url) for non-rectrack doc', () => {
     const myDraft = server.getMetadata('charmod-norm');
-    const content = SpecberusWrapper.extractMetadata(myDraft.location,
-                                                   myDraft.status);
+    const content = SpecberusWrapper.extractMetadata(
+      myDraft.location,
+      myDraft.status,
+    );
 
-    it('should promise the proper rectrack property', () => content.then((result) => {
+    it('should promise the proper rectrack property', () =>
+      content.then(result => {
         expect(result.rectrack).to.equal(myDraft.rectrack);
       }));
   });
@@ -522,7 +574,8 @@ describe('TokenChecker', () => {
       expect(check).to.be.an.instanceOf(Promise);
     });
 
-    it('should promise a list', () => expect(check).to.eventually.be.an.instanceOf(List));
+    it('should promise a list', () =>
+      expect(check).to.eventually.be.an.instanceOf(List));
   });
 
   after(trackProgress);
@@ -539,8 +592,8 @@ describe('UserChecker', () => {
       memberOf: [
         'cn=123,ou=groups,dc=w3,dc=org',
         'cn=456,ou=groups,dc=w3,dc=org',
-        `cn=${  myDraft.groupID  },ou=groups,dc=w3,dc=org`
-      ]
+        `cn=${myDraft.groupID},ou=groups,dc=w3,dc=org`,
+      ],
     };
     const delivererIDs = [myDraft.groupID];
     const content = UserChecker.check(user, delivererIDs);
@@ -549,9 +602,11 @@ describe('UserChecker', () => {
       expect(content).to.be.an.instanceOf(Promise);
     });
 
-    it('should promise a list', () => expect(content).to.eventually.be.an.instanceOf(List));
+    it('should promise a list', () =>
+      expect(content).to.eventually.be.an.instanceOf(List));
 
-    it('should promise an empty list', () => content.then((result) => {
+    it('should promise an empty list', () =>
+      content.then(result => {
         expect(result.isEmpty()).to.be.true;
       }));
   });
@@ -561,13 +616,14 @@ describe('UserChecker', () => {
     const user = {
       memberOf: [
         'cn=123,ou=groups,dc=w3,dc=org',
-        'cn=456,ou=groups,dc=w3,dc=org'
-      ]
+        'cn=456,ou=groups,dc=w3,dc=org',
+      ],
     };
     const delivererIDs = [myDraft.groupID];
     const content = UserChecker.check(user, delivererIDs);
 
-    it('should promise a non-empty list', () => content.then((result) => {
+    it('should promise a non-empty list', () =>
+      content.then(result => {
         expect(result.isEmpty()).to.be.false;
       }));
   });
@@ -581,14 +637,15 @@ describe('IPChecker', () => {
       expect(IPChecker.check).to.be.a('function');
     });
 
-    const ip = "1.2.3.4";
+    const ip = '1.2.3.4';
     const check = IPChecker.check(ip);
 
     it('should return a promise', () => {
       expect(check).to.be.an.instanceOf(Promise);
     });
 
-    it('should promise a non-empty list', () => check.then((result) => {
+    it('should promise a non-empty list', () =>
+      check.then(result => {
         expect(result.isEmpty()).to.be.false;
       }));
   });
@@ -606,32 +663,36 @@ describe('Publisher', () => {
       expect(promise).to.be.an.instanceOf(Promise);
     });
 
-    it('should promise an array', () => expect(promise).to.eventually.be.an.instanceOf(List));
+    it('should promise an array', () =>
+      expect(promise).to.eventually.be.an.instanceOf(List));
 
-    it('should return no errors if publication is successful', () => expect(promise).to.eventually.be.empty);
+    it('should return no errors if publication is successful', () =>
+      expect(promise).to.eventually.be.empty);
 
     it('should return errors when the publication has failed', () => {
-      const errPromise = new Publisher(new BadRequestService()).publish(metadata);
+      const errPromise = new Publisher(new BadRequestService()).publish(
+        metadata,
+      );
 
       return expect(errPromise).to.eventually.have.size(1);
     });
 
     it('should reject if not yet implemented', () => {
-      const rejectPromise = new Publisher(
-        new NotImplementedService()
-      ).publish(metadata);
+      const rejectPromise = new Publisher(new NotImplementedService()).publish(
+        metadata,
+      );
 
-      return expect(rejectPromise)
-        .to.eventually.be.rejectedWith(/Not Implemented/);
+      return expect(rejectPromise).to.eventually.be.rejectedWith(
+        /Not Implemented/,
+      );
     });
 
     it('should reject if the remote server is having an issue', () => {
-      const rejectPromise = new Publisher(
-        new ServerErrorService()
-      ).publish(metadata);
+      const rejectPromise = new Publisher(new ServerErrorService()).publish(
+        metadata,
+      );
 
-      return expect(rejectPromise)
-        .to.eventually.be.rejectedWith(/code 500/);
+      return expect(rejectPromise).to.eventually.be.rejectedWith(/code 500/);
     });
   });
 

@@ -1,9 +1,9 @@
 'use strict';
 
 const fs = require('fs');
-const {substitutions} = require('./utils');
-const {getMetadata} = require('./utils');
-const {endsWith} = require('./utils');
+const { substitutions } = require('./utils');
+const { getMetadata } = require('./utils');
+const { endsWith } = require('./utils');
 
 /**
  * @exports test/lib/htmlTemplate
@@ -32,11 +32,10 @@ function htmlTemplate(serverPath, fileSystemPath) {
 
       if (substitutions[name] !== undefined) {
         replacement += substitutions[name];
-      }
-      else if (metadata[name] !== undefined) {
+      } else if (metadata[name] !== undefined) {
         replacement += metadata[name];
-      }
-      else throw new Error('htmltemplate.js: %s not a valid substitution', name);
+      } else
+        throw new Error('htmltemplate.js: %s not a valid substitution', name);
 
       return str.substring(oldstart, start) + replacement + replace(end + 2);
     }
@@ -63,8 +62,7 @@ function htmlTemplate(serverPath, fileSystemPath) {
       const name = dirpath.substring(dirpath.lastIndexOf('/') + 1);
 
       metadata = getMetadata(name);
-    }
-    catch (e) {
+    } catch (e) {
       return next();
     }
 

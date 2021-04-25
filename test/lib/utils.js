@@ -6,7 +6,7 @@ const fs = require('fs');
  * @exports test/lib/utils/draftsSystemPath
  */
 
-const draftsSystemPath = `${__dirname  }/../drafts`;
+const draftsSystemPath = `${__dirname}/../drafts`;
 
 /**
  * V8 doesn't support String.endsWith
@@ -27,13 +27,26 @@ function fullDate(dateObj) {
     return (n < 10 ? '0' : '') + String(n);
   }
 
-  return String(dateObj.getFullYear()) +
-    pn(dateObj.getMonth() + 1) + pn(dateObj.getDate());
+  return (
+    String(dateObj.getFullYear()) +
+    pn(dateObj.getMonth() + 1) +
+    pn(dateObj.getDate())
+  );
 }
 
 const months = [
-  'January', 'February', 'March', 'April', 'May', 'June', 'July',
-  'August', 'September', 'October', 'November', 'December'
+  'January',
+  'February',
+  'March',
+  'April',
+  'May',
+  'June',
+  'July',
+  'August',
+  'September',
+  'October',
+  'November',
+  'December',
 ];
 
 const today = (function () {
@@ -51,14 +64,14 @@ const tomorrow = new Date(today.getTime() + 24 * 60 * 60 * 1000);
  */
 
 const substitutions = {
-  'DATE': fullDate(today),
+  DATE: fullDate(today),
   'DATE+1': fullDate(tomorrow),
-  'YYYY': today.getFullYear(),
+  YYYY: today.getFullYear(),
   'YYYY+1': today.getFullYear() + 1,
-  'mm': today.getMonth() + 1,
-  'MM': months[today.getMonth()],
+  mm: today.getMonth() + 1,
+  MM: months[today.getMonth()],
   'DD+1': tomorrow.getDate(),
-  'DD': today.getDate()
+  DD: today.getDate(),
 };
 
 // Storage for metadata associated with the drafts
@@ -72,12 +85,11 @@ function augmentMetadata(name) {
   if (data.docData === undefined) data.docDate = today;
 
   if (data.thisVersion === undefined) {
-    data.thisVersion = `https://www.w3.org/TR/${  substitutions.YYYY  }/${ 
-    data.status  }-${  data.shortname  }-${  substitutions.DATE  }/`;
+    data.thisVersion = `https://www.w3.org/TR/${substitutions.YYYY}/${data.status}-${data.shortname}-${substitutions.DATE}/`;
   }
 
   if (data.latestVersion === undefined) {
-    data.latestVersion = `https://www.w3.org/TR/${  data.shortname  }/`;
+    data.latestVersion = `https://www.w3.org/TR/${data.shortname}/`;
   }
 
   if (data.deliverers === undefined) {
@@ -95,12 +107,13 @@ function augmentMetadata(name) {
 function getMetadata(name) {
   if (metadata[name] === undefined) {
     try {
-      metadata[name] = JSON.parse(fs.readFileSync(
-        `${draftsSystemPath  }/${  name  }/meta.json`, { options: 'utf-8' }
-      ));
+      metadata[name] = JSON.parse(
+        fs.readFileSync(`${draftsSystemPath}/${name}/meta.json`, {
+          options: 'utf-8',
+        }),
+      );
       augmentMetadata(name);
-    }
-    catch (e) {
+    } catch (e) {
       metadata[name] = {};
     }
   }

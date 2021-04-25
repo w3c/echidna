@@ -7,8 +7,8 @@
 const chai = require('chai');
 const chaiImmutable = require('chai-immutable');
 
-const {expect} = chai;
-const {List} = require('immutable');
+const { expect } = chai;
+const { List } = require('immutable');
 
 const Job = require('../lib/job');
 
@@ -21,7 +21,9 @@ describe('Job', () => {
     });
 
     it('should always be called with new', () => {
-      expect(() => { Job(); }).to.throw(TypeError);
+      expect(() => {
+        Job();
+      }).to.throw(TypeError);
     });
   });
 
@@ -49,7 +51,9 @@ describe('Job', () => {
     });
 
     it('should not accept non-string statuses', () => {
-      expect(() => { new Job().set('status', 42); }).to.throw(TypeError);
+      expect(() => {
+        new Job().set('status', 42);
+      }).to.throw(TypeError);
     });
 
     it('should not accept Arrays of errors', () => {

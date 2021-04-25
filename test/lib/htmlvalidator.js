@@ -15,8 +15,8 @@ validator.get('/check', (req, res) => {
     messages: [],
     source: {
       encoding: 'utf-8',
-      type: 'text/html'
-    }
+      type: 'text/html',
+    },
   };
 
   return res.json(result);

@@ -9,7 +9,7 @@ const Promise = require('promise');
 const CreatedService = function () {};
 
 CreatedService.prototype.post = function () {
-  return new Promise.resolve({ response: { statusCode: 201 }, body: {} });
+  return Promise.resolve({ response: { statusCode: 201 }, body: {} });
 };
 
 /**
@@ -20,9 +20,9 @@ CreatedService.prototype.post = function () {
 const NotImplementedService = function () {};
 
 NotImplementedService.prototype.post = function () {
-  return new Promise.resolve({
+  return Promise.resolve({
     response: { statusCode: 501 },
-    body: { message: 'Not Implemented' }
+    body: { message: 'Not Implemented' },
   });
 };
 
@@ -33,12 +33,11 @@ NotImplementedService.prototype.post = function () {
 
 const BadRequestService = function () {};
 
-BadRequestService.prototype.post = function () {
-  return new Promise.resolve({
+BadRequestService.prototype.post = () =>
+  Promise.resolve({
     response: { statusCode: 400 },
-    body: { errors: ['Bad Request'] }
+    body: { errors: ['Bad Request'] },
   });
-};
 
 /**
  * A fake HTTP POSTable service that always returns a 500 Internal Server Error
@@ -48,9 +47,9 @@ BadRequestService.prototype.post = function () {
 const ServerErrorService = function () {};
 
 ServerErrorService.prototype.post = function () {
-  return new Promise.resolve({
+  return Promise.resolve({
     response: { statusCode: 500 },
-    body: { errors: ['Internal Server Error'] }
+    body: { errors: ['Internal Server Error'] },
   });
 };
 
