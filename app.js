@@ -30,7 +30,6 @@ const meta = require('./package.json');
 
 // Configuration file
 const config = process.env.CONFIG || 'config.js';
-// eslint-disable-next-line import/no-dynamic-require
 require(`./${config}`);
 // eslint-disable-next-line no-console
 console.log(`Loading config: ${config}`);
@@ -171,7 +170,8 @@ const processRequest = (req, res, isTar) => {
       '',
       new Map(
         jobList.reduce((object, value) => {
-          object[value] = new Job();
+          // eslint-disable-next-line no-param-reassign
+          object[value] = new Job(); // XXX
           return object;
         }, {}),
       ),

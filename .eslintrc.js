@@ -11,6 +11,9 @@ module.exports = {
     // https://github.com/airbnb/javascript/blob/master/packages/eslint-config-airbnb-base/rules/strict.js
     // airbnb uses babel to insert `'use strict', but we don't;
     strict: 'off',
+
+    // XXX
+    'import/no-dynamic-require': 'off',
   },
   overrides: [
     {
