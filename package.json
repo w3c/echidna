@@ -69,7 +69,8 @@
     "coverage": "istanbul cover _mocha",
     "coveralls": "npm run coverage && cat ./coverage/lcov.info | coveralls",
     "build": "npm run lint && npm run test && npm run jsdoc",
-    "start": "node app"
+    "start": "node app",
+    "prepare": "husky install"
   },
   "engines": {
     "node": "12 || 14",
