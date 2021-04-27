@@ -61,7 +61,7 @@
   },
   "scripts": {
     "audit": "npm audit | grep -oE 'https?\\:\\/\\/(www\\.)?(nodesecurity\\.io|npmjs\\.com)\\/advisories\\/[[:digit:]]+' | rev | cut -d '/' -f 1 | rev | diff known-vulns.txt -",
-    "cspell": "cspell *.md **/*.md **/*.css **/*.js **/*.html **/*.tmpl",
+    "cspell": "cspell *.md **/*.md **/*.css **/*.js *.js **/*.html **/*.tmpl",
     "lint": "eslint app.js assets/js/ lib/",
     "testserver": "node test/lib/testserver",
     "test": "mocha --timeout 30000",

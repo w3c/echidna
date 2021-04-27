@@ -1,3 +1,4 @@
+/* eslint-disable no-alert */
 /**
  * Behaviour of the Echidna UI.
  *
@@ -14,7 +15,7 @@ $(document).ready(() => {
   function getStatus() {
     const result = [];
 
-    for (let i = 0; i < jobs.length; i++) {
+    for (let i = 0; i < jobs.length; i += 1) {
       $.get('api/status', { id: jobs[i] }, (data, foo, xhr) => {
         if (xhr.status === 200) {
           // Status retrieved OK:
@@ -75,7 +76,7 @@ $(document).ready(() => {
     }
   });
 
-  $('#auto').click(function () {
+  $('#auto').click(() => {
     $('#queueButton').prop('disabled', $(this).prop('checked'));
 
     if ($(this).prop('checked')) {

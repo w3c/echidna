@@ -12,14 +12,21 @@ module.exports = {
     // airbnb uses babel to insert `'use strict', but we don't;
     strict: 'off',
 
-    // XXX
-    'import/no-dynamic-require': 'off',
+    // https://eslint.org/docs/rules/consistent-return
+    // If you want to allow functions to have different return behavior depending on code branching, then it is safe to disable this rule.
+    'consistent-return': 'off',
   },
   overrides: [
     {
       files: ['test/**/*.js'],
       env: {
         mocha: true,
+      },
+    },
+    {
+      files: ['assets/**/*.js'],
+      env: {
+        browser: true,
       },
     },
   ],
