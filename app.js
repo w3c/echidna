@@ -5,9 +5,6 @@
 
 'use strict';
 
-// eslint-disable-next-line no-console
-console.log('Launching…');
-
 const express = require('express');
 const compression = require('compression');
 const bodyParser = require('body-parser');
