@@ -1,15 +1,15 @@
 'use strict';
 
-var Promise = require('promise');
+const Promise = require('promise');
 
 /**
  * A fake HTTP POSTable service that always returns a 201 Created
  * @exports test/lib/CreatedService
  */
-var CreatedService = function () {};
+const CreatedService = function () {};
 
 CreatedService.prototype.post = function () {
-  return new Promise.resolve({ response: { statusCode: 201 }, body: {} });
+  return Promise.resolve({ response: { statusCode: 201 }, body: {} });
 };
 
 /**
@@ -17,12 +17,12 @@ CreatedService.prototype.post = function () {
  * @exports test/lib/NotImplementedService
  */
 
-var NotImplementedService = function () {};
+const NotImplementedService = function () {};
 
 NotImplementedService.prototype.post = function () {
-  return new Promise.resolve({
+  return Promise.resolve({
     response: { statusCode: 501 },
-    body: { message: 'Not Implemented' }
+    body: { message: 'Not Implemented' },
   });
 };
 
@@ -31,26 +31,25 @@ NotImplementedService.prototype.post = function () {
  * @exports test/lib/BadRequestService
  */
 
-var BadRequestService = function () {};
+const BadRequestService = function () {};
 
-BadRequestService.prototype.post = function () {
-  return new Promise.resolve({
+BadRequestService.prototype.post = () =>
+  Promise.resolve({
     response: { statusCode: 400 },
-    body: { errors: ['Bad Request'] }
+    body: { errors: ['Bad Request'] },
   });
-};
 
 /**
  * A fake HTTP POSTable service that always returns a 500 Internal Server Error
  * @exports test/lib/ServerErrorService
  */
 
-var ServerErrorService = function () {};
+const ServerErrorService = function () {};
 
 ServerErrorService.prototype.post = function () {
-  return new Promise.resolve({
+  return Promise.resolve({
     response: { statusCode: 500 },
-    body: { errors: ['Internal Server Error'] }
+    body: { errors: ['Internal Server Error'] },
   });
 };
 

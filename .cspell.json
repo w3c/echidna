@@ -1,0 +1,63 @@
+{
+    "allowCompoundWords": true,
+    "dictionaries": [
+        "html",
+        "typescript",
+        "css",
+        "npm",
+        "en-gb",
+        "softwareTerms",
+        "en_US",
+        "powershell",
+        "bash"
+    ],
+    "ignorePaths": [
+        "**/*.eot",
+        "**/*.ttf",
+        "**/*.woff",
+        "**/*.svg",
+        ".nyc_output/**",
+        "coverage/**",
+        "test/**",
+        "package-lock.json",
+        "node_modules/**"
+    ],
+    "ignoreWords": [
+        "en",
+        "gb"
+    ],
+    "version": "0.1",
+    "words": [
+        "linkto",
+        "specberus",
+        "Specberus",
+        "octo",
+        "REPLYTO",
+        "dests",
+        "travisci",
+        "denodeify",
+        "iefix",
+        "trstaging",
+        "TRpath",
+        "TR",
+        "finalTRpath",
+        "octokit",
+        "uuidv",
+        "Octokat",
+        "ldaps",
+        "octokat",
+        "insafe",
+        "Insafe",
+        "Anolis",
+        "Jérémie",
+        "ldapjs",
+        "ˈspɛk",
+        "ɪˈkɪd",
+        "tripu",
+        "Spec'fully",
+        "Ljmy",
+        "Anolis",
+        "Symfony",
+        "sbin"
+    ]
+}

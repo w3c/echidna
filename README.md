@@ -52,7 +52,7 @@ You may use the optional defined below:
 
 Alternatively, you can use the configuration file `config.js`.
 
-Once the server is started, you can throw publication requests at it through a `curl`/`POST` request to its enpoint, <http://localhost:3000/api>, or using the web-based testbed (described below).
+Once the server is started, you can throw publication requests at it through a `curl`/`POST` request to its endpoint, <http://localhost:3000/api>, or using the web-based testbed (described below).
 
 You can also use a simple web client to send and monitor those requests, at <http://localhost:3000/ui>.
 
