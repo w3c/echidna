@@ -55,7 +55,7 @@
     "istanbul": "0.4.5",
     "jsdoc": "3.6.6",
     "ldapjs": "2.2.4",
-    "mocha": "8.3.2",
+    "mocha": "8.4.0",
     "morgan": "1.10.0",
     "prettier": "2.2.1"
   },
