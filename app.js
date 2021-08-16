@@ -123,11 +123,18 @@ const processRequest = (req, res, isTar) => {
   );
   const ccEmail = req.body ? req.body.cc : null;
 
-  if (!((url && token) || (tar && token) || (tar && user)) || !decision) {
+  if ((tar && !user) || ((url || tar) && !token)) {
+    // If the submitting the tar without W3C credentials, or submitting the tar or URL without token
     res
-      .status(500)
+      .status(401) // Unauthorized
       .send(
-        'Missing required parameters "url + token + decision",' +
+        'Unauthorized request, missing "token" or "W3C credentials" in the parameters. The valid combination of parameters are "url + token + decision", "tar + token + decision" or "tar + W3C credentials + decision".',
+      );
+  } else if (!(url || tar) || !decision) {
+    res
+      .status(400) // Bad Request
+      .send(
+        'Missing parameters. The valid combination of parameters are "url + token + decision",' +
           ' "tar + token + decision" or "tar + W3C credentials + decision".',
       );
   } else {

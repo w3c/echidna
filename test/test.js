@@ -692,7 +692,7 @@ describe('Publisher', () => {
         metadata,
       );
 
-      return expect(rejectPromise).to.eventually.be.rejectedWith(/code 500/);
+      return expect(rejectPromise).to.eventually.be.rejectedWith(/code 401/);
     });
   });
 

@@ -48,8 +48,8 @@ const ServerErrorService = function () {};
 
 ServerErrorService.prototype.post = function () {
   return Promise.resolve({
-    response: { statusCode: 500 },
-    body: { errors: ['Internal Server Error'] },
+    response: { statusCode: 401 },
+    body: { errors: ['Unauthorized'] },
   });
 };
 
