@@ -50,7 +50,7 @@
     "eslint-plugin-import": "2.24.0",
     "eslint-plugin-jsdoc": "36.0.7",
     "eslint-plugin-node": "11.1.0",
-    "eslint-plugin-prettier": "3.4.0",
+    "eslint-plugin-prettier": "3.4.1",
     "husky": "7.0.1",
     "istanbul": "0.4.5",
     "jsdoc": "3.6.7",
