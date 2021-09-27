@@ -30,7 +30,7 @@
     "node-dig-dns": "0.3.1",
     "nodemailer": "6.6.3",
     "octokat": "0.10.0",
-    "passport": "0.4.1",
+    "passport": "0.5.0",
     "passport-http": "0.3",
     "promise": "8.1.0",
     "request": "2.88.2",
