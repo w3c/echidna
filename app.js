@@ -123,7 +123,7 @@ const processRequest = (req, res, isTar) => {
   );
   const ccEmail = req.body ? req.body.cc : null;
 
-  if ((tar && !user) || ((url || tar) && !token)) {
+  if ((!user && tar) || (!token && (url || tar))) {
     // If the submitting the tar without W3C credentials, or submitting the tar or URL without token
     res
       .status(401) // Unauthorized
