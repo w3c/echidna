@@ -27,7 +27,7 @@ jobs:
         with:
           node-version: ${{ matrix.node-version }}
 
-      - run: npm install
+      - run: npm install --legacy-peer-deps
 
       - run: cp config.js.example config.js
 

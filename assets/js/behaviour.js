@@ -60,7 +60,7 @@ $(document).ready(() => {
             // OK:
             window.alert(`Job submitted OK.\nThe ID is “${data}”.`);
             jobs.push(data);
-          } else if (xhr.status === 500) {
+          } else if (xhr.status === 401 || xhr.status === 400) {
             // Missing parameters:
             window.alert(data);
           } else {
