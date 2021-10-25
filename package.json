@@ -51,7 +51,7 @@
     "eslint-plugin-jsdoc": "36.1.1",
     "eslint-plugin-node": "11.1.0",
     "eslint-plugin-prettier": "4.0.0",
-    "husky": "7.0.2",
+    "husky": "7.0.4",
     "istanbul": "0.4.5",
     "jsdoc": "3.6.7",
     "ldapjs": "2.3.1",
