@@ -1,6 +1,6 @@
 {
-"process": "1 February 2018",
-"processURI": "https://www.w3.org/2018/Process-20180201/",
+"process": "2 November 2021",
+"processURI": "https://www.w3.org/2021/Process-20211102/",
 "editorsDraft": "https://w3c.github.io/navigation-timing/",
 "title":     "Navigation Timing 2",
 "shortname": "navigation-timing-2",
@@ -8,7 +8,7 @@
 "editorIDs": [44357,69474,45188],
 "previousVersion":"https://www.w3.org/TR/2017/WD-navigation-timing-2-20170925/",
 "groupName": "Web Performance Working Group",
-"groupHomepage": "http://www.w3.org/webperf/",
+"groupHomepage": "https://www.w3.org/groups/wg/webperf",
 "groupID": 45211,
 "list": "public-web-perf",
 "rectrack": true,
