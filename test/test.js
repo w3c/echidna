@@ -378,10 +378,10 @@ describe('SpecberusWrapper', () => {
     });
 
     const myDraft = server.getMetadata('navigation-timing-2');
+
     const content = SpecberusWrapper.validate(
       myDraft.location,
       myDraft.status,
-      myDraft.rectrack,
       myDraft.patentPolicy,
     );
 
@@ -413,48 +413,22 @@ describe('SpecberusWrapper', () => {
     const content = SpecberusWrapper.validate(
       server.getMetadata('nav-csserror').location,
       server.getMetadata('nav-csserror').status,
-      server.getMetadata('nav-csserror').rectrack,
       server.getMetadata('nav-csserror').patentPolicy,
     );
 
-    it('should return an error property that has 4 errors', () =>
-      expect(content).that.eventually.has.property('errors').that.has.size(4));
+    it('should return an error property that has 3 errors', () =>
+      expect(content).that.eventually.has.property('errors').that.has.size(3));
   });
 
   describe('validate(url-with-css-warnings)', () => {
     const content = SpecberusWrapper.validate(
       server.getMetadata('nav-csswarning').location,
       server.getMetadata('nav-csswarning').status,
-      server.getMetadata('nav-csswarning').rectrack,
       server.getMetadata('nav-csswarning').patentPolicy,
     );
 
-    it('should return an error property that has 4 error', () =>
-      expect(content).that.eventually.has.property('errors').that.has.size(4));
-  });
-
-  describe('validate(url-with-webrtc-crd-wrong-review-date)', () => {
-    const content = SpecberusWrapper.validate(
-      server.getMetadata('webrtc-crd').location,
-      server.getMetadata('webrtc-crd').status,
-      server.getMetadata('webrtc-crd').rectrack,
-      server.getMetadata('webrtc-crd').patentPolicy,
-    );
-
-    it('should return an error property that has 1 error', () =>
-      expect(content).that.eventually.has.property('errors').that.has.size(1));
-  });
-
-  describe('validate(url-with-webrtc-wrong-review-date-editorial)', () => {
-    const content = SpecberusWrapper.validate(
-      server.getMetadata('webrtc').location,
-      server.getMetadata('webrtc').status,
-      server.getMetadata('webrtc').rectrack,
-      server.getMetadata('webrtc').patentPolicy,
-    );
-
-    it('should return an error property that has 2 errors', () =>
-      expect(content).that.eventually.has.property('errors').that.has.size(2));
+    it('should return an error property that has 3 error', () =>
+      expect(content).that.eventually.has.property('errors').that.has.size(3));
   });
 
   describe('extractMetadata(url)', () => {
