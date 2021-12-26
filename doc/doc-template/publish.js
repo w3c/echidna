@@ -1,3 +1,12 @@
+/* eslint-disable global-require */
+/* eslint-disable node/no-extraneous-require */
+/* eslint-disable prefer-destructuring */
+/* eslint-disable import/no-extraneous-dependencies */
+/* eslint-disable prefer-const */
+/* eslint-disable no-param-reassign */
+/* eslint-disable node/no-unpublished-require */
+/* eslint-disable import/no-unresolved */
+/* eslint-disable node/no-missing-require */
 const doop = require('jsdoc/util/doop');
 const env = require('jsdoc/env');
 const fs = require('jsdoc/fs');
@@ -56,7 +65,7 @@ function needsSignature({ kind, type, meta }) {
   }
   // typedefs that contain functions get a signature, too
   else if (kind === 'typedef' && type && type.names && type.names.length) {
-    for (let i = 0, l = type.names.length; i < l; i++) {
+    for (let i = 0, l = type.names.length; i < l; i += 1) {
       if (type.names[i].toLowerCase() === 'function') {
         needsSig = true;
         break;

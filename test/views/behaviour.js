@@ -110,6 +110,7 @@ function updateJobs(data) {
         } else {
           allMessages[id] = `“${id}”: ${parseInt(
             (100 * completed) / JOBS.length,
+            10,
           )}% (stuck in ${JOBS[j]}).`;
           break;
         }

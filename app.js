@@ -1,6 +1,6 @@
 /**
  * @module
- * @file Configurate API endpoints and view pages.
+ * @file Configure API endpoints and view pages.
  */
 
 'use strict';

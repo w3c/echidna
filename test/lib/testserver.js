@@ -16,7 +16,7 @@ const { draftsSystemPath } = require('./utils');
 
 const PublishService = require('./fake-http-services').CreatedService;
 
-let port = (parseInt(process.env.PORT) || 3000) + 1;
+let port = (parseInt(process.env.PORT, 10) || 3000) + 1;
 const ldapPort = 1389;
 require('../../config-dev.js');
 

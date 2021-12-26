@@ -481,7 +481,7 @@ images/manifest-src-directive.svg
 
 * Reference UI, developed in-house, eg `https://w3.org/publish/`  
   Work is ongoing: [branch `tripu/web-interface`](https://github.com/w3c/echidna/tree/tripu/web-interface)
-* Future user-contributed clients, cattering to different needs
+* Future user-contributed clients, catering to different needs
 * Better error messages
 * More types of specs
 * Support for special cases, eg joint publication

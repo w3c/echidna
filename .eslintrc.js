@@ -1,5 +1,5 @@
 module.exports = {
-  extends: ['airbnb-base', 'prettier', 'plugin:node/recommended'],
+  extends: ['airbnb-base', 'plugin:node/recommended', 'prettier'],
   plugins: ['prettier', 'node'],
   env: {
     node: true,
@@ -21,6 +21,23 @@ module.exports = {
       files: ['test/**/*.js'],
       env: {
         mocha: true,
+        browser: true,
+      },
+      rules: {
+        'func-names': 'off',
+        'global-require': 'off',
+        'guard-for-in': 'off',
+        'import/extensions': 'off',
+        'no-alert': 'off',
+        'no-console': 'off',
+        'no-new': 'off',
+        'no-plusplus': 'off',
+        'no-restricted-globals': 'off',
+        'no-restricted-syntax': 'off',
+        'no-shadow': 'off',
+        'no-unused-expressions': 'off',
+        'no-use-before-define': 'off',
+        'node/no-unpublished-require': 'off',
       },
     },
     {

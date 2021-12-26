@@ -61,7 +61,7 @@ A couple of things you should consider before committing and [opening a pull req
 
 - Regarding your Git commit messages:
   - Use imperative present tense for commit messages as [suggested in the official documentation](http://git-scm.com/book/en/v2/Distributed-Git-Contributing-to-a-Project#Commit-Guidelines).
-  - When commiting a bug fix, start your line with "Fix #xx", xx being the issue number. For example: `git commit -m 'Fix #42: Answer the Ultimate Question of Life, The Universe, and Everything'`
+  - When committing a bug fix, start your line with "Fix #xx", xx being the issue number. For example: `git commit -m 'Fix #42: Answer the Ultimate Question of Life, The Universe, and Everything'`
 - To ease the merge of pull requests, make sure your branch is up-to-date with `master` when submitting it. Always use `git rebase` instead of `git merge` and `git pull --rebase` instead of `git pull` to avoid merge commits in your submissions.
 
 ## Documentation

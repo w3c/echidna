@@ -13,8 +13,8 @@
     lines = source[0].getElementsByTagName('li');
     totalLines = lines.length;
 
-    for (; i < totalLines; i++) {
-      lineNumber++;
+    for (; i < totalLines; i += 1) {
+      lineNumber += 1;
       lineId = `line${lineNumber}`;
       lines[i].id = lineId;
       if (lineId === anchorHash) {

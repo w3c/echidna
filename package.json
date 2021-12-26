@@ -54,6 +54,7 @@
     "husky": "7.0.4",
     "jsdoc": "3.6.7",
     "ldapjs": "2.3.1",
+    "lint-staged": "^12.1.4",
     "mocha": "9.1.3",
     "morgan": "1.10.0",
     "nyc": "15.1.0",
@@ -61,8 +62,8 @@
   },
   "scripts": {
     "audit": "npm audit | grep -oE 'https?\\:\\/\\/(www\\.)?(nodesecurity\\.io|npmjs\\.com)\\/advisories\\/[[:digit:]]+' | rev | cut -d '/' -f 1 | rev | diff known-vulns.txt -",
-    "cspell": "cspell *.md **/*.md **/*.css **/*.js *.js **/*.html **/*.tmpl",
-    "lint": "eslint app.js assets/js/ lib/",
+    "cspell": "cspell --dot \"**/*\"",
+    "lint": "eslint .",
     "testserver": "node test/lib/testserver",
     "test": "mocha",
     "jsdoc": "jsdoc --configure jsdoc.json -r app.js assets/js/ lib/ test/",
@@ -80,5 +81,9 @@
     "colors": true,
     "reporter": "spec",
     "timeout": 30000
+  },
+  "lint-staged": {
+    "*.js": "eslint --fix",
+    "*": "cspell"
   }
 }
