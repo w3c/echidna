@@ -52,11 +52,11 @@
     "eslint-plugin-node": "11.1.0",
     "eslint-plugin-prettier": "4.0.0",
     "husky": "7.0.4",
-    "istanbul": "0.4.5",
     "jsdoc": "3.6.7",
     "ldapjs": "2.3.1",
     "mocha": "9.1.3",
     "morgan": "1.10.0",
+    "nyc": "15.1.0",
     "prettier": "2.5.0"
   },
   "scripts": {
@@ -64,9 +64,9 @@
     "cspell": "cspell *.md **/*.md **/*.css **/*.js *.js **/*.html **/*.tmpl",
     "lint": "eslint app.js assets/js/ lib/",
     "testserver": "node test/lib/testserver",
-    "test": "mocha --timeout 30000",
+    "test": "mocha",
     "jsdoc": "jsdoc --configure jsdoc.json -r app.js assets/js/ lib/ test/",
-    "coverage": "istanbul cover _mocha",
+    "coverage": "nyc npm test",
     "coveralls": "npm run coverage && cat ./coverage/lcov.info | coveralls",
     "build": "npm run lint && npm run test && npm run jsdoc",
     "start": "node app",
@@ -75,5 +75,10 @@
   "engines": {
     "node": "14 || 16",
     "npm": ">=6"
+  },
+  "mocha": {
+    "colors": true,
+    "reporter": "spec",
+    "timeout": 30000
   }
 }
