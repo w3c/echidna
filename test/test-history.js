@@ -24,6 +24,7 @@ describe('History', () => {
 
     it('should be given an Immutable.Stack as argument', () => {
       expect(() => {
+        // eslint-disable-next-line no-new
         new History(['something']);
       }).to.throw(TypeError);
     });

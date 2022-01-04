@@ -18,7 +18,7 @@ const PublishService = require('./fake-http-services').CreatedService;
 
 let port = (parseInt(process.env.PORT, 10) || 3000) + 1;
 const ldapPort = 1389;
-require('../../config-dev.js');
+require('../../config-dev');
 
 /**
  * @exports test/lib/TestServer
@@ -48,7 +48,7 @@ app.get('/data/specs.json', (req, res) => {
   let metadata;
   const listing = fs.readdirSync(draftsSystemPath);
 
-  for (let i = 0; i < listing.length; ++i) {
+  for (let i = 0; i < listing.length; i += 1) {
     metadata = getMetadata(listing[i]);
     if (metadata) specs.push({ id: listing[i], metadata });
     else

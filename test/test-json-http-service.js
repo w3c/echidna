@@ -25,12 +25,15 @@ describe('JsonHttpService', () => {
     it('should be given strings as arguments', () => {
       [
         function () {
+          // eslint-disable-next-line no-new
           new JsonHttpService(42, '', '');
         },
         function () {
+          // eslint-disable-next-line no-new
           new JsonHttpService('', 42, '');
         },
         function () {
+          // eslint-disable-next-line no-new
           new JsonHttpService('', '', 42);
         },
       ].forEach(f => {

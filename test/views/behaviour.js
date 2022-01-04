@@ -44,36 +44,6 @@ function endpoint() {
   }`;
 }
 
-function activateActions() {
-  $('a.publishOne').click(function () {
-    publishOneSpec($(this).attr('data-spec-id'));
-  });
-
-  $('a.publishAllAtOnce').click(() => {
-    publishAllSpecs();
-  });
-  $('a.publishAllWithDelay').click(() => {
-    publishAllSpecs(true);
-  });
-
-  $('td.metadata').click(function () {
-    const spec = findSpec($(this).attr('data-spec-id'));
-
-    dumpObject(spec);
-  });
-
-  $('td.status').click(function () {
-    retrieveStatus($(this).attr('data-spec-id'));
-    /* FIXME
-    var job = allJobs[$(this).attr('data-spec-id')];
-    var message = allMessages[$(this).attr('data-spec-id')];
-    dumpObject(job);
-    logMessage(message); */
-  });
-
-  refresh();
-}
-
 function retrieveStatus(id) {
   $.get(`${endpoint()}/status/?id=${allIDs[id]}`, data => {
     logMessage(`Retrieved status of job "${id}".`);
@@ -81,50 +51,16 @@ function retrieveStatus(id) {
   });
 }
 
-function refresh() {
-  $.get(`${endpoint()}/status/`, data => {
-    updateJobs(data);
-    // FIXME window.setTimeout(refresh, $('input#rate')[0].value * 1000);
+function findSpec(id) {
+  let result;
+  let i = 0;
 
-    if ($('input#scroll')[0].checked) log[0].scrollTop = log[0].scrollHeight;
-  });
-}
-
-function updateJobs(data) {
-  let spec;
-  let id;
-  let step;
-  let completed;
-
-  for (const i in allSpecs) {
-    id = allSpecs[i].id;
-    spec = data.requests[`${location.href}drafts/${id}`];
-    if (spec) {
-      allJobs[id] = allJobs[id] || spec.jobs;
-      completed = 0;
-      allMessages[id] = null;
-      for (const j in JOBS) {
-        step = allJobs[id][JOBS[j]];
-        if (step && step.status && step.status.toLowerCase() === 'ok') {
-          completed++;
-        } else {
-          allMessages[id] = `“${id}”: ${parseInt(
-            (100 * completed) / JOBS.length,
-            10,
-          )}% (stuck in ${JOBS[j]}).`;
-          break;
-        }
-      }
-      if (!allMessages[id]) {
-        allMessages[id] = `“${id}”: done! ${completed} steps completed.`;
-      }
-
-      $(`td[data-spec-id="${id}"] > span`).css(
-        'width',
-        `${(128 * completed) / JOBS.length}px`,
-      );
-    }
+  while (!result && i < allSpecs.length) {
+    if (id === allSpecs[i].id) result = allSpecs[i];
+    i += 1;
   }
+
+  return result;
 }
 
 function publishOneSpec(id) {
@@ -158,16 +94,80 @@ function publishAllSpecs(delay) {
   }
 }
 
-function findSpec(id) {
-  let result;
-  let i = 0;
+function updateJobs(data) {
+  let spec;
+  let id;
+  let step;
+  let completed;
 
-  while (!result && i < allSpecs.length) {
-    if (id === allSpecs[i].id) result = allSpecs[i];
-    i++;
+  for (const i in allSpecs) {
+    id = allSpecs[i].id;
+    spec = data.requests[`${location.href}drafts/${id}`];
+    if (spec) {
+      allJobs[id] = allJobs[id] || spec.jobs;
+      completed = 0;
+      allMessages[id] = null;
+      for (const j in JOBS) {
+        step = allJobs[id][JOBS[j]];
+        if (step && step.status && step.status.toLowerCase() === 'ok') {
+          completed += 1;
+        } else {
+          allMessages[id] = `“${id}”: ${parseInt(
+            (100 * completed) / JOBS.length,
+            10,
+          )}% (stuck in ${JOBS[j]}).`;
+          break;
+        }
+      }
+      if (!allMessages[id]) {
+        allMessages[id] = `“${id}”: done! ${completed} steps completed.`;
+      }
+
+      $(`td[data-spec-id="${id}"] > span`).css(
+        'width',
+        `${(128 * completed) / JOBS.length}px`,
+      );
+    }
   }
+}
 
-  return result;
+function refresh() {
+  $.get(`${endpoint()}/status/`, data => {
+    updateJobs(data);
+    // FIXME window.setTimeout(refresh, $('input#rate')[0].value * 1000);
+
+    if ($('input#scroll')[0].checked) log[0].scrollTop = log[0].scrollHeight;
+  });
+}
+
+function activateActions() {
+  $('a.publishOne').click(function () {
+    publishOneSpec($(this).attr('data-spec-id'));
+  });
+
+  $('a.publishAllAtOnce').click(() => {
+    publishAllSpecs();
+  });
+  $('a.publishAllWithDelay').click(() => {
+    publishAllSpecs(true);
+  });
+
+  $('td.metadata').click(function () {
+    const spec = findSpec($(this).attr('data-spec-id'));
+
+    dumpObject(spec);
+  });
+
+  $('td.status').click(function () {
+    retrieveStatus($(this).attr('data-spec-id'));
+    /* FIXME
+    var job = allJobs[$(this).attr('data-spec-id')];
+    var message = allMessages[$(this).attr('data-spec-id')];
+    dumpObject(job);
+    logMessage(message); */
+  });
+
+  refresh();
 }
 
 $(document).ready(() => {

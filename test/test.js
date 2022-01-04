@@ -24,7 +24,7 @@ const { List } = Immutable;
 const { Map } = Immutable;
 let pendingTests = 6;
 
-require('../config-dev.js');
+require('../config-dev');
 
 const server = require('./lib/testserver');
 const FakeHttpServices = require('./lib/fake-http-services');
@@ -44,13 +44,14 @@ const Publisher = require('../lib/publisher');
 const SpecberusWrapper = require('../lib/specberus-wrapper');
 const TokenChecker = require('../lib/token-checker');
 const UserChecker = require('../lib/user-checker');
-const IPChecker = require('../lib/ip-checker.js');
+const IPChecker = require('../lib/ip-checker');
 
 function readFileSyncUtf8(file) {
   return Fs.readFileSync(file, { encoding: 'utf8' });
 }
 
 const trackProgress = () => {
+  // eslint-disable-next-line no-plusplus
   if (--pendingTests === 0) server.close();
 };
 
@@ -110,9 +111,9 @@ describe('DocumentDownloader', () => {
       expect(content).to.eventually.be.an.instanceOf(List).of.size(2));
 
     it('should fetch multiple URLs', () =>
-      content.then(content => {
-        expect(content.get(0).toString('utf8')).to.contain('looking for');
-        expect(content.get(1).toString('utf8')).to.contain('alive');
+      content.then(result => {
+        expect(result.get(0).toString('utf8')).to.contain('looking for');
+        expect(result.get(1).toString('utf8')).to.contain('alive');
       }));
   });
 
