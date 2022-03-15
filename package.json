@@ -16,7 +16,7 @@
     "url": "https://github.com/w3c/echidna/issues"
   },
   "dependencies": {
-    "@octokit/core": "3.5.1",
+    "@octokit/core": "3.6.0",
     "body-parser": "1.19.0",
     "compression": "1.7.4",
     "express": "4.17.1",
@@ -43,12 +43,12 @@
     "chai-as-promised": "7.1.1",
     "chai-immutable": "2.1.0",
     "coveralls": "3.1.1",
-    "cspell": "5.18.3",
+    "cspell": "5.19.1",
     "eslint": "8.11.0",
     "eslint-config-airbnb-base": "15.0.0",
     "eslint-config-prettier": "8.5.0",
     "eslint-plugin-import": "2.25.3",
-    "eslint-plugin-jsdoc": "37.9.1",
+    "eslint-plugin-jsdoc": "38.0.3",
     "eslint-plugin-node": "11.1.0",
     "eslint-plugin-prettier": "4.0.0",
     "husky": "7.0.4",
