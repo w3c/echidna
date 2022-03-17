@@ -611,8 +611,8 @@ describe('IPChecker', () => {
       expect(IPChecker.check).to.be.a('function');
     });
 
-    const ip = '1.2.3.4';
-    const check = IPChecker.check(ip);
+    const badIp = '1.2.3.4';
+    const check = IPChecker.check(badIp);
 
     it('should return a promise', () => {
       expect(check).to.be.an.instanceOf(Promise);
@@ -622,6 +622,14 @@ describe('IPChecker', () => {
       check.then(result => {
         expect(result.isEmpty()).to.be.false;
       }));
+
+    const goodIp = '20.230.26.68';
+    const check2 = IPChecker.check(goodIp);
+
+    it('should promise an empty list', () =>
+    check2.then(result => {
+      expect(result.isEmpty()).to.be.true;
+    }));
   });
 
   after(trackProgress);
