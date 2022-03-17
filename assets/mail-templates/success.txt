@@ -11,4 +11,4 @@ More details are available here@ATTACHMENT:
 
 -- 
 Echidna @ECHIDNA (Specberus @SPECBERUS)
-Copyright © 2014–2020 W3C — https://www.w3.org/
+Copyright © 2022 W3C — https://www.w3.org/
