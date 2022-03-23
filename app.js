@@ -80,8 +80,8 @@ app.get('/api/version', (req, res) => {
   res.send(meta.version);
 });
 
-app.get('/api/version-specberus', (req, res) => {
-  res.send(SpecberusWrapper.version);
+app.get('/api/version-specberus', async (req, res) => {
+  res.send(await SpecberusWrapper.version());
 });
 
 app.get('/api/status', (req, res) => {
