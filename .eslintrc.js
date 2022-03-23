@@ -5,6 +5,10 @@ module.exports = {
     node: true,
     es2017: true,
   },
+  parserOptions: {
+    ecmaVersion: 2022,
+    allowImportExportEverywhere: true,
+  },
   rules: {
     'prettier/prettier': 'error',
 
@@ -15,6 +19,7 @@ module.exports = {
     // https://eslint.org/docs/rules/consistent-return
     // If you want to allow functions to have different return behavior depending on code branching, then it is safe to disable this rule.
     'consistent-return': 'off',
+    'import/extensions': 'off',
   },
   overrides: [
     {
