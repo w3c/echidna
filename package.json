@@ -1,6 +1,6 @@
 {
   "name": "echidna",
-  "version": "3.1.13",
+  "version": "3.1.15",
   "description": "Echidna — W3C's orchestrator for the new publication workflow",
   "author": "W3C",
   "keywords": [
@@ -43,12 +43,12 @@
     "chai-as-promised": "7.1.1",
     "chai-immutable": "2.1.0",
     "coveralls": "3.1.1",
-    "cspell": "5.20.0",
+    "cspell": "6.0.0",
     "eslint": "8.16.0",
     "eslint-config-airbnb-base": "15.0.0",
     "eslint-config-prettier": "8.5.0",
     "eslint-plugin-import": "2.26.0",
-    "eslint-plugin-jsdoc": "39.2.8",
+    "eslint-plugin-jsdoc": "39.3.2",
     "eslint-plugin-node": "11.1.0",
     "eslint-plugin-prettier": "4.0.0",
     "husky": "8.0.0",
