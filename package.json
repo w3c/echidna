@@ -50,7 +50,7 @@
     "eslint-plugin-import": "2.26.0",
     "eslint-plugin-jsdoc": "39.3.2",
     "eslint-plugin-node": "11.1.0",
-    "eslint-plugin-prettier": "4.0.0",
+    "eslint-plugin-prettier": "4.2.1",
     "husky": "8.0.0",
     "jsdoc": "3.6.7",
     "ldapjs": "2.3.1",
