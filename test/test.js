@@ -379,11 +379,11 @@ describe('SpecberusWrapper', () => {
 
     const myDraft = server.getMetadata('navigation-timing-2');
 
-    const content = SpecberusWrapper.validate(
-      myDraft.location,
-      myDraft.status,
-      myDraft.patentPolicy,
-    );
+    const metadata = new Map({
+      profile: myDraft.status,
+      patentPolicy: myDraft.patentPolicy,
+    });
+    const content = SpecberusWrapper.validate(myDraft.location, metadata);
 
     it('should return a promise', () => {
       expect(content).to.be.an.instanceOf(Promise);
@@ -410,10 +410,13 @@ describe('SpecberusWrapper', () => {
   });
 
   describe('validate(url-with-css-errors)', () => {
+    const metadata = new Map({
+      profile: server.getMetadata('nav-csserror').status,
+      patentPolicy: server.getMetadata('nav-csserror').patentPolicy,
+    });
     const content = SpecberusWrapper.validate(
       server.getMetadata('nav-csserror').location,
-      server.getMetadata('nav-csserror').status,
-      server.getMetadata('nav-csserror').patentPolicy,
+      metadata,
     );
 
     it('should return an error property that has 3 errors', () =>
@@ -421,10 +424,13 @@ describe('SpecberusWrapper', () => {
   });
 
   describe('validate(url-with-css-warnings)', () => {
+    const metadata = new Map({
+      profile: server.getMetadata('nav-csswarning').status,
+      patentPolicy: server.getMetadata('nav-csswarning').patentPolicy,
+    });
     const content = SpecberusWrapper.validate(
       server.getMetadata('nav-csswarning').location,
-      server.getMetadata('nav-csswarning').status,
-      server.getMetadata('nav-csswarning').patentPolicy,
+      metadata,
     );
 
     it('should return an error property that has 3 error', () =>
