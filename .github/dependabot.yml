@@ -19,8 +19,8 @@ updates:
   allow:
     - dependency-name: "specberus"
 - package-ecosystem: github-actions
-    directory: '/'
-    schedule:
-      interval: weekly
-      time: '00:00'
-    open-pull-requests-limit: 10
+  directory: '/'
+  schedule:
+    interval: weekly
+    time: '00:00'
+  open-pull-requests-limit: 10
