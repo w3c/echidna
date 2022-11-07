@@ -14,9 +14,6 @@ updates:
       # ignore minor updates for eslint and any packages starting "eslint"
       - dependency-name: "eslint*"
         update-types: ['version-update:semver-minor']
-      # ignore minor updates for chai and any packages starting "chai"
-      - dependency-name: "jsdoc"
-        update-types: ['version-update:semver-minor']
       - dependency-name: "husky"
         update-types: ['version-update:semver-minor']
 - package-ecosystem: github-actions
