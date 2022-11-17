@@ -1,4 +1,5 @@
 ✗ Echidna failed to publish @SOURCE
+  with decision @DECISION
   for the following reasons:
 
 @ERRORS

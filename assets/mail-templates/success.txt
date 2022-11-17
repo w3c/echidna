@@ -3,6 +3,8 @@
 
   👍 @DESTINATION
 
+  with decision @DECISION
+
 More details are available here@ATTACHMENT:
 
   https://labs.w3.org/echidna/api/status?id=@ID
