@@ -192,6 +192,7 @@ const processRequest = (req, res, isTar) => {
       httpLocation,
       argResultLocation,
       req.ip,
+      dryRun,
     );
 
     Orchestrator.iterate(
