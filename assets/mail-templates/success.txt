@@ -3,7 +3,7 @@
 
   👍 @DESTINATION
 
-  with decision @DECISION
+  Decision: @DECISION
 
 More details are available here@ATTACHMENT:
 
