@@ -218,6 +218,7 @@ const processRequest = (req, res, isTar) => {
             requests[id],
             url || tar.originalname,
             ccEmail,
+            decision,
           );
         }
       })

@@ -1,6 +1,6 @@
 {
   "name": "echidna",
-  "version": "3.2.3",
+  "version": "4.0.0",
   "description": "Echidna — W3C's orchestrator for the new publication workflow",
   "author": "W3C",
   "keywords": [
@@ -34,7 +34,7 @@
     "passport-http": "0.3",
     "promise": "8.3.0",
     "request": "2.88.2",
-    "specberus": "6.2.2",
+    "specberus": "7.0.0",
     "tar-stream": "2.2.0",
     "uuid": "9.0.0"
   },
@@ -55,7 +55,7 @@
     "mocha": "10.1.0",
     "morgan": "1.10.0",
     "nyc": "15.1.0",
-    "prettier": "2.7.1"
+    "prettier": "2.8.0"
   },
   "scripts": {
     "audit": "npm audit | grep -oE 'https?\\:\\/\\/(www\\.)?(nodesecurity\\.io|npmjs\\.com)\\/advisories\\/[[:digit:]]+' | rev | cut -d '/' -f 1 | rev | diff known-vulns.txt -",
