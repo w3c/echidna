@@ -130,8 +130,11 @@ const processRequest = (req, res, isTar) => {
         'Missing parameters. The valid combination of parameters are "url + token + decision",' +
           ' "tar + token + decision" or "tar + W3C credentials + decision".',
       );
-  } else if (tar && !user && (url || tar) && !token) {
+  } else if ((tar && !user) || ((url || tar) && !token)) {
     // If the submitting the tar without W3C credentials, or submitting the tar or URL without token
+    if (!token || !user) {
+      res.setHeader('WWW-Authenticate', 'Basic realm="echidna"');
+    }
     res
       .status(401) // Unauthorized
       .send(
