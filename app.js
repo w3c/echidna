@@ -131,8 +131,9 @@ const processRequest = (req, res, isTar) => {
           ' "tar + token + decision" or "tar + W3C credentials + decision".',
       );
   } else if (tar && !user && (url || tar) && !token) {
-    // If the submitting the tar without W3C credentials, or submitting the tar or URL without token
+    // If submitting the tar without W3C credentials, and submitting the tar or URL without token
     res
+      .setHeader('WWW-Authenticate', 'Basic realm="W3CACL"')
       .status(401) // Unauthorized
       .send(
         'Unauthorized request, missing "token" or "W3C credentials" in the parameters. The valid combination of parameters are "url + token + decision", "tar + token + decision" or "tar + W3C credentials + decision".',
