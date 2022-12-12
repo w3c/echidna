@@ -35,7 +35,7 @@
     "promise": "8.3.0",
     "request": "2.88.2",
     "specberus": "7.0.0",
-    "tar-stream": "2.2.0",
+    "tar-stream": "3.0.0",
     "uuid": "9.0.0"
   },
   "devDependencies": {
