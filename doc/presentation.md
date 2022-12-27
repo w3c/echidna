@@ -183,7 +183,7 @@ ie, webmaster and systeam are busy &rarr; publications have to wait
 # In an ideal world: fully automatic publication
 
 1. .green[Editor pushes changes, eg to **GitHub**]
-2. .green[CI (&ldquo;continuous integration&rdquo;) system, eg **Travis CI**, kicks in]
+2. .green[CI (&ldquo;continuous integration&rdquo;) system, eg **Github Actions**, kicks in]
 3. .green[CI system sends *shortname* to Echidna, plus an *auth token*]
 4. Echidna infers:
   1. Base URL of the spec
@@ -426,31 +426,7 @@ data/output.log
 
 # Keep Echidna in the loop
 
-Example of **Travis** integration:  
-[`https://github.com/w3c/manifest/blob/gh-pages/.travis.yml`](https://github.com/w3c/manifest/blob/gh-pages/.travis.yml)
-
-```yml
-language: node_js
-
-branches:
-  only:
-      - gh-pages
-
-env:
-  global:
-    - URL="http://w3c.github.io/manifest/ECHIDNA"
-    - DECISION="https://lists.w3.org/Archives/Public/webapps/051.html"
-    - secure: "vuLLjmy5[...]aQlBMaI="
-
-script:
-  - echo "ok"
-
-after_success:
-  - curl "https://labs.w3.org/echidna/api/request" \
-    --data "url=$URL" \
-    --data "token=$TOKEN" \
-    --data "decision=$DECISION"
-```
+[spec-prod](https://github.com/w3c/spec-prod), a Github Action integrates Echidna, is highly recommended to automatically generate TR documents and publish them.
 
 .footer[![Logo](https://raw.githubusercontent.com/w3c/echidna/master/doc/w3c-labs-logo-small.png)New publication workflow]
 

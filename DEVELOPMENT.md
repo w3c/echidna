@@ -38,7 +38,7 @@ LDAP (Lightweight Directory Access Protocol) is used to identify a user(username
 Service to download and install resources in the staging server. TAR file or link(pointing to Overview.html or manifest) are supported.
 
 ## ip-checker.js
-Check if ip making `curl` request is from GitHub Actions or Travis.
+Check if ip making `curl` request is from GitHub Actions.
 
 ## metadata
 Specberus.extractMetadata is called by Orchestrator, the task organizer to get metadata of the document.
