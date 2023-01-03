@@ -396,13 +396,6 @@ describe('SpecberusWrapper', () => {
 
       content = SpecberusWrapper.validate(myDraft.location, metadata);
     });
-    // const myDraft = server.getMetadata('navigation-timing-2');
-
-    // const metadata = new Map({
-    //   profile: myDraft.status,
-    //   patentPolicy: myDraft.patentPolicy,
-    // });
-    // const content = SpecberusWrapper.validate(myDraft.location, metadata);
 
     it('should return a promise', () => {
       expect(content).to.be.an.instanceOf(Promise);
