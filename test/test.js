@@ -422,28 +422,36 @@ describe('SpecberusWrapper', () => {
   });
 
   describe('validate(url-with-css-errors)', () => {
-    const metadata = new Map({
-      profile: server.getMetadata('nav-csserror').status,
-      patentPolicy: server.getMetadata('nav-csserror').patentPolicy,
+    let content;
+    before(() => {
+      const metadata = new Map({
+        profile: server.getMetadata('nav-csserror').status,
+        patentPolicy: server.getMetadata('nav-csserror').patentPolicy,
+      });
+
+      content = SpecberusWrapper.validate(
+        server.getMetadata('nav-csserror').location,
+        metadata,
+      );
     });
-    const content = SpecberusWrapper.validate(
-      server.getMetadata('nav-csserror').location,
-      metadata,
-    );
 
     it('should return an error property that has 3 errors', () =>
       expect(content).that.eventually.has.property('errors').that.has.size(3));
   });
 
   describe('validate(url-with-css-warnings)', () => {
-    const metadata = new Map({
-      profile: server.getMetadata('nav-csswarning').status,
-      patentPolicy: server.getMetadata('nav-csswarning').patentPolicy,
+    let content;
+
+    before(() => {
+      const metadata = new Map({
+        profile: server.getMetadata('nav-csswarning').status,
+        patentPolicy: server.getMetadata('nav-csswarning').patentPolicy,
+      });
+      content = SpecberusWrapper.validate(
+        server.getMetadata('nav-csswarning').location,
+        metadata,
+      );
     });
-    const content = SpecberusWrapper.validate(
-      server.getMetadata('nav-csswarning').location,
-      metadata,
-    );
 
     it('should return an error property that has 3 error', () =>
       expect(content).that.eventually.has.property('errors').that.has.size(3));
@@ -645,9 +653,9 @@ describe('IPChecker', () => {
     const check2 = IPChecker.check(goodIp);
 
     it('should promise an empty list', () =>
-    check2.then(result => {
-      expect(result.isEmpty()).to.be.true;
-    }));
+      check2.then(result => {
+        expect(result.isEmpty()).to.be.true;
+      }));
   });
 
   after(trackProgress);
