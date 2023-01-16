@@ -7,7 +7,6 @@ const app = express();
 const morgan = require('morgan');
 const request = require('request');
 const ldap = require('ldapjs');
-const cssvalidator = require('./cssvalidator');
 const htmlvalidator = require('./htmlvalidator');
 const tokenChecker = require('./tokenchecker');
 const htmlTemplate = require('./htmltemplate');
@@ -32,7 +31,6 @@ app.use(
   }),
 );
 
-app.use(cssvalidator);
 app.use(htmlvalidator);
 app.use(tokenChecker);
 
