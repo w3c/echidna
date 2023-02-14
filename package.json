@@ -27,7 +27,6 @@
     "mkdirp": "1.0",
     "moment": "2.29.3",
     "multer": "1.4.3",
-    "node-dig-dns": "0.3.1",
     "nodemailer": "6.9.0",
     "octokat": "0.10.0",
     "passport": "0.6.0",
