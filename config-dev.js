@@ -42,4 +42,4 @@ global.LDAP_GROUPS = [
   'cn=32113,ou=groups,dc=w3,dc=org',
   'cn=49309,ou=groups,dc=w3,dc=org',
 ];
-global.SKIP_VALIDATION = true;
+global.SKIP_VALIDATION = false;

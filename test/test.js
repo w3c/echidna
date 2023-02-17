@@ -435,8 +435,8 @@ describe('SpecberusWrapper', () => {
       );
     });
 
-    it('should return an error property that has 3 errors', () =>
-      expect(content).that.eventually.has.property('errors').that.has.size(3));
+    it('should return an error property that has 1 errors', () =>
+      expect(content).that.eventually.has.property('errors').that.has.size(1));
   });
 
   describe('validate(url-with-css-warnings)', () => {
@@ -453,8 +453,8 @@ describe('SpecberusWrapper', () => {
       );
     });
 
-    it('should return an error property that has 3 error', () =>
-      expect(content).that.eventually.has.property('errors').that.has.size(3));
+    it('should return an error property that has no errors', () =>
+      expect(content).that.eventually.has.property('errors').that.has.size(0));
   });
 
   describe('extractMetadata(url)', () => {

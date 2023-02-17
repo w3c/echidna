@@ -1,6 +1,6 @@
 {
   "name": "echidna",
-  "version": "4.0.4",
+  "version": "4.0.5",
   "description": "Echidna — W3C's orchestrator for the new publication workflow",
   "author": "W3C",
   "keywords": [
@@ -16,7 +16,7 @@
     "url": "https://github.com/w3c/echidna/issues"
   },
   "dependencies": {
-    "@octokit/core": "4.1.0",
+    "@octokit/core": "4.2.0",
     "body-parser": "1.20.0",
     "compression": "1.7.4",
     "express": "4.18.1",
@@ -27,14 +27,13 @@
     "mkdirp": "1.0",
     "moment": "2.29.3",
     "multer": "1.4.3",
-    "node-dig-dns": "0.3.1",
-    "nodemailer": "6.8.0",
+    "nodemailer": "6.9.0",
     "octokat": "0.10.0",
     "passport": "0.6.0",
     "passport-http": "0.3",
     "promise": "8.3.0",
     "request": "2.88.2",
-    "specberus": "7.0.3",
+    "specberus": "7.0.4",
     "tar-stream": "3.0.0",
     "uuid": "9.0.0"
   },
@@ -61,8 +60,8 @@
     "audit": "npm audit | grep -oE 'https?\\:\\/\\/(www\\.)?(nodesecurity\\.io|npmjs\\.com)\\/advisories\\/[[:digit:]]+' | rev | cut -d '/' -f 1 | rev | diff known-vulns.txt -",
     "cspell": "cspell *.md **/*.md **/*.css **/*.js *.js **/*.html **/*.tmpl",
     "lint": "eslint app.js assets/js/ lib/",
-    "testserver": "node test/lib/testserver",
-    "test": "mocha",
+    "testserver": "NODE_ENV=test node test/lib/testserver",
+    "test": "NODE_ENV=test mocha",
     "coverage": "nyc npm test",
     "coveralls": "npm run coverage && cat ./coverage/lcov.info | coveralls",
     "build": "npm run lint && npm run test",
