@@ -5,30 +5,35 @@
 
 'use strict';
 
-const express = require('express');
-const compression = require('compression');
-const bodyParser = require('body-parser');
-const multer = require('multer');
-const path = require('path');
-const Fs = require('fs');
-const { Map } = require('immutable');
-const { v4: uuidv4 } = require('uuid');
+import express from 'express';
+import compression from 'compression';
+import bodyParser from 'body-parser';
+import multer from 'multer';
+import path from 'path';
+import Fs from 'fs';
+import pkg from 'immutable';
+import { v4 as uuidv4 } from 'uuid';
+import passport from 'passport';
 
-const passport = require('passport');
-const LdapAuth = require('ldapauth-fork');
-const { BasicStrategy } = require('passport-http');
-const Job = require('./lib/job');
-const Orchestrator = require('./lib/orchestrator');
-const RequestState = require('./lib/request-state');
-const SpecberusWrapper = require('./lib/specberus-wrapper');
-const mailer = require('./lib/mailer');
+import LdapAuth from 'ldapauth-fork';
+import { BasicStrategy } from 'passport-http';
+import Job from './lib/job.js';
+import Orchestrator from './lib/orchestrator.js';
+import RequestState from './lib/request-state.js';
+import SpecberusWrapper from './lib/specberus-wrapper.js';
+import mailer from './lib/mailer.js';
 
-const meta = require('./package.json');
+import { importJSON } from './lib/util.js';
+import setGlobalInfo from './config-dev.js';
+
+const { Map } = pkg;
+const meta = importJSON('./package.json', import.meta.url);
+setGlobalInfo();
 
 // Configuration file
 const config = process.env.CONFIG || 'config.js';
 // eslint-disable-next-line import/no-dynamic-require
-require(`./${config}`);
+// import(`./${config}`)
 // eslint-disable-next-line no-console
 console.log(`Loading config: ${config}`);
 
@@ -66,11 +71,13 @@ app.set('trust proxy', true);
 
 // Index Page
 app.get('/', (request, response) => {
+  // eslint-disable-next-line no-undef
   response.sendFile(`${__dirname}/views/index.html`);
 });
 
 // New UI
 app.get('/ui', (request, response) => {
+  // eslint-disable-next-line no-undef
   response.sendFile(`${__dirname}/views/web-interface.html`);
 });
 
