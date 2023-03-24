@@ -20,6 +20,11 @@ module.exports = {
     // If you want to allow functions to have different return behavior depending on code branching, then it is safe to disable this rule.
     'consistent-return': 'off',
     'import/extensions': 'off',
+    'global-require': 'off',
+    'no-restricted-syntax': 'warn',
+    'guard-for-in': 'warn',
+    'prefer-destructuring': 'warn',
+    'import/prefer-default-export': 'off',
   },
   overrides: [
     {
