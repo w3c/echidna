@@ -1,14 +1,16 @@
+/* eslint-disable no-unused-expressions */
+/* eslint-disable no-new */
+/* eslint-disable func-names */
 /**
  * @module
  */
 
 'use strict';
 
-const chai = require('chai');
+import chai from 'chai';
+import JsonHttpService from '../lib/json-http-service.js';
 
 const { expect } = chai;
-
-const JsonHttpService = require('../lib/json-http-service');
 
 describe('JsonHttpService', () => {
   describe('object', () => {

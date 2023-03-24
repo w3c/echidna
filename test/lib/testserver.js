@@ -1,24 +1,28 @@
 'use strict';
 
-const fs = require('fs');
-const express = require('express');
+/* eslint-disable consistent-return */
+/* eslint-disable no-console */
+/* eslint-disable func-names */
 
+import express from 'express';
+import fs from 'fs';
+import morgan from 'morgan';
+import request from 'request';
+import ldap from 'ldapjs';
+import htmlvalidator from './htmlvalidator.js';
+import tokenChecker from './tokenchecker.js';
+import htmlTemplate from './htmltemplate.js';
+import { getMetadata, draftsSystemPath } from './utils.js';
+import httpservices from './fake-http-services.js';
+import setGlobalInfo from '../../config-dev.js';
+
+const PublishService = httpservices.CreatedService;
 const app = express();
-const morgan = require('morgan');
-const request = require('request');
-const ldap = require('ldapjs');
-const htmlvalidator = require('./htmlvalidator');
-const tokenChecker = require('./tokenchecker');
-const htmlTemplate = require('./htmltemplate');
-const { getMetadata } = require('./utils');
-const { draftsSystemPath } = require('./utils');
 
-const PublishService = require('./fake-http-services').CreatedService;
-
+// eslint-disable-next-line radix
 let port = (parseInt(process.env.PORT) || 3000) + 1;
 const ldapPort = 1389;
-require('../../config-dev.js');
-
+setGlobalInfo();
 /**
  * @exports test/lib/TestServer
  */
@@ -171,4 +175,4 @@ TestServer.close = () => {
 
 TestServer.start();
 
-module.exports = TestServer;
+export default TestServer;

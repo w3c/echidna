@@ -1,9 +1,9 @@
 'use strict';
 
-const fs = require('fs');
-const { substitutions } = require('./utils');
-const { getMetadata } = require('./utils');
-const { endsWith } = require('./utils');
+/* eslint-disable func-names */
+
+import fs from 'fs';
+import { substitutions, getMetadata, endsWith } from './utils.js';
 
 /**
  * @exports test/lib/htmlTemplate
@@ -43,6 +43,7 @@ function htmlTemplate(serverPath, fileSystemPath) {
     return replace(0);
   }
 
+  // eslint-disable-next-line consistent-return
   return function (req, res, next) {
     let path = req.url;
 
@@ -70,4 +71,6 @@ function htmlTemplate(serverPath, fileSystemPath) {
   };
 }
 
-module.exports = htmlTemplate;
+export default htmlTemplate;
+⌘+
+M

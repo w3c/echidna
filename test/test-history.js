@@ -1,14 +1,16 @@
+/* eslint-disable no-new */
+/* eslint-disable no-unused-expressions */
 /**
  * @module
  */
 
 'use strict';
 
-const chai = require('chai');
+import chai from 'chai';
+
+import History from '../lib/history.js';
 
 const { expect } = chai;
-
-const History = require('../lib/history');
 
 describe('History', () => {
   describe('object', () => {

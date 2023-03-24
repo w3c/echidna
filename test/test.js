@@ -1,50 +1,51 @@
+'use strict';
+
+/* eslint-disable no-plusplus */
+/* eslint-disable no-unused-expressions */
+/* eslint-disable import/named */
 /**
  * @module
  */
 
-'use strict';
+import chai from 'chai';
+import chaiImmutable from 'chai-immutable';
+import chaiAsPromised from 'chai-as-promised';
+import Promise from 'promise';
+import Fs from 'fs';
+import { List, Map } from 'immutable';
+
+import setGlobalInfo from '../config-dev.js';
+
+import server from './lib/testserver.js';
+import {
+  CreatedService,
+  BadRequestService,
+  NotImplementedService,
+  ServerErrorService,
+} from './lib/fake-http-services.js';
+
+import DocumentDownloader from '../lib/document-downloader.js';
+import Publisher from '../lib/publisher.js';
+import SpecberusWrapper from '../lib/specberus-wrapper.js';
+import TokenChecker from '../lib/token-checker.js';
+import UserChecker from '../lib/user-checker.js';
+import IPChecker from '../lib/ip-checker.js';
 
 // Switch the environment into testing mode
 process.env.NODE_ENV = 'dev';
 
-const chai = require('chai');
-const chaiImmutable = require('chai-immutable');
-
 const { expect } = chai;
-const chaiAsPromised = require('chai-as-promised');
 
 chai.use(chaiImmutable);
 chai.use(chaiAsPromised);
 
-const Promise = require('promise');
-const Fs = require('fs');
-const Immutable = require('immutable');
-
-const { List } = Immutable;
-const { Map } = Immutable;
 let pendingTests = 6;
-
-require('../config-dev.js');
-
-const server = require('./lib/testserver');
-const FakeHttpServices = require('./lib/fake-http-services');
-
-const { CreatedService } = FakeHttpServices;
-const { BadRequestService } = FakeHttpServices;
-const { NotImplementedService } = FakeHttpServices;
-const { ServerErrorService } = FakeHttpServices;
+setGlobalInfo();
 
 // Used by the TokenChecker
 global.TOKEN_ENDPOINT = `${server.location()}/authorize`;
 global.USERNAME = 'toto';
 global.PASSWORD = 'secret';
-
-const DocumentDownloader = require('../lib/document-downloader');
-const Publisher = require('../lib/publisher');
-const SpecberusWrapper = require('../lib/specberus-wrapper');
-const TokenChecker = require('../lib/token-checker');
-const UserChecker = require('../lib/user-checker');
-const IPChecker = require('../lib/ip-checker.js');
 
 function readFileSyncUtf8(file) {
   return Fs.readFileSync(file, { encoding: 'utf8' });
