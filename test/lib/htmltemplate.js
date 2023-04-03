@@ -72,5 +72,3 @@ function htmlTemplate(serverPath, fileSystemPath) {
 }
 
 export default htmlTemplate;
-⌘+
-M
