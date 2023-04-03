@@ -384,18 +384,14 @@ describe('SpecberusWrapper', () => {
       expect(SpecberusWrapper.validate).to.be.a('function');
     });
 
-    let content;
+    const myDraft = server.getMetadata('navigation-timing-2');
 
-    before(() => {
-      const myDraft = server.getMetadata('navigation-timing-2');
-
-      const metadata = new Map({
-        profile: myDraft.status,
-        patentPolicy: myDraft.patentPolicy,
-      });
-
-      content = SpecberusWrapper.validate(myDraft.location, metadata);
+    const metadata = new Map({
+      profile: myDraft.status,
+      patentPolicy: myDraft.patentPolicy,
     });
+
+    const content = SpecberusWrapper.validate(myDraft.location, metadata);
 
     it('should return a promise', () => {
       expect(content).to.be.an.instanceOf(Promise);
@@ -422,36 +418,29 @@ describe('SpecberusWrapper', () => {
   });
 
   describe('validate(url-with-css-errors)', () => {
-    let content;
-    before(() => {
-      const metadata = new Map({
-        profile: server.getMetadata('nav-csserror').status,
-        patentPolicy: server.getMetadata('nav-csserror').patentPolicy,
-      });
-
-      content = SpecberusWrapper.validate(
-        server.getMetadata('nav-csserror').location,
-        metadata,
-      );
+    const metadata = new Map({
+      profile: server.getMetadata('nav-csserror').status,
+      patentPolicy: server.getMetadata('nav-csserror').patentPolicy,
     });
+
+    const content = SpecberusWrapper.validate(
+      server.getMetadata('nav-csserror').location,
+      metadata,
+    );
 
     it('should return an error property that has 1 errors', () =>
       expect(content).that.eventually.has.property('errors').that.has.size(1));
   });
 
   describe('validate(url-with-css-warnings)', () => {
-    let content;
-
-    before(() => {
-      const metadata = new Map({
-        profile: server.getMetadata('nav-csswarning').status,
-        patentPolicy: server.getMetadata('nav-csswarning').patentPolicy,
-      });
-      content = SpecberusWrapper.validate(
-        server.getMetadata('nav-csswarning').location,
-        metadata,
-      );
+    const metadata = new Map({
+      profile: server.getMetadata('nav-csswarning').status,
+      patentPolicy: server.getMetadata('nav-csswarning').patentPolicy,
     });
+    const content = SpecberusWrapper.validate(
+      server.getMetadata('nav-csswarning').location,
+      metadata,
+    );
 
     it('should return an error property that has no errors', () =>
       expect(content).that.eventually.has.property('errors').that.has.size(0));
