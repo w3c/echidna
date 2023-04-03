@@ -390,6 +390,7 @@ describe('SpecberusWrapper', () => {
       profile: myDraft.status,
       patentPolicy: myDraft.patentPolicy,
     });
+
     const content = SpecberusWrapper.validate(myDraft.location, metadata);
 
     it('should return a promise', () => {
@@ -421,6 +422,7 @@ describe('SpecberusWrapper', () => {
       profile: server.getMetadata('nav-csserror').status,
       patentPolicy: server.getMetadata('nav-csserror').patentPolicy,
     });
+
     const content = SpecberusWrapper.validate(
       server.getMetadata('nav-csserror').location,
       metadata,
@@ -640,9 +642,9 @@ describe('IPChecker', () => {
     const check2 = IPChecker.check(goodIp);
 
     it('should promise an empty list', () =>
-    check2.then(result => {
-      expect(result.isEmpty()).to.be.true;
-    }));
+      check2.then(result => {
+        expect(result.isEmpty()).to.be.true;
+      }));
   });
 
   after(trackProgress);
