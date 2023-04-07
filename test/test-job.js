@@ -7,8 +7,8 @@
 
 import chai from 'chai';
 import chaiImmutable from 'chai-immutable';
-import { List } from 'immutable';
-import Job from '../lib/job';
+import List from 'immutable';
+import Job from '../lib/job.js';
 
 const { expect } = chai;
 
