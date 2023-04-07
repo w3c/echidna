@@ -21,7 +21,7 @@ import Job from './lib/job.js';
 import Orchestrator from './lib/orchestrator.js';
 import RequestState from './lib/request-state.js';
 import SpecberusWrapper from './lib/specberus-wrapper.js';
-import mailer from './lib/mailer.js';
+import sendMessage from './lib/mailer.js';
 
 import { importJSON } from './lib/util.js';
 import setGlobalInfo from './config-dev.js';
@@ -211,7 +211,7 @@ const processRequest = (req, res, isTar) => {
       },
       requests[id].results,
     )
-      .then(state => {
+      .then(async state => {
         // eslint-disable-next-line no-console
         console.log(`[${state.get('status').toUpperCase()}] ${url}`);
         dumpJobResult(
@@ -221,7 +221,7 @@ const processRequest = (req, res, isTar) => {
         // eslint-disable-next-line no-console
         if (dryRun) console.log('Dry-run: omitting e-mail notification');
         else {
-          mailer.sendMessage(
+          await sendMessage(
             id,
             state,
             requests[id],
