@@ -7,12 +7,13 @@
 
 import chai from 'chai';
 import chaiImmutable from 'chai-immutable';
-import { List, Map } from 'immutable';
+import Immutable from 'immutable';
 
 import Job from '../lib/job.js';
 
 import RequestState from '../lib/request-state.js';
 
+const { List, Map } = Immutable;
 const { expect } = chai;
 
 chai.use(chaiImmutable);

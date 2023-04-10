@@ -12,7 +12,7 @@ import chaiImmutable from 'chai-immutable';
 import chaiAsPromised from 'chai-as-promised';
 import Promise from 'promise';
 import Fs from 'fs';
-import { List, Map } from 'immutable';
+import Immutable from 'immutable';
 
 import setGlobalInfo from '../config-dev.js';
 
@@ -35,6 +35,7 @@ import IPChecker from '../lib/ip-checker.js';
 process.env.NODE_ENV = 'dev';
 
 const { expect } = chai;
+const { List, Map } = Immutable;
 
 chai.use(chaiImmutable);
 chai.use(chaiAsPromised);
