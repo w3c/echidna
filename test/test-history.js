@@ -9,6 +9,9 @@
 import chai from 'chai';
 
 import History from '../lib/history.js';
+import setGlobalInfo from '../config-dev.js';
+
+setGlobalInfo();
 
 const { expect } = chai;
 

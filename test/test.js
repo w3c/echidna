@@ -17,12 +17,7 @@ import Immutable from 'immutable';
 import setGlobalInfo from '../config-dev.js';
 
 import server from './lib/testserver.js';
-import {
-  CreatedService,
-  BadRequestService,
-  NotImplementedService,
-  ServerErrorService,
-} from './lib/fake-http-services.js';
+import fakeHttpServices from './lib/fake-http-services.js';
 
 import DocumentDownloader from '../lib/document-downloader.js';
 import Publisher from '../lib/publisher.js';
@@ -30,6 +25,13 @@ import SpecberusWrapper from '../lib/specberus-wrapper.js';
 import TokenChecker from '../lib/token-checker.js';
 import UserChecker from '../lib/user-checker.js';
 import IPChecker from '../lib/ip-checker.js';
+
+const {
+  CreatedService,
+  BadRequestService,
+  NotImplementedService,
+  ServerErrorService,
+} = fakeHttpServices;
 
 // Switch the environment into testing mode
 process.env.NODE_ENV = 'dev';
