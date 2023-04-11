@@ -72,13 +72,13 @@ app.set('trust proxy', true);
 // Index Page
 app.get('/', (request, response) => {
   // eslint-disable-next-line no-undef
-  response.sendFile(`${__dirname}/views/index.html`);
+  response.sendFile(`${process.cwd()}/views/index.html`);
 });
 
 // New UI
 app.get('/ui', (request, response) => {
   // eslint-disable-next-line no-undef
-  response.sendFile(`${__dirname}/views/web-interface.html`);
+  response.sendFile(`${process.cwd()}/views/web-interface.html`);
 });
 
 // API methods
