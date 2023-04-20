@@ -24,18 +24,16 @@ import SpecberusWrapper from './lib/specberus-wrapper.js';
 import sendMessage from './lib/mailer.js';
 
 import { importJSON } from './lib/util.js';
-import setGlobalInfo from './config-dev.js';
+
+import configDefault from 'config.js';
+// eslint-disable-next-line
+import configDev from process.env.CONFIG;
+
+setGlobalInfo = process.env.CONFIG ? configDev : configDefault;
 
 const { Map } = pkg;
 const meta = importJSON('./package.json', import.meta.url);
 setGlobalInfo();
-
-// Configuration file
-const config = process.env.CONFIG || 'config.js';
-// eslint-disable-next-line import/no-dynamic-require
-// import(`./${config}`)
-// eslint-disable-next-line no-console
-console.log(`Loading config: ${config}`);
 
 const app = express();
 const requests = {};
