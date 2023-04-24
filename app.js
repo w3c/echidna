@@ -219,7 +219,7 @@ const processRequest = (req, res, isTar) => {
         // eslint-disable-next-line no-console
         if (dryRun) console.log('Dry-run: omitting e-mail notification');
         else {
-          await sendMessage(
+          sendMessage(
             id,
             state,
             requests[id],
