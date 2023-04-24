@@ -9,9 +9,8 @@
 import chai from 'chai';
 
 import History from '../lib/history.js';
-import setGlobalInfo from '../config-dev.js';
 
-setGlobalInfo();
+await import(`${process.cwd()}/${process.env.CONFIG || 'config.js'}`);
 
 const { expect } = chai;
 

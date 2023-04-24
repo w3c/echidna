@@ -25,15 +25,10 @@ import sendMessage from './lib/mailer.js';
 
 import { importJSON } from './lib/util.js';
 
-import configDefault from 'config.js';
-// eslint-disable-next-line
-import configDev from process.env.CONFIG;
-
-setGlobalInfo = process.env.CONFIG ? configDev : configDefault;
+await import(`${process.cwd()}/${process.env.CONFIG || 'config.js'}`);
 
 const { Map } = pkg;
 const meta = importJSON('./package.json', import.meta.url);
-setGlobalInfo();
 
 const app = express();
 const requests = {};

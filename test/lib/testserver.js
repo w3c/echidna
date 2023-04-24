@@ -14,7 +14,8 @@ import tokenChecker from './tokenchecker.js';
 import htmlTemplate from './htmltemplate.js';
 import { getMetadata, draftsSystemPath } from './utils.js';
 import httpservices from './fake-http-services.js';
-import setGlobalInfo from '../../config-dev.js';
+
+await import(`${process.cwd()}/${process.env.CONFIG || 'config.js'}`);
 
 const PublishService = httpservices.CreatedService;
 const app = express();
@@ -22,7 +23,7 @@ const app = express();
 // eslint-disable-next-line radix
 let port = (parseInt(process.env.PORT) || 3000) + 1;
 const ldapPort = 1389;
-setGlobalInfo();
+
 /**
  * @exports test/lib/TestServer
  */

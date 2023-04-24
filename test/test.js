@@ -14,8 +14,6 @@ import Promise from 'promise';
 import Fs from 'fs';
 import Immutable from 'immutable';
 
-import setGlobalInfo from '../config-dev.js';
-
 import server from './lib/testserver.js';
 import fakeHttpServices from './lib/fake-http-services.js';
 
@@ -25,6 +23,8 @@ import SpecberusWrapper from '../lib/specberus-wrapper.js';
 import TokenChecker from '../lib/token-checker.js';
 import UserChecker from '../lib/user-checker.js';
 import IPChecker from '../lib/ip-checker.js';
+
+await import(`${process.cwd()}/${process.env.CONFIG || 'config.js'}`);
 
 const {
   CreatedService,
@@ -43,7 +43,6 @@ chai.use(chaiImmutable);
 chai.use(chaiAsPromised);
 
 let pendingTests = 6;
-setGlobalInfo();
 
 // Used by the TokenChecker
 global.TOKEN_ENDPOINT = `${server.location()}/authorize`;

@@ -3,7 +3,7 @@
   "plugins": ["prettier", "node"],
   "env": {
     "node": true,
-    "es2017": true
+    "es2022": true
   },
   "parserOptions": {
     "ecmaVersion": 2022,
@@ -19,7 +19,14 @@
     "guard-for-in": "warn",
     "prefer-destructuring": "warn",
     "import/prefer-default-export": "off",
-    "no-unpublished-import": "off"
+    "no-unpublished-import": "off",
+    "node/no-unsupported-features/es-syntax": [
+      "warn",
+      {
+        "version": ">=18.0.0",
+        "ignores": ["modules"]
+      }
+    ]
   },
   "overrides": [
     {
