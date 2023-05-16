@@ -24,7 +24,7 @@ import TokenChecker from '../lib/token-checker.js';
 import UserChecker from '../lib/user-checker.js';
 import IPChecker from '../lib/ip-checker.js';
 
-await import(`${process.cwd()}/${process.env.CONFIG || 'config.js'}`);
+await import(`${process.cwd()}/config-dev.js`);
 
 const {
   CreatedService,
