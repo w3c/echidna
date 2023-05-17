@@ -1,6 +1,8 @@
 'use strict';
 
-const Promise = require('promise');
+/* eslint-disable func-names */
+
+import Promise from 'promise';
 
 /**
  * A fake HTTP POSTable service that always returns a 201 Created
@@ -53,7 +55,9 @@ ServerErrorService.prototype.post = function () {
   });
 };
 
-exports.CreatedService = CreatedService;
-exports.NotImplementedService = NotImplementedService;
-exports.BadRequestService = BadRequestService;
-exports.ServerErrorService = ServerErrorService;
+export default {
+  CreatedService,
+  NotImplementedService,
+  BadRequestService,
+  ServerErrorService,
+};

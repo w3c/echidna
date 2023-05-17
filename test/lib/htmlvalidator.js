@@ -2,11 +2,9 @@
 
 'use strict';
 
-const express = require('express');
+import express from 'express';
 
 const validator = express();
-
-module.exports = validator;
 
 validator.get('/nu', (req, res) => {
   const url = req.query.doc || '';
@@ -43,3 +41,5 @@ validator.get('/nu', (req, res) => {
 
   return res.json(result);
 });
+
+export default validator;

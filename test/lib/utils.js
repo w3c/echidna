@@ -1,19 +1,27 @@
+/* eslint-disable no-underscore-dangle */
+
 'use strict';
 
-const fs = require('fs');
+import fs from 'fs';
 
 /**
  * @exports test/lib/utils/draftsSystemPath
  */
 
-const draftsSystemPath = `${__dirname}/../drafts`;
+import path from 'path';
+import { fileURLToPath } from 'url';
+
+const __filenameNew = fileURLToPath(import.meta.url);
+const __dirname = path.dirname(__filenameNew);
+
+export const draftsSystemPath = `${__dirname}/../drafts`;
 
 /**
  * V8 doesn't support String.endsWith
  * @exports test/lib/utils/draftsSystemPath
  */
 
-function endsWith(subjectString, searchString) {
+export function endsWith(subjectString, searchString) {
   const s = subjectString.toString();
   const position = s.length - searchString.length;
   const lastIndex = s.indexOf(searchString, position);
@@ -49,6 +57,7 @@ const months = [
   'December',
 ];
 
+// eslint-disable-next-line func-names
 const today = (function () {
   // We strip off the time
   const t = new Date();
@@ -63,7 +72,7 @@ const tomorrow = new Date(today.getTime() + 24 * 60 * 60 * 1000);
  * @exports test/lib/utils/substitutions
  */
 
-const substitutions = {
+export const substitutions = {
   DATE: fullDate(today),
   'DATE+1': fullDate(tomorrow),
   YYYY: today.getFullYear(),
@@ -104,7 +113,7 @@ function augmentMetadata(name) {
  * @exports test/lib/utils/getMetadata
  */
 
-function getMetadata(name) {
+export function getMetadata(name) {
   if (metadata[name] === undefined) {
     try {
       metadata[name] = JSON.parse(
@@ -119,8 +128,3 @@ function getMetadata(name) {
   }
   return metadata[name];
 }
-
-module.exports.draftsSystemPath = draftsSystemPath;
-module.exports.endsWith = endsWith;
-module.exports.substitutions = substitutions;
-module.exports.getMetadata = getMetadata;

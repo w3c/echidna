@@ -1,5 +1,3 @@
-'use strict';
-
 global.DEFAULT_TEMP_LOCATION = '/var/www/';
 // DEFAULT_HTTP_LOCATION without trailing slash
 global.DEFAULT_HTTP_LOCATION = 'http://spec-server';
@@ -11,7 +9,8 @@ global.SPEC_GENERATOR = 'http://localhost:3002/';
 global.USERNAME = '';
 global.PASSWORD = '';
 global.W3C_PUBSYSTEM_URL = 'http://localhost:3001/publish';
-global.TR_INSTALL_CMD = 'mkdir -p /var/www/$dest && cp -R $source /var/www/$dest';
+global.TR_INSTALL_CMD =
+  'mkdir -p /var/www/$dest && cp -R $source /var/www/$dest';
 global.UPDATE_TR_SHORTLINK_CMD = '#';
 global.MAIL_SENDER = 'Echidna <sysbot+echidna@w3.org>';
 global.MAIL_REPLYTO = 'webreq@w3.org';
@@ -23,9 +22,9 @@ global.ALLOWED_CLIENTS = [
   // W3C:
   /https?:\/\/(www\.)?w3c?\.org/i,
   // GitHub:
-  /https?:\/\/w3c\.github\.io/i
+  /https?:\/\/w3c\.github\.io/i,
 ];
-global.LDAP_URL = "ldaps://localhost:636";
+global.LDAP_URL = 'ldaps://localhost:636';
 global.LDAP_SEARCH_BASE = 'ou=user,dc=example,dc=org';
 // LDAP_BIND_DN must contain the placeholder {{username}}
 global.LDAP_BIND_DN = 'uid={{username}},ou=user,dc=example,dc=org';

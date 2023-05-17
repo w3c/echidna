@@ -1,21 +1,21 @@
+/* eslint-disable no-unused-expressions */
 /**
  * @module
  */
 
 'use strict';
 
-const chai = require('chai');
-const chaiAsPromised = require('chai-as-promised');
-const chaiImmutable = require('chai-immutable');
+import chai from 'chai';
+import chaiAsPromised from 'chai-as-promised';
+import chaiImmutable from 'chai-immutable';
+import Immutable from 'immutable';
+import Promise from 'promise';
+import Job from '../lib/job.js';
+
+import Orchestrator from '../lib/orchestrator.js';
+import RequestState from '../lib/request-state.js';
 
 const { expect } = chai;
-const { List } = require('immutable');
-const { Map } = require('immutable');
-const Promise = require('promise');
-
-const Job = require('../lib/job');
-const Orchestrator = require('../lib/orchestrator');
-const RequestState = require('../lib/request-state');
 
 chai.use(chaiAsPromised);
 chai.use(chaiImmutable);
@@ -46,7 +46,7 @@ describe('Orchestrator', () => {
   describe('iterate(iteration, condition, handler, t)', () => {
     function incrementUntil(f, n) {
       return Orchestrator.iterate(
-        i => List.of(f(i)),
+        i => Immutable.List.of(f(i)),
         i => i >= n,
         () => {},
         0,
@@ -85,37 +85,37 @@ describe('Orchestrator', () => {
   describe('runStep(step)', () => {
     const dummyRequest = new RequestState().set(
       'jobs',
-      new Map({
+      new Immutable.Map({
         dummy: new Job(),
       }),
     );
 
     const resultOk = new Orchestrator().runStep(
-      new Map({
+      new Immutable.Map({
         name: 'dummy',
-        promise: Promise.resolve(new Map({ status: 'ok' })),
+        promise: Promise.resolve(new Immutable.Map({ status: 'ok' })),
       }),
     )(dummyRequest);
 
     const resultFailure = new Orchestrator().runStep(
-      new Map({
+      new Immutable.Map({
         name: 'dummy',
         promise: Promise.resolve(
-          new Map({
+          new Immutable.Map({
             status: 'failure',
-            errors: List.of('an error'),
+            errors: Immutable.List.of('an error'),
           }),
         ),
       }),
     )(dummyRequest);
 
     const resultError = new Orchestrator().runStep(
-      new Map({
+      new Immutable.Map({
         name: 'dummy',
         promise: Promise.resolve(
-          new Map({
+          new Immutable.Map({
             status: 'error',
-            errors: List.of('another error'),
+            errors: Immutable.List.of('another error'),
           }),
         ),
       }),
@@ -126,7 +126,7 @@ describe('Orchestrator', () => {
     });
 
     it('should return a list with 2 elements', () => {
-      expect(resultOk).to.be.an.instanceOf(List).and.to.have.size(2);
+      expect(resultOk).to.be.an.instanceOf(Immutable.List).and.to.have.size(2);
     });
 
     it('should return Promises', () => {

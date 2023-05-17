@@ -2,7 +2,7 @@
 
 'use strict';
 
-const express = require('express');
+import express from 'express';
 
 const tokenChecker = express();
 
@@ -19,4 +19,4 @@ tokenChecker.get('/authorize', (req, res) => {
   return res.json(json);
 });
 
-module.exports = tokenChecker;
+export default tokenChecker;

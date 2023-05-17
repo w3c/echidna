@@ -1,20 +1,20 @@
+/* eslint-disable no-unused-expressions */
 /**
  * @module
  */
 
 'use strict';
 
-const chai = require('chai');
-const chaiImmutable = require('chai-immutable');
+import chai from 'chai';
+import chaiImmutable from 'chai-immutable';
+import Immutable from 'immutable';
 
+import Job from '../lib/job.js';
+
+import RequestState from '../lib/request-state.js';
+
+const { List, Map } = Immutable;
 const { expect } = chai;
-const Immutable = require('immutable');
-
-const { List } = Immutable;
-const { Map } = Immutable;
-
-const Job = require('../lib/job');
-const RequestState = require('../lib/request-state');
 
 chai.use(chaiImmutable);
 
