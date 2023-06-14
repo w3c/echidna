@@ -431,6 +431,7 @@ describe('SpecberusWrapper', () => {
       metadata,
     );
 
+    content.then(data => console.log(JSON.stringify(data)));
     it('should return an error property that has 1 errors', () =>
       expect(content).that.eventually.has.property('errors').that.has.size(1));
   });
