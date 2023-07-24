@@ -10,7 +10,7 @@ npm install
 `npm run testserver`  (don't run it with nodemon as echidna creates temp files and it'll trigger a restart)
 
 ## start echidna with dev config
-`CONFIG=config-dev.js W3C_API_KEY=@@W3C_API_KEY@@ node app.js`
+`CONFIG=config-dev.js node app.js`
 
 
 
