@@ -32,5 +32,3 @@ jobs:
       - run: cp config.js.example config.js
 
       - run: npm run build --if-present
-        env:
-          W3C_API_KEY: ${{ secrets.W3C_API_KEY }}
