@@ -34,7 +34,7 @@
     "passport-http": "0.3",
     "promise": "8.3.0",
     "request": "2.88.2",
-    "specberus": "9.5.0",
+    "specberus": "10.0.0",
     "tar-stream": "3.1.1",
     "uuid": "9.0.0"
   },
