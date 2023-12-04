@@ -30,7 +30,7 @@
     "multer": "1.4.3",
     "nodemailer": "6.9.0",
     "octokat": "0.10.0",
-    "passport": "0.6.0",
+    "passport": "0.7.0",
     "passport-http": "0.3",
     "promise": "8.3.0",
     "request": "2.88.2",
