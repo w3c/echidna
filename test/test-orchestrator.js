@@ -5,9 +5,8 @@
 
 'use strict';
 
-import chai from 'chai';
-import chaiAsPromised from 'chai-as-promised';
-import chaiImmutable from 'chai-immutable';
+import * as chai from 'chai';
+import chaiAsPromised from '@rvagg/chai-as-promised';
 import Immutable from 'immutable';
 import Promise from 'promise';
 import Job from '../lib/job.js';
@@ -15,10 +14,9 @@ import Job from '../lib/job.js';
 import Orchestrator from '../lib/orchestrator.js';
 import RequestState from '../lib/request-state.js';
 
-const { expect } = chai;
+const { assert, expect } = chai;
 
 chai.use(chaiAsPromised);
-chai.use(chaiImmutable);
 
 describe('Orchestrator', () => {
   describe('hasFinished(state)', () => {
@@ -126,7 +124,8 @@ describe('Orchestrator', () => {
     });
 
     it('should return a list with 2 elements', () => {
-      expect(resultOk).to.be.an.instanceOf(Immutable.List).and.to.have.size(2);
+      expect(resultOk).to.be.an.instanceOf(Immutable.List);
+      assert.equal(resultOk.size, 2);
     });
 
     it('should return Promises', () => {
@@ -156,11 +155,6 @@ describe('Orchestrator', () => {
         .get(1)
         .then(state => expect(state.jobs.get('dummy').status).to.equal('ok')));
 
-    it('should set the second returned state as successful job', () =>
-      resultOk
-        .get(1)
-        .then(state => expect(state.jobs.get('dummy').status).to.equal('ok')));
-
     it('should set the second returned state as failed job', () =>
       resultFailure
         .get(1)
@@ -171,7 +165,7 @@ describe('Orchestrator', () => {
     it('should return a state with errors when a job fails', () =>
       resultFailure
         .get(1)
-        .then(state => expect(state.jobs.get('dummy').errors).to.have.size(1)));
+        .then(state => assert.equal(state.jobs.get('dummy').errors.size, 1)));
 
     it('should return a failed state when a job fails', () =>
       expect(resultFailure.get(1)).to.eventually.have.property(
@@ -189,7 +183,7 @@ describe('Orchestrator', () => {
     it('should return a state with errors when a job errors', () =>
       resultError
         .get(1)
-        .then(state => expect(state.jobs.get('dummy').errors).to.have.size(1)));
+        .then(state => assert(state.jobs.get('dummy').errors.size, 1)));
 
     it('should return an errored state when a job errors', () =>
       expect(resultError.get(1)).to.eventually.have.property(

@@ -6,7 +6,7 @@
 
 'use strict';
 
-import chai from 'chai';
+import * as chai from 'chai';
 
 import History from '../lib/history.js';
 

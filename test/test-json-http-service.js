@@ -7,7 +7,7 @@
 
 'use strict';
 
-import chai from 'chai';
+import * as chai from 'chai';
 import JsonHttpService from '../lib/json-http-service.js';
 
 const { expect } = chai;

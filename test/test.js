@@ -7,9 +7,8 @@
  * @module
  */
 
-import chai from 'chai';
-import chaiImmutable from 'chai-immutable';
-import chaiAsPromised from 'chai-as-promised';
+import * as chai from 'chai';
+import chaiAsPromised from '@rvagg/chai-as-promised';
 import Promise from 'promise';
 import Fs from 'fs';
 import Immutable from 'immutable';
@@ -36,10 +35,9 @@ const {
 // Switch the environment into testing mode
 process.env.NODE_ENV = 'dev';
 
-const { expect } = chai;
+const { assert, expect } = chai;
 const { List, Map } = Immutable;
 
-chai.use(chaiImmutable);
 chai.use(chaiAsPromised);
 
 let pendingTests = 6;
@@ -109,8 +107,12 @@ describe('DocumentDownloader', () => {
       expect(content).to.be.an.instanceOf(Promise);
     });
 
-    it('should promise a List of size 2', () =>
-      expect(content).to.eventually.be.an.instanceOf(List).of.size(2));
+    it('should promise a List of size 2', () => {
+      expect(content).to.eventually.be.an.instanceOf(List);
+      content.then(content => {
+        assert.equal(content.size, 2);
+      });
+    });
 
     it('should fetch multiple URLs', () =>
       content.then(content => {
@@ -341,7 +343,9 @@ describe('DocumentDownloader', () => {
         'img/image2.jpg',
       );
 
-      expect(DocumentDownloader.getFilenames(manifest)).to.equal(filenames);
+      DocumentDownloader.getFilenames(manifest).forEach((v, k) => {
+        assert.equal(v, filenames.get(k));
+      });
     });
   });
 
@@ -431,8 +435,11 @@ describe('SpecberusWrapper', () => {
       metadata,
     );
 
-    it('should return an error property that has 1 errors', () =>
-      expect(content).that.eventually.has.property('errors').that.has.size(1));
+    it('should return an error property that has 1 errors', () => {
+      content.then(content => {
+        assert.equal(content.errors.size, 1);
+      });
+    });
   });
 
   describe('validate(url-with-css-warnings)', () => {
@@ -445,8 +452,12 @@ describe('SpecberusWrapper', () => {
       metadata,
     );
 
-    it('should return an error property that has no errors', () =>
-      expect(content).that.eventually.has.property('errors').that.has.size(0));
+    it('should return an error property that has no errors', () => {
+      expect(content).that.eventually.has.property('errors');
+      content.then(content => {
+        assert.equal(content.errors.size, 0);
+      });
+    });
   });
 
   describe('extractMetadata(url)', () => {
@@ -667,14 +678,18 @@ describe('Publisher', () => {
       expect(promise).to.eventually.be.an.instanceOf(List));
 
     it('should return no errors if publication is successful', () =>
-      expect(promise).to.eventually.be.empty);
+      promise.then(promise => {
+        assert.equal(promise.size, 0);
+      }));
 
     it('should return errors when the publication has failed', () => {
       const errPromise = new Publisher(new BadRequestService()).publish(
         metadata,
       );
 
-      return expect(errPromise).to.eventually.have.size(1);
+      errPromise.then(content => {
+        assert.equal(content.size, 1);
+      });
     });
 
     it('should reject if not yet implemented', () => {

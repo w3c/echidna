@@ -5,15 +5,12 @@
 
 'use strict';
 
-import chai from 'chai';
-import chaiImmutable from 'chai-immutable';
+import * as chai from 'chai';
 import Immutable from 'immutable';
 import Job from '../lib/job.js';
 
 const { expect } = chai;
 const { List } = Immutable;
-
-chai.use(chaiImmutable);
 
 describe('Job', () => {
   describe('object', () => {
@@ -48,7 +45,7 @@ describe('Job', () => {
     it('should successfully update a list of errors', () => {
       const job = new Job().set('errors', new List('error'));
 
-      expect(job.get('errors')).to.equal(new List('error'));
+      expect(job.get('errors')).to.eql(new List('error'));
     });
 
     it('should not accept non-string statuses', () => {
