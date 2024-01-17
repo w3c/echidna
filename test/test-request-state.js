@@ -5,8 +5,7 @@
 
 'use strict';
 
-import chai from 'chai';
-import chaiImmutable from 'chai-immutable';
+import * as chai from 'chai';
 import Immutable from 'immutable';
 
 import Job from '../lib/job.js';
@@ -14,9 +13,7 @@ import Job from '../lib/job.js';
 import RequestState from '../lib/request-state.js';
 
 const { List, Map } = Immutable;
-const { expect } = chai;
-
-chai.use(chaiImmutable);
+const { assert, expect } = chai;
 
 describe('RequestState', () => {
   const state = new RequestState('something', new Map({ dummy: new Job() }));
@@ -54,7 +51,7 @@ describe('RequestState', () => {
       const newState = state.addToHistory('Some random fact');
 
       // TODO Improve test when History is refactored
-      expect(newState.get('history').facts).to.have.size(1);
+      assert.equal(newState.get('history').facts.size, 1);
     });
   });
 
@@ -91,7 +88,7 @@ describe('RequestState', () => {
     it('should update the status of a specific job', () => {
       const newState = state.setJobErrors('dummy', List.of('error'));
 
-      expect(newState.get('jobs').get('dummy').get('errors')).to.have.size(1);
+      assert.equal(newState.get('jobs').get('dummy').get('errors').size, 1);
     });
 
     it('should handle inexisting jobs', () => {
