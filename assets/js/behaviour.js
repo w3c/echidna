@@ -1,4 +1,4 @@
-/* eslint-disable no-alert */
+ 
 /**
  * Behaviour of the Echidna UI.
  *
