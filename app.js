@@ -64,13 +64,13 @@ app.set('trust proxy', true);
 
 // Index Page
 app.get('/', (request, response) => {
-  // eslint-disable-next-line no-undef
+   
   response.sendFile(`${process.cwd()}/views/index.html`);
 });
 
 // New UI
 app.get('/ui', (request, response) => {
-  // eslint-disable-next-line no-undef
+   
   response.sendFile(`${process.cwd()}/views/web-interface.html`);
 });
 
@@ -99,7 +99,7 @@ app.get('/api/status', (req, res) => {
 
 function dumpJobResult(dest, result) {
   Fs.writeFile(dest, `${JSON.stringify(result, null, 2)}\n`, err => {
-    // eslint-disable-next-line no-console
+     
     if (err) console.error(err);
   });
 }
@@ -176,7 +176,7 @@ const processRequest = (req, res, isTar) => {
       '',
       new Map(
         jobList.reduce((object, value) => {
-          // eslint-disable-next-line no-param-reassign
+           
           object[value] = new Job();
           return object;
         }, {}),
@@ -205,13 +205,13 @@ const processRequest = (req, res, isTar) => {
       requests[id].results,
     )
       .then(async state => {
-        // eslint-disable-next-line no-console
+         
         console.log(`[${state.get('status').toUpperCase()}] ${url}`);
         dumpJobResult(
           `${argResultLocation + path.sep + id}.json`,
           requests[id],
         );
-        // eslint-disable-next-line no-console
+         
         if (dryRun) console.log('Dry-run: omitting e-mail notification');
         else {
           sendMessage(
@@ -247,7 +247,7 @@ passport.use(
 
     ldap.authenticate(username, password, (err, user) => {
       if (err) {
-        // eslint-disable-next-line no-console
+         
         console.log('LDAP auth error: %s', err);
       }
       done(null, user);
@@ -286,12 +286,12 @@ app.post(
 
 app.listen(process.env.PORT || port).on('error', err => {
   if (err) {
-    // eslint-disable-next-line no-console
+     
     console.error(`Error while trying to launch the server: “${err}”.`);
   }
 });
 
-// eslint-disable-next-line no-console
+ 
 console.log(
   `${meta.name} version ${meta.version} running on ${
     process.platform
