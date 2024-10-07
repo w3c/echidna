@@ -69,7 +69,7 @@
     "prepare": "husky install"
   },
   "engines": {
-    "node": "18 || 20",
+    "node": "20 || 22",
     "npm": ">=7"
   },
   "mocha": {
