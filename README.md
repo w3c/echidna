@@ -4,7 +4,7 @@
 
 Echidna is the central piece of software taking care of the new publication workflow at [W3C](http://www.w3.org/). The plan is for Echidna and related sub-projects (see below) to automate the publication of new specs under <http://www.w3.org/TR/>.
 
-## Using Echidna as an editor
+## Using Echidna as a spec editor
 
 **If you are a spec editor, you do not need to install Echidna, nor to run it locally.**
 
