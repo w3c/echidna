@@ -20,7 +20,7 @@
     "@octokit/core": "6.1.2",
     "body-parser": "1.20.3",
     "compression": "1.7.4",
-    "express": "4.21.0",
+    "express": "5.0.1",
     "file-type": "19.6.0",
     "immutable": "4.3.5",
     "ip-range-check": "0.2.0",
