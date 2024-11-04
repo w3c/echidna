@@ -22,7 +22,7 @@
     "compression": "1.7.4",
     "express": "4.21.0",
     "file-type": "19.6.0",
-    "immutable": "4.3.5",
+    "immutable": "5.0.0",
     "ip-range-check": "0.2.0",
     "ldapauth-fork": "6.1.0",
     "mkdirp": "3.0",
