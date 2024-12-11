@@ -79,8 +79,7 @@ describe('DocumentDownloader', () => {
       const notFound = DocumentDownloader.fetch(
         `${server.location()}/et/si/tu/n/existais/pas`,
       );
-
-      return expect(notFound).to.eventually.be.rejectedWith(/code 404/);
+      return expect(notFound).to.eventually.be.rejectedWith(/Not Found/);
     });
 
     it('should reject if the server is not reachable', () => {
@@ -241,7 +240,7 @@ describe('DocumentDownloader', () => {
         '/tmp/whatever',
       );
 
-      return expect(notFound).to.eventually.be.rejectedWith(/code 404/);
+      return expect(notFound).to.eventually.be.rejectedWith(/Not Found/);
     });
 
     it('should reject if the server is not reachable', () => {
