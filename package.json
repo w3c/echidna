@@ -33,7 +33,7 @@
     "passport": "0.7.0",
     "passport-http": "0.3",
     "promise": "8.3.0",
-    "specberus": "11.4.5",
+    "specberus": "11.4.7",
     "superagent": "10.1.0",
     "tar-stream": "3.1.1",
     "uuid": "11.0.3"
