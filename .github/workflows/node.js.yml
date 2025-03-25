@@ -1,6 +1,13 @@
 name: Echidna tests
 
-on: [push, pull_request_target]
+on:
+  push:
+  pull_request:
+    paths-ignore:
+      - "!.github/workflows/**"
+
+permissions:
+  contents: read
 
 jobs:
   test:
@@ -8,19 +15,9 @@ jobs:
     strategy:
       matrix:
         node-version: [18.x, 20.x, 22.x]
-    if: |
-      (github.event_name == 'pull_request_target' && github.actor == 'dependabot[bot]') ||
-      (github.event_name != 'pull_request_target' && github.actor != 'dependabot[bot]')
     steps:
       - name: Checkout
-        if: ${{ github.event_name != 'pull_request_target' }}
         uses: actions/checkout@v4
-
-      - name: Checkout PR from dependabot
-        if: ${{ github.event_name == 'pull_request_target' }}
-        uses: actions/checkout@v4
-        with:
-          ref: ${{ github.event.pull_request.head.sha }}
 
       - name: Use Node.js ${{ matrix.node-version }}
         uses: actions/setup-node@v4
