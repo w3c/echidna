@@ -17,7 +17,7 @@
     "url": "https://github.com/w3c/echidna/issues"
   },
   "dependencies": {
-    "@octokit/core": "6.1.2",
+    "@octokit/core": "7.0.2",
     "body-parser": "2.2.0",
     "compression": "1.8.0",
     "express": "5.1.0",
