@@ -51,7 +51,7 @@
     "eslint-plugin-prettier": "5.0.0-alpha.2",
     "husky": "9.0.6",
     "ldapjs": "3.0.2",
-    "mocha": "11.5.0",
+    "mocha": "11.6.0",
     "morgan": "1.10.0",
     "nyc": "17.1.0",
     "prettier": "3.5.0"
