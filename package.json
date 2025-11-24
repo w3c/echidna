@@ -21,7 +21,7 @@
     "body-parser": "2.2.0",
     "compression": "1.8.0",
     "express": "5.1.0",
-    "file-type": "21.0.0",
+    "file-type": "21.1.1",
     "immutable": "5.1.1",
     "ip-range-check": "0.2.0",
     "ldapauth-fork": "6.1.0",
