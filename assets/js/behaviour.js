@@ -5,8 +5,6 @@
  * @author Antonio <antonio@w3.org>
  */
 
-/* eslint-env jquery */
-
 'use strict';
 
 $(document).ready(() => {
