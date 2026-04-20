@@ -36,7 +36,7 @@
     "specberus": "12.3.0",
     "superagent": "10.3.0",
     "tar-stream": "3.1.1",
-    "uuid": "13.0.0"
+    "uuid": "14.0.0"
   },
   "devDependencies": {
     "chai": "6.2.0",
