@@ -18,7 +18,7 @@
   },
   "dependencies": {
     "@octokit/core": "7.0.2",
-    "body-parser": "2.2.1",
+    "body-parser": "2.3.0",
     "compression": "1.8.0",
     "express": "5.2.0",
     "file-type": "22.0.0",
