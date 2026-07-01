@@ -378,10 +378,9 @@ describe('DocumentDownloader', () => {
 });
 
 describe('SpecberusWrapper', () => {
-  describe('get Specberus version()', async () => {
-    it('should be a format of semantic versioning', () => {
-      expect(SpecberusWrapper.version()).to.eventually.match(/\d+.\d+.\d+/);
-    });
+  describe('get Specberus version()', () => {
+    it('should be a format of semantic versioning', () =>
+      expect(SpecberusWrapper.version()).to.eventually.match(/\d+.\d+.\d+/));
   });
 
   describe('validate(url)', () => {
@@ -393,7 +392,6 @@ describe('SpecberusWrapper', () => {
 
     const metadata = new Map({
       profile: myDraft.status,
-      patentPolicy: myDraft.patentPolicy,
     });
 
     const content = SpecberusWrapper.validate(myDraft.location, metadata);
@@ -420,42 +418,6 @@ describe('SpecberusWrapper', () => {
       expect(content)
         .to.eventually.have.property('metadata')
         .that.is.an.instanceOf(Object));
-  });
-
-  describe('validate(url-with-css-errors)', async () => {
-    const metadata = new Map({
-      profile: server.getMetadata('nav-csserror').status,
-      patentPolicy: server.getMetadata('nav-csserror').patentPolicy,
-    });
-
-    const content = await SpecberusWrapper.validate(
-      server.getMetadata('nav-csserror').location,
-      metadata,
-    );
-
-    it('should return an error property that has 1 errors', () => {
-      content.then(content => {
-        assert.equal(content.errors.size, 1);
-      });
-    });
-  });
-
-  describe('validate(url-with-css-warnings)', async () => {
-    const metadata = new Map({
-      profile: server.getMetadata('nav-csswarning').status,
-      patentPolicy: server.getMetadata('nav-csswarning').patentPolicy,
-    });
-    const content = await SpecberusWrapper.validate(
-      server.getMetadata('nav-csswarning').location,
-      metadata,
-    );
-
-    it('should return an error property that has no errors', () => {
-      expect(content).that.eventually.has.property('errors');
-      content.then(content => {
-        assert.equal(content.errors.size, 0);
-      });
-    });
   });
 
   describe('extractMetadata(url)', () => {

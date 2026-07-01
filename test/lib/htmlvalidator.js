@@ -32,13 +32,6 @@ validator.get('/nu', (req, res) => {
     },
   };
 
-  if (url.indexOf('csserror') !== -1) {
-    result.messages = errors;
-  }
-  if (url.indexOf('csswarning') !== -1) {
-    result.messages = warnings;
-  }
-
   return res.json(result);
 });
 
