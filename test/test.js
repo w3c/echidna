@@ -413,10 +413,10 @@ describe('SpecberusWrapper', () => {
     it('should promise an object with a metadata property', () =>
       expect(content).to.eventually.have.property('metadata'));
 
-    it('should return a metadata property that is a Map', () =>
+    it('should return a metadata property that is an object', () =>
       expect(content)
         .to.eventually.have.property('metadata')
-        .that.is.an.instanceOf(Map));
+        .that.is.an.instanceOf(Object));
   });
 
   describe('extractMetadata(url)', () => {
