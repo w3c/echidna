@@ -8,21 +8,6 @@ const validator = express();
 
 validator.get('/nu', (req, res) => {
   const url = req.query.doc || '';
-  const errors = [
-    {
-      type: 'error',
-      lastLine: 0,
-      lastColumn: 0,
-      message: 'inline-box is not a display value : ',
-    },
-  ];
-  const warnings = [
-    {
-      type: 'info',
-      subType: 'warning',
-      message: 'Property -moz-border-radius is an unknown vendor extension',
-    },
-  ];
   const result = {
     url,
     messages: [],
