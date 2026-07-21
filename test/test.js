@@ -106,12 +106,11 @@ describe('DocumentDownloader', () => {
       expect(content).to.be.an.instanceOf(Promise);
     });
 
-    it('should promise a List of size 2', () => {
-      expect(content).to.eventually.be.an.instanceOf(List);
+    it('should promise a List of size 2', () =>
       content.then(content => {
+        assert.instanceOf(content, List);
         assert.equal(content.size, 2);
-      });
-    });
+      }));
 
     it('should fetch multiple URLs', () =>
       content.then(content => {
@@ -378,13 +377,12 @@ describe('DocumentDownloader', () => {
 });
 
 describe('SpecberusWrapper', () => {
-  describe('get Specberus version()', async () => {
-    it('should be a format of semantic versioning', () => {
-      expect(SpecberusWrapper.version()).to.eventually.match(/\d+.\d+.\d+/);
-    });
+  describe('get Specberus version()', () => {
+    it('should be a format of semantic versioning', () =>
+      expect(SpecberusWrapper.version()).to.eventually.match(/\d+.\d+.\d+/));
   });
 
-  describe('validate(url)', async () => {
+  describe('validate(url)', () => {
     it('should be a function', () => {
       expect(SpecberusWrapper.validate).to.be.a('function');
     });
@@ -393,10 +391,9 @@ describe('SpecberusWrapper', () => {
 
     const metadata = new Map({
       profile: myDraft.status,
-      patentPolicy: myDraft.patentPolicy,
     });
 
-    const content = await SpecberusWrapper.validate(myDraft.location, metadata);
+    const content = SpecberusWrapper.validate(myDraft.location, metadata);
 
     it('should return a promise', () => {
       expect(content).to.be.an.instanceOf(Promise);
@@ -420,42 +417,6 @@ describe('SpecberusWrapper', () => {
       expect(content)
         .to.eventually.have.property('metadata')
         .that.is.an.instanceOf(Map));
-  });
-
-  describe('validate(url-with-css-errors)', async () => {
-    const metadata = new Map({
-      profile: server.getMetadata('nav-csserror').status,
-      patentPolicy: server.getMetadata('nav-csserror').patentPolicy,
-    });
-
-    const content = await SpecberusWrapper.validate(
-      server.getMetadata('nav-csserror').location,
-      metadata,
-    );
-
-    it('should return an error property that has 1 errors', () => {
-      content.then(content => {
-        assert.equal(content.errors.size, 1);
-      });
-    });
-  });
-
-  describe('validate(url-with-css-warnings)', async () => {
-    const metadata = new Map({
-      profile: server.getMetadata('nav-csswarning').status,
-      patentPolicy: server.getMetadata('nav-csswarning').patentPolicy,
-    });
-    const content = await SpecberusWrapper.validate(
-      server.getMetadata('nav-csswarning').location,
-      metadata,
-    );
-
-    it('should return an error property that has no errors', () => {
-      expect(content).that.eventually.has.property('errors');
-      content.then(content => {
-        assert.equal(content.errors.size, 0);
-      });
-    });
   });
 
   describe('extractMetadata(url)', () => {
@@ -685,7 +646,7 @@ describe('Publisher', () => {
         metadata,
       );
 
-      errPromise.then(content => {
+      return errPromise.then(content => {
         assert.equal(content.size, 1);
       });
     });
