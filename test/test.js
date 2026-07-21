@@ -9,7 +9,7 @@
 
 import * as chai from 'chai';
 import chaiAsPromised from '@rvagg/chai-as-promised';
-import Promise from 'promise';
+import ThenPromise from 'promise';
 import Fs from 'fs';
 import Immutable from 'immutable';
 
@@ -64,7 +64,7 @@ describe('DocumentDownloader', () => {
     const content = DocumentDownloader.fetch(server.location());
 
     it('should return a promise', () => {
-      expect(content).to.be.an.instanceOf(Promise);
+      expect(content).to.be.an.instanceOf(ThenPromise);
     });
 
     it('should promise a Buffer', () =>
@@ -103,7 +103,7 @@ describe('DocumentDownloader', () => {
     });
 
     it('should return a promise', () => {
-      expect(content).to.be.an.instanceOf(Promise);
+      expect(content).to.be.an.instanceOf(ThenPromise);
     });
 
     it('should promise a List of size 2', () =>
@@ -135,7 +135,7 @@ describe('DocumentDownloader', () => {
     });
 
     it('should return a promise', () =>
-      expect(promise).to.be.an.instanceOf(Promise));
+      expect(promise).to.be.an.instanceOf(ThenPromise));
 
     it('should create the file with proper content', () =>
       promise.then(() => {
@@ -165,7 +165,7 @@ describe('DocumentDownloader', () => {
     });
 
     it('should return a promise', () =>
-      expect(promise).to.be.an.instanceOf(Promise));
+      expect(promise).to.be.an.instanceOf(ThenPromise));
 
     it('should create multiple files with proper contents', () =>
       promise.then(() => {
@@ -218,7 +218,7 @@ describe('DocumentDownloader', () => {
     });
 
     it('should return a promise', () => {
-      expect(promise).to.be.an.instanceOf(Promise);
+      expect(promise).to.be.an.instanceOf(ThenPromise);
     });
 
     it('should create the folder if it does not exist', () =>
@@ -413,10 +413,10 @@ describe('SpecberusWrapper', () => {
     it('should promise an object with a metadata property', () =>
       expect(content).to.eventually.have.property('metadata'));
 
-    it('should return a metadata property that is a Map', () =>
+    it('should return a metadata property that is an object', () =>
       expect(content)
         .to.eventually.have.property('metadata')
-        .that.is.an.instanceOf(Map));
+        .that.is.an.instanceOf(Object));
   });
 
   describe('extractMetadata(url)', () => {
@@ -533,7 +533,7 @@ describe('TokenChecker', () => {
     const check = TokenChecker.check(myDraft.latestVersion, token, source);
 
     it('should return a promise', () => {
-      expect(check).to.be.an.instanceOf(Promise);
+      expect(check).to.be.an.instanceOf(ThenPromise);
     });
 
     it('should promise a list', () =>
@@ -561,7 +561,7 @@ describe('UserChecker', () => {
     const content = UserChecker.check(user, delivererIDs);
 
     it('should return a promise', () => {
-      expect(content).to.be.an.instanceOf(Promise);
+      expect(content).to.be.an.instanceOf(ThenPromise);
     });
 
     it('should promise a list', () =>
@@ -603,7 +603,7 @@ describe('IPChecker', () => {
     const check = IPChecker.check(badIp);
 
     it('should return a promise', () => {
-      expect(check).to.be.an.instanceOf(Promise);
+      expect(check).to.be.an.instanceOf(ThenPromise);
     });
 
     it('should promise a non-empty list', () =>
@@ -630,7 +630,7 @@ describe('Publisher', () => {
     const promise = new Publisher(new CreatedService()).publish(metadata);
 
     it('should return a promise', () => {
-      expect(promise).to.be.an.instanceOf(Promise);
+      expect(promise).to.be.an.instanceOf(ThenPromise);
     });
 
     it('should promise an array', () =>
