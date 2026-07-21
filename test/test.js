@@ -106,12 +106,11 @@ describe('DocumentDownloader', () => {
       expect(content).to.be.an.instanceOf(Promise);
     });
 
-    it('should promise a List of size 2', () => {
-      expect(content).to.eventually.be.an.instanceOf(List);
+    it('should promise a List of size 2', () =>
       content.then(content => {
+        assert.instanceOf(content, List);
         assert.equal(content.size, 2);
-      });
-    });
+      }));
 
     it('should fetch multiple URLs', () =>
       content.then(content => {
@@ -647,7 +646,7 @@ describe('Publisher', () => {
         metadata,
       );
 
-      errPromise.then(content => {
+      return errPromise.then(content => {
         assert.equal(content.size, 1);
       });
     });
