@@ -2,6 +2,8 @@ name: Echidna tests
 
 on:
   push:
+    branches:
+      - main
   pull_request:
     paths-ignore:
       - "!.github/workflows/**"
