@@ -71,8 +71,7 @@
     "prepare": "husky install"
   },
   "engines": {
-    "node": "24 || 26",
-    "npm": ">=7"
+    "node": "24 || 26"
   },
   "mocha": {
     "colors": true,
