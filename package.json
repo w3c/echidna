@@ -26,7 +26,7 @@
     "ip-range-check": "0.2.0",
     "ldapauth-fork": "6.1.0",
     "mkdirp": "3.0",
-    "moment": "2.30.1",
+    "moment": "2.31.0",
     "multer": "2.2.0",
     "nodemailer": "9.0.3",
     "octokat": "0.10.0",
