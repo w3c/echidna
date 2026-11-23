@@ -28,7 +28,7 @@
     "mkdirp": "3.0",
     "moment": "2.31.0",
     "multer": "2.5.0",
-    "nodemailer": "10.5.0",
+    "nodemailer": "10.6.0",
     "octokat": "0.10.0",
     "passport": "0.7.0",
     "passport-http": "0.3",
